@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -54,9 +55,9 @@
             
             <!-- Deskripsi Singkat -->
             <p class="text-xl md:text-2xl text-gray-600 font-light leading-relaxed max-w-2xl mx-auto">
-                Halo, saya <span class="font-semibold text-gray-800">[Nama Anda]</span>. 
+                Halo, saya <span class="font-semibold text-gray-800">Luthfi Hidayat</span>. 
                 Seorang Desainer Kreatif yang berfokus pada <span class="text-purple-600 font-medium">UI/UX & Desain Visual</span>. 
-                Dengan pengalaman lebih dari 5 tahun, saya telah membantu berbagai jenama mengubah ide kompleks menjadi karya seni digital yang fungsional, bersih, dan penuh makna.
+                Dengan pengalaman lebih dari 9 tahun, saya telah membantu berbagai jenama mengubah ide kompleks menjadi karya seni digital yang fungsional, bersih, dan penuh makna.
             </p>
         </div>
     </header>
@@ -84,25 +85,41 @@
         </p>
     </footer>
 
-    <!-- Script untuk menghasilkan 40 item galeri (10 baris x 4 kolom) -->
+    <!-- Script untuk menghasilkan 40 item galeri dengan variasi rasio -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const gallery = document.getElementById('gallery-grid');
-            const totalItems = 40; // 10 baris x 4 kolom = 40 item
+            const totalItems = 40; 
+            const itemsPerRow = 4;
             
             // Kumpulan kata kunci untuk variasi deskripsi
             const themes = ['Minimalist UI', 'Brand Identity', '3D Render', 'Typography', 'App Concept', 'Web Redesign'];
 
             for (let i = 1; i <= totalItems; i++) {
                 const theme = themes[i % themes.length];
-                // Menggunakan picsum photos dengan seed berbeda untuk setiap gambar
-                const imgUrl = `https://picsum.photos/seed/${i * 15}/600/800`; 
+                
+                let aspectClass, imgWidth, imgHeight;
+
+                // Cek baris (1 baris = 4 item)
+                // Baris 1-5 (Item 1-20): Rasio 16:9
+                // Baris 6-10 (Item 21-40): Rasio 9:16
+                if (i <= 20) {
+                    aspectClass = "aspect-video"; // Tailwind untuk 16:9
+                    imgWidth = 960;
+                    imgHeight = 540;
+                } else {
+                    aspectClass = "aspect-[9/16]"; // Custom aspect 9:16
+                    imgWidth = 540;
+                    imgHeight = 960;
+                }
+
+                const imgUrl = `https://picsum.photos/seed/${i * 22}/${imgWidth}/${imgHeight}`; 
                 const title = `Project Vol. ${i}`;
                 const desc = `Eksplorasi visual bergaya ${theme} dengan pendekatan material yang ekspresif.`;
 
-                // Membuat elemen card (Material Expressive: rounded-3xl besar, hover efek)
+                // Membuat elemen card
                 const card = document.createElement('div');
-                card.className = "group relative aspect-[3/4] rounded-[2.5rem] overflow-hidden bg-gray-100 cursor-pointer shadow-sm hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2";
+                card.className = `group relative ${aspectClass} rounded-[2.5rem] overflow-hidden bg-gray-100 cursor-pointer shadow-sm hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2`;
                 
                 card.innerHTML = `
                     <img 
@@ -113,7 +130,7 @@
                     />
                     <!-- Overlay Gradient -->
                     <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
-                        <h3 class="text-white text-2xl font-bold mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">${title}</h3>
+                        <h3 class="text-white text-xl md:text-2xl font-bold mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">${title}</h3>
                         <p class="text-gray-300 text-sm font-light leading-relaxed transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75 line-clamp-2">${desc}</p>
                     </div>
                 `;
