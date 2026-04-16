@@ -1,9 +1,127 @@
-<html>
-  <head>
-    <title>Hi Recruiter I'm Luthfi</title>
-  </head>
-  <body>
-      <h1>Mas Luth Porto</h1>
-      <p>Designed Together</p>
-  </body>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio Desain | My Arts</title>
+    <!-- Tailwind CSS untuk styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts untuk tipografi yang clean dan modern -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        background: '#fbfbfe', // Warna off-white khas desain minimalis
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: theme('colors.background');
+        }
+        /* Animasi fade-in sederhana saat halaman dimuat */
+        .fade-in {
+            animation: fadeIn 1s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="text-gray-900 antialiased overflow-x-hidden selection:bg-purple-300 selection:text-purple-900">
+
+    <!-- Header & Hero Section -->
+    <header class="min-h-[70vh] flex flex-col justify-center items-center text-center px-6 pt-20 pb-10">
+        <div class="fade-in max-w-4xl mx-auto" style="animation-delay: 0.1s;">
+            <!-- Judul Utama (Expressive Gradient) -->
+            <h1 class="text-6xl md:text-8xl font-extrabold tracking-tight mb-8 text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
+                Hi! Are you ready to design?
+            </h1>
+            
+            <!-- Deskripsi Singkat -->
+            <p class="text-xl md:text-2xl text-gray-600 font-light leading-relaxed max-w-2xl mx-auto">
+                Halo, saya <span class="font-semibold text-gray-800">[Nama Anda]</span>. 
+                Seorang Desainer Kreatif yang berfokus pada <span class="text-purple-600 font-medium">UI/UX & Desain Visual</span>. 
+                Dengan pengalaman lebih dari 5 tahun, saya telah membantu berbagai jenama mengubah ide kompleks menjadi karya seni digital yang fungsional, bersih, dan penuh makna.
+            </p>
+        </div>
+    </header>
+
+    <!-- Gallery Section -->
+    <main class="py-20 px-4 md:px-8 max-w-[1800px] mx-auto fade-in" style="animation-delay: 0.4s;">
+        <!-- Header My Arts -->
+        <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">My arts.</h2>
+        </div>
+
+        <!-- 
+            Grid Kolom: 
+            1 kolom di HP, 2 kolom di Tablet, 4 kolom di Desktop 
+        -->
+        <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+            <!-- Item galeri akan di-generate oleh JavaScript di bawah -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-24 text-center mt-10">
+        <p class="text-3xl md:text-5xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-gray-300 to-gray-500">
+            Design in your mind.
+        </p>
+    </footer>
+
+    <!-- Script untuk menghasilkan 40 item galeri (10 baris x 4 kolom) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const gallery = document.getElementById('gallery-grid');
+            const totalItems = 40; // 10 baris x 4 kolom = 40 item
+            
+            // Kumpulan kata kunci untuk variasi deskripsi
+            const themes = ['Minimalist UI', 'Brand Identity', '3D Render', 'Typography', 'App Concept', 'Web Redesign'];
+
+            for (let i = 1; i <= totalItems; i++) {
+                const theme = themes[i % themes.length];
+                // Menggunakan picsum photos dengan seed berbeda untuk setiap gambar
+                const imgUrl = `https://picsum.photos/seed/${i * 15}/600/800`; 
+                const title = `Project Vol. ${i}`;
+                const desc = `Eksplorasi visual bergaya ${theme} dengan pendekatan material yang ekspresif.`;
+
+                // Membuat elemen card (Material Expressive: rounded-3xl besar, hover efek)
+                const card = document.createElement('div');
+                card.className = "group relative aspect-[3/4] rounded-[2.5rem] overflow-hidden bg-gray-100 cursor-pointer shadow-sm hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2";
+                
+                card.innerHTML = `
+                    <img 
+                        src="${imgUrl}" 
+                        alt="${title}" 
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        loading="lazy"
+                    />
+                    <!-- Overlay Gradient -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+                        <h3 class="text-white text-2xl font-bold mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">${title}</h3>
+                        <p class="text-gray-300 text-sm font-light leading-relaxed transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75 line-clamp-2">${desc}</p>
+                    </div>
+                `;
+                
+                gallery.appendChild(card);
+            }
+        });
+    </script>
+</body>
 </html>
