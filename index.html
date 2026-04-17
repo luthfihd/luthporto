@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portofolio Desain | My Arts</title>
+    <title>Luth's Porto</title>
+    <!-- Favicon Otomatis -->
+    <link id="favicon" rel="icon" type="image/x-icon">
     <!-- Tailwind CSS untuk styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
@@ -107,7 +109,7 @@
                 <div class="mt-12 mb-10 relative">
                     <div class="absolute inset-0 bg-indigo-500/20 blur-2xl rounded-full scale-150"></div>
                     <div class="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-white shadow-xl">
-                        <img src="https://picsum.photos/seed/luthfi/400/400" alt="Luthfi Hidayat" class="w-full h-full object-cover">
+                        <img id="profile-img" src="https://picsum.photos/seed/luthfi/400/400" alt="Luthfi Hidayat" class="w-full h-full object-cover">
                     </div>
                 </div>
                 <h1 class="text-6xl md:text-8xl font-extrabold tracking-tighter leading-[1.1] mb-10 pb-2 text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
@@ -115,7 +117,8 @@
                 </h1>
                 <div class="bg-white/20 backdrop-blur-sm p-6 md:p-8 rounded-[2rem] border border-white/40 shadow-sm mb-12">
                     <p class="text-xl md:text-2xl text-gray-600 font-light leading-relaxed max-w-2xl mx-auto">
-                        Halo, saya <span class="font-semibold text-gray-800">Luthfi Hidayat</span>. Spesialis Multimedia.
+                        Halo, saya <span class="font-semibold text-gray-800">Luthfi Hidayat</span>. 
+                        Seorang Spesialis Multimedia yang berfokus pada <span class="text-purple-600 font-medium">Promosi dan Edukasi</span>. 
                     </p>
                 </div>
             </div>
@@ -123,7 +126,7 @@
 
         <main class="py-20 px-4 md:px-8 max-w-[1800px] mx-auto fade-in">
             <div class="text-center mb-12">
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-8">Karya Saya.</h2>
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-8">Significant Projects</h2>
                 <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-12" id="filter-container">
                     <button onclick="filterGallery('semua')" data-category="semua" class="filter-btn active px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border border-gray-200 hover:border-purple-300 bg-white shadow-sm">Semua</button>
                     <button onclick="filterGallery('promosi')" data-category="promosi" class="filter-btn px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border border-gray-200 hover:border-purple-300 bg-white shadow-sm">Promosi</button>
@@ -143,7 +146,7 @@
             <div class="max-w-6xl mx-auto flex flex-col items-center text-center">
                 <!-- Motto -->
                 <p class="text-2xl md:text-4xl font-bold tracking-tighter mb-12 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">
-                    "Design in your mind, Reality in your hands."
+                    "berkarya untuk melihat dunia."
                 </p>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-4xl pt-8">
@@ -194,12 +197,17 @@
     </div>
 
     <script>
+        /**
+         * TIPS UNTUK VIDEO GOOGLE DRIVE:
+         * Gunakan format link: https://drive.google.com/file/d/[FILE_ID]/preview
+         * Untuk thumbnail, pastikan properti 'url' berisi link gambar preview yang kamu inginkan.
+         */
         const myImages = [
             { 
-                url: 'https://picsum.photos/seed/p1/720/1280', 
-                videoUrl: 'https://drive.google.com/file/d/1v2k-Xq_e3zXy_x_X/preview', 
+                url: 'https://picsum.photos/seed/p1/720/1280', // Gambar ini jadi thumbnail di galeri
+                videoUrl: 'https://drive.google.com/file/d/1EXslDByK9XYy5cd1KXoZ2tqa773OgGv5/preview', 
                 category: 'motion', 
-                title: 'Motion Portrait Video', 
+                title: 'Work Highlights', 
                 desc: 'Deskripsi karya video portrait kamu.' 
             },
             { 
@@ -209,13 +217,13 @@
                 desc: 'Deskripsi karya branding landscape kamu.' 
             },
             { 
-                url: 'https://picsum.photos/seed/p3/1080/1080', 
+                url: 'https://lh3.googleusercontent.com/d/1jkLbUA9ENzlOCrmIo6__zexMv-RF9ODS', 
                 category: 'promosi', 
                 title: 'Social Media Ad', 
                 desc: 'Deskripsi karya promosi square kamu.' 
             },
             { 
-                url: 'https://picsum.photos/seed/p4/720/1280', 
+                url: 'https://lh3.googleusercontent.com/d/11XkhhUcXN5bLTdnbZ-FOFOT4sNtjzSb7', 
                 category: 'edukasi', 
                 title: 'Poster Edukasi', 
                 desc: 'Deskripsi karya edukasi portrait kamu.' 
@@ -226,7 +234,7 @@
             const gallery = document.getElementById('gallery-grid');
             gallery.innerHTML = ''; 
             
-            myImages.forEach((item, index) => {
+            myImages.forEach((item) => {
                 if (filter !== 'semua' && item.category !== filter) return;
 
                 const isVideo = !!item.videoUrl;
@@ -235,20 +243,25 @@
                 
                 card.onclick = () => openModal(isVideo ? item.videoUrl : item.url, item.title, item.desc, isVideo);
 
+                // LOGIKA: Properti 'url' akan selalu menjadi sumber gambar thumbnail di galeri
                 card.innerHTML = `
-                    <img src="${item.url}" alt="${item.title}" class="w-full h-auto block transition-transform duration-700 group-hover:scale-105" loading="lazy" />
-                    ${isVideo ? `
-                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            <div class="w-16 h-16 bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center border border-white/50 text-white shadow-lg">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="m7 4 12 8-12 8V4z"/></svg>
+                    <div class="relative overflow-hidden bg-gray-900">
+                        <img src="${item.url}" alt="${item.title}" class="w-full h-auto block transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" loading="lazy" />
+                        
+                        ${isVideo ? `
+                            <div class="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-transparent transition-colors duration-500">
+                                <div class="w-14 h-14 bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center border border-white/40 text-white shadow-2xl transform transition-transform duration-500 group-hover:scale-110">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" class="ml-1"><path d="m7 4 12 8-12 8V4z"/></svg>
+                                </div>
                             </div>
+                        ` : ''}
+                        
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
+                             <div class="text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-purple-300 mb-1">${item.category}</p>
+                                <h4 class="text-lg font-bold leading-tight">${item.title}</h4>
+                             </div>
                         </div>
-                    ` : ''}
-                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
-                         <div class="text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                            <p class="text-xs font-bold uppercase tracking-widest opacity-70 mb-1">${item.category}</p>
-                            <h4 class="text-lg font-bold leading-tight">${item.title}</h4>
-                         </div>
                     </div>
                 `;
                 gallery.appendChild(card);
@@ -276,7 +289,10 @@
             if (isVideo) {
                 const iframe = document.createElement('iframe');
                 iframe.src = mediaUrl;
-                iframe.className = "w-full aspect-[9/16] md:aspect-video md:h-[80vh]"; 
+                // Mengatur aspek rasio video di dalam modal agar lebih fleksibel
+                iframe.className = "w-full aspect-[9/16] md:max-h-[85vh] md:w-auto md:aspect-auto"; 
+                iframe.style.minWidth = "320px";
+                iframe.style.height = "80vh";
                 iframe.allow = "autoplay";
                 mediaContainer.appendChild(iframe);
             } else {
@@ -309,9 +325,18 @@
             }, 300);
         }
 
+        // Fungsi untuk sinkronisasi favicon dengan foto profil
+        function syncFavicon() {
+            const profileImg = document.getElementById('profile-img');
+            const favicon = document.getElementById('favicon');
+            if (profileImg && favicon) {
+                favicon.href = profileImg.src;
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             renderGallery('semua');
-            // Pastikan Lucide diinisialisasi SETELAH DOM siap
+            syncFavicon(); // Jalankan saat halaman dimuat
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
