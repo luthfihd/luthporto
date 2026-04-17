@@ -125,25 +125,24 @@
                         <circle cx="50" cy="50" r="48" fill="none" stroke="url(#gradient-dashed)" stroke-width="1.5" stroke-dasharray="8 6" stroke-linecap="round"></circle>
                         <defs>
                             <linearGradient id="gradient-dashed" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#6366f1" />
-                                <stop offset="100%" style="stop-color:#ec4899" />
+                                <stop offset="0%" style="stop-color:#ded8eb" />
+                                <stop offset="100%" style="stop-color:#d5d3db" />
                             </linearGradient>
                         </defs>
                     </svg>
 
                     <!-- Foto Profil -->
                     <div class="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-white shadow-xl z-10">
-                        <img id="profile-img" src="https://picsum.photos/seed/luthfi/400/400" alt="Luthfi Hidayat" class="w-full h-full object-cover">
+                        <img id="profile-img" src="https://lh3.googleusercontent.com/d/1jkLbUA9ENzlOCrmIo6__zexMv-RF9ODS" alt="Luthfi Hidayat" class="w-full h-full object-cover">
                     </div>
                 </div>
 
                 <h1 class="text-6xl md:text-8xl font-extrabold tracking-tighter leading-[1.1] mb-10 pb-2 text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
-                    ready to enhance your design?
+                    Luthfi Hidayat
                 </h1>
                 <div class="bg-white/20 backdrop-blur-sm p-6 md:p-8 rounded-[2rem] border border-white/40 shadow-sm mb-12">
                     <p class="text-xl md:text-2xl text-gray-600 font-light leading-relaxed max-w-2xl mx-auto">
-                        Halo, saya <span class="font-semibold text-gray-800">Luthfi Hidayat</span>. 
-                        Seorang Spesialis Multimedia yang berfokus pada <span class="text-purple-600 font-medium">Promosi dan Edukasi</span>. 
+                        Spesialis Multimedia yang berfokus pada konten <span class="text-purple-600 font-medium">Promosi dan Edukasi</span>. 
                     </p>
                 </div>
             </div>
@@ -151,7 +150,7 @@
 
         <main class="py-20 px-4 md:px-8 max-w-[1800px] mx-auto fade-in">
             <div class="text-center mb-12">
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-8">Karya Saya.</h2>
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-8">Significant Projects</h2>
                 <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-12" id="filter-container">
                     <button onclick="filterGallery('semua')" data-category="semua" class="filter-btn active px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border border-gray-200 hover:border-purple-300 bg-white shadow-sm">Semua</button>
                     <button onclick="filterGallery('promosi')" data-category="promosi" class="filter-btn px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border border-gray-200 hover:border-purple-300 bg-white shadow-sm">Promosi</button>
@@ -169,8 +168,8 @@
         <!-- Footer -->
         <footer class="py-20 px-6 mt-10 border-t border-gray-100 bg-white/30 backdrop-blur-sm">
             <div class="max-w-6xl mx-auto flex flex-col items-center text-center">
-                <p class="text-2xl md:text-4xl font-bold tracking-tighter mb-12 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">
-                    "Design in your mind, Reality in your hands."
+                <p class="text-2xl md:text-6xl font-bold tracking-tighter mb-12 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">
+                    #berkaryauntukmelihatdunia
                 </p>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-4xl pt-8">
@@ -205,7 +204,7 @@
         <button onclick="closeModal()" class="close-btn absolute top-6 right-6 z-[110] text-white p-3 rounded-full">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
         </button>
-        <!-- Penyesuaian: modal-content sekarang tidak memiliki overflow-hidden untuk mendukung rasio dinamis -->
+        <!-- Modal Content: max-w-fit agar kontainer mengikuti lebar media -->
         <div class="relative w-full max-w-fit flex flex-col items-center justify-center rounded-[2rem] md:rounded-[3rem] shadow-2xl scale-95 opacity-0 transition-all duration-500 ease-out bg-black" id="modal-content" onclick="event.stopPropagation()">
             <div id="modal-media-container" class="w-full flex justify-center items-center overflow-hidden rounded-[2rem] md:rounded-[3rem]">
                 <!-- Konten diisi via JS -->
@@ -225,25 +224,25 @@
                 videoUrl: 'https://drive.google.com/file/d/1EXslDByK9XYy5cd1KXoZ2tqa773OgGv5/preview', 
                 category: 'motion', 
                 title: 'Work Highlights', 
-                desc: 'Deskripsi karya video portrait kamu.' 
+                desc: 'Tampilan video dengan rasio portrait 9:16.' 
             },
             { 
-                url: 'https://picsum.photos/seed/p2/1280/720', 
+                url: 'https://lh3.googleusercontent.com/d/1DckFEZnJ5W5yolsRjp4En3AVp4gUeLi2', 
                 category: 'branding', 
                 title: 'Landscape Branding Design', 
-                desc: 'Deskripsi karya branding landscape kamu.' 
+                desc: 'Desain branding dengan rasio landscape 16:9.' 
             },
             { 
                 url: 'https://lh3.googleusercontent.com/d/1jkLbUA9ENzlOCrmIo6__zexMv-RF9ODS', 
                 category: 'promosi', 
                 title: 'Social Media Ad', 
-                desc: 'Deskripsi karya promosi square kamu.' 
+                desc: 'Promosi media sosial dengan rasio square 1:1.' 
             },
             { 
                 url: 'https://lh3.googleusercontent.com/d/11XkhhUcXN5bLTdnbZ-FOFOT4sNtjzSb7', 
                 category: 'edukasi', 
                 title: 'Poster Edukasi', 
-                desc: 'Deskripsi karya edukasi portrait kamu.' 
+                desc: 'Poster edukasi vertikal.' 
             },
         ];
 
@@ -294,10 +293,9 @@
             if (isVideo) {
                 const iframe = document.createElement('iframe');
                 iframe.src = mediaUrl;
-                // Penyesuaian: Menggunakan max-h dan max-w agar rasio video tetap terjaga
+                // Rasio dinamis untuk video
                 iframe.className = "max-w-[90vw] max-h-[85vh] h-auto w-auto aspect-auto";
                 
-                // Jika video portrait (seperti TikTok/Reels), kita set lebar tertentu agar tidak terlalu tipis
                 if (mediaUrl.includes('preview')) {
                     iframe.style.width = "min(500px, 85vw)";
                     iframe.style.aspectRatio = "9/16";
@@ -311,7 +309,7 @@
             } else {
                 const img = document.createElement('img');
                 img.src = mediaUrl;
-                // Penyesuaian: Menggunakan object-contain dengan h-auto agar rasio mengikuti gambar asli
+                // Rasio asli untuk gambar (tanpa crop)
                 img.className = "max-w-[90vw] max-h-[85vh] h-auto w-auto object-contain";
                 mediaContainer.appendChild(img);
             }
@@ -339,7 +337,6 @@
             }, 300);
         }
 
-        // Fungsi Canggih untuk Favicon Bulat Otomatis
         function syncRoundFavicon() {
             const profileImg = document.getElementById('profile-img');
             const favicon = document.getElementById('favicon');
