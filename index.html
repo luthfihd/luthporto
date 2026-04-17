@@ -12,8 +12,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <!-- Lucide Icons untuk ikon sosial media -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Font Awesome untuk Ikon Sosial Media -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <script>
         tailwind.config = {
@@ -137,18 +137,25 @@
                     </div>
                 </div>
 
-                <h1 class="text-6xl md:text-8xl font-extrabold tracking-tighter leading-[1.1] mb-10 pb-2 text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
-                    Luthfi Hidayat
+                <!-- Judul Utama -->
+                <h1 class="text-6xl md:text-9xl font-extrabold tracking-tighter leading-[1.1] mb-10 pb-2 text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
+                    Lut.hfi
                 </h1>
+                
+                <!-- Kartu Deskripsi -->
                 <div class="bg-white/20 backdrop-blur-sm p-6 md:p-8 rounded-[2rem] border border-white/40 shadow-sm mb-12">
                     <p class="text-xl md:text-2xl text-gray-600 font-light leading-relaxed max-w-2xl mx-auto">
                         Spesialis Multimedia yang berfokus pada konten <span class="text-purple-600 font-medium">Promosi dan Edukasi</span>. 
+                    </p>
+                    <p class="text-xl md:text-2xl text-gray-600 font-light leading-relaxed max-w-2xl mx-auto">
+                        Menghasilkan <span class="text-purple-600 font-medium">100+</span> Konten yang berdampak
                     </p>
                 </div>
             </div>
         </header>
 
         <main class="py-20 px-4 md:px-8 max-w-[1800px] mx-auto fade-in">
+            <!-- Header Galeri & Filter -->
             <div class="text-center mb-12">
                 <h2 class="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-8">Significant Projects</h2>
                 <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-12" id="filter-container">
@@ -160,12 +167,13 @@
                 </div>
             </div>
 
+            <!-- Grid Galeri -->
             <div id="gallery-grid" class="masonry-container columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 transition-all duration-500">
-                <!-- Konten dibuat melalui JS -->
+                <!-- Konten dibuat secara dinamis melalui JavaScript -->
             </div>
         </main>
 
-        <!-- Footer -->
+        <!-- Bagian Footer -->
         <footer class="py-20 px-6 mt-10 border-t border-gray-100 bg-white/30 backdrop-blur-sm">
             <div class="max-w-6xl mx-auto flex flex-col items-center text-center">
                 <p class="text-2xl md:text-6xl font-bold tracking-tighter mb-12 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">
@@ -174,19 +182,23 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-4xl pt-8">
                     <div class="flex flex-col items-center md:items-start text-center md:text-left">
-                        <h4 class="text-sm font-bold uppercase tracking-widest text-gray-400 mb-4">Hubungi Saya</h4>
+                        <h4 class="text-sm font-bold tracking-widest text-gray-400 mb-4 uppercase">Hubungi Saya</h4>
                         <a href="mailto:halo@luthfihidayat.com" class="text-xl md:text-2xl font-medium text-gray-800 hover:text-purple-600 transition-colors">halo@luthfihidayat.com</a>
                         <p class="text-gray-500 mt-2">+62 812-3456-7890</p>
                     </div>
 
                     <div class="flex flex-col items-center md:items-end text-center md:text-right">
-                        <h4 class="text-sm font-bold uppercase tracking-widest text-gray-400 mb-4">Temukan Saya</h4>
+                        <h4 class="text-sm font-bold tracking-widest text-gray-400 mb-4 uppercase">Temukan Saya</h4>
                         <div class="flex gap-4">
-                            <a href="https://x.com" target="_blank" class="p-3 rounded-2xl bg-white border border-gray-100 text-gray-600 hover:text-white hover:bg-black hover:border-black shadow-sm transition-all duration-300" title="X (Twitter)">
-                                <i data-lucide="twitter"></i>
+                            <!-- Link Sosial Media dengan Ikon Font Awesome -->
+                            <a href="https://x.com" target="_blank" class="flex items-center justify-center w-12 h-12 rounded-2xl bg-white border border-gray-100 text-gray-600 hover:text-white hover:bg-black hover:border-black shadow-sm transition-all duration-300" title="X (Twitter)">
+                                <i class="fa-brands fa-x-twitter text-xl"></i>
                             </a>
-                            <a href="https://www.instagram.com/makanbuahbanyak/" target="_blank" class="p-3 rounded-2xl bg-white border border-gray-100 text-gray-600 hover:text-white hover:bg-purple-500 hover:border-purple-500 shadow-sm transition-all duration-300" title="Instagram">
-                                <i data-lucide="instagram"></i>
+                            <a href="https://www.instagram.com/makanbuahbanyak/" target="_blank" class="flex items-center justify-center w-12 h-12 rounded-2xl bg-white border border-gray-100 text-gray-600 hover:text-white hover:bg-gradient-to-tr hover:from-yellow-400 hover:via-red-500 hover:to-purple-600 hover:border-transparent shadow-sm transition-all duration-300" title="Instagram">
+                                <i class="fa-brands fa-instagram text-xl"></i>
+                            </a>
+                            <a href="https://linkedin.com" target="_blank" class="flex items-center justify-center w-12 h-12 rounded-2xl bg-white border border-gray-100 text-gray-600 hover:text-white hover:bg-[#0077b5] hover:border-[#0077b5] shadow-sm transition-all duration-300" title="LinkedIn">
+                                <i class="fa-brands fa-linkedin-in text-xl"></i>
                             </a>
                         </div>
                     </div>
@@ -199,17 +211,17 @@
         </footer>
     </div>
 
-    <!-- Modal -->
+    <!-- Elemen Modal (Pop-up Galeri) -->
     <div id="modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 bg-black/60 backdrop-blur-xl" onclick="closeModal()">
-        <button onclick="closeModal()" class="close-btn absolute top-6 right-6 z-[110] text-white p-3 rounded-full">
+        <button onclick="closeModal()" class="close-btn absolute top-6 right-6 z-[110] text-white p-3 rounded-full hover:bg-white/40 transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
         </button>
-        <!-- Modal Content: max-w-fit agar kontainer mengikuti lebar media -->
+        <!-- Kontainer Konten Modal -->
         <div class="relative w-full max-w-fit flex flex-col items-center justify-center rounded-[2rem] md:rounded-[3rem] shadow-2xl scale-95 opacity-0 transition-all duration-500 ease-out bg-black" id="modal-content" onclick="event.stopPropagation()">
             <div id="modal-media-container" class="w-full flex justify-center items-center overflow-hidden rounded-[2rem] md:rounded-[3rem]">
-                <!-- Konten diisi via JS -->
+                <!-- Media (Iframe/Image) akan dimasukkan di sini -->
             </div>
-            <!-- Overlay Judul & Deskripsi -->
+            <!-- Overlay Info Judul di Modal -->
             <div class="w-full bg-gradient-to-t from-black/90 via-black/40 to-transparent p-6 md:p-10 pt-24 text-white absolute bottom-0 pointer-events-none rounded-b-[2rem] md:rounded-b-[3rem]">
                 <h3 id="modal-title" class="text-2xl md:text-4xl font-bold mb-2 tracking-tight"></h3>
                 <p id="modal-desc" class="text-sm md:text-lg text-gray-200 font-light"></p>
@@ -218,6 +230,7 @@
     </div>
 
     <script>
+        // Data aset galeri
         const myImages = [
             { 
                 url: 'https://picsum.photos/seed/p1/720/1280', 
@@ -239,13 +252,26 @@
                 desc: 'Promosi media sosial dengan rasio square 1:1.' 
             },
             { 
+                url: 'https://lh3.googleusercontent.com/d/1dKFWHOtSXiweciXRMaRzERNfw-N4Y0AZ', 
+                category: 'branding', 
+                title: 'Logo Identity', 
+                desc: 'Desain logo korporat.' 
+            },
+            { 
+                url: 'https://lh3.googleusercontent.com/d/19_IrWnWQ8y6sRgPIpG50NDQmKeL64NG2', 
+                category: 'promosi', 
+                title: 'Branding Merchandise', 
+                desc: 'Desain Totebag untuk campaign promosi.' 
+            },
+            { 
                 url: 'https://lh3.googleusercontent.com/d/11XkhhUcXN5bLTdnbZ-FOFOT4sNtjzSb7', 
                 category: 'edukasi', 
                 title: 'Poster Edukasi', 
-                desc: 'Poster edukasi vertikal.' 
-            },
+                desc: 'Poster edukasi vertikal untuk publik.' 
+            }
         ];
 
+        // Fungsi untuk merender item galeri ke HTML
         function renderGallery(filter = 'semua') {
             const gallery = document.getElementById('gallery-grid');
             gallery.innerHTML = ''; 
@@ -259,7 +285,7 @@
                 card.innerHTML = `
                     <div class="relative overflow-hidden bg-gray-900">
                         <img src="${item.url}" alt="${item.title}" class="w-full h-auto block transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" loading="lazy" />
-                        ${isVideo ? `<div class="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-transparent transition-colors duration-500"><div class="w-14 h-14 bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center border border-white/40 text-white shadow-2xl transform transition-transform duration-500 group-hover:scale-110"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" class="ml-1"><path d="m7 4 12 8-12 8V4z"/></svg></div></div>` : ''}
+                        ${isVideo ? `<div class="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-transparent transition-colors duration-500"><div class="w-14 h-14 bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center border border-white/40 text-white shadow-2xl transform transition-transform duration-500 group-hover:scale-110"><i class="fa-solid fa-play text-xl ml-1"></i></div></div>` : ''}
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
                              <div class="text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                                 <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-purple-300 mb-1">${item.category}</p>
@@ -272,6 +298,7 @@
             });
         }
 
+        // Fungsi filter kategori
         function filterGallery(category) {
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.remove('active');
@@ -285,6 +312,7 @@
             }, 300);
         }
 
+        // Fungsi membuka modal detail
         function openModal(mediaUrl, title, desc, isVideo = false) {
             const modal = document.getElementById('modal');
             const mediaContainer = document.getElementById('modal-media-container');
@@ -293,7 +321,6 @@
             if (isVideo) {
                 const iframe = document.createElement('iframe');
                 iframe.src = mediaUrl;
-                // Rasio dinamis untuk video
                 iframe.className = "max-w-[90vw] max-h-[85vh] h-auto w-auto aspect-auto";
                 
                 if (mediaUrl.includes('preview')) {
@@ -309,7 +336,6 @@
             } else {
                 const img = document.createElement('img');
                 img.src = mediaUrl;
-                // Rasio asli untuk gambar (tanpa crop)
                 img.className = "max-w-[90vw] max-h-[85vh] h-auto w-auto object-contain";
                 mediaContainer.appendChild(img);
             }
@@ -325,6 +351,7 @@
             }, 10);
         }
 
+        // Fungsi menutup modal
         function closeModal() {
             const modal = document.getElementById('modal');
             document.getElementById('modal-content').classList.replace('scale-100', 'scale-95');
@@ -337,6 +364,7 @@
             }, 300);
         }
 
+        // Sinkronisasi Favicon dengan foto profil secara otomatis (Berbentuk bulat)
         function syncRoundFavicon() {
             const profileImg = document.getElementById('profile-img');
             const favicon = document.getElementById('favicon');
@@ -363,12 +391,10 @@
             }
         }
 
+        // Inisialisasi saat halaman dimuat
         document.addEventListener('DOMContentLoaded', () => {
             renderGallery('semua');
             syncRoundFavicon();
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
         });
     </script>
 </body>
