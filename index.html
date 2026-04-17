@@ -79,6 +79,23 @@
         .animate-float {
             animation: float 6s ease-in-out infinite;
         }
+
+        /* Filter Chip Active Style */
+        .filter-btn.active {
+            background-color: #8b5cf6 !important; /* Force purple-500 */
+            color: white !important;
+            box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.3);
+            border-color: #8b5cf6 !important;
+        }
+
+        /* Masonry Support via CSS Columns */
+        .masonry-container {
+            column-gap: 1.5rem;
+        }
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1.5rem;
+        }
     </style>
 </head>
 <body class="text-gray-900 antialiased overflow-x-hidden selection:bg-purple-300 selection:text-purple-900">
@@ -100,14 +117,10 @@
 
                 <!-- Foto Profil -->
                 <div class="mt-12 mb-10 relative">
-                    <!-- Glow di belakang foto profil -->
                     <div class="absolute inset-0 bg-indigo-500/20 blur-2xl rounded-full scale-150"></div>
-                    
                     <div class="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-white shadow-xl bg-gradient-to-tr from-indigo-100 to-purple-100">
-                        <!-- Ganti URL ini dengan foto profil asli Anda -->
                         <img src="https://picsum.photos/seed/luthfi/400/400" alt="Luthfi Hidayat" class="w-full h-full object-cover">
                     </div>
-                    <!-- Aksen dekoratif melingkar -->
                     <div class="absolute -inset-2 border border-dashed border-purple-300 rounded-full animate-[spin_10s_linear_infinite]"></div>
                 </div>
 
@@ -116,7 +129,7 @@
                     ready to enhance your design?
                 </h1>
                 
-                <!-- Area Teks Ringkasan dengan latar belakang blur transparan -->
+                <!-- Area Teks Ringkasan -->
                 <div class="bg-white/20 backdrop-blur-sm p-6 md:p-8 rounded-[2rem] border border-white/40 shadow-sm mb-12">
                     <p class="text-xl md:text-2xl text-gray-600 font-light leading-relaxed max-w-2xl mx-auto">
                         Halo, saya <span class="font-semibold text-gray-800">Luthfi Hidayat</span>. 
@@ -128,11 +141,21 @@
 
         <!-- Gallery Section -->
         <main class="py-20 px-4 md:px-8 max-w-[1800px] mx-auto fade-in" style="animation-delay: 0.4s;">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">My arts.</h2>
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-8">My arts.</h2>
+                
+                <!-- Filter Kategori -->
+                <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-12" id="filter-container">
+                    <button onclick="filterGallery('semua')" data-category="semua" class="filter-btn active px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border border-gray-200 hover:border-purple-300 bg-white shadow-sm">Semua</button>
+                    <button onclick="filterGallery('promosi')" data-category="promosi" class="filter-btn px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border border-gray-200 hover:border-purple-300 bg-white shadow-sm">Promosi</button>
+                    <button onclick="filterGallery('edukasi')" data-category="edukasi" class="filter-btn px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border border-gray-200 hover:border-purple-300 bg-white shadow-sm">Edukasi</button>
+                    <button onclick="filterGallery('motion')" data-category="motion" class="filter-btn px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border border-gray-200 hover:border-purple-300 bg-white shadow-sm">Motion Graphics</button>
+                    <button onclick="filterGallery('branding')" data-category="branding" class="filter-btn px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border border-gray-200 hover:border-purple-300 bg-white shadow-sm">Branding</button>
+                </div>
             </div>
 
-            <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+            <!-- MASONRY LAYOUT -->
+            <div id="gallery-grid" class="masonry-container columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 transition-all duration-500">
                 <!-- Item galeri di-generate via JS -->
             </div>
         </main>
@@ -146,17 +169,13 @@
     </div>
 
     <!-- Fullscreen Modal Overlay -->
-    <div id="modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 bg-black/40 backdrop-blur-xl" onclick="closeModal()">
-        
-        <!-- Tombol Tutup Melayang -->
+    <div id="modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 bg-black/60 backdrop-blur-xl" onclick="closeModal()">
         <button onclick="closeModal()" class="close-btn absolute top-6 right-6 z-[110] text-white hover:bg-white/40 transition-colors p-3 rounded-full">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
         </button>
 
         <div class="relative max-w-[95vw] max-h-[90vh] flex flex-col items-center justify-center rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl scale-95 opacity-0 transition-all duration-500 ease-out" id="modal-content" onclick="event.stopPropagation()">
-            
             <img id="modal-img" src="" alt="" class="max-w-full max-h-[85vh] object-contain rounded-[2rem] md:rounded-[3rem]">
-
             <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-8 pt-20 text-white rounded-b-[2rem] md:rounded-b-[3rem]">
                 <h3 id="modal-title" class="text-3xl md:text-4xl font-bold mb-3 leading-tight tracking-tight"></h3>
                 <p id="modal-desc" class="text-base md:text-lg text-gray-200 leading-relaxed font-light line-clamp-3 md:line-clamp-none"></p>
@@ -166,54 +185,88 @@
 
     <script>
         const myImages = [
-            <!-- Foto 01 -->
-            { url: 'https://lh3.googleusercontent.com/d/11XkhhUcXN5bLTdnbZ-FOFOT4sNtjzSb7', title: 'Desktop Wallpaper', desc: 'Teks dan visual yang kuat menimbulkan kesadaran, walaupun hanya satu persen.' },
-            <!-- Foto 02 -->
-            { url: 'https://lh3.googleusercontent.com/d/11XkhhUcXN5bLTdnbZ-FOFOT4sNtjzSb7', title: 'Desktop Wallpaper', desc: 'Teks dan visual yang kuat menimbulkan kesadaran, walaupun hanya satu persen.' },
-            <!-- Foto 03 -->
-            { url: 'https://lh3.googleusercontent.com/d/11XkhhUcXN5bLTdnbZ-FOFOT4sNtjzSb7', title: 'Desktop Wallpaper', desc: 'Teks dan visual yang kuat menimbulkan kesadaran, walaupun hanya satu persen.' },
-            <!-- Foto 04 -->
-            { url: 'https://lh3.googleusercontent.com/d/11XkhhUcXN5bLTdnbZ-FOFOT4sNtjzSb7', title: 'Desktop Wallpaper', desc: 'Teks dan visual yang kuat menimbulkan kesadaran, walaupun hanya satu persen.' },
+            { url: '', category: 'branding', title: 'Minimalist Branding', desc: 'Sebuah studi kasus tentang bagaimana kesederhanaan dapat meningkatkan nilai sebuah merk melalui tipografi yang kuat dan palet warna yang tenang.' },
+            { url: '', category: 'motion', title: 'Dynamic Logo Animation', desc: 'Eksplorasi gerak logo yang memberikan kesan fluiditas dan profesionalisme pada identitas visual perusahaan.' },
+            { url: '', category: 'promosi', title: 'Social Media Campaign', desc: 'Desain visual promosi untuk kampanye digital yang menonjol di tengah kebisingan media sosial.' },
+            { url: 'https://picsum.photos/seed/edu1/720/1280', category: 'edukasi', title: 'Educational Infographic', desc: 'Menyederhanakan informasi kompleks menjadi visual yang mudah dipahami untuk kebutuhan pembelajaran interaktif.' },
         ];
 
-        document.addEventListener('DOMContentLoaded', () => {
+        const galleryCategories = ['promosi', 'edukasi', 'motion', 'branding'];
+
+        function renderGallery(filter = 'semua') {
             const gallery = document.getElementById('gallery-grid');
-            const totalItems = 40; 
+            gallery.innerHTML = ''; 
+            
+            const totalItems = 32; 
             
             for (let i = 1; i <= totalItems; i++) {
-                const customData = myImages[i-1] || {};
-                const title = customData.title || `Project Vol. ${i}`;
-                const desc = customData.desc || `Eksplorasi visual kreatif yang menggabungkan elemen desain modern dengan fungsionalitas tingkat tinggi untuk hasil yang memukau.`;
-                
-                let aspectClass, imgWidth, imgHeight;
+                const category = i <= myImages.length ? myImages[i-1].category : galleryCategories[i % 4];
+                if (filter !== 'semua' && category !== filter) continue;
 
-                if (i <= 20) {
-                    aspectClass = "aspect-video"; 
-                    imgWidth = 1280; imgHeight = 720;
+                const customData = myImages[i-1] || {};
+                const title = customData.title || `Project ${category.charAt(0).toUpperCase() + category.slice(1)} Vol. ${i}`;
+                const desc = customData.desc || `Karya kreatif dalam kategori ${category} yang menggabungkan estetika modern dengan tujuan fungsional.`;
+                
+                let imgWidth, imgHeight;
+
+                if (i % 2 === 0) {
+                    imgWidth = 1280; imgHeight = 720; 
+                } else if (i % 3 === 0) {
+                    imgWidth = 1080; imgHeight = 1080; 
                 } else {
-                    aspectClass = "aspect-[9/16]";
-                    imgWidth = 720; imgHeight = 1280;
+                    imgWidth = 720; imgHeight = 1280; 
                 }
 
-                const imgUrl = customData.url || `https://picsum.photos/seed/${i * 31}/${imgWidth}/${imgHeight}`; 
+                const imgUrl = customData.url || `https://picsum.photos/seed/${i + 88}/${imgWidth}/${imgHeight}`; 
 
                 const card = document.createElement('div');
-                card.className = `group relative ${aspectClass} rounded-[2rem] md:rounded-[2.5rem] overflow-hidden bg-gray-200 cursor-pointer shadow-sm hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 fade-in`;
-                card.style.animationDelay = `${(i % 8) * 0.1}s`;
+                card.className = `masonry-item group relative rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-gray-200 cursor-pointer shadow-sm hover:shadow-2xl transition-all duration-500 fade-in`;
+                card.style.animationDelay = `${(i % 6) * 0.05}s`;
                 
                 card.onclick = () => openModal(imgUrl, title, desc);
 
                 card.innerHTML = `
-                    <img src="${imgUrl}" alt="${title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
-                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-                        <div class="bg-white/20 backdrop-blur-md border border-white/30 text-white text-xs md:text-sm font-medium px-5 py-2.5 rounded-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                            Lihat Detail
-                        </div>
+                    <img src="${imgUrl}" alt="${title}" class="w-full h-auto block transition-transform duration-700 group-hover:scale-105" loading="lazy" />
+                    <div class="absolute top-4 left-4 z-10">
+                        <span class="px-3 py-1 rounded-full bg-black/20 backdrop-blur-md border border-white/20 text-[10px] uppercase tracking-widest text-white font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            ${category}
+                        </span>
+                    </div>
+                    <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
+                         <div class="text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                            <p class="text-xs font-bold uppercase tracking-widest opacity-70 mb-1">${category}</p>
+                            <h4 class="text-lg font-bold leading-tight">${title}</h4>
+                         </div>
                     </div>
                 `;
                 
                 gallery.appendChild(card);
             }
+        }
+
+        function filterGallery(category) {
+            // Update Active Button State menggunakan data-category attribute agar lebih akurat
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-category') === category) {
+                    btn.classList.add('active');
+                }
+            });
+
+            const grid = document.getElementById('gallery-grid');
+            grid.style.opacity = '0';
+            grid.style.transform = 'translateY(10px)';
+            
+            setTimeout(() => {
+                renderGallery(category);
+                grid.style.opacity = '1';
+                grid.style.transform = 'translateY(0)';
+            }, 300);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderGallery('semua');
         });
 
         function openModal(img, title, desc) {
