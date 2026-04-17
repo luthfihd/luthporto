@@ -76,6 +76,15 @@
             animation: float 6s ease-in-out infinite;
         }
 
+        /* Animasi Rotasi untuk Dashed Circle */
+        @keyframes rotate-dashed {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: rotate-dashed 12s linear infinite;
+        }
+
         .filter-btn.active {
             background-color: #8b5cf6 !important;
             color: white !important;
@@ -106,12 +115,28 @@
         <header class="min-h-[90vh] flex flex-col justify-center items-center text-center px-6 pt-24 pb-12">
             <div class="fade-in max-w-4xl mx-auto flex flex-col items-center relative">
                 <div class="absolute -z-10 w-full h-full bg-white/30 backdrop-blur-md rounded-[3rem] border border-white/40 shadow-sm opacity-50"></div>
-                <div class="mt-12 mb-10 relative">
-                    <div class="absolute inset-0 bg-indigo-500/20 blur-2xl rounded-full scale-150"></div>
-                    <div class="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-white shadow-xl">
+                
+                <!-- Profil Section dengan Animasi Dashed Circle -->
+                <div class="mt-12 mb-10 relative flex items-center justify-center">
+                    <div class="absolute inset-0 bg-indigo-500/20 blur-3xl rounded-full scale-150"></div>
+                    
+                    <!-- Dashed Circle Animation -->
+                    <svg class="absolute w-44 h-44 md:w-52 md:h-52 animate-spin-slow pointer-events-none" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="48" fill="none" stroke="url(#gradient-dashed)" stroke-width="1.5" stroke-dasharray="8 6" stroke-linecap="round"></circle>
+                        <defs>
+                            <linearGradient id="gradient-dashed" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#6366f1" />
+                                <stop offset="100%" style="stop-color:#ec4899" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+
+                    <!-- Foto Profil -->
+                    <div class="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-white shadow-xl z-10">
                         <img id="profile-img" src="https://picsum.photos/seed/luthfi/400/400" alt="Luthfi Hidayat" class="w-full h-full object-cover">
                     </div>
                 </div>
+
                 <h1 class="text-6xl md:text-8xl font-extrabold tracking-tighter leading-[1.1] mb-10 pb-2 text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
                     ready to enhance your design?
                 </h1>
@@ -126,7 +151,7 @@
 
         <main class="py-20 px-4 md:px-8 max-w-[1800px] mx-auto fade-in">
             <div class="text-center mb-12">
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-8">Significant Projects</h2>
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-8">Karya Saya.</h2>
                 <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-12" id="filter-container">
                     <button onclick="filterGallery('semua')" data-category="semua" class="filter-btn active px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border border-gray-200 hover:border-purple-300 bg-white shadow-sm">Semua</button>
                     <button onclick="filterGallery('promosi')" data-category="promosi" class="filter-btn px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border border-gray-200 hover:border-purple-300 bg-white shadow-sm">Promosi</button>
@@ -144,28 +169,23 @@
         <!-- Footer -->
         <footer class="py-20 px-6 mt-10 border-t border-gray-100 bg-white/30 backdrop-blur-sm">
             <div class="max-w-6xl mx-auto flex flex-col items-center text-center">
-                <!-- Motto -->
                 <p class="text-2xl md:text-4xl font-bold tracking-tighter mb-12 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">
-                    "berkarya untuk melihat dunia."
+                    "Design in your mind, Reality in your hands."
                 </p>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-4xl pt-8">
-                    <!-- Kontak -->
                     <div class="flex flex-col items-center md:items-start text-center md:text-left">
                         <h4 class="text-sm font-bold uppercase tracking-widest text-gray-400 mb-4">Hubungi Saya</h4>
                         <a href="mailto:halo@luthfihidayat.com" class="text-xl md:text-2xl font-medium text-gray-800 hover:text-purple-600 transition-colors">halo@luthfihidayat.com</a>
                         <p class="text-gray-500 mt-2">+62 812-3456-7890</p>
                     </div>
 
-                    <!-- Sosial Media (Hanya X dan Instagram) -->
                     <div class="flex flex-col items-center md:items-end text-center md:text-right">
                         <h4 class="text-sm font-bold uppercase tracking-widest text-gray-400 mb-4">Temukan Saya</h4>
                         <div class="flex gap-4">
-                            <!-- Link X -->
                             <a href="https://x.com" target="_blank" class="p-3 rounded-2xl bg-white border border-gray-100 text-gray-600 hover:text-white hover:bg-black hover:border-black shadow-sm transition-all duration-300" title="X (Twitter)">
                                 <i data-lucide="twitter"></i>
                             </a>
-                            <!-- Link Instagram -->
                             <a href="https://www.instagram.com/makanbuahbanyak/" target="_blank" class="p-3 rounded-2xl bg-white border border-gray-100 text-gray-600 hover:text-white hover:bg-purple-500 hover:border-purple-500 shadow-sm transition-all duration-300" title="Instagram">
                                 <i data-lucide="instagram"></i>
                             </a>
@@ -185,26 +205,23 @@
         <button onclick="closeModal()" class="close-btn absolute top-6 right-6 z-[110] text-white p-3 rounded-full">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
         </button>
-        <div class="relative w-full max-w-5xl flex flex-col items-center justify-center rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl scale-95 opacity-0 transition-all duration-500 ease-out bg-black" id="modal-content" onclick="event.stopPropagation()">
-            <div id="modal-media-container" class="w-full flex justify-center items-center">
+        <!-- Penyesuaian: modal-content sekarang tidak memiliki overflow-hidden untuk mendukung rasio dinamis -->
+        <div class="relative w-full max-w-fit flex flex-col items-center justify-center rounded-[2rem] md:rounded-[3rem] shadow-2xl scale-95 opacity-0 transition-all duration-500 ease-out bg-black" id="modal-content" onclick="event.stopPropagation()">
+            <div id="modal-media-container" class="w-full flex justify-center items-center overflow-hidden rounded-[2rem] md:rounded-[3rem]">
                 <!-- Konten diisi via JS -->
             </div>
-            <div class="w-full bg-gradient-to-t from-black/90 via-black/60 to-transparent p-8 pt-20 text-white absolute bottom-0">
-                <h3 id="modal-title" class="text-3xl md:text-4xl font-bold mb-3 tracking-tight"></h3>
-                <p id="modal-desc" class="text-base md:text-lg text-gray-200 font-light"></p>
+            <!-- Overlay Judul & Deskripsi -->
+            <div class="w-full bg-gradient-to-t from-black/90 via-black/40 to-transparent p-6 md:p-10 pt-24 text-white absolute bottom-0 pointer-events-none rounded-b-[2rem] md:rounded-b-[3rem]">
+                <h3 id="modal-title" class="text-2xl md:text-4xl font-bold mb-2 tracking-tight"></h3>
+                <p id="modal-desc" class="text-sm md:text-lg text-gray-200 font-light"></p>
             </div>
         </div>
     </div>
 
     <script>
-        /**
-         * TIPS UNTUK VIDEO GOOGLE DRIVE:
-         * Gunakan format link: https://drive.google.com/file/d/[FILE_ID]/preview
-         * Untuk thumbnail, pastikan properti 'url' berisi link gambar preview yang kamu inginkan.
-         */
         const myImages = [
             { 
-                url: 'https://picsum.photos/seed/p1/720/1280', // Gambar ini jadi thumbnail di galeri
+                url: 'https://picsum.photos/seed/p1/720/1280', 
                 videoUrl: 'https://drive.google.com/file/d/1EXslDByK9XYy5cd1KXoZ2tqa773OgGv5/preview', 
                 category: 'motion', 
                 title: 'Work Highlights', 
@@ -236,26 +253,14 @@
             
             myImages.forEach((item) => {
                 if (filter !== 'semua' && item.category !== filter) return;
-
                 const isVideo = !!item.videoUrl;
                 const card = document.createElement('div');
                 card.className = `masonry-item group relative rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-gray-200 cursor-pointer shadow-sm hover:shadow-2xl transition-all duration-500 fade-in`;
-                
                 card.onclick = () => openModal(isVideo ? item.videoUrl : item.url, item.title, item.desc, isVideo);
-
-                // LOGIKA: Properti 'url' akan selalu menjadi sumber gambar thumbnail di galeri
                 card.innerHTML = `
                     <div class="relative overflow-hidden bg-gray-900">
                         <img src="${item.url}" alt="${item.title}" class="w-full h-auto block transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" loading="lazy" />
-                        
-                        ${isVideo ? `
-                            <div class="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-transparent transition-colors duration-500">
-                                <div class="w-14 h-14 bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center border border-white/40 text-white shadow-2xl transform transition-transform duration-500 group-hover:scale-110">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" class="ml-1"><path d="m7 4 12 8-12 8V4z"/></svg>
-                                </div>
-                            </div>
-                        ` : ''}
-                        
+                        ${isVideo ? `<div class="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-transparent transition-colors duration-500"><div class="w-14 h-14 bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center border border-white/40 text-white shadow-2xl transform transition-transform duration-500 group-hover:scale-110"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" class="ml-1"><path d="m7 4 12 8-12 8V4z"/></svg></div></div>` : ''}
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
                              <div class="text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                                 <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-purple-300 mb-1">${item.category}</p>
@@ -289,16 +294,25 @@
             if (isVideo) {
                 const iframe = document.createElement('iframe');
                 iframe.src = mediaUrl;
-                // Mengatur aspek rasio video di dalam modal agar lebih fleksibel
-                iframe.className = "w-full aspect-[9/16] md:max-h-[85vh] md:w-auto md:aspect-auto"; 
-                iframe.style.minWidth = "320px";
-                iframe.style.height = "80vh";
+                // Penyesuaian: Menggunakan max-h dan max-w agar rasio video tetap terjaga
+                iframe.className = "max-w-[90vw] max-h-[85vh] h-auto w-auto aspect-auto";
+                
+                // Jika video portrait (seperti TikTok/Reels), kita set lebar tertentu agar tidak terlalu tipis
+                if (mediaUrl.includes('preview')) {
+                    iframe.style.width = "min(500px, 85vw)";
+                    iframe.style.aspectRatio = "9/16";
+                } else {
+                    iframe.style.width = "min(1280px, 90vw)";
+                    iframe.style.aspectRatio = "16/9";
+                }
+                
                 iframe.allow = "autoplay";
                 mediaContainer.appendChild(iframe);
             } else {
                 const img = document.createElement('img');
                 img.src = mediaUrl;
-                img.className = "max-w-full max-h-[85vh] object-contain";
+                // Penyesuaian: Menggunakan object-contain dengan h-auto agar rasio mengikuti gambar asli
+                img.className = "max-w-[90vw] max-h-[85vh] h-auto w-auto object-contain";
                 mediaContainer.appendChild(img);
             }
 
@@ -325,18 +339,36 @@
             }, 300);
         }
 
-        // Fungsi untuk sinkronisasi favicon dengan foto profil
-        function syncFavicon() {
+        // Fungsi Canggih untuk Favicon Bulat Otomatis
+        function syncRoundFavicon() {
             const profileImg = document.getElementById('profile-img');
             const favicon = document.getElementById('favicon');
+            
             if (profileImg && favicon) {
-                favicon.href = profileImg.src;
+                const tempImg = new Image();
+                tempImg.crossOrigin = "anonymous"; 
+                tempImg.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const size = 64; 
+                    canvas.width = size;
+                    canvas.height = size;
+                    
+                    ctx.beginPath();
+                    ctx.arc(size/2, size/2, size/2, 0, Math.PI * 2);
+                    ctx.closePath();
+                    ctx.clip();
+                    
+                    ctx.drawImage(tempImg, 0, 0, size, size);
+                    favicon.href = canvas.toDataURL('image/png');
+                };
+                tempImg.src = profileImg.src;
             }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             renderGallery('semua');
-            syncFavicon(); // Jalankan saat halaman dimuat
+            syncRoundFavicon();
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
