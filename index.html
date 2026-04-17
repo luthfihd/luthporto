@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luth's Porto</title>
+    <title>Portofolio Desain | My Arts</title>
     <!-- Tailwind CSS untuk styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts untuk tipografi yang clean dan modern -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons untuk ikon sosial media -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     
     <script>
         tailwind.config = {
@@ -29,20 +31,15 @@
         body {
             background-color: theme('colors.background');
         }
-        /* Animasi fade-in sederhana saat halaman dimuat */
         .fade-in {
             animation: fadeIn 1s ease-out forwards;
             opacity: 0;
             transform: translateY(20px);
         }
         @keyframes fadeIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Blur transisi untuk konten utama */
         #main-content {
             transition: filter 0.4s ease, transform 0.4s ease;
         }
@@ -52,7 +49,6 @@
             pointer-events: none;
         }
 
-        /* Modal styling */
         #modal {
             display: none;
             opacity: 0;
@@ -63,14 +59,12 @@
             opacity: 1;
         }
         
-        /* Tombol tutup transparan */
         .close-btn {
             background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        /* Animasi Mengambang untuk Background Blur */
         @keyframes float {
             0% { transform: translate(0, 0); }
             50% { transform: translate(15px, 20px); }
@@ -80,15 +74,14 @@
             animation: float 6s ease-in-out infinite;
         }
 
-        /* Filter Chip Active Style */
         .filter-btn.active {
-            background-color: #8b5cf6 !important; /* Force purple-500 */
+            background-color: #8b5cf6 !important;
             color: white !important;
             box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.3);
             border-color: #8b5cf6 !important;
         }
 
-        /* Masonry Support via CSS Columns */
+        /* Masonry Layout */
         .masonry-container {
             column-gap: 1.5rem;
         }
@@ -100,7 +93,7 @@
 </head>
 <body class="text-gray-900 antialiased overflow-x-hidden selection:bg-purple-300 selection:text-purple-900">
 
-    <!-- Efek Blur Gradien Latar Belakang (Dekoratif) -->
+    <!-- Efek Latar Belakang -->
     <div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
         <div class="absolute top-[10%] left-[20%] w-[40vw] h-[40vw] bg-indigo-200/40 rounded-full blur-[100px] animate-float"></div>
         <div class="absolute top-[20%] right-[10%] w-[35vw] h-[35vw] bg-pink-100/50 rounded-full blur-[100px] animate-float" style="animation-delay: -3s;"></div>
@@ -108,43 +101,29 @@
     </div>
 
     <div id="main-content">
-        <!-- Header & Hero Section -->
         <header class="min-h-[90vh] flex flex-col justify-center items-center text-center px-6 pt-24 pb-12">
-            <div class="fade-in max-w-4xl mx-auto flex flex-col items-center relative" style="animation-delay: 0.1s;">
-                
-                <!-- Blur Gradien Khusus di Belakang Profil & Teks -->
+            <div class="fade-in max-w-4xl mx-auto flex flex-col items-center relative">
                 <div class="absolute -z-10 w-full h-full bg-white/30 backdrop-blur-md rounded-[3rem] border border-white/40 shadow-sm opacity-50"></div>
-
-                <!-- Foto Profil -->
                 <div class="mt-12 mb-10 relative">
                     <div class="absolute inset-0 bg-indigo-500/20 blur-2xl rounded-full scale-150"></div>
-                    <div class="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-white shadow-xl bg-gradient-to-tr from-indigo-100 to-purple-100">
+                    <div class="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-white shadow-xl">
                         <img src="https://picsum.photos/seed/luthfi/400/400" alt="Luthfi Hidayat" class="w-full h-full object-cover">
                     </div>
-                    <div class="absolute -inset-2 border border-dashed border-purple-300 rounded-full animate-[spin_10s_linear_infinite]"></div>
                 </div>
-
-                <!-- Judul Utama -->
                 <h1 class="text-6xl md:text-8xl font-extrabold tracking-tighter leading-[1.1] mb-10 pb-2 text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
                     ready to enhance your design?
                 </h1>
-                
-                <!-- Area Teks Ringkasan -->
                 <div class="bg-white/20 backdrop-blur-sm p-6 md:p-8 rounded-[2rem] border border-white/40 shadow-sm mb-12">
                     <p class="text-xl md:text-2xl text-gray-600 font-light leading-relaxed max-w-2xl mx-auto">
-                        Halo, saya <span class="font-semibold text-gray-800">Luthfi Hidayat</span>. 
-                        Seorang Spesialis Multimedia yang berfokus pada <span class="text-purple-600 font-medium">Promosi dan Edukasi</span>. 
+                        Halo, saya <span class="font-semibold text-gray-800">Luthfi Hidayat</span>. Spesialis Multimedia.
                     </p>
                 </div>
             </div>
         </header>
 
-        <!-- Gallery Section -->
-        <main class="py-20 px-4 md:px-8 max-w-[1800px] mx-auto fade-in" style="animation-delay: 0.4s;">
+        <main class="py-20 px-4 md:px-8 max-w-[1800px] mx-auto fade-in">
             <div class="text-center mb-12">
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-8">My arts.</h2>
-                
-                <!-- Filter Kategori -->
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-8">Karya Saya.</h2>
                 <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-12" id="filter-container">
                     <button onclick="filterGallery('semua')" data-category="semua" class="filter-btn active px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border border-gray-200 hover:border-purple-300 bg-white shadow-sm">Semua</button>
                     <button onclick="filterGallery('promosi')" data-category="promosi" class="filter-btn px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border border-gray-200 hover:border-purple-300 bg-white shadow-sm">Promosi</button>
@@ -154,155 +133,189 @@
                 </div>
             </div>
 
-            <!-- MASONRY LAYOUT -->
             <div id="gallery-grid" class="masonry-container columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 transition-all duration-500">
-                <!-- Item galeri di-generate via JS -->
+                <!-- Konten dibuat melalui JS -->
             </div>
         </main>
 
         <!-- Footer -->
-        <footer class="py-24 text-center mt-10">
-            <p class="text-3xl md:text-5xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-gray-300 to-gray-500">
-                Design in your mind.
-            </p>
+        <footer class="py-20 px-6 mt-10 border-t border-gray-100 bg-white/30 backdrop-blur-sm">
+            <div class="max-w-6xl mx-auto flex flex-col items-center text-center">
+                <!-- Motto -->
+                <p class="text-2xl md:text-4xl font-bold tracking-tighter mb-12 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">
+                    "Design in your mind, Reality in your hands."
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-4xl pt-8">
+                    <!-- Kontak -->
+                    <div class="flex flex-col items-center md:items-start text-center md:text-left">
+                        <h4 class="text-sm font-bold uppercase tracking-widest text-gray-400 mb-4">Hubungi Saya</h4>
+                        <a href="mailto:halo@luthfihidayat.com" class="text-xl md:text-2xl font-medium text-gray-800 hover:text-purple-600 transition-colors">halo@luthfihidayat.com</a>
+                        <p class="text-gray-500 mt-2">+62 812-3456-7890</p>
+                    </div>
+
+                    <!-- Sosial Media (Hanya X dan Instagram) -->
+                    <div class="flex flex-col items-center md:items-end text-center md:text-right">
+                        <h4 class="text-sm font-bold uppercase tracking-widest text-gray-400 mb-4">Temukan Saya</h4>
+                        <div class="flex gap-4">
+                            <!-- Link X -->
+                            <a href="https://x.com" target="_blank" class="p-3 rounded-2xl bg-white border border-gray-100 text-gray-600 hover:text-white hover:bg-black hover:border-black shadow-sm transition-all duration-300" title="X (Twitter)">
+                                <i data-lucide="twitter"></i>
+                            </a>
+                            <!-- Link Instagram -->
+                            <a href="https://www.instagram.com/makanbuahbanyak/" target="_blank" class="p-3 rounded-2xl bg-white border border-gray-100 text-gray-600 hover:text-white hover:bg-purple-500 hover:border-purple-500 shadow-sm transition-all duration-300" title="Instagram">
+                                <i data-lucide="instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-20 pt-8 border-t border-gray-100 w-full text-gray-400 text-sm">
+                    <p>&copy; 2026 Luthfi Hidayat. All rights reserved.</p>
+                </div>
+            </div>
         </footer>
     </div>
 
-    <!-- Fullscreen Modal Overlay -->
+    <!-- Modal -->
     <div id="modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 bg-black/60 backdrop-blur-xl" onclick="closeModal()">
-        <button onclick="closeModal()" class="close-btn absolute top-6 right-6 z-[110] text-white hover:bg-white/40 transition-colors p-3 rounded-full">
+        <button onclick="closeModal()" class="close-btn absolute top-6 right-6 z-[110] text-white p-3 rounded-full">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
         </button>
-
-        <div class="relative max-w-[95vw] max-h-[90vh] flex flex-col items-center justify-center rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl scale-95 opacity-0 transition-all duration-500 ease-out" id="modal-content" onclick="event.stopPropagation()">
-            <img id="modal-img" src="" alt="" class="max-w-full max-h-[85vh] object-contain rounded-[2rem] md:rounded-[3rem]">
-            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-8 pt-20 text-white rounded-b-[2rem] md:rounded-b-[3rem]">
-                <h3 id="modal-title" class="text-3xl md:text-4xl font-bold mb-3 leading-tight tracking-tight"></h3>
-                <p id="modal-desc" class="text-base md:text-lg text-gray-200 leading-relaxed font-light line-clamp-3 md:line-clamp-none"></p>
+        <div class="relative w-full max-w-5xl flex flex-col items-center justify-center rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl scale-95 opacity-0 transition-all duration-500 ease-out bg-black" id="modal-content" onclick="event.stopPropagation()">
+            <div id="modal-media-container" class="w-full flex justify-center items-center">
+                <!-- Konten diisi via JS -->
+            </div>
+            <div class="w-full bg-gradient-to-t from-black/90 via-black/60 to-transparent p-8 pt-20 text-white absolute bottom-0">
+                <h3 id="modal-title" class="text-3xl md:text-4xl font-bold mb-3 tracking-tight"></h3>
+                <p id="modal-desc" class="text-base md:text-lg text-gray-200 font-light"></p>
             </div>
         </div>
     </div>
 
     <script>
         const myImages = [
-            { url: '', category: 'branding', title: 'Minimalist Branding', desc: 'Sebuah studi kasus tentang bagaimana kesederhanaan dapat meningkatkan nilai sebuah merk melalui tipografi yang kuat dan palet warna yang tenang.' },
-            { url: '', category: 'motion', title: 'Dynamic Logo Animation', desc: 'Eksplorasi gerak logo yang memberikan kesan fluiditas dan profesionalisme pada identitas visual perusahaan.' },
-            { url: '', category: 'promosi', title: 'Social Media Campaign', desc: 'Desain visual promosi untuk kampanye digital yang menonjol di tengah kebisingan media sosial.' },
-            { url: 'https://picsum.photos/seed/edu1/720/1280', category: 'edukasi', title: 'Educational Infographic', desc: 'Menyederhanakan informasi kompleks menjadi visual yang mudah dipahami untuk kebutuhan pembelajaran interaktif.' },
+            { 
+                url: 'https://picsum.photos/seed/p1/720/1280', 
+                videoUrl: 'https://drive.google.com/file/d/1v2k-Xq_e3zXy_x_X/preview', 
+                category: 'motion', 
+                title: 'Motion Portrait Video', 
+                desc: 'Deskripsi karya video portrait kamu.' 
+            },
+            { 
+                url: 'https://picsum.photos/seed/p2/1280/720', 
+                category: 'branding', 
+                title: 'Landscape Branding Design', 
+                desc: 'Deskripsi karya branding landscape kamu.' 
+            },
+            { 
+                url: 'https://picsum.photos/seed/p3/1080/1080', 
+                category: 'promosi', 
+                title: 'Social Media Ad', 
+                desc: 'Deskripsi karya promosi square kamu.' 
+            },
+            { 
+                url: 'https://picsum.photos/seed/p4/720/1280', 
+                category: 'edukasi', 
+                title: 'Poster Edukasi', 
+                desc: 'Deskripsi karya edukasi portrait kamu.' 
+            },
         ];
-
-        const galleryCategories = ['promosi', 'edukasi', 'motion', 'branding'];
 
         function renderGallery(filter = 'semua') {
             const gallery = document.getElementById('gallery-grid');
             gallery.innerHTML = ''; 
             
-            const totalItems = 32; 
-            
-            for (let i = 1; i <= totalItems; i++) {
-                const category = i <= myImages.length ? myImages[i-1].category : galleryCategories[i % 4];
-                if (filter !== 'semua' && category !== filter) continue;
+            myImages.forEach((item, index) => {
+                if (filter !== 'semua' && item.category !== filter) return;
 
-                const customData = myImages[i-1] || {};
-                const title = customData.title || `Project ${category.charAt(0).toUpperCase() + category.slice(1)} Vol. ${i}`;
-                const desc = customData.desc || `Karya kreatif dalam kategori ${category} yang menggabungkan estetika modern dengan tujuan fungsional.`;
-                
-                let imgWidth, imgHeight;
-
-                if (i % 2 === 0) {
-                    imgWidth = 1280; imgHeight = 720; 
-                } else if (i % 3 === 0) {
-                    imgWidth = 1080; imgHeight = 1080; 
-                } else {
-                    imgWidth = 720; imgHeight = 1280; 
-                }
-
-                const imgUrl = customData.url || `https://picsum.photos/seed/${i + 88}/${imgWidth}/${imgHeight}`; 
-
+                const isVideo = !!item.videoUrl;
                 const card = document.createElement('div');
                 card.className = `masonry-item group relative rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-gray-200 cursor-pointer shadow-sm hover:shadow-2xl transition-all duration-500 fade-in`;
-                card.style.animationDelay = `${(i % 6) * 0.05}s`;
                 
-                card.onclick = () => openModal(imgUrl, title, desc);
+                card.onclick = () => openModal(isVideo ? item.videoUrl : item.url, item.title, item.desc, isVideo);
 
                 card.innerHTML = `
-                    <img src="${imgUrl}" alt="${title}" class="w-full h-auto block transition-transform duration-700 group-hover:scale-105" loading="lazy" />
-                    <div class="absolute top-4 left-4 z-10">
-                        <span class="px-3 py-1 rounded-full bg-black/20 backdrop-blur-md border border-white/20 text-[10px] uppercase tracking-widest text-white font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            ${category}
-                        </span>
-                    </div>
-                    <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
+                    <img src="${item.url}" alt="${item.title}" class="w-full h-auto block transition-transform duration-700 group-hover:scale-105" loading="lazy" />
+                    ${isVideo ? `
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <div class="w-16 h-16 bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center border border-white/50 text-white shadow-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="m7 4 12 8-12 8V4z"/></svg>
+                            </div>
+                        </div>
+                    ` : ''}
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
                          <div class="text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                            <p class="text-xs font-bold uppercase tracking-widest opacity-70 mb-1">${category}</p>
-                            <h4 class="text-lg font-bold leading-tight">${title}</h4>
+                            <p class="text-xs font-bold uppercase tracking-widest opacity-70 mb-1">${item.category}</p>
+                            <h4 class="text-lg font-bold leading-tight">${item.title}</h4>
                          </div>
                     </div>
                 `;
-                
                 gallery.appendChild(card);
-            }
+            });
         }
 
         function filterGallery(category) {
-            // Update Active Button State menggunakan data-category attribute agar lebih akurat
-            const buttons = document.querySelectorAll('.filter-btn');
-            buttons.forEach(btn => {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.remove('active');
-                if (btn.getAttribute('data-category') === category) {
-                    btn.classList.add('active');
-                }
+                if (btn.getAttribute('data-category') === category) btn.classList.add('active');
             });
-
             const grid = document.getElementById('gallery-grid');
             grid.style.opacity = '0';
-            grid.style.transform = 'translateY(10px)';
-            
             setTimeout(() => {
                 renderGallery(category);
                 grid.style.opacity = '1';
-                grid.style.transform = 'translateY(0)';
             }, 300);
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            renderGallery('semua');
-        });
-
-        function openModal(img, title, desc) {
+        function openModal(mediaUrl, title, desc, isVideo = false) {
             const modal = document.getElementById('modal');
-            const content = document.getElementById('main-content');
-            const modalInner = document.getElementById('modal-content');
-            const modalImg = document.getElementById('modal-img');
-            
-            modalImg.src = img;
+            const mediaContainer = document.getElementById('modal-media-container');
+            mediaContainer.innerHTML = '';
+
+            if (isVideo) {
+                const iframe = document.createElement('iframe');
+                iframe.src = mediaUrl;
+                iframe.className = "w-full aspect-[9/16] md:aspect-video md:h-[80vh]"; 
+                iframe.allow = "autoplay";
+                mediaContainer.appendChild(iframe);
+            } else {
+                const img = document.createElement('img');
+                img.src = mediaUrl;
+                img.className = "max-w-full max-h-[85vh] object-contain";
+                mediaContainer.appendChild(img);
+            }
+
             document.getElementById('modal-title').innerText = title;
             document.getElementById('modal-desc').innerText = desc;
-
             modal.classList.add('active');
-            content.classList.add('content-blur');
+            document.getElementById('main-content').classList.add('content-blur');
             document.body.style.overflow = 'hidden'; 
-
             setTimeout(() => {
-                modalInner.classList.remove('scale-95', 'opacity-0');
-                modalInner.classList.add('scale-100', 'opacity-100');
+                document.getElementById('modal-content').classList.remove('scale-95', 'opacity-0');
+                document.getElementById('modal-content').classList.add('scale-100', 'opacity-100');
             }, 10);
         }
 
         function closeModal() {
             const modal = document.getElementById('modal');
-            const content = document.getElementById('main-content');
-            const modalInner = document.getElementById('modal-content');
-
-            modalInner.classList.remove('scale-100', 'opacity-100');
-            modalInner.classList.add('scale-95', 'opacity-0');
-            
+            document.getElementById('modal-content').classList.replace('scale-100', 'scale-95');
+            document.getElementById('modal-content').classList.replace('opacity-100', 'opacity-0');
             setTimeout(() => {
                 modal.classList.remove('active');
-                content.classList.remove('content-blur');
+                document.getElementById('main-content').classList.remove('content-blur');
                 document.body.style.overflow = 'auto'; 
+                document.getElementById('modal-media-container').innerHTML = '';
             }, 300);
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderGallery('semua');
+            // Pastikan Lucide diinisialisasi SETELAH DOM siap
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
     </script>
 </body>
 </html>
