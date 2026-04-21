@@ -118,7 +118,16 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#
 .admin-item{border-radius:var(--radius-md);overflow:hidden;position:relative;cursor:default;border:1px solid rgba(255,255,255,0.08);transition:transform 0.3s var(--spring),box-shadow 0.3s;animation:fadeUp 0.4s ease both;}
 .admin-item:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,0.4);}
 .admin-thumb{width:100%;height:130px;object-fit:cover;display:block;}
-.admin-placeholder{width:100%;height:130px;display:flex;align-items:center;justify-content:center;font-size:2rem;color:rgba(255,255,255,0.4);}
+..admin-placeholder {
+  width: 100%;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: rgba(255,255,255,0.8);
+  background: linear-gradient(135deg, rgba(108,99,255,0.15), rgba(255,107,157,0.15));
+}
 .admin-item-info{padding:10px 12px;background:rgba(0,0,0,0.3);}
 .admin-item-title{font-size:12px;font-weight:600;color:#fff;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .admin-item-cat{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.4);}
@@ -189,7 +198,7 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#
       <span class="topbar-brand">⚙ Luth's Admin</span>
       <div class="topbar-right">
         <span class="repo-badge" id="repoBadge">—</span>
-        <a href="index.html" target="_blank" class="btn-view-site">↗ Lihat Site</a>
+        <a href="index.html" target="_blank" class="btn-view-site">↗ Lihat Perubahan</a>
         <button class="btn-logout" onclick="doLogout()">Logout</button>
       </div>
     </div>
@@ -299,6 +308,7 @@ let pendingFiles = [];
 let activeTab = 'upload';
 let adminFilter = 'all';
 let deleteTargetId = null;
+let deleteTargetItem = null;
 
 // ── LOGIN ──
 function doLogin() {
@@ -321,6 +331,7 @@ function doLogout() {
   GH = { user:'', repo:'', token:'' };
   document.getElementById('adminPanel').style.display = 'none';
   document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('loginScreen').style.flex = '1';
 }
 
 // ── BOOT ──
@@ -377,14 +388,10 @@ async function loadData() {
     const r = await fetch(`https://raw.githubusercontent.com/${GH.user}/${GH.repo}/main/data.json?t=${Date.now()}`);
     if (r.ok) {
       allItems = await r.json();
-      // Pastikan semua item memiliki type yang benar
-      allItems = allItems.map(item => {
-        if (item.type === 'gdrive') item.type = 'video';
-        return item;
-      });
+      console.log('Data loaded:', allItems.length, 'items');
     } else {
       allItems = [];
-      console.log('No existing data.json, starting fresh');
+      console.log('No data.json found, starting fresh');
     }
   } catch(e) { 
     console.error('Load data error:', e);
@@ -412,20 +419,34 @@ function renderAdminGrid() {
     if (item.type === 'image') {
       const src = item.src.startsWith('http') ? item.src
         : `https://raw.githubusercontent.com/${GH.user}/${GH.repo}/main/images/${item.src}`;
-      media = `<img class="admin-thumb" src="${src}" alt="${item.title}" loading="lazy">`;
+      media = `<img class="admin-thumb" src="${src}" alt="${item.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x200?text=Image+Not+Found'">`;
     } else {
-      const g = item.gradientClass || 'gradient-1';
-      media = `<div class="admin-placeholder ${g}">${item.icon || '✦'}</div>`;
+      // Untuk Google Drive / Video
+      const gradient = item.gradientClass || 'gradient-1';
+      media = `<div class="admin-placeholder" style="background: linear-gradient(135deg, rgba(108,99,255,0.2), rgba(255,107,157,0.2)); height:130px; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px;">
+        <div style="font-size: 2.5rem;">${item.icon || '🎬'}</div>
+        <div style="font-size: 10px; color: rgba(255,255,255,0.6);">${item.type === 'gdrive' ? 'Google Drive' : 'Video'}</div>
+      </div>`;
     }
     el.innerHTML = `
       ${media}
       <div class="admin-item-info">
-        <div class="admin-item-title">${item.title}</div>
+        <div class="admin-item-title">${escapeHtml(item.title)}</div>
         <div class="admin-item-cat">${item.category}</div>
       </div>
-      <button class="admin-item-del" onclick="confirmDelete('${item.id}','${item.title.replace(/'/g,'`')}')" title="Hapus">✕</button>
+      <button class="admin-item-del" onclick="confirmDelete('${item.id}')" title="Hapus">✕</button>
     `;
     grid.appendChild(el);
+  });
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/[&<>]/g, function(m) {
+    if (m === '&') return '&amp;';
+    if (m === '<') return '&lt;';
+    if (m === '>') return '&gt;';
+    return m;
   });
 }
 
@@ -448,11 +469,15 @@ function switchTab(name, btn) {
 // ── DROPZONE ──
 const dz = document.getElementById('dropzone');
 const fi = document.getElementById('fileInput');
-dz.addEventListener('click', () => fi.click());
-dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('over'); });
-dz.addEventListener('dragleave', () => dz.classList.remove('over'));
-dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('over'); handleFiles(Array.from(e.dataTransfer.files)); });
-fi.addEventListener('change', () => handleFiles(Array.from(fi.files)));
+if (dz) {
+  dz.addEventListener('click', () => fi.click());
+  dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('over'); });
+  dz.addEventListener('dragleave', () => dz.classList.remove('over'));
+  dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('over'); handleFiles(Array.from(e.dataTransfer.files)); });
+}
+if (fi) {
+  fi.addEventListener('change', () => handleFiles(Array.from(fi.files)));
+}
 
 function handleFiles(files) {
   const valid = files.filter(f => f.type.startsWith('image/') && f.size <= 25*1024*1024);
@@ -464,6 +489,7 @@ function handleFiles(files) {
 
 function renderPreviews() {
   const list = document.getElementById('previewList');
+  if (!list) return;
   list.innerHTML = '';
   pendingFiles.forEach((f, i) => {
     const url = URL.createObjectURL(f);
@@ -487,35 +513,21 @@ async function submitItem() {
     const link = document.getElementById('fGdrive').value.trim();
     if (!link) { toast('Masukkan link Google Drive!', 'err'); return; }
     
-    // Extract file ID dari Google Drive link
-    let fileId = '';
-    let embedUrl = '';
-    
-    // Handle berbagai format Google Drive link
-    if (link.includes('/file/d/')) {
-      fileId = link.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)?.[1] || '';
-      embedUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`;
-    } else if (link.includes('id=')) {
-      fileId = link.split('id=')[1].split('&')[0];
-      embedUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`;
-    } else if (link.includes('uc?id=')) {
-      fileId = link.split('uc?id=')[1].split('&')[0];
-      embedUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`;
-    }
-    
-    await saveItem({ 
-      type: 'video',  // Ubah ke 'video' agar konsisten
+    const newItem = { 
+      id: 'item_' + Date.now() + '_' + Math.random().toString(36).slice(2,8),
+      type: 'gdrive',
       src: link, 
-      embedUrl: embedUrl,
-      title, 
+      title: title, 
       category: cat, 
-      desc, 
-      icon: '▶', 
-      gradientClass: randomGradient(),
-      driveId: fileId
-    });
-    document.getElementById('fGdrive').value = '';
+      desc: desc, 
+      icon: '🎬',
+      date: new Date().toISOString().slice(0,10)
+    };
+    
+    allItems.unshift(newItem);
+    await pushDataJson();
     toast('✦ Karya Google Drive berhasil ditambahkan!', 'ok');
+    document.getElementById('fGdrive').value = '';
     document.getElementById('fTitle').value = '';
     document.getElementById('fDesc').value = '';
     renderAdminGrid();
@@ -533,14 +545,18 @@ async function submitItem() {
       const ext = file.name.split('.').pop().toLowerCase();
       const filename = `${Date.now()}_${i}.${ext}`;
       await putFile(`images/${filename}`, base64, `Add image: ${filename}`);
-      await saveItem({ 
-        type: 'image', 
-        src: filename, 
-        title: pendingFiles.length > 1 ? `${title} (${i+1})` : title, 
-        category: cat, 
-        desc, 
-        icon: '◆' 
-      }, false);
+      
+      const newItem = {
+        id: 'item_' + Date.now() + '_' + i + '_' + Math.random().toString(36).slice(2,6),
+        type: 'image',
+        src: filename,
+        title: pendingFiles.length > 1 ? `${title} (${i+1})` : title,
+        category: cat,
+        desc: desc,
+        icon: '◆',
+        date: new Date().toISOString().slice(0,10)
+      };
+      allItems.unshift(newItem);
       setProgress(80 + ((i+1)/pendingFiles.length)*20);
     }
     await pushDataJson();
@@ -548,8 +564,7 @@ async function submitItem() {
     pendingFiles = []; renderPreviews();
     document.getElementById('fTitle').value = '';
     document.getElementById('fDesc').value = '';
-    document.getElementById('fCat').value = 'promotional';
-    fi.value = '';
+    if(fi) fi.value = '';
     renderAdminGrid();
   } catch(e) {
     toast('Error: ' + e.message, 'err');
@@ -557,46 +572,49 @@ async function submitItem() {
   setLoading(false);
 }
 
-async function saveItem(itemData, push = true) {
-  const item = {
-    id: 'item_' + Date.now() + '_' + Math.random().toString(36).slice(2,6),
-    date: new Date().toISOString().slice(0,10),
-    ...itemData
-  };
-  allItems.unshift(item);
-  if (push) {
-    await pushDataJson();
-    toast('✦ Karya berhasil ditambahkan!', 'ok');
-    document.getElementById('fTitle').value = '';
-    document.getElementById('fDesc').value = '';
-    renderAdminGrid();
-  }
-}
-
 async function pushDataJson() {
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(allItems, null, 2))));
+  const jsonStr = JSON.stringify(allItems, null, 2);
+  const content = btoa(unescape(encodeURIComponent(jsonStr)));
   const sha = await getFileSha('data.json');
   await putFile('data.json', content, 'Update portfolio data', sha);
+  console.log('Data saved successfully');
 }
 
-// ── DELETE ──
-function confirmDelete(id, title) {
+// ── DELETE (FIXED) ──
+function confirmDelete(id) {
   deleteTargetId = id;
-  document.getElementById('modalSub').textContent = `"${title}" akan dihapus permanen.`;
+  const item = allItems.find(i => i.id === id);
+  if (!item) {
+    toast('Item tidak ditemukan!', 'err');
+    return;
+  }
+  deleteTargetItem = item;
+  document.getElementById('modalSub').textContent = `"${item.title}" akan dihapus permanen.`;
   document.getElementById('confirmModal').classList.add('open');
-  document.getElementById('btnConfirmDel').onclick = doDelete;
 }
+
 function closeModal() {
   document.getElementById('confirmModal').classList.remove('open');
   deleteTargetId = null;
+  deleteTargetItem = null;
 }
+
 async function doDelete() {
-  closeModal();
-  const item = allItems.find(i => i.id === deleteTargetId);
-  if (!item) return;
+  if (!deleteTargetId && !deleteTargetItem) {
+    closeModal();
+    return;
+  }
+  
+  const item = deleteTargetItem || allItems.find(i => i.id === deleteTargetId);
+  if (!item) {
+    toast('Item tidak ditemukan!', 'err');
+    closeModal();
+    return;
+  }
+  
   setLoading(true);
   try {
-    // Hapus file gambar jika tipe image
+    // Hapus file gambar dari repo jika tipe image
     if (item.type === 'image' && item.src && !item.src.startsWith('http')) {
       const imgPath = `images/${item.src}`;
       const sha = await getFileSha(imgPath);
@@ -606,80 +624,82 @@ async function doDelete() {
       }
     }
     
-    // Untuk Google Drive (type video atau gdrive), cukup hapus dari data.json
-    // karena file-nya tersimpan di Drive, bukan di repo
+    // Hapus dari array allItems
+    const beforeCount = allItems.length;
+    allItems = allItems.filter(i => i.id !== item.id);
+    console.log(`Item deleted: ${item.title}. Before: ${beforeCount}, After: ${allItems.length}`);
     
-    // Hapus dari array
-    allItems = allItems.filter(i => i.id !== deleteTargetId);
+    // Simpan data.json yang sudah diperbarui
     await pushDataJson();
-    toast('Karya berhasil dihapus.', 'ok');
+    
+    toast(`"${item.title}" berhasil dihapus!`, 'ok');
     renderAdminGrid();
   } catch(e) { 
     console.error('Delete error:', e);
-    toast('Gagal hapus: ' + e.message, 'err'); 
+    toast('Gagal hapus: ' + e.message, 'err');
+    
+    // Coba reload data untuk sync
+    await loadData();
   }
   setLoading(false);
+  closeModal();
 }
 
-// Perbaiki renderAdminGrid untuk menampilkan Google Drive dengan benar
-function renderAdminGrid() {
-  const filtered = adminFilter === 'all' ? allItems : allItems.filter(i => i.category === adminFilter);
-  document.getElementById('galleryCount').textContent = `${allItems.length} karya total`;
-  const grid = document.getElementById('adminGrid');
-  if (!filtered.length) {
-    grid.innerHTML = `<div class="empty-admin"><p>Belum ada karya di kategori ini.</p></div>`;
-    return;
+// Pastikan tombol confirm delete terhubung ke fungsi yang benar
+document.addEventListener('DOMContentLoaded', function() {
+  const confirmBtn = document.getElementById('btnConfirmDel');
+  if (confirmBtn) {
+    // Hapus event listener lama jika ada
+    const newBtn = confirmBtn.cloneNode(true);
+    confirmBtn.parentNode.replaceChild(newBtn, confirmBtn);
+    newBtn.addEventListener('click', doDelete);
   }
-  grid.className = 'admin-grid';
-  grid.innerHTML = '';
-  filtered.forEach((item, idx) => {
-    const el = document.createElement('div');
-    el.className = 'admin-item';
-    el.style.animationDelay = `${idx * 0.05}s`;
-    let media = '';
-    if (item.type === 'image') {
-      const src = item.src.startsWith('http') ? item.src
-        : `https://raw.githubusercontent.com/${GH.user}/${GH.repo}/main/images/${item.src}`;
-      media = `<img class="admin-thumb" src="${src}" alt="${item.title}" loading="lazy">`;
-    } else if (item.type === 'video' || item.type === 'gdrive') {
-      // Tampilkan thumbnail Google Drive jika tersedia
-      const thumbUrl = item.embedUrl || 'https://via.placeholder.com/400x200?text=Google+Drive+Video';
-      const gradient = item.gradientClass || 'gradient-1';
-      media = `<div class="admin-placeholder ${gradient}" style="background: linear-gradient(135deg, rgba(108,99,255,0.2), rgba(255,107,157,0.2)); display: flex; flex-direction: column; gap: 8px;">
-        <div style="font-size: 2.5rem;">${item.icon || '🎬'}</div>
-        <div style="font-size: 10px; color: rgba(255,255,255,0.6);">Google Drive</div>
-      </div>`;
-    } else {
-      const gradient = item.gradientClass || 'gradient-1';
-      media = `<div class="admin-placeholder ${gradient}">${item.icon || '✦'}</div>`;
-    }
-    el.innerHTML = `
-      ${media}
-      <div class="admin-item-info">
-        <div class="admin-item-title">${escapeHtml(item.title)}</div>
-        <div class="admin-item-cat">${item.category}</div>
-      </div>
-      <button class="admin-item-del" onclick="confirmDelete('${item.id}','${escapeHtml(item.title).replace(/'/g, "\\'")}')" title="Hapus">✕</button>
-    `;
-    grid.appendChild(el);
+});
+
+// ── HELPERS ──
+function fileToBase64(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = e => res(e.target.result.split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(file);
   });
 }
 
-// Helper function untuk escape HTML
-function escapeHtml(str) {
-  if (!str) return '';
-  return str.replace(/[&<>]/g, function(m) {
-    if (m === '&') return '&amp;';
-    if (m === '<') return '&lt;';
-    if (m === '>') return '&gt;';
-    return m;
-  });
+function setLoading(on) {
+  const btn = document.getElementById('btnSubmit');
+  if (btn) btn.disabled = on;
+  const btnText = document.getElementById('btnText');
+  if (btnText) btnText.textContent = on ? 'Menyimpan...' : '✦ Simpan ke Portfolio';
+  const progressWrap = document.getElementById('progressWrap');
+  if (progressWrap) progressWrap.style.display = on ? 'block' : 'none';
+  if (!on) setProgress(0);
+}
+
+function setProgress(pct) { 
+  const bar = document.getElementById('progressBar');
+  if (bar) bar.style.width = pct + '%'; 
+}
+
+function toast(msg, type='ok') {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg; 
+  t.className = `toast ${type} show`;
+  setTimeout(() => t.classList.remove('show'), 3500);
 }
 
 // ── AUTO LOGIN FROM SESSION ──
 (function() {
   const saved = sessionStorage.getItem('gh_admin');
-  if (saved) { try { GH = JSON.parse(saved); bootAdmin(); } catch(e) { sessionStorage.removeItem('gh_admin'); } }
+  if (saved) { 
+    try { 
+      GH = JSON.parse(saved); 
+      bootAdmin(); 
+    } catch(e) { 
+      sessionStorage.removeItem('gh_admin'); 
+    } 
+  }
 })();
 </script>
 </body>
