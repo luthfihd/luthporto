@@ -316,7 +316,7 @@ function applyProfile() {
     `<span class="chip ${PROFILE.chipClasses[i]||'chip-1'}">${c}</span>`).join('');
   document.querySelectorAll('.contact-pill')[0].href = `mailto:${PROFILE.email}`;
   document.querySelectorAll('.contact-pill')[0].textContent = `✉ ${PROFILE.email}`;
-  document.querySelectorAll('.contact-pill')[1].href = `tel:${PROFILE.phone.replace(/\s/g,'')}`;
+  document.querySelectorAll('.contact-pill')[1].href = `https://wa.me/${PROFILE.phone.replace(/\s/g,'')}`;
   document.querySelectorAll('.contact-pill')[1].textContent = `☎ ${PROFILE.phone}`;
   const socials = document.querySelectorAll('.social-btn');
   if(PROFILE.social.x) socials[0].href = PROFILE.social.x;
