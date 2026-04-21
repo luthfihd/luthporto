@@ -1,0 +1,63 @@
+[
+  {
+    "id": "demo1",
+    "title": "Brand Identity — Noctua Studio",
+    "category": "promotional",
+    "desc": "Rebranding lengkap untuk studio kreatif berbasis di Jakarta. Identitas visual, color system, dan brand guidelines.",
+    "type": "placeholder",
+    "gradientClass": "gradient-1",
+    "icon": "◆",
+    "date": "2025-01-01"
+  },
+  {
+    "id": "demo2",
+    "title": "Motion Poster — Festival Musik",
+    "category": "promotional",
+    "desc": "Animated poster untuk festival musik tahunan. Dikerjakan dengan After Effects dan Illustrator.",
+    "type": "placeholder",
+    "gradientClass": "gradient-7",
+    "icon": "▲",
+    "date": "2025-01-02"
+  },
+  {
+    "id": "demo3",
+    "title": "Infografis — Iklim & Bumi",
+    "category": "educational",
+    "desc": "Seri infografis interaktif tentang perubahan iklim. Data dari BMKG divisualisasikan secara kreatif.",
+    "type": "placeholder",
+    "gradientClass": "gradient-4",
+    "icon": "●",
+    "date": "2025-01-03"
+  },
+  {
+    "id": "demo4",
+    "title": "Campaign Visual — Kopi Nusantara",
+    "category": "promotional",
+    "desc": "Visual campaign untuk brand kopi lokal menembus pasar premium.",
+    "type": "placeholder",
+    "gradientClass": "gradient-5",
+    "icon": "★",
+    "date": "2025-01-04"
+  },
+  {
+    "id": "demo5",
+    "title": "Explainer Video — FinTech",
+    "category": "video",
+    "desc": "Video explainer 90 detik untuk startup fintech. Character animation dan motion graphics.",
+    "type": "gdrive",
+    "src": "",
+    "gradientClass": "gradient-2",
+    "icon": "▶",
+    "date": "2025-01-05"
+  },
+  {
+    "id": "demo6",
+    "title": "Panduan Desain — UI Basics",
+    "category": "educational",
+    "desc": "Modul pembelajaran desain UI untuk pemula. Mencakup tipografi, warna, dan grid system.",
+    "type": "placeholder",
+    "gradientClass": "gradient-3",
+    "icon": "◉",
+    "date": "2025-01-06"
+  }
+]
