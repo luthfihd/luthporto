@@ -1,5 +1,15 @@
 [
   {
+    "id": "item_1776784975039_jqvzs0",
+    "type": "gdrive",
+    "src": "https://drive.google.com/file/d/1zr-l3eyWSuczuWpc3rZxphkebu_-u8-q/view?usp=sharing",
+    "title": "AI Poster",
+    "category": "promotional",
+    "desc": "AI-Generated Coffee Promotion Poster",
+    "icon": "🎬",
+    "date": "2026-04-21"
+  },
+  {
     "id": "item_1776784803775_k7tam8",
     "type": "gdrive",
     "src": "https://drive.google.com/file/d/1c73R3VSn9XUHUq9GtU-ztx7FYAp7YX-t/view?usp=drive_link",
