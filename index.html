@@ -327,8 +327,26 @@ function applyProfile() {
 // ── STATE ──
 let allItems = [];
 let currentFilter = 'all';
+// ── GDRIVE THUMBNAIL ──
+function getGoogleDriveId(url) {
+  if (!url) return null;
+  let fileId = null;
+  if (url.includes('/file/d/')) {
+    fileId = url.split('/file/d/')[1]?.split('/')[0] || null;
+  } else if (url.includes('id=')) {
+    fileId = url.split('id=')[1]?.split('&')[0] || null;
+  } else if (url.includes('uc?id=')) {
+    fileId = url.split('uc?id=')[1]?.split('&')[0] || null;
+  }
+  return fileId;
+}
 
-// ── FETCH DATA ──
+function getGoogleDriveThumbnail(url) {
+  const fileId = getGoogleDriveId(url);
+  return fileId ? `https://drive.google.com/thumbnail?id=${fileId}&sz=w600` : null;
+}
+
+  // ── FETCH DATA ──
 async function loadPortfolio() {
   try {
     const res = await fetch(DATA_URL + '?t=' + Date.now());
@@ -363,7 +381,14 @@ function renderGrid() {
       const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
       mediaHtml = `<img class="masonry-thumb" src="${src}" alt="${item.title}" loading="lazy">`;
     } else if (item.type === 'video' || item.type === 'gdrive') {
-      mediaHtml = `<div class="masonry-placeholder ${item.gradientClass||'gradient-1'}" style="min-height:${180+Math.random()*120|0}px;font-size:2.8rem;color:rgba(255,255,255,0.45);">${item.icon||'▶'}</div>`;
+      // INI BAGIAN YANG DIGANTI
+      const thumbUrl = getGoogleDriveThumbnail(item.src);
+      if (thumbUrl) {
+        mediaHtml = `<img class="masonry-thumb" src="${thumbUrl}" alt="${item.title}" loading="lazy" style="width:100%; min-height:200px; object-fit:cover;" onerror="this.style.display='none'; this.parentElement.querySelector('.masonry-placeholder').style.display='flex';">`;
+        mediaHtml += `<div class="masonry-placeholder ${item.gradientClass||'gradient-1'}" style="display:none; min-height:200px; font-size:2.8rem; color:rgba(255,255,255,0.45);">${item.icon||'▶'}</div>`;
+      } else {
+        mediaHtml = `<div class="masonry-placeholder ${item.gradientClass||'gradient-1'}" style="min-height:${180+Math.random()*120|0}px;font-size:2.8rem;color:rgba(255,255,255,0.45);">${item.icon||'▶'}</div>`;
+      }
     } else {
       mediaHtml = `<div class="masonry-placeholder ${item.gradientClass||'gradient-1'}" style="min-height:${160+Math.random()*140|0}px;font-size:2.8rem;color:rgba(255,255,255,0.45);">${item.icon||'✦'}</div>`;
     }
