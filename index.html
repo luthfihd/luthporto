@@ -483,7 +483,10 @@ function openLightbox(item) {
   const media = document.getElementById('lbMedia');
   if (item.type === 'image') {
     const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
-    media.innerHTML = `<img src="${src}" alt="${item.title}">`;
+    media.innerHTML = `<img src="${src}" alt="${item.title}" 
+  onload="this.closest('.lightbox-inner').style.maxWidth = this.naturalWidth > this.naturalHeight 
+    ? '90vw' : 'min(90vw, ' + Math.round(this.naturalWidth * 0.7) + 'px)'"
+>`;
   } else if (item.type === 'gdrive' && item.src) {
     const m = item.src.match(/\/d\/([-\w]+)/);
     const id = m ? m[1] : null;
