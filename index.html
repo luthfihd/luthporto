@@ -411,7 +411,7 @@ async function loadPortfolio() {
   }
 }
 
-// ── RENDER ──
+// ── RENDER ── //
 function renderGrid() {
   const grid = document.getElementById('masonryGrid');
   const items = currentFilter === 'all' ? allItems : allItems.filter(i => i.category === currentFilter);
@@ -436,7 +436,7 @@ function renderGrid() {
       // INI BAGIAN YANG DIGANTI
       const thumbUrl = getGoogleDriveThumbnail(item.src);
       if (thumbUrl) {
-        mediaHtml = `<img class="masonry-thumb" src="${thumbUrl}" alt="${item.title}" loading="lazy" style="width:100%; min-height:200px; object-fit:cover;" onerror="this.style.display='none'; this.parentElement.querySelector('.masonry-placeholder').style.display='flex';">`;
+        mediaHtml = `<img class="masonry-thumb" src="${thumbUrl}" alt="${item.title}" loading="lazy" style="width:100%; height:auto;" onerror="this.style.display='none'; this.parentElement.querySelector('.masonry-placeholder').style.display='flex';">`;
         mediaHtml += `<div class="masonry-placeholder ${item.gradientClass||'gradient-1'}" style="display:none; min-height:200px; font-size:2.8rem; color:rgba(255,255,255,0.45);">${item.icon||'▶'}</div>`;
       } else {
         mediaHtml = `<div class="masonry-placeholder ${item.gradientClass||'gradient-1'}" style="min-height:${180+Math.random()*120|0}px;font-size:2.8rem;color:rgba(255,255,255,0.45);">${item.icon||'▶'}</div>`;
