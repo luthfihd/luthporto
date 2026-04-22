@@ -143,10 +143,10 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 20px;
   background: rgba(0,0,0,0.85);
   backdrop-filter: blur(30px) saturate(160%);
   -webkit-backdrop-filter: blur(30px) saturate(160%);
+  padding: 20px;
 }
 #lightbox.open { display: flex; }
 
@@ -156,36 +156,19 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
   border-radius: var(--radius-xl);
   overflow: hidden;
   animation: lbIn 0.4s var(--spring);
-  background: transparent
-  backdrop-filter: blur(20px);
-  max-height: 90vh;
-  width: auto;
 }
 
-.lightbox-media {
-  flex-shrink: 0;
-  line-height: 0;
-  background: transparent;
-}
+.lightbox-media { line-height: 0; }
 
 .lightbox-media img {
   display: block;
-  max-width: 85vw;
-  max-height: 75vh;
-  width: auto;
+  width: 100%;
   height: auto;
 }
 
 .lightbox-info {
   padding: 20px 24px;
-  background: rgba(20,20,40,0.85); /* ← pindah background ke sini saja */
-  backdrop-filter: blur(20px);
-}
-
-.lightbox-media iframe {
-  width: 100%;
-  aspect-ratio: 16 / 9; /* rasio video standar */
-  border: none;
+  background: rgba(20,20,40,0.9);
 }
 .lb-ph{min-height:320px;display:flex;align-items:center;justify-content:center;font-size:5rem;width:100%;}
 .lightbox-info{padding:24px 32px;overflow-y:auto;}
@@ -494,11 +477,16 @@ function openLightbox(item) {
   document.getElementById('lbTag').className = `masonry-item-tag ${tagClass}`;
   const media = document.getElementById('lbMedia');
   if (item.type === 'image') {
-    const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
-    media.innerHTML = `<img src="${src}" alt="${item.title}" 
-  onload="this.closest('.lightbox-inner').style.maxWidth = this.naturalWidth > this.naturalHeight 
-    ? '90vw' : 'min(90vw, ' + Math.round(this.naturalWidth * 0.7) + 'px)'"
->`;
+  const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
+  const img = new Image();
+  img.onload = function() {
+    const isPortrait = img.naturalHeight > img.naturalWidth;
+    const inner = document.querySelector('.lightbox-inner');
+    inner.style.width = isPortrait ? 'min(60vw, 500px)' : 'min(90vw, 1000px)';
+    media.innerHTML = `<img src="${src}" alt="${item.title}" style="width:100%;height:auto;display:block;">`;
+  };
+  img.src = src;
+}
   } else if (item.type === 'gdrive' && item.src) {
     const m = item.src.match(/\/d\/([-\w]+)/);
     const id = m ? m[1] : null;
