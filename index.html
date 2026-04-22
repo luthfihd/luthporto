@@ -156,7 +156,7 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
   border-radius: var(--radius-xl);
   overflow: hidden;
   animation: lbIn 0.4s var(--spring);
-  background: rgba(20,20,40,0.8);
+  background: transparent
   backdrop-filter: blur(20px);
   max-height: 90vh;
   width: auto;
@@ -170,14 +170,16 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
 
 .lightbox-media img {
   display: block;
-  max-width: 80vw;
-  max-height: 70vh;
+  max-width: 85vw;
+  max-height: 75vh;
   width: auto;
   height: auto;
 }
 
 .lightbox-info {
   padding: 20px 24px;
+  background: rgba(20,20,40,0.85); /* ← pindah background ke sini saja */
+  backdrop-filter: blur(20px);
 }
 
 .lightbox-media iframe {
