@@ -497,10 +497,17 @@ function openLightbox(item) {
     const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
     const img = new Image();
     img.onload = function() {
-      const portrait = img.naturalHeight > img.naturalWidth;
-      inner.style.width = portrait ? 'min(55vw, 480px)' : 'min(85vw, 900px)';
-      media.innerHTML = `<img src="${src}" alt="${item.title}" style="width:100%;height:auto;max-height:70vh;display:block;">`;
-    };
+  const portrait = img.naturalHeight > img.naturalWidth;
+  if (portrait) {
+    inner.style.width = 'auto';
+    inner.style.maxWidth = '85vw';
+    media.innerHTML = `<img src="${src}" alt="${item.title}" style="height:65vh;width:auto;display:block;">`;
+  } else {
+    inner.style.width = 'min(85vw, 900px)';
+    inner.style.maxWidth = '';
+    media.innerHTML = `<img src="${src}" alt="${item.title}" style="width:100%;height:auto;max-height:65vh;display:block;">`;
+  }
+};
     img.onerror = function() {
       media.innerHTML = `<img src="${src}" alt="${item.title}" style="max-width:85vw;max-height:70vh;width:auto;height:auto;display:block;">`;
     };
