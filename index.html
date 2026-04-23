@@ -537,6 +537,12 @@ function closeLightbox() {
   const inner = document.querySelector('.lightbox-inner');
   inner.style.animation = 'lbOut 0.3s ease forwards';
   document.getElementById('app').style.animation = 'pageIn 0.8s var(--spring)'; // ← tambah ini
+ 
+  // Reset dulu biar animasi bisa jalan ulang
+  app.style.animation = 'none';
+  app.offsetHeight; // ← trigger reflow
+  app.style.animation = 'pageIn 0.4s var(--spring)';
+ 
   setTimeout(() => {
     document.getElementById('lightbox').classList.remove('open');
     inner.style.animation = '';
