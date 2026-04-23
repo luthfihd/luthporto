@@ -136,7 +136,7 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
 .empty-icon{font-size:3rem;margin-bottom:12px;display:block;}
 
 /* ── LIGHTBOX ── */
-#lightbox{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.85);backdrop-filter:blur(30px) saturate(160%);-webkit-backdrop-filter:blur(30px) saturate(160%);padding:0px;}
+#lightbox{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.85);backdrop-filter:blur(30px) saturate(160%);-webkit-backdrop-filter:blur(30px) saturate(160%);padding:20px;}
 #lightbox.open{display:flex;}
 
 .lightbox-inner {
@@ -145,8 +145,9 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
   overflow: hidden;
   animation: lbIn 0.4s var(--spring);
   margin: auto;
-  width: 100vw;
-  max-width: 100vw;
+  width: max-content;
+  max-width: 88vw;
+  min-width: min(88vw, 800px);
 }
 .lightbox-media{line-height:0;}
 .lightbox-media img{display:block;max-width:90vw;max-height:90vh;width:90vw;height:auto;}
@@ -472,7 +473,7 @@ inner.style.maxWidth = '';
 
 if (item.type === 'image') {
   const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
-  media.innerHTML = `<img src="${src}" alt="${item.title}" style="width:min(95vw,1600px);height:auto;max-height:90vh;display:block;animation:imgIn 0.4s var(--spring);">`;
+  media.innerHTML = `<img src="${src}" alt="${item.title}" style="width:min(88vw,1400px);height:auto;max-height:88vh;display:block;animation:imgIn 0.4s var(--spring);">`;
 
 } else if (item.type === 'gdrive' && item.src) {
   const m = item.src.match(/\/d\/([-\w]+)/);
