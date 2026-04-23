@@ -136,71 +136,23 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
 .empty-icon{font-size:3rem;margin-bottom:12px;display:block;}
 
 /* ── LIGHTBOX ── */
-#lightbox {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0,0,0,0.85);
-  backdrop-filter: blur(30px) saturate(160%);
-  -webkit-backdrop-filter: blur(30px) saturate(160%);
-}
-#lightbox.open { display: flex; }
+#lightbox{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.85);backdrop-filter:blur(30px) saturate(160%);-webkit-backdrop-filter:blur(30px) saturate(160%);padding:20px;}
+#lightbox.open{display:flex;}
 
-.lightbox-inner {
-  border-radius: var(--radius-xl); /* ← kembalikan radius */
-  overflow: hidden;
-  animation: lbIn 0.4s var(--spring);
-  display: flex;
-  flex-direction: column;
-  width: 90vw;  
-  height: 90vh; 
-  margin: auto;
-}
+.lightbox-inner{position:relative;border-radius:var(--radius-xl);overflow:hidden;animation:lbIn 0.4s var(--spring);margin:auto;max-width:90vw;max-height:90vh;}
 
-.lightbox-media {
-  flex: 1; /* ← isi sisa ruang */
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
-  line-height: 0;
-  overflow: hidden;
-  background: transparent;
-  min-height: 0;
-}
+.lightbox-media{line-height:0;}
+.lightbox-media img{display:block;max-width:90vw;max-height:90vh;width:auto;height:auto;}
+.lightbox-media iframe{display:block;width:80vw;max-width:900px;aspect-ratio:16/9;}
 
-lightbox-media img {
-  display: block;
-  width: auto;
-  height: 100%;
-  max-width: 100%;
-  object-fit: contain;
-  animation: imgIn 0.4s var(--spring);
-}
-  
-.lightbox-media iframe {
-  width: 85vw;
-  max-width: 900px;
-  aspect-ratio: 16/9;
-  border: none;
-  display: block;
-}
+.lightbox-info{position:absolute;bottom:0;left:0;right:0;padding:20px 24px 24px;background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,rgba(0,0,0,0.4) 60%,transparent 100%);}
 
-.lightbox-info {
-  padding: 20px 24px;
-  background: rgba(20,20,40,0.95);
-  backdrop-filter: blur(20px);
-  width: 100%;
-}
-
-.lightbox-title { font-family:'Playfair Display',serif; font-size:1.3rem; color:#fff; margin-bottom:6px; }
-.lightbox-meta  { margin-bottom:8px; }
-.lightbox-desc  { color:rgba(255,255,255,0.62); font-size:14px; line-height:1.7; }
-.lightbox-close { position:absolute; top:20px; right:20px; width:46px; height:46px; border-radius:50%; border:1.5px solid rgba(255,255,255,0.28); background:rgba(255,255,255,0.08); color:#fff; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(12px); transition:all 0.25s; z-index:10; }
-.lightbox-close:hover { background:rgba(255,107,157,0.3); border-color:rgba(255,107,157,0.6); transform:rotate(90deg) scale(1.1); }
-.lb-ph { min-height:300px; display:flex; align-items:center; justify-content:center; font-size:5rem; width:100%; }
+.lightbox-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:#fff;margin-bottom:4px;font-weight:700;}
+.lightbox-meta{margin-bottom:6px;}
+.lightbox-desc{color:rgba(255,255,255,0.75);font-size:13px;line-height:1.6;}
+.lightbox-close{position:absolute;top:20px;right:20px;width:46px;height:46px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.28);background:rgba(255,255,255,0.08);color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(12px);transition:all 0.25s;z-index:10;}
+.lightbox-close:hover{background:rgba(255,107,157,0.3);border-color:rgba(255,107,157,0.6);transform:rotate(90deg) scale(1.1);}
+.lb-ph{min-height:300px;width:400px;display:flex;align-items:center;justify-content:center;font-size:5rem;}
 
 /* ── FOOTER ── */
 footer{margin-top:60px;padding:60px 0 40px;}
@@ -330,7 +282,7 @@ footer{margin-top:60px;padding:60px 0 40px;}
 <!-- LIGHTBOX -->
 <div id="lightbox">
   <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-  <div class="lightbox-inner glass">
+  <div class="lightbox-inner">
     <div class="lightbox-media" id="lbMedia"></div>
     <div class="lightbox-info">
       <div class="lightbox-meta"><span class="masonry-item-tag" id="lbTag"></span></div>
@@ -513,18 +465,8 @@ inner.style.maxWidth = '';
 
 if (item.type === 'image') {
   const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
-  const img = new Image();
-  img.onload = function() {
-  const ratio = img.naturalWidth / img.naturalHeight;
-  const maxH = window.innerHeight * 0.75;
-  const calculatedW = Math.round(maxH * ratio);
-  inner.style.width = Math.min(calculatedW, window.innerWidth * 0.9) + 'px';
-  media.innerHTML = `<img src="${src}" alt="${item.title}" style="width:100%;height:auto;display:block;">`;
-};
-  img.onerror = function() {
-    media.innerHTML = `<img src="${src}" alt="${item.title}" style="max-width:100%;max-height:100%;width:auto;height:auto;display:block;">`;
-  };
-  img.src = src;
+  media.innerHTML = `<img src="${src}" alt="${item.title}" style="max-width:90vw;max-height:90vh;width:auto;height:auto;display:block;animation:imgIn 0.4s var(--spring);">`;
+}
 } else if (item.type === 'gdrive' && item.src) {
   const m = item.src.match(/\/d\/([-\w]+)/);
   const id = m ? m[1] : null;
