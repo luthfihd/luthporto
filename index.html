@@ -148,12 +148,14 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
 #lightbox.open { display: flex; }
 
 .lightbox-inner {
+  border-radius: var(--radius-xl); /* ← kembalikan radius */
   overflow: hidden;
   animation: lbIn 0.4s var(--spring);
   display: flex;
   flex-direction: column;
-  width: 100vw;  /* ← full width */
-  height: 100vh; /* ← full height */
+  width: 90vw;  
+  height: 90vh; 
+  margin: auto;
 }
 
 .lightbox-media {
@@ -172,6 +174,7 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
   max-height: 100%;
   width: auto;
   height: auto;
+  object-fit: contain; /* ← ini yang bikin gambar ngikut container */
 }
 
 .lightbox-media iframe {
