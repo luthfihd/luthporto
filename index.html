@@ -466,7 +466,7 @@ inner.style.maxWidth = '';
 if (item.type === 'image') {
   const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
   media.innerHTML = `<img src="${src}" alt="${item.title}" style="max-width:90vw;max-height:90vh;width:auto;height:auto;display:block;animation:imgIn 0.4s var(--spring);">`;
-}
+
 } else if (item.type === 'gdrive' && item.src) {
   const m = item.src.match(/\/d\/([-\w]+)/);
   const id = m ? m[1] : null;
