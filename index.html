@@ -147,6 +147,7 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
   margin: auto;
   width: max-content; /* ← ngikutin konten */
   max-width: 90vw;
+  min-width: min(90vw, 600px); /* ← tambah ini */
 }
 .lightbox-media{line-height:0;}
 .lightbox-media img{display:block;max-width:90vw;max-height:90vh;width:90vw;height:auto;}
@@ -472,7 +473,7 @@ inner.style.maxWidth = '';
 
 if (item.type === 'image') {
   const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
-  media.innerHTML = `<img src="${src}" alt="${item.title}" style="max-width:90vw;max-height:85vh;width:90vw;height:auto;display:block;animation:imgIn 0.4s var(--spring);">`;
+  media.innerHTML = `<img src="${src}" alt="${item.title}" style="width:min(90vw,1200px);height:auto;max-height:85vh;display:block;animation:imgIn 0.4s var(--spring);">`;
 
 } else if (item.type === 'gdrive' && item.src) {
   const m = item.src.match(/\/d\/([-\w]+)/);
