@@ -144,25 +144,32 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
   background: rgba(0,0,0,0.85);
   backdrop-filter: blur(30px) saturate(160%);
   -webkit-backdrop-filter: blur(30px) saturate(160%);
-  padding: 20px;
 }
 #lightbox.open { display: flex; }
 
 .lightbox-inner {
-  border-radius: var(--radius-xl);
   overflow: hidden;
   animation: lbIn 0.4s var(--spring);
   display: flex;
   flex-direction: column;
-  max-height: 95vh;
+  width: 100vw;  /* ← full width */
+  height: 100vh; /* ← full height */
 }
 
-.lightbox-media { line-height: 0; }
+.lightbox-media {
+  flex: 1; /* ← isi sisa ruang */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  overflow: hidden;
+  background: transparent;
+}
 
 .lightbox-media img {
   display: block;
-  max-width: 85vw;
-  max-height: 70vh;
+  max-width: 100%;
+  max-height: 100%;
   width: auto;
   height: auto;
 }
@@ -490,44 +497,32 @@ function openLightbox(item) {
   const media = document.getElementById('lbMedia');
   const inner = document.querySelector('.lightbox-inner');
 
-  // Reset dulu
-  inner.style.width = '';
+ // Reset dulu
+inner.style.width = '';
+inner.style.maxWidth = '';
 
-  if (item.type === 'image') {
-    const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
-    const img = new Image();
-    img.onload = function() {
-  const portrait = img.naturalHeight > img.naturalWidth;
-  if (portrait) {
-    inner.style.width = 'auto';
-    inner.style.maxWidth = '100vw'; // ← dari 85vw
-    media.innerHTML = `<img src="${src}" alt="${item.title}" style="height:85vh;width:auto;display:block;">`; // ← dari 80vh
-  } else {
-    inner.style.width = '100vw'; // ← dari min(85vw, 900px)
-    inner.style.maxWidth = '';
-    media.innerHTML = `<img src="${src}" alt="${item.title}" style="width:100%;height:auto;max-height:85vh;display:block;">`; // ← dari 65vh
-  }
-};
-    img.onerror = function() {
-      media.innerHTML = `<img src="${src}" alt="${item.title}" style="max-width:85vw;max-height:70vh;width:auto;height:auto;display:block;">`;
-    };
-    img.src = src;
-  } else if (item.type === 'gdrive' && item.src) {
-    const m = item.src.match(/\/d\/([-\w]+)/);
-    const id = m ? m[1] : null;
-    inner.style.width = 'min(85vw, 900px)';
-    media.innerHTML = id
-      ? `<iframe src="https://drive.google.com/file/d/${id}/preview" allow="autoplay" style="width:100%;aspect-ratio:16/9;border:none;display:block;"></iframe>`
-      : `<div class="lb-ph ${item.gradientClass||'gradient-1'}">${item.icon||'📁'}</div>`;
-  } else {
-    inner.style.width = 'min(85vw, 900px)';
-    media.innerHTML = `<div class="lb-ph ${item.gradientClass||'gradient-1'}">${item.icon||'✦'}</div>`;
-  }
-
-  document.getElementById('lightbox').classList.add('open');
-  document.body.style.overflow = 'hidden';
+if (item.type === 'image') {
+  const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
+  const img = new Image();
+  img.onload = function() {
+    media.innerHTML = `<img src="${src}" alt="${item.title}" style="max-width:100%;max-height:100%;width:auto;height:auto;display:block;">`;
+  };
+  img.onerror = function() {
+    media.innerHTML = `<img src="${src}" alt="${item.title}" style="max-width:100%;max-height:100%;width:auto;height:auto;display:block;">`;
+  };
+  img.src = src;
+} else if (item.type === 'gdrive' && item.src) {
+  const m = item.src.match(/\/d\/([-\w]+)/);
+  const id = m ? m[1] : null;
+  media.innerHTML = id
+    ? `<iframe src="https://drive.google.com/file/d/${id}/preview" allow="autoplay" style="width:100%;aspect-ratio:16/9;border:none;display:block;"></iframe>`
+    : `<div class="lb-ph ${item.gradientClass||'gradient-1'}">${item.icon||'📁'}</div>`;
+} else {
+  media.innerHTML = `<div class="lb-ph ${item.gradientClass||'gradient-1'}">${item.icon||'✦'}</div>`;
 }
-  
+document.getElementById('lightbox').classList.add('open');
+document.body.style.overflow = 'hidden';
+ 
 function closeLightbox() {
   document.getElementById('lightbox').classList.remove('open');
   document.body.style.overflow = '';
