@@ -515,8 +515,12 @@ if (item.type === 'image') {
   const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
   const img = new Image();
   img.onload = function() {
-    media.innerHTML = `<img src="${src}" alt="${item.title}" style="max-width:100%;max-height:100%;width:auto;height:auto;display:block;">`;
-  };
+  const ratio = img.naturalWidth / img.naturalHeight;
+  const maxH = window.innerHeight * 0.75;
+  const calculatedW = Math.round(maxH * ratio);
+  inner.style.width = Math.min(calculatedW, window.innerWidth * 0.9) + 'px';
+  media.innerHTML = `<img src="${src}" alt="${item.title}" style="width:100%;height:auto;display:block;">`;
+};
   img.onerror = function() {
     media.innerHTML = `<img src="${src}" alt="${item.title}" style="max-width:100%;max-height:100%;width:auto;height:auto;display:block;">`;
   };
