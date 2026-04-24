@@ -146,7 +146,7 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
   animation: lbIn 0.4s var(--spring);
   margin: auto;
   width: max-content;
-  max-width: 88vw;
+  max-width: 90vw;
   min-width: min(88vw, 800px);
 }
 .lightbox-media{line-height:0;}
@@ -478,7 +478,8 @@ if (item.type === 'image') {
     const isPortrait = img.naturalHeight > img.naturalWidth;
     inner.style.width = isPortrait ? 'auto' : '88vw';
     inner.style.maxWidth = '90vw';
-    media.innerHTML = `<img src="${src}" alt="${item.title}" style="${isPortrait ? 'height:88vh;width:auto;' : 'width:100%;height:auto;'}display:block;animation:imgIn 0.4s var(--spring);">`;
+    inner.style.height = 'auto'; /* ← tambah ini */
+    media.innerHTML = `<img src="${src}" alt="${item.title}" style="${isPortrait ? 'height:88vh;width:auto;' : 'width:100%;height:auto;max-height:82vh;'}display:block;animation:imgIn 0.4s var(--spring);">`;
   };
   img.src = src;
 
