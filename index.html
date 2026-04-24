@@ -145,9 +145,8 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
   overflow: hidden;
   animation: lbIn 0.4s var(--spring);
   margin: auto;
-  width: max-content;
+  width: fit-content;
   max-width: 90vw;
-  min-width: min(88vw, 800px);
 }
 .lightbox-media{line-height:0;}
 .lightbox-media img{display:block;max-width:90vw;max-height:90vh;width:90vw;height:auto;}
@@ -473,16 +472,16 @@ inner.style.maxWidth = '';
 
 if (item.type === 'image') {
   const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
-  const img = new Image();
-  img.onload = function() {
-    const isPortrait = img.naturalHeight > img.naturalWidth;
-    inner.style.width = isPortrait ? 'auto' : '88vw';
-    inner.style.maxWidth = '90vw';
-    inner.style.height = 'auto'; /* ← tambah ini */
-    media.innerHTML = `<img src="${src}" alt="${item.title}" style="${isPortrait ? 'height:88vh;width:auto;' : 'width:100%;height:auto;max-height:82vh;'}display:block;animation:imgIn 0.4s var(--spring);">`;
-  };
+  inner.style.width = '';
+  inner.style.maxWidth = '';
+  inner.style.height = '';
+  const img = document.createElement('img');
   img.src = src;
-
+  img.alt = item.title;
+  img.style.cssText = 'max-width:90vw;max-height:85vh;width:auto;height:auto;display:block;animation:imgIn 0.4s var(--spring);';
+  media.innerHTML = '';
+  media.appendChild(img);
+  
 } else if (item.type === 'gdrive' && item.src) {
   const m = item.src.match(/\/d\/([-\w]+)/);
   const id = m ? m[1] : null;
