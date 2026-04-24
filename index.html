@@ -136,7 +136,7 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
 .empty-icon{font-size:3rem;margin-bottom:12px;display:block;}
 
 /* ── LIGHTBOX ── */
-#lightbox{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.85);backdrop-filter:blur(30px) saturate(160%);-webkit-backdrop-filter:blur(30px) saturate(160%);padding:20px;}
+#lightbox{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);padding:20px;}
 #lightbox.open{display:flex;}
 
 .lightbox-inner {
@@ -473,7 +473,14 @@ inner.style.maxWidth = '';
 
 if (item.type === 'image') {
   const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
-  media.innerHTML = `<img src="${src}" alt="${item.title}" style="width:88vw;height:auto;display:block;animation:imgIn 0.4s var(--spring);">`;
+  const img = new Image();
+  img.onload = function() {
+    const isPortrait = img.naturalHeight > img.naturalWidth;
+    inner.style.width = isPortrait ? 'auto' : '88vw';
+    inner.style.maxWidth = '90vw';
+    media.innerHTML = `<img src="${src}" alt="${item.title}" style="${isPortrait ? 'height:88vh;width:auto;' : 'width:100%;height:auto;'}display:block;animation:imgIn 0.4s var(--spring);">`;
+  };
+  img.src = src;
 
 } else if (item.type === 'gdrive' && item.src) {
   const m = item.src.match(/\/d\/([-\w]+)/);
