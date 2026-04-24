@@ -473,7 +473,7 @@ inner.style.maxWidth = '';
 
 if (item.type === 'image') {
   const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
-  media.innerHTML = `<img src="${src}" alt="${item.title}" style="width:min(88vw,1400px);height:auto;max-height:88vh;display:block;animation:imgIn 0.4s var(--spring);">`;
+  media.innerHTML = `<img src="${src}" alt="${item.title}" style="width:88vw;height:auto;display:block;animation:imgIn 0.4s var(--spring);">`;
 
 } else if (item.type === 'gdrive' && item.src) {
   const m = item.src.match(/\/d\/([-\w]+)/);
