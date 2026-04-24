@@ -478,7 +478,7 @@ if (item.type === 'image') {
   const img = document.createElement('img');
   img.src = src;
   img.alt = item.title;
-  img.style.cssText = 'max-width:90vw;max-height:85vh;width:auto;height:auto;display:block;animation:imgIn 0.4s var(--spring);';
+  img.style.cssText = 'width:90vw;height:auto;max-height:85vh;display:block;animation:imgIn 0.4s var(--spring);';
   media.innerHTML = '';
   media.appendChild(img);
   
