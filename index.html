@@ -353,14 +353,6 @@ function applyProfile() {
   const chips = document.getElementById('heroChips');
   chips.innerHTML = PROFILE.chips.map((c,i) =>
     `<span class="chip ${PROFILE.chipClasses[i]||'chip-1'}">${c}</span>`).join('');
-  document.querySelectorAll('.contact-pill')[0].href = `mailto:${PROFILE.email}`;
-  document.querySelectorAll('.contact-pill')[0].textContent = `✉ ${PROFILE.email}`;
-  document.querySelectorAll('.contact-pill')[1].href = `https://wa.me/${PROFILE.phone.replace(/\s/g,'')}`;
-  document.querySelectorAll('.contact-pill')[1].textContent = `☎ ${PROFILE.phone}`;
-  const socials = document.querySelectorAll('.social-btn');
-  if(PROFILE.social.x) socials[0].href = PROFILE.social.x;
-  if(PROFILE.social.linkedin) socials[1].href = PROFILE.social.linkedin;
-  if(PROFILE.social.instagram) socials[2].href = PROFILE.social.instagram;
 }
 
 // ── STATE ──
