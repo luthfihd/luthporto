@@ -173,85 +173,6 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
 .empty-state{text-align:center;padding:60px 20px;color:rgba(255,255,255,0.3);}
 .empty-icon{font-size:3rem;margin-bottom:12px;display:block;}
 
-/* ── MODAL ── */
-#modal{position:fixed;inset:0;z-index:1000;display:none;opacity:0;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,0.6);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);transition:opacity 0.4s ease;}
-#modal.active{display:flex;opacity:1;}
-#app{transition:filter 0.4s ease,transform 0.4s ease;}
-.content-blur{filter:blur(20px);transform:scale(0.98);pointer-events:none;}
-#modal-content {
-  position: relative;
-  display: flex; /* Tambahkan flex agar membungkus container di dalamnya */
-  flex-direction: column;
-  width: fit-content; /* KUNCI: Biar wadah kacanya cuma selebar konten */
-  max-width: 95vw;
-  max-height: 95vh;
-  border-radius: 28px;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.6);
-  transform: scale(0.95);
-  opacity: 0;
-  transition: all 0.5s ease-out;
-  background: rgba(255,255,255,0.1); /* Pakai background transparan/glassmorphism */
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.2);
-  overflow: hidden;
-}
-#modal-content.show{transform:scale(1);opacity:1;}
-#modal-media-container {
-  width: auto; /* KUNCI: Biar dia tidak maksa lebar 100% */
-  height: auto;
-  max-width: 100%;
-  max-height: 85vh; /* Biar kalau foto portrait tidak kepotong layar */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  border-radius: 28px;
-  background: rgba(255,255,255,0.05); /* Tambahan efek kaca dikit */
-}
-/* 1. Ini untuk gambarnya */
-#modal-media-container img {
-  display: block;
-  width: auto;
-  height: auto;
-  max-width: 100%;    /* Biar nggak melebar paksa keluar container */
-  max-height: 80vh;   /* Kunci: Biar foto portrait tetap muat di layar */
-  object-fit: contain; /* Menjaga rasio foto asli agar tidak gepeng */
-  border-radius: 20px; /* Opsional, sesuaikan dengan desainmu */
-}
-
-/* 2. Ini untuk videonya (kalau kamu pakai tag <video>) */
-#modal-media-container video {
-  display: block;
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: 80vh;
-  object-fit: contain;
-}
-
-/* 3. Ini untuk iframe (YouTube/Vimeo) - Tetap pertahankan rasio landscape */
-#modal-media-container iframe {
-  display: block;
-  width: min(900px, 85vw);
-  aspect-ratio: 16/9;
-  border: none;
-  border-radius: 12px;
-}
-.modal-info {
-  position: relative; /* Ganti dari absolute ke relative */
-  padding: 20px;
-  background: rgba(0,0,0,0.4);
-  backdrop-filter: blur(10px);
-  width: 100%;
-  pointer-events: auto; /* Biar bisa diklik/select teksnya */
-}
-.modal-tag{font-size:11px;font-family:'Space Mono',monospace;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:50px;display:inline-block;width:fit-content;margin-bottom:8px;}
-.modal-title{font-family:'Playfair Display',serif;font-size:clamp(1.1rem,3vw,1.6rem);color:#fff;margin-bottom:6px;font-weight:700;}
-.modal-desc{color:rgba(255,255,255,0.75);font-size:13px;line-height:1.6;}
-.modal-close-btn{position:fixed;top:20px;right:20px;z-index:1010;width:48px;height:48px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.15);backdrop-filter:blur(12px);color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.25s;}
-.modal-close-btn:hover{background:rgba(255,107,157,0.3);border-color:rgba(255,107,157,0.6);transform:rotate(90deg) scale(1.1);}
-.lb-ph{min-height:300px;width:min(400px,85vw);display:flex;align-items:center;justify-content:center;font-size:5rem;}
-
 /* ── FOOTER ── */
 footer{margin-top:60px;padding:60px 0 40px;}
 .footer-card{border-radius:var(--radius-xl);padding:52px 40px;max-width:900px;margin:0 auto;text-align:center;}
@@ -282,12 +203,6 @@ footer{margin-top:60px;padding:60px 0 40px;}
 ::-webkit-scrollbar{width:5px;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:rgba(108,99,255,0.4);border-radius:3px;}
-@media(max-width:600px){.hero-card{padding:24px 20px;}.footer-card{padding:32px 20px;}.lightbox-info{padding:18px 20px;}}
-@media(max-width:600px) {
-  #lightbox { padding: 16px; }
-  .lightbox-inner { width: fit-content !important; max-width: 92vw !important; border-radius: 20px !important; }
-  .lightbox-img { max-width: 92vw !important; max-height: 82vh !important; width: auto !important; height: auto !important; }
-}
 </style>
 </head>
 <body>
@@ -381,19 +296,19 @@ footer{margin-top:60px;padding:60px 0 40px;}
 </footer>
 
 <!-- HTML MODAL -->
-<div id="modal" class="fixed inset-0 z-[1000] hidden items-center justify-center p-4 bg-black/60 backdrop-blur-[20px] transition-opacity duration-300">
+<div id="modal" class="fixed inset-0 z-[9999] hidden items-center justify-center p-4 bg-black/60 backdrop-blur-[20px] transition-opacity duration-300">
     
-    <button onclick="closeModal()" class="fixed top-5 right-5 z-[1010] w-12 h-12 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-white hover:bg-red-500/40 hover:rotate-90 transition-all flex items-center justify-center text-2xl">×</button>
+    <button onclick="closeModal()" class="fixed top-5 right-5 z-[10000] w-12 h-12 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-white hover:bg-red-500/40 hover:rotate-90 transition-all flex items-center justify-center text-2xl">×</button>
 
     <div id="modal-content" class="relative flex flex-col w-fit max-w-[95vw] max-h-[92vh] bg-white/10 backdrop-blur-[40px] border border-white/20 rounded-[32px] shadow-2xl overflow-hidden scale-95 opacity-0 transition-all duration-500">
         
         <div id="modal-media-container" class="flex items-center justify-center overflow-hidden">
             </div>
 
-        <div class="modal-info relative p-6 bg-black/40 backdrop-blur-xl w-full border-t border-white/5">
+        <div class="relative p-6 bg-black/40 backdrop-blur-xl w-full border-t border-white/5">
             <div id="modal-tag" class="text-[10px] font-mono tracking-[2px] text-indigo-300 uppercase mb-2">Portfolio</div>
             <h2 id="modal-title" class="text-white text-xl md:text-2xl font-serif font-bold mb-1 leading-tight">Project Title</h2>
-            <p id="modal-desc" class="text-white/60 text-xs md:text-sm leading-relaxed max-w-prose">Project description...</p>
+            <p id="modal-desc" class="text-white/60 text-xs md:text-sm leading-relaxed max-w-prose">Description...</p>
         </div>
     </div>
 </div>
@@ -547,61 +462,53 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 
 // ── MODAL ──
 function openLightbox(item) {
-  // 1. Logika Kategori & Tag (Tetap pakai punya kamu)
-  const tagClass = {promotional:'tag-promo', educational:'tag-edu', video:'tag-video'}[item.category] || 'tag-promo';
+  // 1. Ambil elemen-elemen modal
+  const modal = document.getElementById('modal');
+  const content = document.getElementById('modal-content');
+  const container = document.getElementById('modal-media-container');
+  const app = document.getElementById('app');
+
+  // 2. Isi konten teks
   const tagLabel = {promotional:'Promotional', educational:'Educational', video:'Video'}[item.category] || item.category;
+  const tagClass = {promotional:'tag-promo', educational:'tag-edu', video:'video'}[item.category] || 'tag-promo';
   
-  // Update teks (Pastikan ID di HTML baru sesuai: modal-title, modal-desc, modal-tag)
   document.getElementById('modal-title').textContent = item.title;
   document.getElementById('modal-desc').textContent = item.desc || 'Tidak ada deskripsi.';
   document.getElementById('modal-tag').textContent = tagLabel;
-  // Jika ingin tetap pakai styling warna tag dari CSS lama:
-  document.getElementById('modal-tag').className = `text-[10px] font-mono tracking-widest uppercase mb-2 inline-block px-3 py-1 rounded-full ${tagClass}`;
+  // Mempertahankan warna tag dari CSS kamu yang lama
+  document.getElementById('modal-tag').className = `text-[10px] font-mono tracking-[2px] uppercase mb-2 inline-block px-3 py-1 rounded-full ${tagClass}`;
 
-  const container = document.getElementById('modal-media-container');
+  // 3. Logika Media (Kunci Ramping: max-h-[65vh])
   container.innerHTML = '';
-
-  // 2. Logika Media (Kita tambahkan Class Tailwind 'max-h-[65vh]' agar ramping)
   if (item.type === 'image') {
     const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
     const img = document.createElement('img');
     img.src = src;
-    img.alt = item.title;
-    // KUNCI RAMPING:
-    img.className = "max-w-full max-h-[65vh] object-contain block mx-auto";
+    img.className = "max-w-full max-h-[65vh] object-contain block mx-auto"; // Kunci agar portrait ramping
     container.appendChild(img);
-  } else if (item.type === 'gdrive' && item.src) {
-    const m = item.src.match(/\/d\/([-\w]+)/);
-    const id = m ? m[1] : null;
+  } else if (item.type === 'gdrive' || item.src.includes('drive.google.com')) {
+    const id = item.src.match(/\/d\/([-\w]+)/)?.[1] || item.src.split('id=')[1]?.split('&')[0];
     if (id) {
       const iframe = document.createElement('iframe');
       iframe.src = `https://drive.google.com/file/d/${id}/preview`;
-      iframe.allow = 'autoplay';
-      // Untuk Iframe Gdrive, kita beri ukuran yang pas
-      iframe.className = "w-[85vw] max-w-[900px] aspect-video border-none rounded-lg";
+      iframe.className = "w-[85vw] max-w-[900px] aspect-video border-none rounded-xl shadow-2xl";
       container.appendChild(iframe);
     }
-  } else {
-    container.innerHTML = `<div class="flex items-center justify-center min-h-[300px] text-6xl ${item.gradientClass||'gradient-1'}">${item.icon||'✦'}</div>`;
   }
 
-  // 3. Logika Menampilkan Modal (Disesuaikan untuk Tailwind)
-  const modal = document.getElementById('modal');
-  const content = document.getElementById('modal-content');
-  const app = document.getElementById('app');
-
+  // 4. Munculkan Modal & Blur Background
   modal.classList.remove('hidden');
   modal.classList.add('flex');
   
-  if(app) {
+  if (app) {
     app.style.filter = 'blur(15px) grayscale(0.2)';
     app.style.transform = 'scale(0.98)';
-    app.style.transition = 'all 0.5s ease';
+    app.style.pointerEvents = 'none'; // Biar background gak bisa di-klik
   }
 
   document.body.style.overflow = 'hidden';
 
-  // Animasi halus muncul
+  // 5. Trigger Animasi Scale & Opacity
   requestAnimationFrame(() => {
     modal.style.opacity = '1';
     content.classList.remove('scale-95', 'opacity-0');
@@ -609,38 +516,33 @@ function openLightbox(item) {
   });
 }
 
- function closeModal() {
+function closeModal() {
   const modal = document.getElementById('modal');
   const content = document.getElementById('modal-content');
   const app = document.getElementById('app');
 
-  // 1. Jalankan animasi mengecil dan menghilang
+  // 1. Animasi Menutup
   if (content) {
     content.classList.remove('scale-100', 'opacity-100');
     content.classList.add('scale-95', 'opacity-0');
   }
+  modal.style.opacity = '0';
 
-  // 2. Hilangkan efek blur pada background web (#app)
+  // 2. Kembalikan Tampilan Background
   if (app) {
     app.style.filter = '';
     app.style.transform = '';
+    app.style.pointerEvents = 'auto';
   }
 
-  // 3. Sembunyikan modal setelah animasi selesai (400ms)
+  // 3. Sembunyikan Modal setelah animasi selesai
   setTimeout(() => {
     modal.classList.add('hidden');
     modal.classList.remove('flex');
-    modal.style.opacity = '0';
-    
-    // Kembalikan scrollbar body
     document.body.style.overflow = '';
-    
-    // Bersihkan container media agar video/iframe berhenti berputar
-    const container = document.getElementById('modal-media-container');
-    if (container) container.innerHTML = '';
+    document.getElementById('modal-media-container').innerHTML = '';
   }, 400);
 }
-
 // Tambahkan baris ini agar tombol 'X' di HTML bisa memanggil fungsi ini
 window.closeModal = closeModal; 
   
