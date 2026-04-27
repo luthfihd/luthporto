@@ -479,22 +479,28 @@ function openLightbox(item) {
 
   // 3. Logika Media (Kunci Ramping: max-h-[65vh])
   container.innerHTML = '';
+
   if (item.type === 'image') {
     const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
     const img = document.createElement('img');
     img.src = src;
-    // HAPUS w-full, biarkan dia auto width agar kontainer kaca mengecil
+    // Ini kunci ramping: h-auto dan w-fit di container nanti
     img.className = "block h-auto max-h-[65vh] max-w-[90vw] object-contain mx-auto shadow-inner";
     container.appendChild(img);
-}
-  } else if (item.type === 'gdrive' || item.src.includes('drive.google.com')) {
-    const id = item.src.match(/\/d\/([-\w]+)/)?.[1] || item.src.split('id=')[1]?.split('&')[0];
+  } 
+  else if (item.type === 'gdrive' || (item.src && item.src.includes('drive.google.com'))) {
+    const m = item.src.match(/\/d\/([-\w]+)/);
+    const id = m ? m[1] : (item.src.split('id=')[1]?.split('&')[0]);
     if (id) {
       const iframe = document.createElement('iframe');
       iframe.src = `https://drive.google.com/file/d/${id}/preview`;
       iframe.className = "w-[85vw] max-w-[900px] aspect-video border-none rounded-xl shadow-2xl";
       container.appendChild(iframe);
     }
+  } 
+  else {
+    // Fallback jika tipe tidak dikenal
+    container.innerHTML = `<div class="flex items-center justify-center min-h-[300px] text-6xl ${item.gradientClass||'gradient-1'}">${item.icon||'✦'}</div>`;
   }
 
   // 4. Munculkan Modal & Blur Background
