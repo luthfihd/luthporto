@@ -134,6 +134,12 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#
 .admin-item-del{position:absolute;top:7px;right:7px;width:28px;height:28px;border-radius:50%;background:rgba(255,107,157,0.25);border:1px solid rgba(255,107,157,0.4);color:#ff6b9d;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.25s,background 0.2s;backdrop-filter:blur(6px);}
 .admin-item:hover .admin-item-del{opacity:1;}
 .admin-item-del:hover{background:rgba(255,107,157,0.5);}
+.admin-item-edit{position:absolute;top:7px;left:7px;width:28px;height:28px;border-radius:50%;background:rgba(108,99,255,0.25);border:1px solid rgba(108,99,255,0.4);color:#a099ff;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.25s,background 0.2s;backdrop-filter:blur(6px);}
+.admin-item:hover .admin-item-edit{opacity:1;}
+.admin-item-edit:hover{background:rgba(108,99,255,0.5);}
+.edit-modal-bg{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px;}
+.edit-modal-bg.open{display:flex;}
+.edit-modal-card{border-radius:var(--radius-xl);padding:36px 32px;max-width:440px;width:100%;}
 .empty-admin{text-align:center;padding:48px 20px;color:rgba(255,255,255,0.3);}
 .loading-spin{display:flex;justify-content:center;align-items:center;padding:40px;gap:12px;}
 .spinner{width:36px;height:36px;border-radius:50%;border:3px solid rgba(108,99,255,0.2);border-top-color:#6C63FF;animation:spin 0.8s linear infinite;}
@@ -300,6 +306,34 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#
   </div>
 </div>
 
+<!-- EDIT MODAL -->
+<div class="edit-modal-bg" id="editModal">
+  <div class="edit-modal-card glass">
+    <div class="modal-icon">✏️</div>
+    <div class="modal-title" style="font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:20px;">Edit Karya</div>
+    <div class="form-group">
+      <label>Judul</label>
+      <input id="editTitle" class="text-input" style="margin-bottom:0;">
+    </div>
+    <div class="form-group">
+      <label>Kategori</label>
+      <select id="editCat">
+        <option value="promotional">Promotional</option>
+        <option value="educational">Educational</option>
+        <option value="video">Video</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Deskripsi</label>
+      <textarea id="editDesc"></textarea>
+    </div>
+    <div class="modal-btns" style="margin-top:8px;">
+      <button class="btn-cancel" onclick="closeEditModal()">Batal</button>
+      <button class="btn-confirm-del" style="background:linear-gradient(135deg,#6C63FF,#FF6B9D);" onclick="saveEdit()">Simpan</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ── STATE ──
 let GH = { user:'', repo:'', token:'' };
@@ -458,13 +492,14 @@ function renderAdminGrid() {
     }
     
     el.innerHTML = `
-      ${media}
-      <div class="admin-item-info">
-        <div class="admin-item-title">${escapeHtml(item.title)}</div>
-        <div class="admin-item-cat">${item.category}</div>
-      </div>
-      <button class="admin-item-del" onclick="confirmDelete('${item.id}')" title="Hapus">✕</button>
-    `;
+  ${media}
+  <div class="admin-item-info">
+    <div class="admin-item-title">${escapeHtml(item.title)}</div>
+    <div class="admin-item-cat">${item.category}</div>
+  </div>
+  <button class="admin-item-edit" onclick="openEditModal('${item.id}')" title="Edit">✎</button>
+  <button class="admin-item-del" onclick="confirmDelete('${item.id}')" title="Hapus">✕</button>
+`;
     grid.appendChild(el);
   });
 }
@@ -683,6 +718,45 @@ document.addEventListener('DOMContentLoaded', function() {
     confirmBtn.parentNode.replaceChild(newBtn, confirmBtn);
     newBtn.addEventListener('click', doDelete);
   }
+});
+
+// ── EDIT ──
+let editTargetId = null;
+
+function openEditModal(id) {
+  const item = allItems.find(i => i.id === id);
+  if (!item) return;
+  editTargetId = id;
+  document.getElementById('editTitle').value = item.title || '';
+  document.getElementById('editCat').value = item.category || 'promotional';
+  document.getElementById('editDesc').value = item.desc || '';
+  document.getElementById('editModal').classList.add('open');
+}
+
+function closeEditModal() {
+  document.getElementById('editModal').classList.remove('open');
+  editTargetId = null;
+}
+
+async function saveEdit() {
+  const item = allItems.find(i => i.id === editTargetId);
+  if (!item) return;
+  item.title = document.getElementById('editTitle').value.trim();
+  item.category = document.getElementById('editCat').value;
+  item.desc = document.getElementById('editDesc').value.trim();
+  try {
+    await pushDataJson();
+    toast('✦ Karya berhasil diupdate!', 'ok');
+    renderAdminGrid();
+    closeEditModal();
+  } catch(e) {
+    toast('Gagal simpan: ' + e.message, 'err');
+  }
+}
+
+// Tutup edit modal saat klik di luar
+document.getElementById('editModal')?.addEventListener('click', e => {
+  if (e.target === document.getElementById('editModal')) closeEditModal();
 });
 
 // ── HELPERS ──
