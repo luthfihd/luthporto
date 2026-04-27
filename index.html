@@ -177,12 +177,20 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
 #modal.active{display:flex;opacity:1;}
 #app{transition:filter 0.4s ease,transform 0.4s ease;}
 .content-blur{filter:blur(20px);transform:scale(0.98);pointer-events:none;}
-#modal-content{position:relative;width:auto;max-width:90vw;border-radius:28px;box-shadow:0 25px 60px rgba(0,0,0,0.6);transform:scale(0.95);opacity:0;transition:all 0.5s ease-out;background:#000;overflow:hidden;}
+#modal-content{position:relative;width:auto;max-width:90vw;border-radius:28px;box-shadow:0 25px 60px rgba(0,0,0,0.6);transform:scale(0.95);opacity:0;transition:all 0.5s ease-out;background:#000;overflow:hidden;display:flex;flex-direction:column;}
 #modal-content.show{transform:scale(1);opacity:1;}
 #modal-media-container{width:100%;display:flex;justify-content:center;align-items:center;overflow:hidden;border-radius:28px;}
 #modal-media-container img{max-width:90vw;max-height:85vh;width:auto;height:auto;display:block;image-rendering:auto;}
 #modal-media-container iframe{display:block;width:min(900px,85vw);aspect-ratio:16/9;border:none;}
-.modal-info{position:absolute;bottom:0;left:0;right:0;padding:96px 24px 28px;background:linear-gradient(to top,rgba(0,0,0,0.9) 0%,rgba(0,0,0,0.4) 60%,transparent 100%);pointer-events:none;border-radius:0 0 28px 28px;}
+.modal-info {
+  position: relative;     /* ← ubah dari absolute */
+  /* hapus bottom, left, right */
+  width: 100%;
+  padding: 96px 24px 28px;
+  background: linear-gradient(to top,rgba(0,0,0,0.9) 0%,rgba(0,0,0,0.4) 60%,transparent 100%);
+  pointer-events: none;
+  border-radius: 0 0 28px 28px;
+}
 .modal-tag{font-size:11px;font-family:'Space Mono',monospace;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:50px;display:inline-block;width:fit-content;margin-bottom:8px;}
 .modal-title{font-family:'Playfair Display',serif;font-size:clamp(1.1rem,3vw,1.6rem);color:#fff;margin-bottom:6px;font-weight:700;}
 .modal-desc{color:rgba(255,255,255,0.75);font-size:13px;line-height:1.6;}
