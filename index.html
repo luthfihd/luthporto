@@ -204,27 +204,36 @@ footer{margin-top:60px;padding:60px 0 40px;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:rgba(108,99,255,0.4);border-radius:3px;}
 
-/* Paksa modal-content untuk menciut */
+/* RESET TOTAL MODAL CONTENT */
 #modal-content {
+    display: table !important; /* Kunci: Table otomatis menciut sesuai isi */
     width: auto !important;
     min-width: 0 !important;
-    display: inline-flex !important; /* Pakai inline-flex agar lebarnya pas konten */
-    align-self: center;
+    margin: auto !important;
+    max-width: 95vw !important;
 }
 
 #modal-media-container {
+    display: block !important;
     width: auto !important;
-    min-width: 0 !important;
-    max-width: fit-content !important;
 }
 
 #modal-media-container img {
-    display: block;
-    max-width: 90vw;
-    max-height: 70vh;
+    display: block !important;
     width: auto !important;
     height: auto !important;
-} 
+    max-height: 70vh !important;
+    max-width: 100% !important;
+}
+
+/* Biar teks di bawahnya nggak ngelebarin table */
+.modal-info-box {
+    display: table-caption !important;
+    caption-side: bottom !important;
+    width: 100% !important;
+    background: rgba(0,0,0,0.6) !important;
+    backdrop-filter: blur(10px);
+}
 
 </style>
 </head>
@@ -319,21 +328,18 @@ footer{margin-top:60px;padding:60px 0 40px;}
 </footer>
 
 <!-- HTML MODAL -->
-<div id="modal" class="fixed inset-0 z-[9999] hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-opacity duration-300">
+<div id="modal" class="fixed inset-0 z-[9999] hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md">
     
-    <button onclick="closeModal()" class="fixed top-5 right-5 z-[10000] w-12 h-12 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-white hover:bg-red-500 transition-all flex items-center justify-center text-2xl">×</button>
+    <button onclick="closeModal()" class="fixed top-5 right-5 z-[10000] w-12 h-12 rounded-full border border-white/20 bg-white/10 text-white text-2xl">×</button>
 
-    <div id="modal-content" class="relative flex flex-col items-center scale-95 opacity-0 transition-all duration-500 rounded-[32px] overflow-hidden bg-white/10 backdrop-blur-3xl border border-white/20 shadow-2xl">
+    <div id="modal-content" class="relative scale-95 opacity-0 transition-all duration-500 rounded-[32px] overflow-hidden shadow-2xl border border-white/20">
         
-        <div id="modal-media-container" class="relative">
-            </div>
+        <div id="modal-media-container"></div>
 
-        <div class="p-6 bg-gradient-to-t from-black/90 via-black/20 to-transparent w-full mt-[-100px] pt-24 relative z-10 pointer-events-none">
-            <div id="modal-tag" class="modal-tag pointer-events-auto">Category</div>
-            <h2 id="modal-title" class="text-white text-xl font-serif font-bold mb-1 pointer-events-auto leading-tight">Title</h2>
-            <p id="modal-desc" class="text-white/70 text-xs max-w-[280px] pointer-events-auto line-clamp-2">
-                Description...
-            </p>
+        <div class="modal-info-box p-6">
+            <div id="modal-tag" class="modal-tag mb-2">Category</div>
+            <h2 id="modal-title" class="text-white text-xl font-serif font-bold mb-1">Title</h2>
+            <p id="modal-desc" class="text-white/60 text-xs">Description...</p>
         </div>
     </div>
 </div>
