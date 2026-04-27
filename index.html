@@ -301,15 +301,19 @@ footer{margin-top:60px;padding:60px 0 40px;}
 </footer>
 
 <!-- MODAL - VERSION TAILWIND -->
-<div id="modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 bg-black/60 backdrop-blur-xl hidden opacity-0 transition-opacity duration-400" onclick="closeModal()">
-    <button onclick="closeModal()" class="close-btn absolute top-6 right-6 z-[110] text-white p-3 rounded-full hover:bg-white/40 transition-all duration-300">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+<div id="modal" style="display: none; position: fixed; inset: 0; z-index: 99999; align-items: center; justify-content: center; padding: 16px; background: rgba(0,0,0,0.6); backdrop-filter: blur(40px);" onclick="closeModal()">
+    <button onclick="closeModal()" class="absolute top-6 right-6 z-[110] text-white p-3 rounded-full hover:bg-white/40 transition-all duration-300">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+        </svg>
     </button>
-    <div id="modal-content" class="relative w-full max-w-fit rounded-[2rem] md:rounded-[3rem] shadow-2xl scale-95 opacity-0 transition-all duration-500 ease-out bg-black overflow-hidden" onclick="event.stopPropagation()">
-        <div id="modal-media-container" class="w-full flex justify-center items-center overflow-hidden rounded-[2rem] md:rounded-[3rem]"></div>
-        <div class="w-full bg-gradient-to-t from-black/90 via-black/40 to-transparent p-6 md:p-10 pt-24 text-white absolute bottom-0 pointer-events-none rounded-b-[2rem] md:rounded-b-[3rem]">
-            <h3 id="modalTitle" class="text-2xl md:text-4xl font-bold mb-2 tracking-tight"></h3>
-            <p id="modalDesc" class="text-sm md:text-lg text-gray-200 font-light"></p>
+    
+    <div id="modal-content" class="relative w-fit max-w-[90vw] rounded-[2rem] shadow-2xl scale-95 opacity-0 transition-all duration-500 ease-out bg-black overflow-hidden" onclick="event.stopPropagation()">
+        <div id="modal-media-container" class="flex justify-center items-center"></div>
+        <div class="w-full bg-gradient-to-t from-black/90 via-black/40 to-transparent p-6 pt-24 text-white rounded-b-[2rem] pointer-events-none">
+            <span id="modalTag" class="inline-block px-3 py-1 rounded-full text-xs font-mono uppercase tracking-wide mb-2 bg-white/20"></span>
+            <h3 id="modalTitle" class="text-2xl md:text-3xl font-bold mb-2"></h3>
+            <p id="modalDesc" class="text-sm md:text-base text-gray-200"></p>
         </div>
     </div>
 </div>
@@ -462,50 +466,79 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 });
 
 // ── MODAL TAILWIND──
-function openLightbox(project) {
-    const modal = document.getElementById('modal');
-    const mediaContainer = document.getElementById('modal-media-container');
-    mediaContainer.innerHTML = '';
+// ── MODAL (VERSION UNTUK SISTEM ANDA) ──
+function openLightbox(item) {
+  const tagClass = {promotional:'tag-promo',educational:'tag-edu',video:'tag-video'}[item.category]||'tag-promo';
+  const tagLabel = {promotional:'Promotional',educational:'Educational',video:'Video'}[item.category]||item.category;
+  
+  document.getElementById('modalTitle').textContent = item.title;
+  document.getElementById('modalDesc').textContent = item.desc || 'Tidak ada deskripsi.';
+  document.getElementById('modalTag').textContent = tagLabel;
+  document.getElementById('modalTag').className = `masonry-item-tag modal-tag ${tagClass}`;
 
-    if (project.videoUrl) {
-        const iframe = document.createElement('iframe');
-        iframe.src = project.videoUrl;
-        iframe.className = "max-w-[90vw] max-h-[85vh] h-auto w-auto aspect-auto";
-        iframe.style.width = project.videoUrl.includes('preview') ? "min(500px, 85vw)" : "min(1280px, 90vw)";
-        iframe.style.aspectRatio = project.videoUrl.includes('preview') ? "9/16" : "16/9";
-        iframe.setAttribute("allowfullscreen", "true");
-        iframe.setAttribute("webkitallowfullscreen", "true");
-        iframe.setAttribute("mozallowfullscreen", "true");
-        iframe.setAttribute("allow", "autoplay; fullscreen; picture-in-picture");
-        mediaContainer.appendChild(iframe);
-    } else {
-        const img = document.createElement('img');
-        img.src = project.url;
-        img.className = "max-w-[90vw] max-h-[85vh] h-auto w-auto object-contain";
-        mediaContainer.appendChild(img);
+  const container = document.getElementById('modal-media-container');
+  container.innerHTML = '';
+
+  if (item.type === 'image') {
+    const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = item.title;
+    img.style.maxWidth = '90vw';
+    img.style.maxHeight = '85vh';
+    img.style.width = 'auto';
+    img.style.height = 'auto';
+    container.appendChild(img);
+  } else if (item.type === 'gdrive' && item.src) {
+    const m = item.src.match(/\/d\/([-\w]+)/);
+    const id = m ? m[1] : null;
+    if (id) {
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://drive.google.com/file/d/${id}/preview`;
+      iframe.allow = 'autoplay';
+      iframe.style.width = 'min(900px, 85vw)';
+      iframe.style.aspectRatio = '16/9';
+      iframe.style.border = 'none';
+      container.appendChild(iframe);
     }
+  } else {
+    container.innerHTML = `<div class="lb-ph ${item.gradientClass||'gradient-1'}">${item.icon||'✦'}</div>`;
+  }
 
-    document.getElementById('modalTitle').innerText = project.title;
-    document.getElementById('modalDesc').innerText = project.desc;
-    modal.classList.remove('hidden');
-    modal.classList.add('active');
-    document.getElementById('app').classList.add('content-blur');
-    document.body.style.overflow = 'hidden';
-    setTimeout(() => {
-        document.getElementById('modal-content').classList.remove('scale-95', 'opacity-0');
-    }, 10);
+  // ========== BAGIAN MENAMPILKAN MODAL ==========
+  const modal = document.getElementById('modal');
+  const content = document.getElementById('modal-content');
+  
+  // Tampilkan modal
+  modal.style.display = 'flex';
+  
+  // Animasi masuk
+  setTimeout(() => {
+    content.classList.remove('scale-95', 'opacity-0');
+  }, 10);
+  
+  // Blur background
+  document.getElementById('app').classList.add('content-blur');
+  document.body.style.overflow = 'hidden';
 }
 
 function closeModal() {
-    const modal = document.getElementById('modal');
-    document.getElementById('modal-content').classList.add('scale-95', 'opacity-0');
-    setTimeout(() => {
-        modal.classList.add('hidden');
-        modal.classList.remove('active');
-        document.getElementById('app').classList.remove('content-blur');
-        document.body.style.overflow = 'auto';
-        document.getElementById('modal-media-container').innerHTML = '';
-    }, 300);
+  const modal = document.getElementById('modal');
+  const content = document.getElementById('modal-content');
+  
+  // Animasi keluar
+  content.classList.add('scale-95', 'opacity-0');
+  
+  setTimeout(() => {
+    modal.style.display = 'none';
+    document.getElementById('app').classList.remove('content-blur');
+    document.body.style.overflow = '';
+    
+    const container = document.getElementById('modal-media-container');
+    const v = container.querySelector('video');
+    if(v) v.pause();
+    container.innerHTML = '';
+  }, 400);
 }
 
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
