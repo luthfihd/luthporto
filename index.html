@@ -172,10 +172,36 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
 .empty-state{text-align:center;padding:60px 20px;color:rgba(255,255,255,0.3);}
 .empty-icon{font-size:3rem;margin-bottom:12px;display:block;}
 
-/* ── CSS MODAL replaced by Tailwind ── */
-#app{transition:filter 0.4s ease,transform 0.4s ease;}
-.content-blur{filter:blur(20px);transform:scale(0.98);pointer-events:none;}
-.lb-ph{min-height:300px;width:min(400px,85vw);display:flex;align-items:center;justify-content:center;font-size:5rem;}
+/* ── CSS MODAL ── */
+#app {
+  transition: filter 0.4s ease, transform 0.4s ease;
+}
+.content-blur {
+  filter: blur(20px);
+  transform: scale(0.98);
+  pointer-events: none;
+}
+.lb-ph {
+  min-height: 300px;
+  width: min(400px, 85vw);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5rem;
+}
+/* Animasi classes */
+.scale-95 {
+  transform: scale(0.95);
+}
+.scale-100 {
+  transform: scale(1);
+}
+.opacity-0 {
+  opacity: 0;
+}
+.opacity-100 {
+  opacity: 1;
+}
 
 /* ── FOOTER ── */
 footer{margin-top:60px;padding:60px 0 40px;}
@@ -208,10 +234,19 @@ footer{margin-top:60px;padding:60px 0 40px;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:rgba(108,99,255,0.4);border-radius:3px;}
 @media(max-width:600px){.hero-card{padding:24px 20px;}.footer-card{padding:32px 20px;}.lightbox-info{padding:18px 20px;}}
+
+/* CSS untuk modal di mobile */
 @media(max-width:600px) {
-  #lightbox { padding: 16px; }
-  .lightbox-inner { width: fit-content !important; max-width: 92vw !important; border-radius: 20px !important; }
-  .lightbox-img { max-width: 92vw !important; max-height: 82vh !important; width: auto !important; height: auto !important; }
+  #modal-content {
+    max-width: 92vw !important;
+    border-radius: 20px !important;
+  }
+  
+  #modal-media-container img,
+  #modal-media-container iframe {
+    max-width: 92vw !important;
+    max-height: 82vh !important;
+  }
 }
 </style>
 </head>
@@ -325,6 +360,7 @@ footer{margin-top:60px;padding:60px 0 40px;}
     </div>
 </div>
 <script>
+
 // ── CONFIG: ganti sesuai repo kamu ──
 const GITHUB_USER = 'luthfihd';   // ← ganti
 const GITHUB_REPO = 'luthporto'; // ← ganti
@@ -557,19 +593,12 @@ function closeModal() {
   
   // Animasi keluar
   content.classList.add('scale-95', 'opacity-0');
-  content.classList.remove('scale-100', 'opacity-100');
   
   setTimeout(() => {
-    // Sembunyikan modal
     modal.style.display = 'none';
-    
-    // Hapus blur
     document.getElementById('app').classList.remove('content-blur');
-    
-    // Reset scroll
     document.body.style.overflow = '';
     
-    // Bersihkan konten
     const container = document.getElementById('modal-media-container');
     const v = container.querySelector('video');
     if(v) v.pause();
