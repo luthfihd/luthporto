@@ -207,8 +207,35 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
   border-radius: 28px;
   background: rgba(255,255,255,0.05); /* Tambahan efek kaca dikit */
 }
-#modal-media-container img{max-width:90vw;max-height:85vh;width:auto;height:auto;display:block;image-rendering:auto;}
-#modal-media-container iframe{display:block;width:min(900px,85vw);aspect-ratio:16/9;border:none;}
+/* 1. Ini untuk gambarnya */
+#modal-media-container img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;    /* Biar nggak melebar paksa keluar container */
+  max-height: 80vh;   /* Kunci: Biar foto portrait tetap muat di layar */
+  object-fit: contain; /* Menjaga rasio foto asli agar tidak gepeng */
+  border-radius: 20px; /* Opsional, sesuaikan dengan desainmu */
+}
+
+/* 2. Ini untuk videonya (kalau kamu pakai tag <video>) */
+#modal-media-container video {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+}
+
+/* 3. Ini untuk iframe (YouTube/Vimeo) - Tetap pertahankan rasio landscape */
+#modal-media-container iframe {
+  display: block;
+  width: min(900px, 85vw);
+  aspect-ratio: 16/9;
+  border: none;
+  border-radius: 12px;
+}
 .modal-info {
   position: relative; /* Ganti dari absolute ke relative */
   padding: 20px;
