@@ -296,20 +296,19 @@ footer{margin-top:60px;padding:60px 0 40px;}
 </footer>
 
 <!-- HTML MODAL -->
-<div id="modal" class="fixed inset-0 z-[9999] hidden items-center justify-center p-4 bg-black/60 backdrop-blur-[20px] transition-opacity duration-300">
+<div id="modal" class="fixed inset-0 z-[9999] hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-opacity duration-300">
     
-    <button onclick="closeModal()" class="fixed top-5 right-5 z-[10000] w-12 h-12 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-white hover:bg-red-500/40 hover:rotate-90 transition-all flex items-center justify-center text-2xl">×</button>
+    <button onclick="closeModal()" class="fixed top-5 right-5 z-[10000] w-12 h-12 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-white hover:bg-red-500 transition-all flex items-center justify-center text-2xl">×</button>
 
-    <div id="modal-content" class="relative flex flex-col w-fit mx-auto max-w-[95vw] max-h-[92vh] bg-white/10 backdrop-blur-[40px] border border-white/20 rounded-[32px] shadow-2xl overflow-hidden scale-95 opacity-0 transition-all duration-500">
-    
-        <div id="modal-media-container" class="w-fit mx-auto flex items-center justify-center overflow-hidden">
-             </div>
+    <div id="modal-content" class="relative flex flex-col w-fit h-fit mx-auto max-w-[95vw] max-h-[95vh] bg-white/5 backdrop-blur-3xl border border-white/20 rounded-[32px] shadow-2xl overflow-hidden scale-95 opacity-0 transition-all duration-500">
+        
+        <div id="modal-media-container" class="relative flex items-center justify-center overflow-hidden">
+            </div>
 
-        <div class="p-6 bg-black/60 backdrop-blur-xl border-t border-white/5 w-full">
-            <div id="modal-tag" class="modal-tag">Category</div>
-            <h2 id="modal-title" class="text-white text-xl font-serif font-bold mb-1 leading-tight">Title</h2>
-            
-            <p id="modal-desc" class="text-white/60 text-xs leading-relaxed max-w-[300px]">
+        <div class="p-6 bg-gradient-to-t from-black/90 via-black/40 to-transparent w-full mt-[-80px] pt-20 relative z-10 pointer-events-none">
+            <div id="modal-tag" class="modal-tag pointer-events-auto">Category</div>
+            <h2 id="modal-title" class="text-white text-xl font-serif font-bold mb-1 pointer-events-auto leading-tight">Title</h2>
+            <p id="modal-desc" class="text-white/70 text-xs max-w-[280px] pointer-events-auto line-clamp-2">
                 Description...
             </p>
         </div>
@@ -488,10 +487,10 @@ function openLightbox(item) {
     const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
     const img = document.createElement('img');
     img.src = src;
-    // PERBAIKAN: Gunakan w-auto dan hapus angka lebar yang memaksa
-    img.className = "block h-auto max-h-[65vh] w-auto object-contain mx-auto shadow-inner";
+    // KUNCI: w-auto agar dia tidak maksa lebar, h-auto agar rasio terjaga
+    img.className = "block w-auto h-auto max-h-[75vh] max-w-[90vw] object-contain mx-auto";
     container.appendChild(img);
-} 
+}
   else if (item.type === 'gdrive' || (item.src && item.src.includes('drive.google.com'))) {
     const m = item.src.match(/\/d\/([-\w]+)/);
     const id = m ? m[1] : (item.src.split('id=')[1]?.split('&')[0]);
