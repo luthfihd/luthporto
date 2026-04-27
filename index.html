@@ -302,13 +302,17 @@ footer{margin-top:60px;padding:60px 0 40px;}
 
     <div id="modal-content" class="relative flex flex-col w-fit mx-auto max-w-[95vw] max-h-[92vh] bg-white/10 backdrop-blur-[40px] border border-white/20 rounded-[32px] shadow-2xl overflow-hidden scale-95 opacity-0 transition-all duration-500">
     
-    <div id="modal-media-container" class="w-fit mx-auto flex items-center justify-center overflow-hidden bg-black/20">
-        </div>
+        <div id="modal-media-container" class="w-fit mx-auto flex items-center justify-center overflow-hidden">
+             </div>
 
-    <div class="relative p-6 bg-black/60 backdrop-blur-xl w-full border-t border-white/5">
-        <div id="modal-tag" class="modal-tag">Portfolio</div>
-        <h2 id="modal-title" class="text-white text-xl font-serif font-bold mb-1">Project Title</h2>
-        <p id="modal-desc" class="text-white/60 text-xs max-w-sm">Description...</p>
+        <div class="p-6 bg-black/60 backdrop-blur-xl border-t border-white/5 w-full">
+            <div id="modal-tag" class="modal-tag">Category</div>
+            <h2 id="modal-title" class="text-white text-xl font-serif font-bold mb-1 leading-tight">Title</h2>
+            
+            <p id="modal-desc" class="text-white/60 text-xs leading-relaxed max-w-[300px]">
+                Description...
+            </p>
+        </div>
     </div>
 </div>
 
@@ -484,10 +488,10 @@ function openLightbox(item) {
     const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
     const img = document.createElement('img');
     img.src = src;
-    // Ini kunci ramping: h-auto dan w-fit di container nanti
-    img.className = "block h-auto max-h-[65vh] max-w-[90vw] object-contain mx-auto shadow-inner";
+    // PERBAIKAN: Gunakan w-auto dan hapus angka lebar yang memaksa
+    img.className = "block h-auto max-h-[65vh] w-auto object-contain mx-auto shadow-inner";
     container.appendChild(img);
-  } 
+} 
   else if (item.type === 'gdrive' || (item.src && item.src.includes('drive.google.com'))) {
     const m = item.src.match(/\/d\/([-\w]+)/);
     const id = m ? m[1] : (item.src.split('id=')[1]?.split('&')[0]);
