@@ -313,12 +313,14 @@ footer{margin-top:60px;padding:60px 0 40px;}
         </svg>
     </button>
     
-    <div id="modal-content" style="position: relative; width: auto; max-width: 90vw; border-radius: 28px; transform: scale(0.95); opacity: 0; transition: all 0.5s; background: #000; overflow: hidden;" onclick="event.stopPropagation()">
-        <div id="modal-media-container" style="display: flex; justify-content: center; align-items: center;"></div>
-        <div style="background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); padding: 96px 24px 24px; color: white;">
-            <span id="modalTag" style="display: inline-block; background: rgba(255,255,255,0.2); padding: 3px 10px; border-radius: 50px; font-size: 11px;"></span>
-            <h3 id="modalTitle" style="font-size: 24px; margin: 8px 0 4px;"></h3>
-            <p id="modalDesc" style="font-size: 13px; opacity: 0.75;"></p>
+    <div id="modal-content" class="relative w-fit max-w-[90vw] rounded-[2rem] shadow-2xl scale-95 opacity-0 transition-all duration-500 ease-out bg-black overflow-hidden" onclick="event.stopPropagation()">
+        <div id="modal-media-container" class="flex justify-center items-center">
+            <!-- konten masuk sini -->
+        </div>
+        <div class="w-full bg-gradient-to-t from-black/90 via-black/40 to-transparent p-6 pt-24 text-white rounded-b-[2rem] pointer-events-none">
+            <span id="modalTag" class="inline-block px-3 py-1 rounded-full text-xs font-mono uppercase tracking-wide mb-2 bg-white/20"></span>
+            <h3 id="modalTitle" class="text-2xl md:text-3xl font-bold mb-2"></h3>
+            <p id="modalDesc" class="text-sm md:text-base text-gray-200"></p>
         </div>
     </div>
 </div>
@@ -469,7 +471,7 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
   });
 });
 
-// ── MODAL Tailwind──
+// ── MODAL TAILWIND──
 function openLightbox(item) {
   console.log("1. Fungsi openLightbox mulai");
   
@@ -516,7 +518,7 @@ function openLightbox(item) {
     console.log("4. Fallback ditambahkan");
   }
 
-  // ========== BAGIAN MENAMPILKAN MODAL ==========
+  // ========== BAGIAN MENAMPILKAN MODAL (YANG BARU) ==========
   const modal = document.getElementById('modal');
   const content = document.getElementById('modal-content');
   
@@ -533,52 +535,46 @@ function openLightbox(item) {
     return;
   }
   
-  console.log("7. Sebelum ubah style - modal.style.display:", modal.style.display);
-  
-  // Tampilkan modal
+  // Tampilkan modal (pakai display)
   modal.style.display = 'flex';
-  modal.style.opacity = '1';
-  modal.style.backgroundColor = 'rgba(0,0,0,0.6)';
-  content.style.transform = 'scale(1)';
-  content.style.opacity = '1';
   
-  console.log("8. Sesudah ubah style - modal.style.display:", modal.style.display);
-  console.log("9. Sesudah ubah style - modal.style.opacity:", modal.style.opacity);
+  // Animasi masuk: tambah class ke content
+  setTimeout(() => {
+    content.classList.remove('scale-95', 'opacity-0');
+    content.classList.add('scale-100', 'opacity-100');
+  }, 10);
   
-  // Hapus class hidden jika ada (untuk jaga-jaga)
-  modal.classList.remove('hidden');
-  
-  console.log("10. Class hidden sudah dihapus");
-  
+  // Blur background
   document.getElementById('app').classList.add('content-blur');
   document.body.style.overflow = 'hidden';
   
-  console.log("11. Selesai, modal seharusnya tampak");
+  console.log("Selesai, modal seharusnya tampak");
 }
 
 function closeModal() {
   const modal = document.getElementById('modal');
   const content = document.getElementById('modal-content');
   
-  // Sembunyikan modal
-  modal.style.display = 'none';
-  modal.style.opacity = '0';
-  content.style.transform = 'scale(0.95)';
-  content.style.opacity = '0';
+  // Animasi keluar
+  content.classList.add('scale-95', 'opacity-0');
+  content.classList.remove('scale-100', 'opacity-100');
   
-  // Hapus blur
-  document.getElementById('app').classList.remove('content-blur');
-  
-  // Reset scroll
-  document.body.style.overflow = '';
-  
-  // Bersihkan konten
   setTimeout(() => {
+    // Sembunyikan modal
+    modal.style.display = 'none';
+    
+    // Hapus blur
+    document.getElementById('app').classList.remove('content-blur');
+    
+    // Reset scroll
+    document.body.style.overflow = '';
+    
+    // Bersihkan konten
     const container = document.getElementById('modal-media-container');
     const v = container.querySelector('video');
     if(v) v.pause();
     container.innerHTML = '';
-  }, 300);
+  }, 400);
 }
 
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
