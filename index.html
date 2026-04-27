@@ -472,6 +472,8 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 
 // ── MODAL Tailwind──
 function openLightbox(item) {
+  console.log("openLightbox jalan", item);
+  
   const tagClass = {promotional:'tag-promo',educational:'tag-edu',video:'tag-video'}[item.category]||'tag-promo';
   const tagLabel = {promotional:'Promotional',educational:'Educational',video:'Video'}[item.category]||item.category;
   
@@ -488,6 +490,11 @@ function openLightbox(item) {
     const img = document.createElement('img');
     img.src = src;
     img.alt = item.title;
+    // Tambahkan class untuk styling gambar
+    img.style.maxWidth = '90vw';
+    img.style.maxHeight = '85vh';
+    img.style.width = 'auto';
+    img.style.height = 'auto';
     container.appendChild(img);
   } else if (item.type === 'gdrive' && item.src) {
     const m = item.src.match(/\/d\/([-\w]+)/);
@@ -496,53 +503,56 @@ function openLightbox(item) {
       const iframe = document.createElement('iframe');
       iframe.src = `https://drive.google.com/file/d/${id}/preview`;
       iframe.allow = 'autoplay';
+      iframe.style.width = 'min(900px, 85vw)';
+      iframe.style.aspectRatio = '16/9';
+      iframe.style.border = 'none';
       container.appendChild(iframe);
     }
   } else {
     container.innerHTML = `<div class="lb-ph ${item.gradientClass||'gradient-1'}">${item.icon||'✦'}</div>`;
   }
 
-  // ========== UPDATE: PAKAI TAILWIND CLASS ==========
+  // ========== INI KUNCI YANG DIPAKAI (sama seperti testing di console) ==========
   const modal = document.getElementById('modal');
   const content = document.getElementById('modal-content');
   
-  modal.classList.remove('hidden');
-  modal.classList.add('flex');
+  // Tampilkan modal pakai style langsung
+  modal.style.display = 'flex';
+  modal.style.opacity = '1';
+  modal.style.backgroundColor = 'rgba(0,0,0,0.6)';  // kembali ke warna semula
   
+  // Animasi konten
+  content.style.transform = 'scale(1)';
+  content.style.opacity = '1';
+  
+  // Blur background
   document.getElementById('app').classList.add('content-blur');
   document.body.style.overflow = 'hidden';
-  
-  requestAnimationFrame(() => {
-    modal.classList.add('opacity-1');
-    content.classList.remove('scale-95', 'opacity-0');
-  });
 }
 
 function closeModal() {
   const modal = document.getElementById('modal');
   const content = document.getElementById('modal-content');
   
-  content.classList.add('scale-95', 'opacity-0');
-  modal.classList.remove('opacity-1');
+  // Sembunyikan modal
+  modal.style.display = 'none';
+  modal.style.opacity = '0';
+  content.style.transform = 'scale(0.95)';
+  content.style.opacity = '0';
   
+  // Hapus blur
   document.getElementById('app').classList.remove('content-blur');
   
-  // PageIn animation (pertahankan)
-  const app = document.getElementById('app');
-  app.style.animation = 'none';
-  app.offsetHeight;
-  app.style.animation = 'pageIn 0.4s var(--spring)';
-
+  // Reset scroll
+  document.body.style.overflow = '';
+  
+  // Bersihkan konten
   setTimeout(() => {
-    modal.classList.add('hidden');
-    modal.classList.remove('flex', 'opacity-1');
-    document.body.style.overflow = '';
-    
     const container = document.getElementById('modal-media-container');
     const v = container.querySelector('video');
     if(v) v.pause();
     container.innerHTML = '';
-  }, 400);
+  }, 300);
 }
 
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
