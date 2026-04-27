@@ -203,6 +203,29 @@ footer{margin-top:60px;padding:60px 0 40px;}
 ::-webkit-scrollbar{width:5px;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:rgba(108,99,255,0.4);border-radius:3px;}
+
+/* Paksa modal-content untuk menciut */
+#modal-content {
+    width: auto !important;
+    min-width: 0 !important;
+    display: inline-flex !important; /* Pakai inline-flex agar lebarnya pas konten */
+    align-self: center;
+}
+
+#modal-media-container {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: fit-content !important;
+}
+
+#modal-media-container img {
+    display: block;
+    max-width: 90vw;
+    max-height: 70vh;
+    width: auto !important;
+    height: auto !important;
+} 
+
 </style>
 </head>
 <body>
@@ -300,12 +323,12 @@ footer{margin-top:60px;padding:60px 0 40px;}
     
     <button onclick="closeModal()" class="fixed top-5 right-5 z-[10000] w-12 h-12 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-white hover:bg-red-500 transition-all flex items-center justify-center text-2xl">×</button>
 
-    <div id="modal-content" class="relative flex flex-col w-fit h-fit mx-auto max-w-[95vw] max-h-[95vh] bg-white/5 backdrop-blur-3xl border border-white/20 rounded-[32px] shadow-2xl overflow-hidden scale-95 opacity-0 transition-all duration-500">
+    <div id="modal-content" class="relative flex flex-col items-center scale-95 opacity-0 transition-all duration-500 rounded-[32px] overflow-hidden bg-white/10 backdrop-blur-3xl border border-white/20 shadow-2xl">
         
-        <div id="modal-media-container" class="relative flex items-center justify-center overflow-hidden">
+        <div id="modal-media-container" class="relative">
             </div>
 
-        <div class="p-6 bg-gradient-to-t from-black/90 via-black/40 to-transparent w-full mt-[-80px] pt-20 relative z-10 pointer-events-none">
+        <div class="p-6 bg-gradient-to-t from-black/90 via-black/20 to-transparent w-full mt-[-100px] pt-24 relative z-10 pointer-events-none">
             <div id="modal-tag" class="modal-tag pointer-events-auto">Category</div>
             <h2 id="modal-title" class="text-white text-xl font-serif font-bold mb-1 pointer-events-auto leading-tight">Title</h2>
             <p id="modal-desc" class="text-white/70 text-xs max-w-[280px] pointer-events-auto line-clamp-2">
@@ -464,61 +487,55 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 
 // ── MODAL ──
 function openLightbox(item) {
-  // 1. Ambil elemen-elemen modal
   const modal = document.getElementById('modal');
   const content = document.getElementById('modal-content');
   const container = document.getElementById('modal-media-container');
   const app = document.getElementById('app');
 
-  // 2. Isi konten teks
+  // 1. Isi konten teks
   const tagLabel = {promotional:'Promotional', educational:'Educational', video:'Video'}[item.category] || item.category;
   const tagClass = {promotional:'tag-promo', educational:'tag-edu', video:'video'}[item.category] || 'tag-promo';
   
   document.getElementById('modal-title').textContent = item.title;
   document.getElementById('modal-desc').textContent = item.desc || 'Tidak ada deskripsi.';
   document.getElementById('modal-tag').textContent = tagLabel;
-  // Mempertahankan warna tag dari CSS kamu yang lama
-  document.getElementById('modal-tag').className = `text-[10px] font-mono tracking-[2px] uppercase mb-2 inline-block px-3 py-1 rounded-full ${tagClass}`;
+  document.getElementById('modal-tag').className = `modal-tag ${tagClass}`;
 
-  // 3. Logika Media (Kunci Ramping: max-h-[65vh])
+  // 2. Logika Media (KUNCI RAMPING DI SINI)
   container.innerHTML = '';
-
   if (item.type === 'image') {
     const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
     const img = document.createElement('img');
     img.src = src;
-    // KUNCI: w-auto agar dia tidak maksa lebar, h-auto agar rasio terjaga
-    img.className = "block w-auto h-auto max-h-[75vh] max-w-[90vw] object-contain mx-auto";
+    
+    // Pakai w-auto agar lebarnya mengikuti proporsi asli foto setelah tingginya dipangkas max-h
+    img.className = "block h-auto max-h-[70vh] w-auto mx-auto rounded-t-[32px]"; 
+    
     container.appendChild(img);
-}
+  } 
   else if (item.type === 'gdrive' || (item.src && item.src.includes('drive.google.com'))) {
+    // ... kode gdrive kamu ...
     const m = item.src.match(/\/d\/([-\w]+)/);
     const id = m ? m[1] : (item.src.split('id=')[1]?.split('&')[0]);
     if (id) {
       const iframe = document.createElement('iframe');
       iframe.src = `https://drive.google.com/file/d/${id}/preview`;
-      iframe.className = "w-[85vw] max-w-[900px] aspect-video border-none rounded-xl shadow-2xl";
+      iframe.className = "w-[85vw] max-w-[900px] aspect-video border-none rounded-xl";
       container.appendChild(iframe);
     }
-  } 
-  else {
-    // Fallback jika tipe tidak dikenal
-    container.innerHTML = `<div class="flex items-center justify-center min-h-[300px] text-6xl ${item.gradientClass||'gradient-1'}">${item.icon||'✦'}</div>`;
   }
 
-  // 4. Munculkan Modal & Blur Background
+  // 3. Munculkan Modal
   modal.classList.remove('hidden');
   modal.classList.add('flex');
   
   if (app) {
     app.style.filter = 'blur(15px) grayscale(0.2)';
     app.style.transform = 'scale(0.98)';
-    app.style.pointerEvents = 'none'; // Biar background gak bisa di-klik
   }
 
   document.body.style.overflow = 'hidden';
 
-  // 5. Trigger Animasi Scale & Opacity
   requestAnimationFrame(() => {
     modal.style.opacity = '1';
     content.classList.remove('scale-95', 'opacity-0');
