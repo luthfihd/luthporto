@@ -472,6 +472,7 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 
 // ── MODAL Tailwind──
 function openLightbox(item) {
+  alert("Fungsi openLightbox terpanggil!");  // ← tambah ini
   console.log("openLightbox jalan", item);
   
   const tagClass = {promotional:'tag-promo',educational:'tag-edu',video:'tag-video'}[item.category]||'tag-promo';
