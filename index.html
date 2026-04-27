@@ -172,26 +172,23 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
 .empty-state{text-align:center;padding:60px 20px;color:rgba(255,255,255,0.3);}
 .empty-icon{font-size:3rem;margin-bottom:12px;display:block;}
 
-/* ── LIGHTBOX ── */
-#lightbox{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);padding:20px;}
-#lightbox.open{display:flex;}
-
-.lightbox-inner{position:relative;border-radius:var(--radius-xl);overflow:hidden;animation:lbIn 0.4s var(--spring);margin:auto;width:fit-content;max-width:90vw;}
-
-.lightbox-media{line-height:0;}
-
-.lightbox-img{display:block;max-width:90vw;max-height:85vh;width:auto;height:auto;animation:imgIn 0.4s var(--spring);}
-
-.lightbox-iframe{display:block;width:min(900px,85vw);aspect-ratio:16/9;border:none;}
-
-.lightbox-info{position:absolute;bottom:0;left:0;right:0;padding:20px 24px 24px;background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,rgba(0,0,0,0.4) 60%,transparent 100%);}
-
-.lightbox-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:#fff;margin-bottom:4px;font-weight:700;}
-.lightbox-meta{margin-bottom:6px;}
-.lightbox-desc{color:rgba(255,255,255,0.75);font-size:13px;line-height:1.6;}
-.lightbox-close{position:absolute;top:16px;right:16px;width:46px;height:46px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.28);background:rgba(255,255,255,0.08);color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(12px);transition:all 0.25s;z-index:10;}
-.lightbox-close:hover{background:rgba(255,107,157,0.3);border-color:rgba(255,107,157,0.6);transform:rotate(90deg) scale(1.1);}
-.lb-ph{min-height:300px;width:400px;display:flex;align-items:center;justify-content:center;font-size:5rem;}
+/* ── MODAL ── */
+#modal{position:fixed;inset:0;z-index:1000;display:none;opacity:0;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,0.6);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);transition:opacity 0.4s ease;}
+#modal.active{display:flex;opacity:1;}
+#app{transition:filter 0.4s ease,transform 0.4s ease;}
+.content-blur{filter:blur(20px);transform:scale(0.98);pointer-events:none;}
+#modal-content{position:relative;width:fit-content;max-width:90vw;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:28px;box-shadow:0 25px 60px rgba(0,0,0,0.5);transform:scale(0.95);opacity:0;transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);background:#000;overflow:hidden;}
+#modal-content.show{transform:scale(1);opacity:1;}
+#modal-media-container{width:100%;display:flex;justify-content:center;align-items:center;overflow:hidden;border-radius:28px;}
+#modal-media-container img{max-width:90vw;max-height:85vh;width:auto;height:auto;display:block;object-fit:contain;}
+#modal-media-container iframe{display:block;width:min(900px,85vw);aspect-ratio:16/9;border:none;}
+.modal-info{position:absolute;bottom:0;left:0;right:0;padding:24px 28px 28px;background:linear-gradient(to top,rgba(0,0,0,0.9) 0%,rgba(0,0,0,0.5) 50%,transparent 100%);pointer-events:none;border-radius:0 0 28px 28px;}
+.modal-tag{font-size:11px;font-family:'Space Mono',monospace;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:50px;display:inline-block;width:fit-content;margin-bottom:8px;}
+.modal-title{font-family:'Playfair Display',serif;font-size:clamp(1.1rem,3vw,1.6rem);color:#fff;margin-bottom:6px;font-weight:700;}
+.modal-desc{color:rgba(255,255,255,0.75);font-size:13px;line-height:1.6;}
+.modal-close-btn{position:fixed;top:20px;right:20px;z-index:1010;width:48px;height:48px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.15);backdrop-filter:blur(12px);color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.25s;}
+.modal-close-btn:hover{background:rgba(255,107,157,0.3);border-color:rgba(255,107,157,0.6);transform:rotate(90deg) scale(1.1);}
+.lb-ph{min-height:300px;width:min(400px,85vw);display:flex;align-items:center;justify-content:center;font-size:5rem;}
 
 /* ── FOOTER ── */
 footer{margin-top:60px;padding:60px 0 40px;}
@@ -321,15 +318,15 @@ footer{margin-top:60px;padding:60px 0 40px;}
   </div>
 </footer>
 
-<!-- LIGHTBOX -->
-<div id="lightbox">
-  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-  <div class="lightbox-inner">
-    <div class="lightbox-media" id="lbMedia"></div>
-    <div class="lightbox-info">
-      <div class="lightbox-meta"><span class="masonry-item-tag" id="lbTag"></span></div>
-      <div class="lightbox-title" id="lbTitle"></div>
-      <div class="lightbox-desc" id="lbDesc"></div>
+<!-- MODAL -->
+<div id="modal" onclick="closeModal()">
+  <button class="modal-close-btn" onclick="closeModal()">✕</button>
+  <div id="modal-content" onclick="event.stopPropagation()">
+    <div id="modal-media-container"></div>
+    <div class="modal-info">
+      <span class="masonry-item-tag modal-tag" id="modalTag"></span>
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-desc" id="modalDesc"></div>
     </div>
   </div>
 </div>
@@ -481,27 +478,25 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
   });
 });
 
-// ── LIGHTBOX ──
+// ── MODAL ──
 function openLightbox(item) {
   const tagClass = {promotional:'tag-promo',educational:'tag-edu',video:'tag-video'}[item.category]||'tag-promo';
   const tagLabel = {promotional:'Promotional',educational:'Educational',video:'Video'}[item.category]||item.category;
-  document.getElementById('lbTitle').textContent = item.title;
-  document.getElementById('lbDesc').textContent = item.desc || 'Tidak ada deskripsi.';
-  document.getElementById('lbTag').textContent = tagLabel;
-  document.getElementById('lbTag').className = `masonry-item-tag ${tagClass}`;
+  
+  document.getElementById('modalTitle').textContent = item.title;
+  document.getElementById('modalDesc').textContent = item.desc || 'Tidak ada deskripsi.';
+  document.getElementById('modalTag').textContent = tagLabel;
+  document.getElementById('modalTag').className = `masonry-item-tag modal-tag ${tagClass}`;
 
-  const media = document.getElementById('lbMedia');
-  const inner = document.querySelector('.lightbox-inner');
-  media.innerHTML = '';
-  inner.style.cssText = '';
+  const container = document.getElementById('modal-media-container');
+  container.innerHTML = '';
 
   if (item.type === 'image') {
     const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
     const img = document.createElement('img');
     img.src = src;
     img.alt = item.title;
-    img.className = 'lightbox-img';
-    media.appendChild(img);
+    container.appendChild(img);
   } else if (item.type === 'gdrive' && item.src) {
     const m = item.src.match(/\/d\/([-\w]+)/);
     const id = m ? m[1] : null;
@@ -509,36 +504,47 @@ function openLightbox(item) {
       const iframe = document.createElement('iframe');
       iframe.src = `https://drive.google.com/file/d/${id}/preview`;
       iframe.allow = 'autoplay';
-      iframe.className = 'lightbox-iframe';
-      media.appendChild(iframe);
+      container.appendChild(iframe);
     }
   } else {
-    media.innerHTML = `<div class="lb-ph ${item.gradientClass||'gradient-1'}">${item.icon||'✦'}</div>`;
+    container.innerHTML = `<div class="lb-ph ${item.gradientClass||'gradient-1'}">${item.icon||'✦'}</div>`;
   }
 
-  document.getElementById('lightbox').classList.add('open');
+  const modal = document.getElementById('modal');
+  const content = document.getElementById('modal-content');
+  modal.style.display = 'flex';
+  document.getElementById('app').classList.add('content-blur');
   document.body.style.overflow = 'hidden';
+  requestAnimationFrame(() => {
+    modal.style.opacity = '1';
+    content.classList.add('show');
+  });
 }
-function closeLightbox() {
-  const inner = document.querySelector('.lightbox-inner');
-  inner.style.animation = 'lbOut 0.3s ease forwards';
-  document.getElementById('app').style.animation = 'pageIn 1.0s var(--spring)'; // ← tambah ini
- 
-  // Reset dulu biar animasi bisa jalan ulang
+
+function closeModal() {
+  const modal = document.getElementById('modal');
+  const content = document.getElementById('modal-content');
+  content.classList.remove('show');
+  modal.style.opacity = '0';
+  document.getElementById('app').classList.remove('content-blur');
+  
+  // pageIn animation
+  const app = document.getElementById('app');
   app.style.animation = 'none';
-  app.offsetHeight; // ← trigger reflow
+  app.offsetHeight;
   app.style.animation = 'pageIn 0.4s var(--spring)';
- 
+
   setTimeout(() => {
-    document.getElementById('lightbox').classList.remove('open');
-    inner.style.animation = '';
+    modal.style.display = 'none';
     document.body.style.overflow = '';
-    const v = document.querySelector('#lbMedia video');
+    container = document.getElementById('modal-media-container');
+    const v = container.querySelector('video');
     if(v) v.pause();
-  }, 280);
+    container.innerHTML = '';
+  }, 400);
 }
-document.getElementById('lightbox').addEventListener('click', e => { if(e.target===document.getElementById('lightbox')) closeLightbox(); });
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeLightbox(); });
+
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
 
 // ── SCROLL BG ──
 const bgPalettes = [
