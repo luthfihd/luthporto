@@ -9,6 +9,7 @@
 <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1jkLbUA9ENzlOCrmIo6__zexMv-RF9ODS=w64-h64">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
 <style>
 /* ── DESIGN TOKENS ── */
 :root {
@@ -379,19 +380,22 @@ footer{margin-top:60px;padding:60px 0 40px;}
   </div>
 </footer>
 
-<!-- MODAL -->
-<div id="modal" onclick="closeModal()">
-  <button class="modal-close-btn" onclick="closeModal()">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-  </button>
-  <div id="modal-content" onclick="event.stopPropagation()">
-    <div id="modal-media-container"></div>
-    <div class="modal-info">
-      <span class="masonry-item-tag modal-tag" id="modalTag"></span>
-      <div class="modal-title" id="modalTitle"></div>
-      <div class="modal-desc" id="modalDesc"></div>
+<!-- HTML MODAL -->
+<div id="modal" class="fixed inset-0 z-[1000] hidden items-center justify-center p-4 bg-black/60 backdrop-blur-[20px] transition-opacity duration-300">
+    
+    <button onclick="closeModal()" class="fixed top-5 right-5 z-[1010] w-12 h-12 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-white hover:bg-red-500/40 hover:rotate-90 transition-all flex items-center justify-center text-2xl">×</button>
+
+    <div id="modal-content" class="relative flex flex-col w-fit max-w-[95vw] max-h-[92vh] bg-white/10 backdrop-blur-[40px] border border-white/20 rounded-[32px] shadow-2xl overflow-hidden scale-95 opacity-0 transition-all duration-500">
+        
+        <div id="modal-media-container" class="flex items-center justify-center overflow-hidden">
+            </div>
+
+        <div class="modal-info relative p-6 bg-black/40 backdrop-blur-xl w-full border-t border-white/5">
+            <div id="modal-tag" class="text-[10px] font-mono tracking-[2px] text-indigo-300 uppercase mb-2">Portfolio</div>
+            <h2 id="modal-title" class="text-white text-xl md:text-2xl font-serif font-bold mb-1 leading-tight">Project Title</h2>
+            <p id="modal-desc" class="text-white/60 text-xs md:text-sm leading-relaxed max-w-prose">Project description...</p>
+        </div>
     </div>
-  </div>
 </div>
 
 <script>
@@ -543,22 +547,28 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 
 // ── MODAL ──
 function openLightbox(item) {
-  const tagClass = {promotional:'tag-promo',educational:'tag-edu',video:'tag-video'}[item.category]||'tag-promo';
-  const tagLabel = {promotional:'Promotional',educational:'Educational',video:'Video'}[item.category]||item.category;
+  // 1. Logika Kategori & Tag (Tetap pakai punya kamu)
+  const tagClass = {promotional:'tag-promo', educational:'tag-edu', video:'tag-video'}[item.category] || 'tag-promo';
+  const tagLabel = {promotional:'Promotional', educational:'Educational', video:'Video'}[item.category] || item.category;
   
-  document.getElementById('modalTitle').textContent = item.title;
-  document.getElementById('modalDesc').textContent = item.desc || 'Tidak ada deskripsi.';
-  document.getElementById('modalTag').textContent = tagLabel;
-  document.getElementById('modalTag').className = `masonry-item-tag modal-tag ${tagClass}`;
+  // Update teks (Pastikan ID di HTML baru sesuai: modal-title, modal-desc, modal-tag)
+  document.getElementById('modal-title').textContent = item.title;
+  document.getElementById('modal-desc').textContent = item.desc || 'Tidak ada deskripsi.';
+  document.getElementById('modal-tag').textContent = tagLabel;
+  // Jika ingin tetap pakai styling warna tag dari CSS lama:
+  document.getElementById('modal-tag').className = `text-[10px] font-mono tracking-widest uppercase mb-2 inline-block px-3 py-1 rounded-full ${tagClass}`;
 
   const container = document.getElementById('modal-media-container');
   container.innerHTML = '';
 
+  // 2. Logika Media (Kita tambahkan Class Tailwind 'max-h-[65vh]' agar ramping)
   if (item.type === 'image') {
     const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
     const img = document.createElement('img');
     img.src = src;
     img.alt = item.title;
+    // KUNCI RAMPING:
+    img.className = "max-w-full max-h-[65vh] object-contain block mx-auto";
     container.appendChild(img);
   } else if (item.type === 'gdrive' && item.src) {
     const m = item.src.match(/\/d\/([-\w]+)/);
@@ -567,46 +577,73 @@ function openLightbox(item) {
       const iframe = document.createElement('iframe');
       iframe.src = `https://drive.google.com/file/d/${id}/preview`;
       iframe.allow = 'autoplay';
+      // Untuk Iframe Gdrive, kita beri ukuran yang pas
+      iframe.className = "w-[85vw] max-w-[900px] aspect-video border-none rounded-lg";
       container.appendChild(iframe);
     }
   } else {
-    container.innerHTML = `<div class="lb-ph ${item.gradientClass||'gradient-1'}">${item.icon||'✦'}</div>`;
+    container.innerHTML = `<div class="flex items-center justify-center min-h-[300px] text-6xl ${item.gradientClass||'gradient-1'}">${item.icon||'✦'}</div>`;
   }
 
+  // 3. Logika Menampilkan Modal (Disesuaikan untuk Tailwind)
   const modal = document.getElementById('modal');
   const content = document.getElementById('modal-content');
-  modal.style.display = 'flex';
-  document.getElementById('app').classList.add('content-blur');
+  const app = document.getElementById('app');
+
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+  
+  if(app) {
+    app.style.filter = 'blur(15px) grayscale(0.2)';
+    app.style.transform = 'scale(0.98)';
+    app.style.transition = 'all 0.5s ease';
+  }
+
   document.body.style.overflow = 'hidden';
+
+  // Animasi halus muncul
   requestAnimationFrame(() => {
     modal.style.opacity = '1';
-    content.classList.add('show');
+    content.classList.remove('scale-95', 'opacity-0');
+    content.classList.add('scale-100', 'opacity-100');
   });
 }
 
-function closeModal() {
+ function closeModal() {
   const modal = document.getElementById('modal');
   const content = document.getElementById('modal-content');
-  content.classList.remove('show');
-  modal.style.opacity = '0';
-  document.getElementById('app').classList.remove('content-blur');
-  
-  // pageIn animation
   const app = document.getElementById('app');
-  app.style.animation = 'none';
-  app.offsetHeight;
-  app.style.animation = 'pageIn 0.4s var(--spring)';
 
+  // 1. Jalankan animasi mengecil dan menghilang
+  if (content) {
+    content.classList.remove('scale-100', 'opacity-100');
+    content.classList.add('scale-95', 'opacity-0');
+  }
+
+  // 2. Hilangkan efek blur pada background web (#app)
+  if (app) {
+    app.style.filter = '';
+    app.style.transform = '';
+  }
+
+  // 3. Sembunyikan modal setelah animasi selesai (400ms)
   setTimeout(() => {
-    modal.style.display = 'none';
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    modal.style.opacity = '0';
+    
+    // Kembalikan scrollbar body
     document.body.style.overflow = '';
-    container = document.getElementById('modal-media-container');
-    const v = container.querySelector('video');
-    if(v) v.pause();
-    container.innerHTML = '';
+    
+    // Bersihkan container media agar video/iframe berhenti berputar
+    const container = document.getElementById('modal-media-container');
+    if (container) container.innerHTML = '';
   }, 400);
 }
 
+// Tambahkan baris ini agar tombol 'X' di HTML bisa memanggil fungsi ini
+window.closeModal = closeModal; 
+  
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
 
 // ── SCROLL BG ──
