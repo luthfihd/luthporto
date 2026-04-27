@@ -306,23 +306,22 @@ footer{margin-top:60px;padding:60px 0 40px;}
 </footer>
 
 <!-- MODAL - VERSION TAILWIND -->
-<div id="modal" class="fixed inset-0 z-[100] hidden opacity-0 transition-opacity duration-400 ease items-center justify-center p-4 bg-black/60 backdrop-blur-xl" onclick="closeModal()">
+<div id="modal" style="display: none; position: fixed; inset: 0; z-index: 99999; align-items: center; justify-content: center; padding: 16px; background: rgba(0,0,0,0.6); backdrop-filter: blur(40px);" onclick="closeModal()">
     <button onclick="closeModal()" class="absolute top-6 right-6 z-[110] text-white p-3 rounded-full hover:bg-white/40 transition-all duration-300">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
         </svg>
     </button>
     
-    <div id="modal-content" class="relative w-full max-w-fit rounded-[2rem] shadow-2xl scale-95 opacity-0 transition-all duration-500 ease-out bg-black overflow-hidden" onclick="event.stopPropagation()">
-        <div id="modal-media-container" class="w-auto max-w-full flex justify-center items-center overflow-hidden rounded-[2rem]"></div>
-        <div class="w-full bg-gradient-to-t from-black/90 via-black/40 to-transparent p-6 pt-24 text-white rounded-b-[2rem] pointer-events-none">
-            <span class="masonry-item-tag modal-tag inline-block px-3 py-1 rounded-full text-xs font-mono uppercase tracking-wide mb-2" id="modalTag"></span>
-            <h3 class="text-2xl md:text-3xl font-bold mb-2 tracking-tight" id="modalTitle"></h3>
-            <p class="text-sm md:text-base text-gray-200 font-light" id="modalDesc"></p>
+    <div id="modal-content" style="position: relative; width: auto; max-width: 90vw; border-radius: 28px; transform: scale(0.95); opacity: 0; transition: all 0.5s; background: #000; overflow: hidden;" onclick="event.stopPropagation()">
+        <div id="modal-media-container" style="display: flex; justify-content: center; align-items: center;"></div>
+        <div style="background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); padding: 96px 24px 24px; color: white;">
+            <span id="modalTag" style="display: inline-block; background: rgba(255,255,255,0.2); padding: 3px 10px; border-radius: 50px; font-size: 11px;"></span>
+            <h3 id="modalTitle" style="font-size: 24px; margin: 8px 0 4px;"></h3>
+            <p id="modalDesc" style="font-size: 13px; opacity: 0.75;"></p>
         </div>
     </div>
 </div>
-
 <script>
 // ── CONFIG: ganti sesuai repo kamu ──
 const GITHUB_USER = 'luthfihd';   // ← ganti
