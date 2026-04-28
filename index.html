@@ -550,11 +550,12 @@ function openLightbox(item) {
     const container = document.getElementById('modal-media-container');
     const app = document.getElementById('app');
 
-    // 1. Reset Modal (Sembunyikan dulu agar tidak berantakan)
-    modal.style.display = 'none';
-    modal.style.opacity = '0';
+    // 1. SIAPKAN MODAL (Ada tapi tak terlihat)
+    modal.style.display = 'flex'; 
+    modal.style.opacity = '0'; // Sembunyikan lewat opacity
+    modal.style.visibility = 'hidden'; // Biar gak bisa diklik dulu
     content.classList.add('scale-95', 'opacity-0');
-    content.style.width = 'auto'; // Reset lebar ke otomatis
+    content.style.width = 'auto'; 
 
     // Isi Teks
     document.getElementById('modal-title').textContent = item.title;
@@ -570,42 +571,30 @@ function openLightbox(item) {
     let fileId = "";
 
     // Ambil ID dari Drive
-    if (fullSrc.includes('/d/')) {
-        fileId = fullSrc.split('/d/')[1].split('/')[0];
-    } else if (fullSrc.includes('id=')) {
-        fileId = fullSrc.split('id=')[1].split('&')[0];
-    }
+    if (fullSrc.includes('/d/')) fileId = fullSrc.split('/d/')[1].split('/')[0];
+    else if (fullSrc.includes('id=')) fileId = fullSrc.split('id=')[1].split('&')[0];
 
-    // --- DETEKSI JALUR ---
     const isVideo = item.icon === "🎬";
 
     if (isVideo) {
-        // --- JALUR VIDEO (Jalur B) ---
-        // Karena iframe tidak punya lebar alami, kita tentukan lebarnya di sini
+        // --- JALUR VIDEO ---
         content.style.width = '800px'; 
-        content.style.maxWidth = '90vw';
-        
+        content.style.maxWidth = '95vw';
         container.innerHTML = `
-            <div class="aspect-video w-full bg-black">
-                <iframe 
-                    src="https://drive.google.com/file/d/${fileId}/preview" 
-                    class="w-full h-[450px] border-none" 
-                    allow="autoplay">
-                </iframe>
-            </div>
-        `;
-        
-        // Video tidak perlu nunggu onload, langsung panggil show
+            <div class="aspect-video w-full bg-black rounded-t-xl overflow-hidden">
+                <iframe src="https://drive.google.com/file/d/${fileId}/preview" 
+                        class="w-full h-[450px] border-none" allow="autoplay"></iframe>
+            </div>`;
         showModal();
-
     } else {
-        // --- JALUR GAMBAR (Jalur A - Tetap Seperti Semula) ---
+        // --- JALUR GAMBAR (Tunggu Download & Ukuran) ---
         const img = document.createElement('img');
         const thumbSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
 
         img.onload = function() {
-            // Logika Fit Content yang kamu suka
-            content.style.width = img.clientWidth + 'px';
+            // Karena modal sudah display:flex (tapi hidden), clientWidth pasti terbaca!
+            const measuredWidth = img.clientWidth;
+            content.style.width = measuredWidth + 'px';
             showModal();
         };
 
@@ -613,9 +602,9 @@ function openLightbox(item) {
         container.appendChild(img);
     }
 
-    // FUNGSI UNTUK MEMUNCULKAN MODAL (Hanya dipanggil kalau media siap)
+    // FUNGSI TAMPILKAN (Setelah ukuran fix)
     function showModal() {
-        modal.style.display = 'flex';
+        modal.style.visibility = 'visible'; // Sekarang boleh terlihat
         setTimeout(() => {
             modal.style.opacity = '1';
             content.classList.remove('scale-95', 'opacity-0');
@@ -629,12 +618,8 @@ function openLightbox(item) {
         document.body.style.overflow = 'hidden';
     }
 
-    // Klik luar untuk tutup
-    modal.onclick = (e) => {
-        if (e.target === modal) closeModal();
-    };
+    modal.onclick = (e) => { if (e.target === modal) closeModal(); };
 }
-
 
 function closeModal() {
     const modal = document.getElementById('modal');
