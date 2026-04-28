@@ -222,12 +222,11 @@ footer{margin-top:60px;padding:60px 0 40px;}
 /* 2. Kotak Kaca (Kunci Ramping) */
 #modal-content {
     background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 32px;
     overflow: hidden;
     position: relative;
-    width: fit-content; /* Sangat Penting */
+    width: fit-content; /* Ini yang bikin dia mau menciut */
     max-width: 95vw;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
 }
@@ -271,18 +270,23 @@ footer{margin-top:60px;padding:60px 0 40px;}
 .tag-promo { background: #6366f1; }
 .tag-edu { background: #10b981; }
 .video { background: #ef4444; }
-  
 /* Container utama untuk menjaga rasio video 16:9 */
 .aspect-video {
     position: relative;
-    padding-bottom: 56.25%; /* Rasio 16:9 */
+    width: 100%;
+    padding-bottom: 56.25%; /* Ini standar rasio 16:9 */
     height: 0;
+    background: #000; /* Biar gak kedip putih pas loading */
 }
+
 /* Memaksa iframe Google Drive mengisi penuh container */
 .aspect-video iframe {
     position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
 }
 
 </style>
@@ -546,13 +550,18 @@ function openLightbox(item) {
     const container = document.getElementById('modal-media-container');
     const app = document.getElementById('app');
 
-    // Sembunyikan dulu biar gak bebel
-    modal.style.display = 'none';
-    modal.style.opacity = '0';
-    content.classList.add('scale-95', 'opacity-0');
-    content.style.width = 'auto'; 
+    // 1. Persiapan Modal
+    modal.style.display = 'flex';
+    modal.style.pointerEvents = 'auto';
+    content.style.width = '300px'; 
+    
+    setTimeout(() => {
+        modal.style.opacity = '1';
+        content.classList.remove('opacity-0', 'scale-95');
+        content.classList.add('opacity-100', 'scale-100');
+    }, 10);
 
-    // 1. Isi Data Teks
+    // Isi Teks
     document.getElementById('modal-title').textContent = item.title;
     document.getElementById('modal-desc').textContent = item.desc || '';
     const tag = document.getElementById('modal-tag');
@@ -561,59 +570,52 @@ function openLightbox(item) {
         tag.className = `modal-tag tag-${item.category}`;
     }
 
+    // 2. LOGIKA MEDIA (Gambar vs Video)
     container.innerHTML = '';
-    let fullSrc = item.src;
-    let fileId = "";
+    let fullSrc = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
 
-    // Ambil ID Drive
-    if (fullSrc.includes('/d/')) fileId = fullSrc.split('/d/')[1].split('/')[0];
-    else if (fullSrc.includes('id=')) fileId = fullSrc.split('id=')[1].split('&')[0];
+    if (item.type === 'video') {
+        // --- LOGIKA VIDEO DRIVE ---
+        let fileId = "";
+        if (fullSrc.includes('/d/')) fileId = fullSrc.split('/d/')[1].split('/')[0];
+        else if (fullSrc.includes('id=')) fileId = fullSrc.split('id=')[1].split('&')[0];
 
-    // Deteksi Video via Icon atau Kategori
-    const isVideo = item.icon === "🎬" || item.category.toLowerCase().includes('video');
+        // Pakai lebar default untuk video (16:9)
+        content.style.width = '800px'; 
+        content.style.maxWidth = '90vw';
 
-    if (isVideo) {
-        // --- SKENARIO VIDEO ---
-        content.style.width = '850px'; // Lebar mantap untuk video
         container.innerHTML = `
             <div class="aspect-video w-full bg-black">
-                <iframe src="https://drive.google.com/file/d/${fileId}/preview" class="w-full h-full border-none" allow="autoplay"></iframe>
+                <iframe 
+                    src="https://drive.google.com/file/d/${fileId}/preview" 
+                    width="100%" 
+                    height="100%" 
+                    allow="autoplay" 
+                    class="border-none w-full h-[450px]">
+                </iframe>
             </div>
         `;
-        
-        // Langsung tampilkan karena iframe preview biasanya punya placeholder sendiri
-        showModal();
     } else {
-        // --- SKENARIO GAMBAR (Tunggu Download) ---
+        // --- LOGIKA GAMBAR (Sama seperti sebelumnya) ---
         const img = document.createElement('img');
-        const thumbSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
+        img.className = "max-w-full h-auto block mx-auto opacity-0 transition-opacity duration-500"; 
+
+        if (fullSrc.includes('drive.google.com')) {
+            let fileId = (fullSrc.includes('/d/')) ? fullSrc.split('/d/')[1].split('/')[0] : fullSrc.split('id=')[1].split('&')[0];
+            fullSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
+        }
 
         img.onload = function() {
-            // Setelah download selesai, baru tentukan lebar dan tampilkan
             content.style.width = img.clientWidth + 'px';
-            showModal();
+            img.classList.remove('opacity-0');
         };
-
-        img.src = thumbSrc;
+        img.src = fullSrc;
         container.appendChild(img);
     }
 
-    // Fungsi Pembantu untuk Animasi Muncul
-    function showModal() {
-        modal.style.display = 'flex';
-        setTimeout(() => {
-            modal.style.opacity = '1';
-            content.classList.remove('scale-95', 'opacity-0');
-            content.classList.add('scale-100', 'opacity-100');
-        }, 50);
-
-        if (app) {
-            app.style.filter = 'blur(15px)';
-            app.style.transform = 'scale(0.98)';
-        }
-        document.body.style.overflow = 'hidden';
-    }
-
+    // 3. Efek Background & Click Outside
+    if (app) { app.style.filter = 'blur(15px)'; app.style.transform = 'scale(0.98)'; }
+    document.body.style.overflow = 'hidden';
     modal.onclick = (e) => { if (e.target === modal) closeModal(); };
 }
 
