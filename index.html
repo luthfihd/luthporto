@@ -271,6 +271,51 @@ footer{margin-top:60px;padding:60px 0 40px;}
 .tag-edu { background: #10b981; }
 .video { background: #ef4444; }
 
+/* 1. MOTTO */
+.motto-text {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+    font-size: clamp(1.2rem, 5vw, 3rem); 
+    padding: 0 1rem;
+    text-align: center;
+}
+
+.social-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.social-icon {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    aspect-ratio: 1 / 1; 
+}
+
+/* 2. Overwrite Khusus Mobile (Ditaruh Paling Bawah) */
+@media (max-width: 768px) {
+    .hero-container {
+        padding: 2rem 1.5rem; 
+    }
+
+    .social-row {
+        gap: 1rem; /* Ini akan berhasil menimpa 1.5rem di atas */
+    }
+    
+    .motto-text {
+        margin-bottom: 1.5rem;
+    }
+}
+  
 </style>
 </head>
 <body>
