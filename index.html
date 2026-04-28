@@ -541,10 +541,18 @@ function openLightbox(item) {
         tag.className = `modal-tag tag-${item.category}`;
     }
 
-    // 2. Bersihkan kontainer & Siapkan Gambar
-    container.innerHTML = '';
-    const img = document.createElement('img');
-    const fullSrc = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
+// 2. Bersihkan kontainer & Siapkan Gambar
+container.innerHTML = '';
+const img = document.createElement('img');
+
+// GUNAKAN 'let' supaya bisa diubah di bawah
+let fullSrc = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
+
+// Cek jika link berasal dari Google Drive halaman preview, ubah ke link langsung
+if (fullSrc.includes('drive.google.com') && fullSrc.includes('/view')) {
+    const fileId = fullSrc.split('/d/')[1].split('/')[0];
+    fullSrc = `https://drive.google.com/uc?export=view&id=${fileId}`;
+}
 
     img.onload = function() {
         console.log("Gambar loaded, lebar:", img.clientWidth);
