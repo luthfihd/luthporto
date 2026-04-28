@@ -205,52 +205,45 @@ footer{margin-top:60px;padding:60px 0 40px;}
 ::-webkit-scrollbar-thumb{background:rgba(108,99,255,0.4);border-radius:3px;}
 
 /* --- KUNCI MODAL FIT-TO-CONTENT --- */
-/* 1. Reset Modal Background */
 #modal {
-    display: none; 
+    display: none; /* Muncul via JS */
     position: fixed;
     inset: 0;
     z-index: 9999;
-    background: rgba(0,0,0,0.8);
-    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(12px);
+    align-items: center;
+    justify-content: center;
     opacity: 0;
     transition: opacity 0.3s ease;
 }
 
-/* 2. Kotak Kaca yang Mencincut (Fit) */
 #modal-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0.95);
-    width: fit-content !important; /* Paksa lebar seukuran isi */
-    max-width: 90vw;
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 32px;
     overflow: hidden;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    position: relative;
+    /* Lebar tidak ditentukan di sini, tapi oleh JS */
+    transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-/* 3. Aturan Gambar */
 #modal-media-container img {
     display: block;
-    width: auto !important;
-    height: auto !important;
-    max-height: 70vh !important;
-    max-width: 100% !important;
+    max-height: 70vh; /* Batasi tinggi agar tidak tumpah */
+    width: auto;
+    height: auto;
+    margin: 0 auto;
 }
 
-/* 4. Teks yang Nurut (Tidak Mendorong Lebar) */
 .modal-info-box {
-    display: block;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.5);
     width: 100%;
     box-sizing: border-box;
-    padding: 24px;
-    background: rgba(0, 0, 0, 0.5);
 }
 
-/* 5. Styling untuk Tag/Label */
+/* Styling untuk Tag/Label */
 .modal-tag {
     display: inline-block;
     padding: 4px 12px;
@@ -525,55 +518,47 @@ function openLightbox(item) {
   const modal = document.getElementById('modal');
   const content = document.getElementById('modal-content');
   const container = document.getElementById('modal-media-container');
-  const app = document.getElementById('app');
 
-  // 1. Isi konten teks
-  const tagLabel = {promotional:'Promotional', educational:'Educational', video:'Video'}[item.category] || item.category;
-  const tagClass = {promotional:'tag-promo', educational:'tag-edu', video:'video'}[item.category] || 'tag-promo';
-  
+  // 1. Reset lebar konten agar tidak sisa dari klik sebelumnya
+  content.style.width = 'auto';
+
+  // 2. Isi Teks (Pastikan ID ini ada di HTML kamu)
   document.getElementById('modal-title').textContent = item.title;
-  document.getElementById('modal-desc').textContent = item.desc || 'Tidak ada deskripsi.';
-  document.getElementById('modal-tag').textContent = tagLabel;
-  document.getElementById('modal-tag').className = `modal-tag ${tagClass}`;
-
-  // 2. Logika Media (KUNCI RAMPING DI SINI)
+  document.getElementById('modal-desc').textContent = item.desc || '';
+  
+  // 3. Logika Gambar
   container.innerHTML = '';
   if (item.type === 'image') {
-    const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
     const img = document.createElement('img');
-    img.src = src;
-    // Cukup gunakan class untuk style saja, ukuran diatur CSS Poin 1
-    img.className = "mx-auto shadow-inner"; 
+    img.src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
+    
+    // KUNCI: Paksa modal-content mengikuti lebar asli gambar yang tampil
+    img.onload = function() {
+      const width = img.clientWidth;
+      if (width > 0) {
+        content.style.width = width + 'px';
+      }
+    };
+
     container.appendChild(img);
-} 
-  else if (item.type === 'gdrive' || (item.src && item.src.includes('drive.google.com'))) {
-    // ... kode gdrive kamu ...
-    const m = item.src.match(/\/d\/([-\w]+)/);
-    const id = m ? m[1] : (item.src.split('id=')[1]?.split('&')[0]);
-    if (id) {
-      const iframe = document.createElement('iframe');
-      iframe.src = `https://drive.google.com/file/d/${id}/preview`;
-      iframe.className = "w-[85vw] max-w-[900px] aspect-video border-none rounded-xl";
-      container.appendChild(iframe);
-    }
   }
 
-  // 3. Munculkan Modal
-  modal.style.display = 'block'; // Pakai block agar CSS position: absolute kita jalan
-  
+  // 4. Munculkan Modal
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+
+  // Blur background app
+  const app = document.getElementById('app');
   if (app) {
-    app.style.filter = 'blur(15px) grayscale(0.2)';
+    app.style.filter = 'blur(15px)';
     app.style.transform = 'scale(0.98)';
   }
 
-  document.body.style.overflow = 'hidden';
-
-  // Gunakan setTimeout agar transisi opacity & scale terlihat halus
+  // Animasi masuk
   setTimeout(() => {
     modal.style.opacity = '1';
-    // Kita manipulasi style langsung karena CSS baru kita pakai transform translate
-    content.style.opacity = '1';
-    content.style.transform = 'translate(-50%, -50%) scale(1)';
+    content.classList.remove('scale-95', 'opacity-0');
+    content.classList.add('scale-100', 'opacity-100');
   }, 10);
 }
 function closeModal() {
