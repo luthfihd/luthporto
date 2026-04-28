@@ -276,7 +276,7 @@ footer{margin-top:60px;padding:60px 0 40px;}
     overflow-wrap: break-word;
     word-wrap: break-word;
     hyphens: auto;
-    font-size: clamp(1.2rem, 5vw, 3rem); 
+    font-size: clamp(1rem, 5vw, 3rem); 
     padding: 0 1rem;
     text-align: center;
 }
@@ -291,8 +291,8 @@ footer{margin-top:60px;padding:60px 0 40px;}
 }
 
 .social-icon {
-    width: 48px;
-    height: 48px;
+    width: 42px;
+    height: 42px;
     flex-shrink: 0; 
     display: flex;
     justify-content: center;
@@ -308,7 +308,9 @@ footer{margin-top:60px;padding:60px 0 40px;}
     }
 
     .social-row {
-        gap: 1rem; /* Ini akan berhasil menimpa 1.5rem di atas */
+      max-width: 200px;  
+      margin: 0 auto;
+      gap: 0.8rem; 
     }
     
     .motto-text {
