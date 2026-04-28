@@ -227,16 +227,18 @@ footer{margin-top:60px;padding:60px 0 40px;}
     overflow: hidden;
     position: relative;
     width: fit-content; /* Ini yang bikin dia mau menciut */
-    max-width: 90vw;
+    max-width: 95vw;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
 }
 
 /* 3. Aturan Gambar di Dalamnya */
 #modal-media-container img {
     display: block;
-    max-height: 70vh;
     width: auto;
     height: auto;
+    max-width: 90vw;   /* Maksimal 90% lebar layar */
+    max-height: 75vh;  /* Maksimal 75% tinggi layar biar gak kepotong info teks */
+    object-fit: contain;
     margin: 0 auto;
 }
 
