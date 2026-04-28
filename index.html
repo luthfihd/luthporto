@@ -550,10 +550,9 @@ function openLightbox(item) {
     const container = document.getElementById('modal-media-container');
     const app = document.getElementById('app');
 
-    // 1. SIAPKAN MODAL (Ada tapi tak terlihat)
-    modal.style.display = 'flex'; 
-    modal.style.opacity = '0'; // Sembunyikan lewat opacity
-    modal.style.visibility = 'hidden'; // Biar gak bisa diklik dulu
+    // 1. Reset awal (Modal disembunyikan total)
+    modal.style.display = 'none';
+    modal.style.opacity = '0';
     content.classList.add('scale-95', 'opacity-0');
     content.style.width = 'auto'; 
 
@@ -571,40 +570,23 @@ function openLightbox(item) {
     let fileId = "";
 
     // Ambil ID dari Drive
-    if (fullSrc.includes('/d/')) fileId = fullSrc.split('/d/')[1].split('/')[0];
-    else if (fullSrc.includes('id=')) fileId = fullSrc.split('id=')[1].split('&')[0];
-
-    const isVideo = item.icon === "🎬";
-
-    if (isVideo) {
-        // --- JALUR VIDEO ---
-        content.style.width = '800px'; 
-        content.style.maxWidth = '95vw';
-        container.innerHTML = `
-            <div class="aspect-video w-full bg-black rounded-t-xl overflow-hidden">
-                <iframe src="https://drive.google.com/file/d/${fileId}/preview" 
-                        class="w-full h-[450px] border-none" allow="autoplay"></iframe>
-            </div>`;
-        showModal();
-    } else {
-        // --- JALUR GAMBAR (Tunggu Download & Ukuran) ---
-        const img = document.createElement('img');
-        const thumbSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
-
-        img.onload = function() {
-            // Karena modal sudah display:flex (tapi hidden), clientWidth pasti terbaca!
-            const measuredWidth = img.clientWidth;
-            content.style.width = measuredWidth + 'px';
-            showModal();
-        };
-
-        img.src = thumbSrc;
-        container.appendChild(img);
+    if (fullSrc.includes('/d/')) {
+        fileId = fullSrc.split('/d/')[1].split('/')[0];
+    } else if (fullSrc.includes('id=')) {
+        fileId = fullSrc.split('id=')[1].split('&')[0];
     }
 
-    // FUNGSI TAMPILKAN (Setelah ukuran fix)
-    function showModal() {
-        modal.style.visibility = 'visible'; // Sekarang boleh terlihat
+    // --- MURNI GAMBAR SAJA ---
+    const img = document.createElement('img');
+    // Link Thumbnail resolusi tinggi
+    const thumbSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
+
+    img.onload = function() {
+        // Tentukan lebar modal SEBELUM muncul, sesuai lebar asli gambar
+        content.style.width = img.clientWidth + 'px';
+        
+        // Baru tampilkan modal setelah ukuran fix
+        modal.style.display = 'flex';
         setTimeout(() => {
             modal.style.opacity = '1';
             content.classList.remove('scale-95', 'opacity-0');
@@ -616,9 +598,15 @@ function openLightbox(item) {
             app.style.transform = 'scale(0.98)';
         }
         document.body.style.overflow = 'hidden';
-    }
+    };
 
-    modal.onclick = (e) => { if (e.target === modal) closeModal(); };
+    img.src = thumbSrc;
+    container.appendChild(img);
+
+    // Klik luar untuk tutup
+    modal.onclick = (e) => {
+        if (e.target === modal) closeModal();
+    };
 }
 
 function closeModal() {
