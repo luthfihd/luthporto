@@ -362,16 +362,16 @@ footer{margin-top:60px;padding:60px 0 40px;}
 </footer>
 
 <!-- HTML MODAL -->
-<div id="modal" class="hidden">
+<div id="modal" class="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-md transition-opacity duration-300" style="display: none; opacity: 0;">
     <button onclick="closeModal()" class="fixed top-5 right-5 z-[10001] w-12 h-12 rounded-full border border-white/20 bg-white/10 text-white text-3xl flex items-center justify-center hover:bg-white/20 transition-all">×</button>
 
-    <div id="modal-content" class="scale-95 opacity-0">
+    <div id="modal-content" class="scale-95 opacity-0 mx-auto">
         <div id="modal-media-container"></div>
         
         <div class="modal-info-box">
             <div id="modal-tag" class="modal-tag">Category</div>
             <h2 id="modal-title" class="text-white text-xl font-bold mb-1">Title</h2>
-            <p id="modal-desc" class="text-white/60 text-xs leading-relaxed">Description...</p>
+            <p id="modal-desc" class="text-white/60 text-xs">Description...</p>
         </div>
     </div>
 </div>
