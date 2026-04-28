@@ -550,10 +550,10 @@ function openLightbox(item) {
     const container = document.getElementById('modal-media-container');
     const app = document.getElementById('app');
 
-    // 1. Persiapan Modal
+    // 1. Tampilkan Modal Segera
     modal.style.display = 'flex';
     modal.style.pointerEvents = 'auto';
-    content.style.width = '300px'; 
+    content.style.width = '350px'; // Lebar loading awal
     
     setTimeout(() => {
         modal.style.opacity = '1';
@@ -561,7 +561,7 @@ function openLightbox(item) {
         content.classList.add('opacity-100', 'scale-100');
     }, 10);
 
-    // Isi Teks
+    // Isi Data Teks
     document.getElementById('modal-title').textContent = item.title;
     document.getElementById('modal-desc').textContent = item.desc || '';
     const tag = document.getElementById('modal-tag');
@@ -570,50 +570,56 @@ function openLightbox(item) {
         tag.className = `modal-tag tag-${item.category}`;
     }
 
-    // 2. LOGIKA MEDIA (Gambar vs Video)
+    // 2. Deteksi Media
     container.innerHTML = '';
-    let fullSrc = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
+    let fullSrc = item.src;
+    let fileId = "";
 
-    if (item.type === 'video') {
-        // --- LOGIKA VIDEO DRIVE ---
-        let fileId = "";
-        if (fullSrc.includes('/d/')) fileId = fullSrc.split('/d/')[1].split('/')[0];
-        else if (fullSrc.includes('id=')) fileId = fullSrc.split('id=')[1].split('&')[0];
+    // Ambil ID dari link Drive
+    if (fullSrc.includes('/d/')) {
+        fileId = fullSrc.split('/d/')[1].split('/')[0];
+    } else if (fullSrc.includes('id=')) {
+        fileId = fullSrc.split('id=')[1].split('&')[0];
+    }
 
-        // Pakai lebar default untuk video (16:9)
-        content.style.width = '800px'; 
-        content.style.maxWidth = '90vw';
+    // LOGIKA OTOMATIS: Cek apakah kategori mengandung kata 'video' atau 'motion'
+    // Kamu bisa sesuaikan kata kunci ini sesuai kategori di admin kamu
+    const isVideo = item.category.toLowerCase().includes('video') || 
+                    item.category.toLowerCase().includes('motion') ||
+                    item.icon === "🎬"; // Menggunakan icon sebagai penanda
 
+    if (isVideo) {
+        // TAMPILKAN VIDEO PLAYER
+        content.style.width = '850px'; 
+        content.style.maxWidth = '95vw';
+        
         container.innerHTML = `
             <div class="aspect-video w-full bg-black">
                 <iframe 
                     src="https://drive.google.com/file/d/${fileId}/preview" 
-                    width="100%" 
-                    height="100%" 
                     allow="autoplay" 
-                    class="border-none w-full h-[450px]">
+                    class="w-full h-full border-none">
                 </iframe>
             </div>
         `;
     } else {
-        // --- LOGIKA GAMBAR (Sama seperti sebelumnya) ---
+        // TAMPILKAN GAMBAR
         const img = document.createElement('img');
-        img.className = "max-w-full h-auto block mx-auto opacity-0 transition-opacity duration-500"; 
-
-        if (fullSrc.includes('drive.google.com')) {
-            let fileId = (fullSrc.includes('/d/')) ? fullSrc.split('/d/')[1].split('/')[0] : fullSrc.split('id=')[1].split('&')[0];
-            fullSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
-        }
+        img.className = "max-w-full h-auto block mx-auto opacity-0 transition-opacity duration-500";
+        
+        // Link Thumbnail Drive
+        const thumbSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
 
         img.onload = function() {
-            content.style.width = img.clientWidth + 'px';
+            // fit-content akan bekerja setelah width diset ke auto
+            content.style.width = 'fit-content';
             img.classList.remove('opacity-0');
         };
-        img.src = fullSrc;
+        img.src = thumbSrc;
         container.appendChild(img);
     }
 
-    // 3. Efek Background & Click Outside
+    // 3. Efek Akhir
     if (app) { app.style.filter = 'blur(15px)'; app.style.transform = 'scale(0.98)'; }
     document.body.style.overflow = 'hidden';
     modal.onclick = (e) => { if (e.target === modal) closeModal(); };
