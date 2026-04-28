@@ -273,12 +273,19 @@ footer{margin-top:60px;padding:60px 0 40px;}
 
 /* 1. MOTTO */
 .motto-text {
-    overflow-wrap: break-word;
+    display: block;
+    width: 100%;
+    /* Gunakan break-word agar patahnya per kata, jika gagal baru break-all */
     word-wrap: break-word;
-    hyphens: auto;
-    font-size: clamp(1rem, 5vw, 3rem); 
+    overflow-wrap: break-word;
+    word-break: break-word; 
+    
+    /* Turunkan angka pertama clamp ke 1.2rem agar lebih aman di HP kecil */
+    font-size: clamp(1.2rem, 4vw, 3rem); 
+    
     padding: 0 1rem;
     text-align: center;
+    hyphens: auto;
 }
 
 .social-row {
@@ -301,7 +308,7 @@ footer{margin-top:60px;padding:60px 0 40px;}
     aspect-ratio: 1 / 1; 
 }
 
-/* 2. Overwrite Khusus Mobile (Ditaruh Paling Bawah) */
+/* 2. Khusus Mobile (Ditaruh Paling Bawah) */
 @media (max-width: 768px) {
     .hero-container {
         padding: 2rem 1.5rem; 
@@ -315,6 +322,9 @@ footer{margin-top:60px;padding:60px 0 40px;}
     
     .motto-text {
         margin-bottom: 1.5rem;
+        padding: 0 10px;
+        line-height: 1.3;
+        white-space: normal;
     }
 }
   
