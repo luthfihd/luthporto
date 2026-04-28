@@ -38,7 +38,7 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#
   #bg-canvas { filter: brightness(1.4) saturate(0.7); }
   .hero-title .line1 { color: #1a1a2e !important; }
   .section-title { color: #1a1a2e !important; }
-  .section-title span { background: linear-gradient(135deg,#6C63FF,#c026d3,#FF6B9D) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; background-clip: text !important; }
+  .section-title span { background: linear-gradient(135deg,#201557,#4c1557,#153657) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; background-clip: text !important; }
   .section-eyebrow { color: #b8860b !important; }
   .hero-desc { color: rgba(26,26,46,0.8) !important; }
   .designer-name { background: linear-gradient(135deg,#4FC3F7,#6C63FF) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; background-clip: text !important; }
@@ -125,7 +125,7 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
 .section-header{text-align:center;margin-bottom:48px;}
 .section-eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--c3);text-transform:uppercase;margin-bottom:12px;}
 .section-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:700;color:#fff;line-height:1.15;}
-.section-title span{background:linear-gradient(135deg,#6C63FF,#c026d3,#FF6B9D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.section-title span{background:linear-gradient(135deg,#decfe8,#cfd5e8,#cfe3e8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .filter-btn.active{color:#fff;border-color:rgba(108,99,255,0.6);background:linear-gradient(135deg,#6C63FF,#c026d3,#FF6B9D);box-shadow:0 0 20px rgba(108,99,255,0.3),inset 0 1px 0 rgba(255,255,255,0.2);transform:translateY(-2px);opacity:1;}
 .filter-btn:hover{transform:translateY(-2px);color:#fff;background:linear-gradient(135deg,rgba(108,99,255,0.75),rgba(192,38,211,0.75),rgba(255,107,157,0.75));opacity:0.75;}
 
@@ -275,17 +275,12 @@ footer{margin-top:60px;padding:60px 0 40px;}
 .motto-text {
     display: block;
     width: 100%;
-    /* Gunakan break-word agar patahnya per kata, jika gagal baru break-all */
     word-wrap: break-word;
     overflow-wrap: break-word;
     word-break: break-word; 
-    
-    /* Turunkan angka pertama clamp ke 1.2rem agar lebih aman di HP kecil */
     font-size: clamp(1.2rem, 4vw, 3rem); 
-    
     padding: 0 1rem;
     text-align: center;
-    hyphens: auto;
 }
 
 .social-row {
