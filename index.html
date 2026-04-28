@@ -550,16 +550,11 @@ function openLightbox(item) {
     const container = document.getElementById('modal-media-container');
     const app = document.getElementById('app');
 
-    // 1. Persiapan Modal
-    modal.style.display = 'flex';
-    modal.style.pointerEvents = 'auto';
-    content.style.width = '300px'; 
-    
-    setTimeout(() => {
-        modal.style.opacity = '1';
-        content.classList.remove('opacity-0', 'scale-95');
-        content.classList.add('opacity-100', 'scale-100');
-    }, 10);
+    // 1. Reset Modal (Sembunyikan dulu agar tidak berantakan)
+    modal.style.display = 'none';
+    modal.style.opacity = '0';
+    content.classList.add('scale-95', 'opacity-0');
+    content.style.width = 'auto'; // Reset lebar ke otomatis
 
     // Isi Teks
     document.getElementById('modal-title').textContent = item.title;
@@ -570,53 +565,74 @@ function openLightbox(item) {
         tag.className = `modal-tag tag-${item.category}`;
     }
 
-    // 2. LOGIKA MEDIA (Gambar vs Video)
     container.innerHTML = '';
-    let fullSrc = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
+    let fullSrc = item.src;
+    let fileId = "";
 
-    if (item.type === 'video') {
-        // --- LOGIKA VIDEO DRIVE ---
-        let fileId = "";
-        if (fullSrc.includes('/d/')) fileId = fullSrc.split('/d/')[1].split('/')[0];
-        else if (fullSrc.includes('id=')) fileId = fullSrc.split('id=')[1].split('&')[0];
+    // Ambil ID dari Drive
+    if (fullSrc.includes('/d/')) {
+        fileId = fullSrc.split('/d/')[1].split('/')[0];
+    } else if (fullSrc.includes('id=')) {
+        fileId = fullSrc.split('id=')[1].split('&')[0];
+    }
 
-        // Pakai lebar default untuk video (16:9)
+    // --- DETEKSI JALUR ---
+    const isVideo = item.icon === "🎬";
+
+    if (isVideo) {
+        // --- JALUR VIDEO (Jalur B) ---
+        // Karena iframe tidak punya lebar alami, kita tentukan lebarnya di sini
         content.style.width = '800px'; 
         content.style.maxWidth = '90vw';
-
+        
         container.innerHTML = `
             <div class="aspect-video w-full bg-black">
                 <iframe 
                     src="https://drive.google.com/file/d/${fileId}/preview" 
-                    width="100%" 
-                    height="100%" 
-                    allow="autoplay" 
-                    class="border-none w-full h-[450px]">
+                    class="w-full h-[450px] border-none" 
+                    allow="autoplay">
                 </iframe>
             </div>
         `;
-    } else {
-        // --- LOGIKA GAMBAR (Sama seperti sebelumnya) ---
-        const img = document.createElement('img');
-        img.className = "max-w-full h-auto block mx-auto opacity-0 transition-opacity duration-500"; 
+        
+        // Video tidak perlu nunggu onload, langsung panggil show
+        showModal();
 
-        if (fullSrc.includes('drive.google.com')) {
-            let fileId = (fullSrc.includes('/d/')) ? fullSrc.split('/d/')[1].split('/')[0] : fullSrc.split('id=')[1].split('&')[0];
-            fullSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
-        }
+    } else {
+        // --- JALUR GAMBAR (Jalur A - Tetap Seperti Semula) ---
+        const img = document.createElement('img');
+        const thumbSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
 
         img.onload = function() {
+            // Logika Fit Content yang kamu suka
             content.style.width = img.clientWidth + 'px';
-            img.classList.remove('opacity-0');
+            showModal();
         };
-        img.src = fullSrc;
+
+        img.src = thumbSrc;
         container.appendChild(img);
     }
 
-    // 3. Efek Background & Click Outside
-    if (app) { app.style.filter = 'blur(20px)'; app.style.transform = 'scale(0.98)'; }
-    document.body.style.overflow = 'hidden';
-    modal.onclick = (e) => { if (e.target === modal) closeModal(); };
+    // FUNGSI UNTUK MEMUNCULKAN MODAL (Hanya dipanggil kalau media siap)
+    function showModal() {
+        modal.style.display = 'flex';
+        setTimeout(() => {
+            modal.style.opacity = '1';
+            content.classList.remove('scale-95', 'opacity-0');
+            content.classList.add('scale-100', 'opacity-100');
+        }, 50);
+
+        if (app) {
+            app.style.filter = 'blur(15px)';
+            app.style.transform = 'scale(0.98)';
+        }
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Klik luar untuk tutup
+    modal.onclick = (e) => {
+        if (e.target === modal) closeModal();
+    };
 }
 
 
