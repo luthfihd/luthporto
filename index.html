@@ -206,51 +206,47 @@ footer{margin-top:60px;padding:60px 0 40px;}
 
 /* RESET TOTAL CARA MODAL BEKERJA */
 #modal {
-    display: none; /* Akan jadi 'block' via JS, bukan 'flex' */
+    display: none; 
     position: fixed;
     inset: 0;
-    text-align: center; /* Kunci centering untuk inline-block */
-    white-space: nowrap; /* Trik centering lama */
     z-index: 9999;
-}
-
-/* Trik centering supaya modal-content di tengah tanpa Flexbox */
-#modal::before {
-    content: '';
-    display: inline-block;
-    height: 100%;
-    vertical-align: middle;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(10px);
 }
 
 #modal-content {
-    display: inline-block !important; /* INI KUNCI FIT-TO-CONTENT */
-    vertical-align: middle;
-    white-space: normal; /* Balikin teks biar nggak satu baris */
-    width: auto !important;
-    max-width: 90vw !important;
-    margin: 20px auto;
-    text-align: left;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(40px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 32px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    /* INI KUNCINYA */
+    width: fit-content !important;
+    min-width: 100px; /* Biar nggak hilang kalau loading */
+    max-width: 90vw;
+    background: rgba(255,255,255,0.1);
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,0.2);
     overflow: hidden;
+    transition: all 0.3s ease;
 }
 
 #modal-media-container img {
     display: block;
     width: auto !important;
-    max-width: 100% !important;
-    max-height: 65vh !important;
     height: auto !important;
+    max-height: 70vh !important;
+    max-width: 90vw !important;
 }
 
+/* Supaya TEKS tidak pernah lebih lebar dari GAMBAR */
 .modal-info-box {
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important; /* Jangan biarkan dia lebih lebar dari gambar */
+    display: block;
+    width: 0; /* Aneh tapi nyata: ini trik CSS agar dia tidak mendorong lebar parent */
+    min-width: 100% !important; /* Dia akan selebar gambar di atasnya saja */
+    padding: 20px;
+    box-sizing: border-box;
+    background: rgba(0,0,0,0.4);
 }
-
 </style>
 </head>
 <body>
@@ -344,21 +340,15 @@ footer{margin-top:60px;padding:60px 0 40px;}
 </footer>
 
 <!-- HTML MODAL -->
-<div id="modal" class="fixed inset-0 z-[9999] hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-    
-    <button onclick="closeModal()" class="fixed top-5 right-5 z-[10000] w-12 h-12 rounded-full border border-white/20 bg-white/10 text-white text-2xl">×</button>
+<div id="modal">
+    <button onclick="closeModal()" class="fixed top-5 right-5 z-[10000] w-12 h-12 rounded-full bg-white/10 text-white text-2xl">×</button>
 
-    <div id="modal-content" class="relative scale-95 opacity-0 transition-all duration-500 bg-white/10 backdrop-blur-[40px] border border-white/20 rounded-[32px] shadow-2xl overflow-hidden">
-    
-    <div id="modal-media-container" class="w-full text-center">
+    <div id="modal-content" class="opacity-0">
+        <div id="modal-media-container"></div>
+        <div class="modal-info-box">
+            <h2 id="modal-title" class="text-white font-bold truncate">Title</h2>
+            <p id="modal-desc" class="text-white/60 text-xs line-clamp-2">Description...</p>
         </div>
-
-    <div class="modal-info-box p-6 bg-black/60 backdrop-blur-xl border-t border-white/5">
-        <div id="modal-tag" class="modal-tag mb-2">Category</div>
-        <h2 id="modal-title" class="text-white text-xl font-serif font-bold mb-1">Title</h2>
-        <p id="modal-desc" class="text-white/60 text-xs leading-relaxed max-w-[280px]">
-            Description...
-        </p>
     </div>
 </div>
 
@@ -548,8 +538,7 @@ function openLightbox(item) {
   }
 
   // 3. Munculkan Modal
-  modal.classList.remove('hidden');
-  modal.style.display = 'block';
+  modal.style.display = 'block'; // Pakai block agar CSS position: absolute kita jalan
   
   if (app) {
     app.style.filter = 'blur(15px) grayscale(0.2)';
@@ -558,12 +547,13 @@ function openLightbox(item) {
 
   document.body.style.overflow = 'hidden';
 
-  requestAnimationFrame(() => {
+  // Gunakan setTimeout agar transisi opacity & scale terlihat halus
+  setTimeout(() => {
     modal.style.opacity = '1';
-    content.classList.remove('scale-95', 'opacity-0');
-    content.classList.add('scale-100', 'opacity-100');
-  });
-}
+    // Kita manipulasi style langsung karena CSS baru kita pakai transform translate
+    content.style.opacity = '1';
+    content.style.transform = 'translate(-50%, -50%) scale(1)';
+  }, 10);
 
 function closeModal() {
   const modal = document.getElementById('modal');
