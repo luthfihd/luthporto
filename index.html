@@ -206,33 +206,27 @@ footer{margin-top:60px;padding:60px 0 40px;}
 
 /* RESET TOTAL MODAL CONTENT */
 #modal-content {
-    display: table !important; /* Kunci: Table otomatis menciut sesuai isi */
+    display: inline-block !important; /* Paksa menciut seukuran konten */
     width: auto !important;
-    min-width: 0 !important;
-    margin: auto !important;
     max-width: 95vw !important;
-}
-
-#modal-media-container {
-    display: block !important;
-    width: auto !important;
+    vertical-align: middle;
+    text-align: left; /* Supaya teks di dalamnya tetap rapi */
 }
 
 #modal-media-container img {
-    display: block !important;
+    display: block;
     width: auto !important;
     height: auto !important;
     max-height: 70vh !important;
     max-width: 100% !important;
+    border-radius: 32px 32px 0 0; /* Lengkungan atas saja */
 }
 
-/* Biar teks di bawahnya nggak ngelebarin table */
 .modal-info-box {
-    display: table-caption !important;
-    caption-side: bottom !important;
-    width: 100% !important;
-    background: rgba(0,0,0,0.6) !important;
-    backdrop-filter: blur(10px);
+    width: 100%;
+    box-sizing: border-box;
+    /* Pastikan info box tidak punya lebar minimal yang besar */
+    min-width: 0 !important; 
 }
 
 </style>
@@ -332,15 +326,17 @@ footer{margin-top:60px;padding:60px 0 40px;}
     
     <button onclick="closeModal()" class="fixed top-5 right-5 z-[10000] w-12 h-12 rounded-full border border-white/20 bg-white/10 text-white text-2xl">×</button>
 
-    <div id="modal-content" class="relative scale-95 opacity-0 transition-all duration-500 rounded-[32px] overflow-hidden shadow-2xl border border-white/20">
-        
-        <div id="modal-media-container"></div>
-
-        <div class="modal-info-box p-6">
-            <div id="modal-tag" class="modal-tag mb-2">Category</div>
-            <h2 id="modal-title" class="text-white text-xl font-serif font-bold mb-1">Title</h2>
-            <p id="modal-desc" class="text-white/60 text-xs">Description...</p>
+    <div id="modal-content" class="relative scale-95 opacity-0 transition-all duration-500 bg-white/10 backdrop-blur-[40px] border border-white/20 rounded-[32px] shadow-2xl overflow-hidden">
+    
+    <div id="modal-media-container" class="w-full text-center">
         </div>
+
+    <div class="modal-info-box p-6 bg-black/60 backdrop-blur-xl border-t border-white/5">
+        <div id="modal-tag" class="modal-tag mb-2">Category</div>
+        <h2 id="modal-title" class="text-white text-xl font-serif font-bold mb-1">Title</h2>
+        <p id="modal-desc" class="text-white/60 text-xs leading-relaxed max-w-[280px]">
+            Description...
+        </p>
     </div>
 </div>
 
@@ -513,12 +509,10 @@ function openLightbox(item) {
     const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
     const img = document.createElement('img');
     img.src = src;
-    
-    // Pakai w-auto agar lebarnya mengikuti proporsi asli foto setelah tingginya dipangkas max-h
-    img.className = "block h-auto max-h-[70vh] w-auto mx-auto rounded-t-[32px]"; 
-    
+    // Cukup gunakan class untuk style saja, ukuran diatur CSS Poin 1
+    img.className = "mx-auto shadow-inner"; 
     container.appendChild(img);
-  } 
+} 
   else if (item.type === 'gdrive' || (item.src && item.src.includes('drive.google.com'))) {
     // ... kode gdrive kamu ...
     const m = item.src.match(/\/d\/([-\w]+)/);
