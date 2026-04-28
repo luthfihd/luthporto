@@ -205,42 +205,53 @@ footer{margin-top:60px;padding:60px 0 40px;}
 ::-webkit-scrollbar-thumb{background:rgba(108,99,255,0.4);border-radius:3px;}
 
 /* --- KUNCI MODAL FIT-TO-CONTENT --- */
+/* 1. Background Modal (Si Hitam Transparan) */
 #modal {
-    display: none; /* Muncul via JS */
+    display: none; /* Standby, muncul via JS */
     position: fixed;
     inset: 0;
     z-index: 9999;
     background: rgba(0, 0, 0, 0.85);
     backdrop-filter: blur(12px);
-    align-items: center;
-    justify-content: center;
     opacity: 0;
     transition: opacity 0.3s ease;
+    align-items: center;
+    justify-content: center;
 }
 
+/* 2. Kotak Kaca (Kunci Ramping) */
 #modal-content {
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 32px;
     overflow: hidden;
     position: relative;
-    /* Lebar tidak ditentukan di sini, tapi oleh JS */
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    width: fit-content; /* Ini yang bikin dia mau menciut */
+    max-width: 90vw;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
 }
 
+/* 3. Aturan Gambar di Dalamnya */
 #modal-media-container img {
     display: block;
-    max-height: 70vh; /* Batasi tinggi agar tidak tumpah */
+    max-height: 70vh;
     width: auto;
     height: auto;
     margin: 0 auto;
 }
 
+/* 4. Box Info Teks */
 .modal-info-box {
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.5);
+    padding: 24px;
+    background: rgba(0, 0, 0, 0.6);
     width: 100%;
     box-sizing: border-box;
+}
+
+/* Pengaman agar tidak menghalangi klik saat tertutup */
+#modal.hidden { 
+    pointer-events: none; 
+    display: none; 
 }
 
 /* Styling untuk Tag/Label */
@@ -351,17 +362,16 @@ footer{margin-top:60px;padding:60px 0 40px;}
 </footer>
 
 <!-- HTML MODAL -->
-<div id="modal" class="fixed inset-0 z-[9999] hidden bg-black/80 backdrop-blur-md transition-opacity duration-300">
-    <button onclick="closeModal()" class="fixed top-5 right-5 z-[10000] w-12 h-12 rounded-full border border-white/20 bg-white/10 text-white text-2xl flex items-center justify-center">×</button>
+<div id="modal" class="hidden">
+    <button onclick="closeModal()" class="fixed top-5 right-5 z-[10001] w-12 h-12 rounded-full border border-white/20 bg-white/10 text-white text-3xl flex items-center justify-center hover:bg-white/20 transition-all">×</button>
 
-    <div id="modal-content" class="opacity-0 shadow-2xl">
+    <div id="modal-content" class="scale-95 opacity-0">
         <div id="modal-media-container"></div>
         
         <div class="modal-info-box">
-            <div id="modal-tag" class="modal-tag mb-2">Category</div> 
-            
-            <h2 id="modal-title" class="text-white text-xl font-serif font-bold mb-1">Title</h2>
-            <p id="modal-desc" class="text-white/70 text-xs leading-relaxed">Description...</p>
+            <div id="modal-tag" class="modal-tag">Category</div>
+            <h2 id="modal-title" class="text-white text-xl font-bold mb-1">Title</h2>
+            <p id="modal-desc" class="text-white/60 text-xs leading-relaxed">Description...</p>
         </div>
     </div>
 </div>
@@ -515,82 +525,81 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 
 // ── MODAL ──
 function openLightbox(item) {
-  const modal = document.getElementById('modal');
-  const content = document.getElementById('modal-content');
-  const container = document.getElementById('modal-media-container');
+    const modal = document.getElementById('modal');
+    const content = document.getElementById('modal-content');
+    const container = document.getElementById('modal-media-container');
+    const app = document.getElementById('app');
 
-  // 1. Reset lebar konten agar tidak sisa dari klik sebelumnya
-  content.style.width = 'auto';
+    // 1. Isi Data Teks
+    const elTitle = document.getElementById('modal-title');
+    const elDesc = document.getElementById('modal-desc');
+    const elTag = document.getElementById('modal-tag');
 
-  // 2. Isi Teks (Pastikan ID ini ada di HTML kamu)
-  document.getElementById('modal-title').textContent = item.title;
-  document.getElementById('modal-desc').textContent = item.desc || '';
-  
-  // 3. Logika Gambar
-  container.innerHTML = '';
-  if (item.type === 'image') {
-    const img = document.createElement('img');
-    img.src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
-    
-    // KUNCI: Paksa modal-content mengikuti lebar asli gambar yang tampil
-    img.onload = function() {
-      const width = img.clientWidth;
-      if (width > 0) {
-        content.style.width = width + 'px';
-      }
-    };
+    if (elTitle) elTitle.textContent = item.title;
+    if (elDesc) elDesc.textContent = item.desc || '';
+    if (elTag) {
+        elTag.textContent = item.category;
+        elTag.className = `modal-tag tag-${item.category}`;
+    }
 
-    container.appendChild(img);
-  }
+    // 2. Logika Media (Gambar)
+    container.innerHTML = '';
+    if (item.type === 'image') {
+        const img = document.createElement('img');
+        const fullSrc = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
+        
+        content.style.width = 'auto'; // Reset lebar
+        
+        img.onload = function() {
+            const renderedWidth = img.clientWidth;
+            if (renderedWidth > 0) {
+                content.style.width = renderedWidth + 'px';
+            }
+            
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.style.opacity = '1';
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        };
+        
+        img.src = fullSrc;
+        container.appendChild(img);
+    }
 
-  // 4. Munculkan Modal
-  modal.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-
-  // Blur background app
-  const app = document.getElementById('app');
-  if (app) {
-    app.style.filter = 'blur(15px)';
-    app.style.transform = 'scale(0.98)';
-  }
-
-  // Animasi masuk
-  setTimeout(() => {
-    modal.style.opacity = '1';
-    content.classList.remove('scale-95', 'opacity-0');
-    content.classList.add('scale-100', 'opacity-100');
-  }, 10);
+    if (app) {
+        app.style.filter = 'blur(15px)';
+        app.style.transform = 'scale(0.98)';
+    }
+    document.body.style.overflow = 'hidden';
+    modal.classList.remove('hidden');
 }
-function closeModal() {
-  const modal = document.getElementById('modal');
-  const content = document.getElementById('modal-content');
-  const app = document.getElementById('app');
 
-  // 1. Animasi Menutup
-  if (content) {
+function closeModal() {
+    const modal = document.getElementById('modal');
+    const content = document.getElementById('modal-content');
+    const container = document.getElementById('modal-media-container'); // Tambahkan ini
+    const app = document.getElementById('app');
+
     content.classList.remove('scale-100', 'opacity-100');
     content.classList.add('scale-95', 'opacity-0');
-  }
-  modal.style.opacity = '0';
+    modal.style.opacity = '0';
 
-  // 2. Kembalikan Tampilan Background
-  if (app) {
-    app.style.filter = '';
-    app.style.transform = '';
-    app.style.pointerEvents = 'auto';
-  }
-
-  // 3. Sembunyikan Modal setelah animasi selesai
-  setTimeout(() => {
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-    document.body.style.overflow = '';
-    document.getElementById('modal-media-container').innerHTML = '';
-  }, 400);
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+        
+        if (app) {
+            app.style.filter = '';
+            app.style.transform = '';
+        }
+        document.body.style.overflow = '';
+        if (container) container.innerHTML = ''; // Sekarang aman
+    }, 300);
 }
-// Tambahkan baris ini agar tombol 'X' di HTML bisa memanggil fungsi ini
-window.closeModal = closeModal; 
-  
+
+window.closeModal = closeModal;
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
 
 // ── SCROLL BG ──
