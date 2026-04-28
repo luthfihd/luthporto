@@ -204,29 +204,51 @@ footer{margin-top:60px;padding:60px 0 40px;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:rgba(108,99,255,0.4);border-radius:3px;}
 
-/* RESET TOTAL MODAL CONTENT */
-#modal-content {
-    display: inline-block !important; /* Paksa menciut seukuran konten */
-    width: auto !important;
-    max-width: 95vw !important;
+/* RESET TOTAL CARA MODAL BEKERJA */
+#modal {
+    display: none; /* Akan jadi 'block' via JS, bukan 'flex' */
+    position: fixed;
+    inset: 0;
+    text-align: center; /* Kunci centering untuk inline-block */
+    white-space: nowrap; /* Trik centering lama */
+    z-index: 9999;
+}
+
+/* Trik centering supaya modal-content di tengah tanpa Flexbox */
+#modal::before {
+    content: '';
+    display: inline-block;
+    height: 100%;
     vertical-align: middle;
-    text-align: left; /* Supaya teks di dalamnya tetap rapi */
+}
+
+#modal-content {
+    display: inline-block !important; /* INI KUNCI FIT-TO-CONTENT */
+    vertical-align: middle;
+    white-space: normal; /* Balikin teks biar nggak satu baris */
+    width: auto !important;
+    max-width: 90vw !important;
+    margin: 20px auto;
+    text-align: left;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 32px;
+    overflow: hidden;
 }
 
 #modal-media-container img {
     display: block;
     width: auto !important;
-    height: auto !important;
-    max-height: 70vh !important;
     max-width: 100% !important;
-    border-radius: 32px 32px 0 0; /* Lengkungan atas saja */
+    max-height: 65vh !important;
+    height: auto !important;
 }
 
 .modal-info-box {
-    width: 100%;
-    box-sizing: border-box;
-    /* Pastikan info box tidak punya lebar minimal yang besar */
-    min-width: 0 !important; 
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important; /* Jangan biarkan dia lebih lebar dari gambar */
 }
 
 </style>
@@ -527,7 +549,7 @@ function openLightbox(item) {
 
   // 3. Munculkan Modal
   modal.classList.remove('hidden');
-  modal.classList.add('flex');
+  modal.style.display = 'block';
   
   if (app) {
     app.style.filter = 'blur(15px) grayscale(0.2)';
