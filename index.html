@@ -316,16 +316,32 @@ footer{margin-top:60px;padding:60px 0 40px;}
     }
     
     .motto-text {
-        font-size: 0.80rem !important; 
-        padding-left: 5px !important;
-        padding-right: 5px !important;
-        width: 100% !important;
-        max-width: 100% !important;
+        /* 1. Reset Lebar & Margin */
+        width: auto !important;
+        max-width: none !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        
+        /* 2. Paksa Pindah Baris (WAJIB) */
         display: block !important;
-        white-space: normal !important;
-        word-break: break-all !important; 
-        line-height: 1.2;
-        margin-bottom: 1.2rem;
+        white-space: normal !important; 
+        overflow-wrap: anywhere !important;
+        word-break: break-all !important;
+        
+        /* 3. Kembalikan Font ke ukuran standar (biar gak kekecilan) */
+        font-size: 1.1rem !important; 
+        
+        /* 4. Hapus padding yang mungkin mendorong teks keluar */
+        padding: 0 !important;
+        
+        line-height: 1.4;
+        text-align: center;
+    }
+
+    /* 5. Cek pembungkusnya (tambahkan ini juga) */
+    .hero-card, .footer-card {
+        width: 100% !important;
+        overflow: visible !important; /* Biar kalau teks 'offside' dikit gak langsung ilang */
     }
 }
   
