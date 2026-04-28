@@ -541,44 +541,61 @@ function openLightbox(item) {
         tag.className = `modal-tag tag-${item.category}`;
     }
 
-// 2. Bersihkan kontainer & Siapkan Gambar
+    // 2. Bersihkan kontainer & Siapkan Gambar
 container.innerHTML = '';
 const img = document.createElement('img');
+img.className = "max-w-full h-auto block mx-auto"; // Tambahan class biar rapi
 
-// GUNAKAN 'let' supaya bisa diubah di bawah
 let fullSrc = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
 
-// Cek jika link berasal dari Google Drive halaman preview, ubah ke link langsung
-if (fullSrc.includes('drive.google.com') && fullSrc.includes('/view')) {
-    const fileId = fullSrc.split('/d/')[1].split('/')[0];
-    fullSrc = `https://drive.google.com/uc?export=view&id=${fileId}`;
+// Deteksi & Perbaiki Link Google Drive
+if (fullSrc.includes('drive.google.com')) {
+    let fileId = "";
+    if (fullSrc.includes('/d/')) {
+        fileId = fullSrc.split('/d/')[1].split('/')[0];
+    } else if (fullSrc.includes('id=')) {
+        fileId = fullSrc.split('id=')[1].split('&')[0];
+    }
+    
+    if (fileId) {
+        // Gunakan thumbnail berkualitas tinggi (seringkali lebih stabil daripada uc?id)
+        fullSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1000&id=${fileId}`;
+    }
 }
 
-    img.onload = function() {
-        console.log("Gambar loaded, lebar:", img.clientWidth);
-        content.style.width = img.clientWidth + 'px';
-        
-        // Tampilkan Modal
-        modal.style.display = 'flex';
-        
-        // Animasi masuk
-        setTimeout(() => {
-            modal.style.opacity = '1';
-            content.classList.remove('scale-95', 'opacity-0');
-            content.classList.add('scale-100', 'opacity-100');
-        }, 50);
-    };
-
-    img.onerror = function() {
-        console.error("Gagal memuat gambar:", fullSrc);
-        // Tetap buka modal meskipun gambar gagal agar tidak stuck
-        modal.style.display = 'flex';
+img.onload = function() {
+    console.log("Gambar Berhasil Terload!");
+    content.style.width = img.clientWidth + 'px';
+    modal.style.display = 'flex';
+    
+    setTimeout(() => {
         modal.style.opacity = '1';
-        container.innerHTML = '<p class="p-10 text-white">Gagal memuat gambar.</p>';
-    };
+        content.classList.remove('scale-95', 'opacity-0');
+        content.classList.add('scale-100', 'opacity-100');
+    }, 50);
+};
 
+img.onerror = function() {
+    console.error("Gagal load gambar dari:", fullSrc);
+    modal.style.display = 'flex';
+    modal.style.opacity = '1';
+    container.innerHTML = `
+        <div class="p-10 text-center">
+            <p class="text-white mb-4">Gagal memuat gambar.</p>
+            <a href="${fullSrc}" target="_blank" class="text-blue-400 underline text-xs">Cek Link Drive (Pastikan sudah Public)</a>
+        </div>
+    `;
+};
+
+// --- REVISI SEDIKIT DI SINI ---
+// Kita hanya tambahkan anti-cache jika BUKAN link Google Drive
+if (!fullSrc.includes('drive.google.com')) {
+    img.src = fullSrc + (fullSrc.includes('?') ? '&' : '?') + 't=' + new Date().getTime();
+} else {
     img.src = fullSrc;
-    container.appendChild(img);
+}
+
+container.appendChild(img);
 
     // 3. Efek Background
     if (app) {
