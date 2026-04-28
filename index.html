@@ -525,55 +525,59 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 
 // ── MODAL ──
 function openLightbox(item) {
+    console.log("Membuka item:", item.title); // Debugging
     const modal = document.getElementById('modal');
     const content = document.getElementById('modal-content');
     const container = document.getElementById('modal-media-container');
     const app = document.getElementById('app');
 
-    // 1. Isi Data Teks
-    const elTitle = document.getElementById('modal-title');
-    const elDesc = document.getElementById('modal-desc');
-    const elTag = document.getElementById('modal-tag');
-
-    if (elTitle) elTitle.textContent = item.title;
-    if (elDesc) elDesc.textContent = item.desc || '';
-    if (elTag) {
-        elTag.textContent = item.category;
-        elTag.className = `modal-tag tag-${item.category}`;
+    // 1. Reset & Isi Teks
+    content.style.width = 'auto';
+    document.getElementById('modal-title').textContent = item.title;
+    document.getElementById('modal-desc').textContent = item.desc || '';
+    const tag = document.getElementById('modal-tag');
+    if(tag) {
+        tag.textContent = item.category;
+        tag.className = `modal-tag tag-${item.category}`;
     }
 
-    // 2. Logika Media (Gambar)
+    // 2. Bersihkan kontainer & Siapkan Gambar
     container.innerHTML = '';
-    if (item.type === 'image') {
-        const img = document.createElement('img');
-        const fullSrc = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
-        
-        content.style.width = 'auto'; // Reset lebar
-        
-        img.onload = function() {
-            const renderedWidth = img.clientWidth;
-            if (renderedWidth > 0) {
-                content.style.width = renderedWidth + 'px';
-            }
-            
-            modal.style.display = 'flex';
-            setTimeout(() => {
-                modal.style.opacity = '1';
-                content.classList.remove('scale-95', 'opacity-0');
-                content.classList.add('scale-100', 'opacity-100');
-            }, 10);
-        };
-        
-        img.src = fullSrc;
-        container.appendChild(img);
-    }
+    const img = document.createElement('img');
+    const fullSrc = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
 
+    img.onload = function() {
+        console.log("Gambar loaded, lebar:", img.clientWidth);
+        content.style.width = img.clientWidth + 'px';
+        
+        // Tampilkan Modal
+        modal.style.display = 'flex';
+        
+        // Animasi masuk
+        setTimeout(() => {
+            modal.style.opacity = '1';
+            content.classList.remove('scale-95', 'opacity-0');
+            content.classList.add('scale-100', 'opacity-100');
+        }, 50);
+    };
+
+    img.onerror = function() {
+        console.error("Gagal memuat gambar:", fullSrc);
+        // Tetap buka modal meskipun gambar gagal agar tidak stuck
+        modal.style.display = 'flex';
+        modal.style.opacity = '1';
+        container.innerHTML = '<p class="p-10 text-white">Gagal memuat gambar.</p>';
+    };
+
+    img.src = fullSrc;
+    container.appendChild(img);
+
+    // 3. Efek Background
     if (app) {
         app.style.filter = 'blur(15px)';
         app.style.transform = 'scale(0.98)';
     }
     document.body.style.overflow = 'hidden';
-    modal.classList.remove('hidden');
 }
 
 function closeModal() {
