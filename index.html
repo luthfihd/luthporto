@@ -204,7 +204,8 @@ footer{margin-top:60px;padding:60px 0 40px;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:rgba(108,99,255,0.4);border-radius:3px;}
 
-/* RESET TOTAL CARA MODAL BEKERJA */
+/* --- KUNCI MODAL FIT-TO-CONTENT --- */
+/* 1. Reset Modal Background */
 #modal {
     display: none; 
     position: fixed;
@@ -212,41 +213,58 @@ footer{margin-top:60px;padding:60px 0 40px;}
     z-index: 9999;
     background: rgba(0,0,0,0.8);
     backdrop-filter: blur(10px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
+/* 2. Kotak Kaca yang Mencincut (Fit) */
 #modal-content {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.95);
-    /* INI KUNCINYA */
-    width: fit-content !important;
-    min-width: 100px; /* Biar nggak hilang kalau loading */
+    width: fit-content !important; /* Paksa lebar seukuran isi */
     max-width: 90vw;
-    background: rgba(255,255,255,0.1);
-    border-radius: 24px;
-    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 32px;
     overflow: hidden;
-    transition: all 0.3s ease;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
+/* 3. Aturan Gambar */
 #modal-media-container img {
     display: block;
     width: auto !important;
     height: auto !important;
     max-height: 70vh !important;
-    max-width: 90vw !important;
+    max-width: 100% !important;
 }
 
-/* Supaya TEKS tidak pernah lebih lebar dari GAMBAR */
+/* 4. Teks yang Nurut (Tidak Mendorong Lebar) */
 .modal-info-box {
     display: block;
-    width: 0; /* Aneh tapi nyata: ini trik CSS agar dia tidak mendorong lebar parent */
-    min-width: 100% !important; /* Dia akan selebar gambar di atasnya saja */
-    padding: 20px;
+    width: 100%;
     box-sizing: border-box;
-    background: rgba(0,0,0,0.4);
+    padding: 24px;
+    background: rgba(0, 0, 0, 0.5);
 }
+
+/* 5. Styling untuk Tag/Label */
+.modal-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: white;
+}
+.tag-promo { background: #6366f1; }
+.tag-edu { background: #10b981; }
+.video { background: #ef4444; }
+
 </style>
 </head>
 <body>
@@ -340,14 +358,17 @@ footer{margin-top:60px;padding:60px 0 40px;}
 </footer>
 
 <!-- HTML MODAL -->
-<div id="modal">
-    <button onclick="closeModal()" class="fixed top-5 right-5 z-[10000] w-12 h-12 rounded-full bg-white/10 text-white text-2xl">×</button>
+<div id="modal" class="fixed inset-0 z-[9999] hidden bg-black/80 backdrop-blur-md transition-opacity duration-300">
+    <button onclick="closeModal()" class="fixed top-5 right-5 z-[10000] w-12 h-12 rounded-full border border-white/20 bg-white/10 text-white text-2xl flex items-center justify-center">×</button>
 
-    <div id="modal-content" class="opacity-0">
+    <div id="modal-content" class="opacity-0 shadow-2xl">
         <div id="modal-media-container"></div>
+        
         <div class="modal-info-box">
-            <h2 id="modal-title" class="text-white font-bold truncate">Title</h2>
-            <p id="modal-desc" class="text-white/60 text-xs line-clamp-2">Description...</p>
+            <div id="modal-tag" class="modal-tag mb-2">Category</div> 
+            
+            <h2 id="modal-title" class="text-white text-xl font-serif font-bold mb-1">Title</h2>
+            <p id="modal-desc" class="text-white/70 text-xs leading-relaxed">Description...</p>
         </div>
     </div>
 </div>
