@@ -574,7 +574,7 @@ function openLightbox(item) {
     container.innerHTML = '';
     let fullSrc = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
 
-    if (item.type === 'video') {
+    if (item.type === 'gdrive') {
         // --- LOGIKA VIDEO DRIVE ---
         let fileId = "";
         if (fullSrc.includes('/d/')) fileId = fullSrc.split('/d/')[1].split('/')[0];
