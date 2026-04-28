@@ -530,15 +530,18 @@ function openLightbox(item) {
     const container = document.getElementById('modal-media-container');
     const app = document.getElementById('app');
 
-    // 1. BUKA MODAL INSTAN (Biar user tahu kliknya berhasil)
+    // 1. Reset Modal & Tampilkan Segera
     modal.style.display = 'flex';
-    content.style.width = '90vw'; // Default lebar sementara biar nggak 'penyet'
-    content.classList.remove('opacity-0', 'scale-95');
-    content.classList.add('opacity-100', 'scale-100');
+    modal.style.pointerEvents = 'auto'; // Pastikan bisa diklik
+    content.style.width = '300px'; // Lebar minimal awal biar gak aneh
     
-    setTimeout(() => { modal.style.opacity = '1'; }, 10);
+    setTimeout(() => {
+        modal.style.opacity = '1';
+        content.classList.remove('opacity-0', 'scale-95');
+        content.classList.add('opacity-100', 'scale-100');
+    }, 10);
 
-    // 2. Isi Teks Langsung
+    // 2. Isi Teks
     document.getElementById('modal-title').textContent = item.title;
     document.getElementById('modal-desc').textContent = item.desc || '';
     const tag = document.getElementById('modal-tag');
@@ -547,55 +550,62 @@ function openLightbox(item) {
         tag.className = `modal-tag tag-${item.category}`;
     }
 
-    // 3. Masukkan Gambar (Download sambil ditonton)
+    // 3. Proses Gambar
     container.innerHTML = '';
     const img = document.createElement('img');
-    // Beri opacity 0 dulu biar nggak 'nyala' mendadak
-    img.className = "max-w-full h-auto block mx-auto opacity-0 transition-opacity duration-700"; 
+    img.className = "max-w-full h-auto block mx-auto opacity-0 transition-opacity duration-500"; 
 
     let fullSrc = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
     if (fullSrc.includes('drive.google.com')) {
-        let fileId = (fullSrc.includes('/d/')) ? fullSrc.split('/d/')[1].split('/')[0] : fullSrc.split('id=')[1].split('&')[0];
-        fullSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1000&id=${fileId}`;
+        let fileId = "";
+        if (fullSrc.includes('/d/')) fileId = fullSrc.split('/d/')[1].split('/')[0];
+        else if (fullSrc.includes('id=')) fileId = fullSrc.split('id=')[1].split('&')[0];
+        
+        // Naikkan sz ke 1600 agar tidak pecah
+        fullSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
     }
 
     img.onload = function() {
-        // Begitu gambar landing, CIUTKAN kotak kaca sesuai ukuran gambar asli
         content.style.width = img.clientWidth + 'px';
-        img.classList.remove('opacity-0'); // Munculkan gambar dengan lembut
+        img.classList.remove('opacity-0');
     };
 
     img.src = fullSrc;
     container.appendChild(img);
 
-    // Efek Blur Background
+    // 4. Efek Background & Scroll
     if (app) {
         app.style.filter = 'blur(15px)';
         app.style.transform = 'scale(0.98)';
     }
     document.body.style.overflow = 'hidden';
+
+    // --- SOLUSI KLIK LUAR ---
+    // Jika user klik modal (background hitamnya), tutup modal.
+    modal.onclick = function(e) {
+        if (e.target === modal) closeModal();
+    };
 }
 
 function closeModal() {
     const modal = document.getElementById('modal');
     const content = document.getElementById('modal-content');
-    const container = document.getElementById('modal-media-container'); // Tambahkan ini
     const app = document.getElementById('app');
 
+    // Animasi Keluar
+    modal.style.opacity = '0';
+    modal.style.pointerEvents = 'none'; // Biar gak bisa diklik selama transisi
     content.classList.remove('scale-100', 'opacity-100');
     content.classList.add('scale-95', 'opacity-0');
-    modal.style.opacity = '0';
 
     setTimeout(() => {
-        modal.classList.add('hidden');
         modal.style.display = 'none';
-        
         if (app) {
             app.style.filter = '';
             app.style.transform = '';
         }
         document.body.style.overflow = '';
-        if (container) container.innerHTML = ''; // Sekarang aman
+        document.getElementById('modal-media-container').innerHTML = '';
     }, 300);
 }
 
