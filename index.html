@@ -35,9 +35,7 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#
     --glass-highlight: rgba(255,255,255,0.8);
   }
   body { background: #f0f0fa; color: #1a1a2e !important; }
-  #bg-canvas { 
-    background-color: #f0f0fa
-    filter: brightness(1.4) saturate(0.7); }
+  #bg-canvas { filter: brightness(1.4) saturate(0.7); }
   .hero-title .line1 { color: #1a1a2e !important; }
   .section-title { color: #1a1a2e !important; }
   .section-title span { background: linear-gradient(135deg,#201557,#4c1557,#153657) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; background-clip: text !important; }
@@ -64,39 +62,16 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#
   .social-ig:hover { background: linear-gradient(135deg,#6C63FF,#c026d3,#FF6B9D) !important; border-color: #6C63FF !important; color: #fff !important; }
 }
 
-/* ── BACKGROUND ULTRA LIGHT ── */
-#bg-canvas {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  background-color: #f0f0fa; /* Warna gelap default */
-}
-
-.bg-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(90px);
-  opacity: 0.5;
-  /* Animasi & Transisi Dihapus Total */
-}
-
-/* Posisi Orb Statis */
-.bg-orb:nth-child(1){ width:650px; height:650px; background:radial-gradient(circle,#6C63FF,transparent 70%); top:-15%; left:-10%; }
-.bg-orb:nth-child(2){ width:550px; height:550px; background:radial-gradient(circle,#FF6B9D,transparent 70%); top:25%; right:-10%; }
-.bg-orb:nth-child(3){ width:500px; height:500px; background:radial-gradient(circle,#FFD93D,transparent 70%); bottom:-10%; left:15%; }
-.bg-orb:nth-child(4){ width:420px; height:420px; background:radial-gradient(circle,#4ECDC4,transparent 70%); top:55%; left:55%; }
-.bg-orb:nth-child(5){ width:380px; height:380px; background:radial-gradient(circle,#FF8C42,transparent 70%); top:10%; left:38%; }
-
-/* Noise Texture */
-body::before {
-  content:'';
-  position:fixed;
-  inset:0;
-  z-index:1;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events:none;
-  opacity:0.25;
-}
+  /* ── BACKGROUND ── */
+#bg-canvas{position:fixed;inset:0;z-index:0;}
+.bg-orb{position:absolute;border-radius:50%;filter:blur(20px);opacity:0.5;animation:drift 18s ease-in-out infinite alternate;transition:background 1.0s ease;}
+.bg-orb:nth-child(1){width:650px;height:650px;background:radial-gradient(circle,#6C63FF,transparent 70%);top:-15%;left:-10%;animation-delay:0s;}
+.bg-orb:nth-child(2){width:550px;height:550px;background:radial-gradient(circle,#FF6B9D,transparent 70%);top:25%;right:-10%;animation-delay:-4s;}
+.bg-orb:nth-child(3){width:500px;height:500px;background:radial-gradient(circle,#FFD93D,transparent 70%);bottom:-10%;left:15%;animation-delay:-7s;}
+.bg-orb:nth-child(4){width:420px;height:420px;background:radial-gradient(circle,#4ECDC4,transparent 70%);top:55%;left:55%;animation-delay:-2s;}
+.bg-orb:nth-child(5){width:380px;height:380px;background:radial-gradient(circle,#FF8C42,transparent 70%);top:10%;left:38%;animation-delay:-10s;}
+@keyframes drift{0%{transform:translate(0,0) scale(1);}50%{transform:translate(35px,-25px) scale(1.07);}100%{transform:translate(-15px,45px) scale(0.94);}}
+body::before{content:'';position:fixed;inset:0;z-index:1;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;opacity:0.25;}
 
 /* ── GLASS ── */
 .glass{background:var(--glass-bg);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-highlight);position:relative;overflow:hidden;}
