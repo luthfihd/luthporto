@@ -66,14 +66,11 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#
 body {
     margin: 0;
     min-height: 100vh;
-    /* Gradasi static murni, tanpa blur, tanpa orb */
-    background: linear-gradient(
-        135deg, 
-        #0f172a 0%,    /* Biru Gelap (Dasar) */
-        #1e1b4b 25%,   /* Indigo */
-        #312e81 50%,   /* Deep Blue */
-        #1e1b4b 75%,   /* Indigo */
-        #0f172a 100%   /* Biru Gelap */
+    background: radial-gradient(at 0% 0%, #6C63FF 0%, transparent 50%),
+            radial-gradient(at 100% 0%, #FF6B9D 0%, transparent 50%),
+            radial-gradient(at 100% 100%, #4ECDC4 0%, transparent 50%),
+            radial-gradient(at 0% 100%, #FFD93D 0%, transparent 50%),
+            #f0f0fa; /* Warna dasar */
     );
     background-attachment: fixed; /* Biar background nggak ikut kegulung pas discroll */
 }
