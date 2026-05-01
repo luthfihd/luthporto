@@ -11,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
+
 /* ── DESIGN TOKENS ── */
 :root {
   --glass-bg: rgba(255,255,255,0.10);
@@ -29,7 +30,7 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#
 
   /* ── BACKGROUND ── */
 #bg-canvas{position:fixed;inset:0;z-index:0;}
-.bg-orb{position:absolute;border-radius:50%;filter:blur(20px);opacity:0.5;animation:drift 18s ease-in-out infinite alternate;transition:background 1.0s ease;}
+.bg-orb{position:absolute;border-radius:50%;filter:blur(97px);opacity:0.5;}
 .bg-orb:nth-child(1){width:650px;height:650px;background:radial-gradient(circle,#6C63FF,transparent 70%);top:-15%;left:-10%;}
 .bg-orb:nth-child(2){width:550px;height:550px;background:radial-gradient(circle,#FF6B9D,transparent 70%);top:25%;right:-10%;}
 .bg-orb:nth-child(3){width:500px;height:500px;background:radial-gradient(circle,#FFD93D,transparent 70%);bottom:-10%;left:15%;}
@@ -68,7 +69,7 @@ header{min-height:100vh;display:flex;flex-direction:column;align-items:center;ju
 .hero-tag-dot{width:7px;height:7px;background:#FFD93D;border-radius:50%;animation:pulse 2s ease-in-out infinite;}
 h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.5rem);font-weight:900;line-height:1.2;letter-spacing:-1.5px;margin-bottom:24px;animation:fadeUp 0.8s ease 0.3s both;}
 .hero-title .line1{display:block;color:#fff;}
-.hero-title .line2{display:block;background:linear-gradient(135deg,#6C63FF 0%,#FF6B9D 40%,#FFD93D 80%,#4ECDC4 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200% 200%;animation:gradShift 4s ease infinite,fadeUp 0.8s ease 0.3s both;}
+.hero-title .line2{display:block;background:linear-gradient(135deg,#6C63FF 0%,#FF6B9D 40%,#FFD93D 80%,#4ECDC4 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200% 200%;}
 @keyframes gradShift{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
 .hero-card{border-radius:var(--radius-xl);padding:32px 40px;max-width:680px;width:100%;margin:0 auto 36px;animation:fadeUp 0.8s ease 0.5s both;}
 .designer-name{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;letter-spacing:3px;background:linear-gradient(135deg,#4FC3F7,#6C63FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;margin-bottom:12px;}
