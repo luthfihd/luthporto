@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="id">
 <head>
 <meta charset="UTF-8">
@@ -185,7 +185,7 @@ footer{margin-top:60px;padding:60px 0 40px;}
 
 /* 2. Kotak Kaca (Kunci Ramping) */
 #modal-content {
-    background: rgba(15, 23, 42, 0.8);
+    background: rgba(0, 0, 0, 0);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 32px;
     overflow: hidden;
@@ -666,7 +666,7 @@ function openLightbox(item) {
     };
 
     // 4. Efek Background & Click Outside
-    if (app) { app.style.filter = 'blur(4px)'; app.style.transform = 'scale(0.98)'; }
+    if (app) { app.style.filter = 'blur(1px)'; app.style.transform = 'scale(0.98)'; }
     document.body.style.overflow = 'hidden';
     modal.onclick = (e) => { if (e.target === modal) closeModal(); };
 }
