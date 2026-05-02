@@ -228,12 +228,12 @@ footer{margin-top:60px;padding:60px 0 40px;}
 #modal-media-container::-webkit-scrollbar { display: none; } /* Chrome/Safari */
 #modal-media-container img {
     display: block;
-    width: 100%;
-    height: 100%;
+    width: auto;
+    height: auto;
     flex-shrink: 0;
     scroll-snap-align: center;
     max-width: 90vw;   /* Maksimal 90% lebar layar */
-    max-height: 75vh;  /* Maksimal 75% tinggi layar biar gak kepotong info teks */
+    max-height: 70vh;  /* Maksimal 70% tinggi layar biar gak kepotong info teks */
     object-fit: contain;
     margin: 0 auto;
 }
@@ -652,16 +652,32 @@ function openLightbox(item) {
         if (index === 0) {
             img.onload = function() {
                 // Logika Fit-to-Content yang kamu inginkan
-                let targetWidth = img.naturalWidth;
-                if (img.naturalHeight > img.naturalWidth) {
-                    // Jika portrait, batasi berdasarkan tinggi layar
-                    targetWidth = (img.naturalWidth / img.naturalHeight) * (window.innerHeight * 0.7);
-                }
-                
-                // Set lebar modal sesuai gambar pertama
-                content.style.width = Math.min(targetWidth, window.innerWidth * 0.9) + 'px';
-                img.classList.remove('opacity-0');
-            };
+                const maxHeight = window.innerHeight * 0.7;
+                const nativeWidth = img.naturalWidth;
+                const nativeHeight = img.naturalHeight;
+                const aspectRatio = nativeWidth / nativeHeight;
+
+            let finalWidth;
+            
+            // Jika tinggi gambar asli lebih besar dari batas 70vh
+            if (nativeHeight > maxHeight) {
+                finalWidth = maxHeight * aspectRatio;
+            } else {
+                finalWidth = nativeWidth;
+            }
+
+            // Batasi agar tidak lebih lebar dari 90% layar
+            const maxWidth = window.innerWidth * 0.9;
+            if (finalWidth > maxWidth) {
+                finalWidth = maxWidth;
+            }
+
+            // TERAPKAN LEBAR KE MODAL CONTENT
+            // Ini akan membuat modal "menjepit" gambar tanpa sisa black bar
+            document.getElementById('modal-content').style.width = Math.floor(finalWidth) + 'px';
+            
+            img.classList.remove('opacity-0');
+        };
         } else {
             img.classList.remove('opacity-0');
         }
