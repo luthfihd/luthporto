@@ -196,10 +196,26 @@ footer{margin-top:60px;padding:60px 0 40px;}
 }
 
 /* 3. Aturan Gambar di Dalamnya */
+#modal-media-container::-webkit-scrollbar { display: none; }
+
+.modal-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    transition: all 0.3s ease;
+}
+.modal-dot.active {
+    background: #6C63FF;
+    transform: scale(1.4);
+}
+  
 #modal-media-container img {
     display: block;
     width: auto;
     height: auto;
+    flex-shrink: 0;
+    scroll-snap-align: center;
     max-width: 90vw;   /* Maksimal 90% lebar layar */
     max-height: 75vh;  /* Maksimal 75% tinggi layar biar gak kepotong info teks */
     object-fit: contain;
@@ -399,8 +415,15 @@ footer{margin-top:60px;padding:60px 0 40px;}
 <div id="modal" class="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-md transition-opacity duration-300" style="display: none; opacity: 0;">
     <button onclick="closeModal()" class="fixed top-5 right-5 z-[10001] w-12 h-12 rounded-full border border-white/20 bg-white/10 text-white text-3xl flex items-center justify-center hover:bg-white/20 transition-all">×</button>
 
-    <div id="modal-content" class="scale-95 opacity-0 mx-auto">
-        <div id="modal-media-container"></div>
+    <div id="modal-content" class="scale-95 opacity-0 mx-auto relative">
+        <a id="btn-gdrive-link" href="#" target="_blank" class="absolute top-4 right-4 z-[10002] w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-indigo-600 transition-all">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
+
+        <div id="modal-media-container" class="flex overflow-x-auto scroll-snap-x mandatory scrollbar-hide" style="scroll-snap-type: x mandatory; -ms-overflow-style: none; scrollbar-width: none;">
+            </div>
+
+        <div id="modal-dots" class="flex justify-center gap-2 py-3 bg-black/20"></div>
         
         <div class="modal-info-box">
             <div id="modal-tag" class="modal-tag">Category</div>
@@ -562,13 +585,20 @@ function openLightbox(item) {
     const modal = document.getElementById('modal');
     const content = document.getElementById('modal-content');
     const container = document.getElementById('modal-media-container');
+    const dotsContainer = document.getElementById('modal-dots');
+    const gdriveBtn = document.getElementById('btn-gdrive-link');
     const app = document.getElementById('app');
 
-    // 1. Persiapan Modal
+    // 1. Reset & Persiapan Awal
+    container.innerHTML = '';
+    if(dotsContainer) dotsContainer.innerHTML = '';
     modal.style.display = 'flex';
     modal.style.pointerEvents = 'auto';
-    content.style.width = '300px'; 
+    content.style.width = '300px'; // Lebar awal sebelum dihitung gambar pertama
     
+    // Set Tombol GDrive (diambil dari link pertama)
+    if(gdriveBtn) gdriveBtn.href = item.src;
+
     setTimeout(() => {
         modal.style.opacity = '1';
         content.classList.remove('opacity-0', 'scale-95');
@@ -584,55 +614,64 @@ function openLightbox(item) {
         tag.className = `modal-tag tag-${item.category}`;
     }
 
-    // 2. LOGIKA MEDIA
-        container.innerHTML = '';
-        let fullSrc = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
+    // 2. LOGIKA MULTIPLE MEDIA & FIT-TO-CONTENT
+    // Kita pecah link berdasarkan koma (jika ada)
+    const allLinks = (item.image || item.src).split(',');
 
-        const img = document.createElement('img');
-        img.className = "max-w-full h-auto block mx-auto opacity-0 transition-opacity duration-500"; 
+    allLinks.forEach((link, index) => {
+        let rawSrc = link.trim();
+        let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
 
+        // Convert GDrive link ke Thumbnail HD
         if (fullSrc.includes('drive.google.com')) {
-            let fileId = (fullSrc.includes('/d/')) ? fullSrc.split('/d/')[1].split('/')[0] : fullSrc.split('id=')[1].split('&')[0];
+            let fileId = getGoogleDriveId(fullSrc);
             fullSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
         }
 
-        img.onload = function() {
-            content.style.width = img.clientWidth + 'px';
-            img.classList.remove('opacity-0');
-        };
+        const img = document.createElement('img');
+        img.className = "opacity-0 transition-opacity duration-500"; 
         img.src = fullSrc;
+
+        // HANYA GAMBAR PERTAMA: Yang menentukan lebar modal agar tetap FIT
+        if (index === 0) {
+            img.onload = function() {
+                // Logika Fit-to-Content yang kamu inginkan
+                let targetWidth = img.naturalWidth;
+                if (img.naturalHeight > img.naturalWidth) {
+                    // Jika portrait, batasi berdasarkan tinggi layar
+                    targetWidth = (img.naturalWidth / img.naturalHeight) * (window.innerHeight * 0.7);
+                }
+                
+                // Set lebar modal sesuai gambar pertama
+                content.style.width = Math.min(targetWidth, window.innerWidth * 0.9) + 'px';
+                img.classList.remove('opacity-0');
+            };
+        } else {
+            img.classList.remove('opacity-0');
+        }
+
         container.appendChild(img);
 
-    // 3. Efek Background & Click Outside
+        // Buat Dots jika gambar lebih dari satu
+        if (allLinks.length > 1 && dotsContainer) {
+            const dot = document.createElement('div');
+            dot.className = `modal-dot ${index === 0 ? 'active' : ''}`;
+            dotsContainer.appendChild(dot);
+        }
+    });
+
+    // 3. LOGIKA SCROLL UNTUK DOTS
+    container.onscroll = () => {
+        const idx = Math.round(container.scrollLeft / container.offsetWidth);
+        const dots = document.querySelectorAll('.modal-dot');
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === idx));
+    };
+
+    // 4. Efek Background & Click Outside
     if (app) { app.style.filter = 'blur(15px)'; app.style.transform = 'scale(0.98)'; }
     document.body.style.overflow = 'hidden';
     modal.onclick = (e) => { if (e.target === modal) closeModal(); };
 }
-
-function closeModal() {
-    const modal = document.getElementById('modal');
-    const content = document.getElementById('modal-content');
-    const app = document.getElementById('app');
-
-    // Animasi Keluar
-    modal.style.opacity = '0';
-    modal.style.pointerEvents = 'none'; // Biar gak bisa diklik selama transisi
-    content.classList.remove('scale-100', 'opacity-100');
-    content.classList.add('scale-95', 'opacity-0');
-
-    setTimeout(() => {
-        modal.style.display = 'none';
-        if (app) {
-            app.style.filter = '';
-            app.style.transform = '';
-        }
-        document.body.style.overflow = '';
-        document.getElementById('modal-media-container').innerHTML = '';
-    }, 300);
-}
-
-window.closeModal = closeModal;
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
 
 function closeModal() {
     const modal = document.getElementById('modal');
