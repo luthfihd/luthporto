@@ -171,7 +171,7 @@ footer{margin-top:60px;padding:60px 0 40px;}
 /* --- KUNCI MODAL FIT-TO-CONTENT --- */
 /* 1. Background Modal */
 #modal {
-    display: none; /* Standby, muncul via JS */
+    display: none;
     position: fixed;
     inset: 0;
     z-index: 9999;
@@ -207,7 +207,25 @@ footer{margin-top:60px;padding:60px 0 40px;}
     background: #6C63FF;
     transform: scale(1.4);
 }
-#modal-media-container:-webkit-scrollbar { display: none; }
+
+.modal-dots-container {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 0;
+    background: #0a0a18;
+}
+
+#modal-media-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+    align-items: center;
+    background: transparent;
+}
+#modal-media-container::-webkit-scrollbar { display: none; } /* Chrome/Safari */
 #modal-media-container img {
     display: block;
     width: 100%;
@@ -666,7 +684,7 @@ function openLightbox(item) {
     };
 
     // 4. Efek Background & Click Outside
-    if (app) { app.style.filter = ''; app.style.transform = 'scale(0.98)'; }
+    if (app) { app.style.filter = 'none'; app.style.transform = 'scale(1)'; }
     document.body.style.overflow = 'hidden';
     modal.onclick = (e) => { if (e.target === modal) closeModal(); };
 }
