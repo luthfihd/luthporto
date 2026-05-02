@@ -29,7 +29,7 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#
 
   /* ── BACKGROUND ── */
 #bg-canvas{position:fixed;inset:0;z-index:0;}
-.bg-orb{position:absolute;border-radius:50%;filter:blur(40px);opacity:0.5;}
+.bg-orb{position:absolute;border-radius:50%;filter:blur(20px);opacity:0.5;}
 .bg-orb:nth-child(1){width:650px;height:650px;background:radial-gradient(circle,#6C63FF,transparent 70%);top:-15%;left:-10%;}
 .bg-orb:nth-child(2){width:550px;height:550px;background:radial-gradient(circle,#FF6B9D,transparent 70%);top:25%;right:-10%;}
 .bg-orb:nth-child(3){width:500px;height:500px;background:radial-gradient(circle,#FFD93D,transparent 70%);bottom:-10%;left:15%;}
@@ -176,7 +176,7 @@ footer{margin-top:60px;padding:60px 0 40px;}
     inset: 0;
     z-index: 9999;
     background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(2px);
     opacity: 0;
     transition: opacity 0.3s ease;
     align-items: center;
@@ -185,7 +185,7 @@ footer{margin-top:60px;padding:60px 0 40px;}
 
 /* 2. Kotak Kaca (Kunci Ramping) */
 #modal-content {
-    background: rgba(0, 0, 0, 0);
+    background: rgba(0, 0, 0, 0.85);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 32px;
     overflow: hidden;
@@ -666,7 +666,7 @@ function openLightbox(item) {
     };
 
     // 4. Efek Background & Click Outside
-    if (app) { app.style.filter = 'blur(1px)'; app.style.transform = 'scale(0.98)'; }
+    if (app) { app.style.filter = 'blur(8px)'; app.style.transform = 'scale(0.98)'; }
     document.body.style.overflow = 'hidden';
     modal.onclick = (e) => { if (e.target === modal) closeModal(); };
 }
