@@ -695,9 +695,8 @@ function openLightbox(item) {
     if(dotsContainer) dotsContainer.innerHTML = '';
     modal.style.display = 'flex';
     modal.style.pointerEvents = 'auto';
-    content.style.width = '300px'; // Lebar awal sebelum dihitung gambar pertama
+    content.style.width = '300px'; 
     
-    // Set Tombol GDrive (diambil dari link pertama)
     if(gdriveBtn) gdriveBtn.href = item.src;
 
     setTimeout(() => {
@@ -706,7 +705,6 @@ function openLightbox(item) {
         content.classList.add('opacity-100', 'scale-100');
     }, 10);
 
-    // Isi Teks
     document.getElementById('modal-title').textContent = item.title;
     document.getElementById('modal-desc').textContent = item.desc || '';
     const tag = document.getElementById('modal-tag');
@@ -715,11 +713,9 @@ function openLightbox(item) {
         tag.className = `modal-tag tag-${item.category}`;
     }
 
-    // 2. LOGIKA MULTIPLE MEDIA & FIT-TO-CONTENT
-    // Kita pecah link berdasarkan koma (jika ada)
+    // 2. LOGIKA MULTIPLE MEDIA
     const allLinks = (item.image || item.src).split(',');
 
-    // --- TAMBAHAN DI SINI: Kontrol Tombol Navigasi ---
     const prevBtn = document.getElementById('modal-prev');
     const nextBtn = document.getElementById('modal-next');
     if (prevBtn && nextBtn) {
@@ -727,89 +723,75 @@ function openLightbox(item) {
         prevBtn.style.display = isMultiple ? 'flex' : 'none';
         nextBtn.style.display = isMultiple ? 'flex' : 'none';
     }
-    // ----------------------------------------------
   
+    // PERBAIKAN DI SINI:
     allLinks.forEach((link, index) => {
-    let rawSrc = link.trim();
-    let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
-    
-    // --- LOGIKA DETEKSI PINTAR ---
-    // Kita anggap konten adalah VIDEO jika:
-    // 1. Ekstensi filenya video (mp4, mov, dll)
-    // 2. ATAU kategorinya adalah 'video' (ini kunci buat link GDrive kamu)
-    const isVideo = rawSrc.match(/\.(mp4|webm|ogg|mov)$/i) || item.category === 'video';
-    
-    let mediaElement;
+        let rawSrc = link.trim();
+        let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
+        
+        const isVideo = rawSrc.match(/\.(mp4|webm|ogg|mov)$/i) || item.category === 'video';
+        let mediaElement;
 
-    if (isVideo) {
-        // --- JIKA TERDETEKSI SEBAGAI VIDEO ---
-        if (rawSrc.includes('drive.google.com')) {
-            // Jika GDrive Video: Pakai Iframe Embed
-            mediaElement = document.createElement('iframe');
-            let fileId = getGoogleDriveId(rawSrc);
-            mediaElement.src = `https://drive.google.com/file/d/${fileId}/preview`;
-            mediaElement.className = "opacity-0 transition-opacity duration-500 w-full";
-            mediaElement.style.height = "70vh";
-            mediaElement.style.border = "none";
-            mediaElement.style.borderRadius = "12px";
-            mediaElement.setAttribute('allow', 'autoplay');
-        } else {
-            // Jika MP4 Biasa: Pakai Tag Video
-            mediaElement = document.createElement('video');
-            mediaElement.src = fullSrc;
-            mediaElement.controls = true;
-            mediaElement.className = "opacity-0 transition-opacity duration-500 w-full h-auto";
-            mediaElement.style.maxHeight = "70vh";
-        }
-
-        // Logika Fit-to-Content Video
-        if (index === 0) {
+        if (isVideo) {
             if (rawSrc.includes('drive.google.com')) {
-                // Video GDrive (Iframe) kita kasih standar 16:9
-                const maxHeight = window.innerHeight * 0.7;
-                document.getElementById('modal-content').style.width = Math.floor(maxHeight * 1.77) + 'px';
-                setTimeout(() => mediaElement.classList.remove('opacity-0'), 500);
+                mediaElement = document.createElement('iframe');
+                let fileId = getGoogleDriveId(rawSrc);
+                mediaElement.src = `https://drive.google.com/file/d/${fileId}/preview`;
+                mediaElement.className = "opacity-0 transition-opacity duration-500 w-full";
+                mediaElement.style.height = "70vh";
+                mediaElement.style.border = "none";
+                mediaElement.style.borderRadius = "12px";
+                mediaElement.setAttribute('allow', 'autoplay');
             } else {
-                mediaElement.onloadedmetadata = function() {
-                    applyFit(mediaElement.videoWidth, mediaElement.videoHeight);
-                    mediaElement.classList.remove('opacity-0');
-                };
+                mediaElement.createElement('video'); // Perbaikan typo sebelumnya
+                mediaElement = document.createElement('video');
+                mediaElement.src = fullSrc;
+                mediaElement.controls = true;
+                mediaElement.className = "opacity-0 transition-opacity duration-500 w-full h-auto";
+                mediaElement.style.maxHeight = "70vh";
+            }
+
+            if (index === 0) {
+                if (rawSrc.includes('drive.google.com')) {
+                    const maxHeight = window.innerHeight * 0.7;
+                    document.getElementById('modal-content').style.width = Math.floor(maxHeight * 1.77) + 'px';
+                    setTimeout(() => mediaElement.classList.remove('opacity-0'), 500);
+                } else {
+                    mediaElement.onloadedmetadata = function() {
+                        applyFit(mediaElement.videoWidth, mediaElement.videoHeight);
+                        mediaElement.classList.remove('opacity-0');
+                    };
+                }
+            } else {
+                mediaElement.classList.remove('opacity-0');
             }
         } else {
-            mediaElement.classList.remove('opacity-0');
-        }
-
-    } else {
-        // --- JIKA TERDETEKSI SEBAGAI GAMBAR ---
-        mediaElement = document.createElement('img');
-        mediaElement.className = "opacity-0 transition-opacity duration-500";
-        
-        if (fullSrc.includes('drive.google.com')) {
-            let fileId = getGoogleDriveId(fullSrc);
-            fullSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
-        }
-        mediaElement.src = fullSrc;
-
-        if (index === 0) {
-            mediaElement.onload = function() {
-                applyFit(mediaElement.naturalWidth, mediaElement.naturalHeight);
+            mediaElement = document.createElement('img');
+            mediaElement.className = "opacity-0 transition-opacity duration-500";
+            if (fullSrc.includes('drive.google.com')) {
+                let fileId = getGoogleDriveId(fullSrc);
+                fullSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
+            }
+            mediaElement.src = fullSrc;
+            if (index === 0) {
+                mediaElement.onload = function() {
+                    applyFit(mediaElement.naturalWidth, mediaElement.naturalHeight);
+                    mediaElement.classList.remove('opacity-0');
+                };
+            } else {
                 mediaElement.classList.remove('opacity-0');
-            };
-        } else {
-            mediaElement.classList.remove('opacity-0');
+            }
         }
-    }
 
-    container.appendChild(mediaElement);
-});
+        container.appendChild(mediaElement);
 
-        // Buat Dots jika gambar lebih dari satu
+        // DOTS harus di dalam loop forEach agar variabel 'index' terbaca
         if (allLinks.length > 1 && dotsContainer) {
             const dot = document.createElement('div');
             dot.className = `modal-dot ${index === 0 ? 'active' : ''}`;
             dotsContainer.appendChild(dot);
         }
-    };
+    }); // <--- Tutup loop forEach di sini
 
     // 3. LOGIKA SCROLL UNTUK DOTS
     container.onscroll = () => {
@@ -818,11 +800,11 @@ function openLightbox(item) {
         dots.forEach((dot, i) => dot.classList.toggle('active', i === idx));
     };
 
-    // 4. Efek Background & Click Outside
+    // 4. Efek Background
     if (app) { app.style.filter = 'none'; app.style.transform = 'scale(1)'; }
     document.body.style.overflow = 'hidden';
     modal.onclick = (e) => { if (e.target === modal) closeModal(); };
-  }
+} // <--- Tutup fungsi openLightbox di sini
 
   function closeModal() {
     const modal = document.getElementById('modal');
