@@ -602,54 +602,62 @@ async function loadPortfolio() {
 function renderGrid() {
   const grid = document.getElementById('masonryGrid');
   const items = currentFilter === 'all' ? allItems : allItems.filter(i => i.category === currentFilter);
+  
   if (!items.length) {
     grid.innerHTML = `<div class="empty-state"><span class="empty-icon">✦</span><p>Belum ada karya di kategori ini.</p></div>`;
     return;
   }
+
   grid.className = 'masonry-grid';
   grid.innerHTML = '';
-  
+
   items.forEach((item, idx) => {
     const el = document.createElement('div');
-    el.className = 'masonry-item relative'; // Tambah class relative
+    // Tambahkan class 'group' agar multi-indicator muncul saat hover
+    el.className = 'masonry-item relative group'; 
     el.style.animationDelay = `${idx * 0.06}s`;
     el.onclick = () => openLightbox(item);
-    
+
     const tagClass = {promotional:'tag-promo',educational:'tag-edu',video:'tag-video'}[item.category]||'tag-promo';
     const tagLabel = {promotional:'Promotional',educational:'Educational',video:'Video'}[item.category]||item.category;
 
+    // 1. Logika Pecah Link & Indikator Multiple
     const allLinks = (item.image || item.src || "").split(',');
-    const multiIndicator = allLinks.length > 1 ? `
-      <div class="multi-indicator">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+    const isMultiple = allLinks.length > 1;
+
+    // 2. Tentukan Media Utama (Thumbnail)
+    const firstLink = allLinks[0].trim();
+    let finalSrc = firstLink.startsWith('http') ? firstLink : IMAGES_BASE + firstLink;
+
+    // Jika tipe video/gdrive, pastikan thumbnailnya benar
+    if (item.type === 'video' || item.type === 'gdrive') {
+        if (finalSrc.includes('drive.google.com')) {
+            let fileId = getGoogleDriveId(finalSrc);
+            finalSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w600&id=${fileId}`;
+        }
+    }
+
+    // 3. Bangun HTML (Hanya gunakan SATU variabel mediaHtml)
+    let mediaHtml = `<img class="masonry-thumb" src="${finalSrc}" alt="${item.title}" loading="lazy" onerror="this.src='https://placehold.co/600x400/1a1a3e/white?text=Image+Not+Found'">`;
+
+    // 4. Tambahkan Indikator Tumpukan jika gambar > 1
+    const multiIndicator = isMultiple ? `
+      <div class="absolute top-3 right-3 z-20 bg-black/40 backdrop-blur-md p-1.5 rounded-lg border border-white/10 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
       </div>` : '';
 
-    let mediaHtml = '';
-    const firstLink = allLinks[0].trim();
-    const src = firstLink.startsWith('http') ? firstLink : IMAGES_BASE + firstLink;
+    el.innerHTML = `
+        ${mediaHtml}
+        ${multiIndicator}
+        <div class="masonry-overlay">
+            <div class="masonry-item-title">${item.title}</div>
+            <span class="masonry-item-tag ${tagClass}">${tagLabel}</span>
+        </div>
+    `;
 
-    if (item.type === 'image' || allLinks.length > 0) {
-      mediaHtml = `<img class="masonry-thumb" src="${src}" alt="${item.title}" loading="lazy" onerror="this.src='https://placehold.co/600x400/1a1a3e/white?text=No+Image'">`;
-    }
-    
-    let mediaHtml = '';
-    if (item.type === 'image') {
-      const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
-      mediaHtml = `<img class="masonry-thumb" src="${src}" alt="${item.title}" loading="lazy">`;
-    } else if (item.type === 'video' || item.type === 'gdrive') {
-      
-      // INI BAGIAN YANG DIGANTI
-      const thumbUrl = getGoogleDriveThumbnail(item.src);
-      if (thumbUrl) {
-        mediaHtml = `<img class="masonry-thumb" src="${thumbUrl}" alt="${item.title}" loading="lazy" style="width:100%;" onerror="this.style.display='none'; this.parentElement.querySelector('.masonry-placeholder').style.display='flex';">`;
-        mediaHtml += `<div class="masonry-placeholder ${item.gradientClass||'gradient-1'}" style="display:none; min-height:200px; font-size:2.8rem; color:rgba(255,255,255,0.45);">${item.icon||'▶'}</div>`;
-      } else {
-        mediaHtml = `<div class="masonry-placeholder ${item.gradientClass||'gradient-1'}" style="min-height:${180+Math.random()*120|0}px;font-size:2.8rem;color:rgba(255,255,255,0.45);">${item.icon||'▶'}</div>`;
-      }
-    } else {
-      mediaHtml = `<div class="masonry-placeholder ${item.gradientClass||'gradient-1'}" style="min-height:${160+Math.random()*140|0}px;font-size:2.8rem;color:rgba(255,255,255,0.45);">${item.icon||'✦'}</div>`;
-    }
-    el.innerHTML = `${mediaHtml}<div class="masonry-overlay"><div class="masonry-item-title">${item.title}</div><span class="masonry-item-tag ${tagClass}">${tagLabel}</span></div>`;
     grid.appendChild(el);
   });
 }
