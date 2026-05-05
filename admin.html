@@ -130,8 +130,8 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#
 .admin-item-del{position:absolute;top:7px;right:7px;width:28px;height:28px;border-radius:50%;background:rgba(255,107,157,0.25);border:1px solid rgba(255,107,157,0.4);color:#ff6b9d;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.25s,background 0.2s;backdrop-filter:blur(6px);}
 .admin-item:hover .admin-item-del{opacity:1;}
 .admin-item-del:hover{background:rgba(255,107,157,0.5);}
-.admin-item-edit{position:absolute;top:7px;left:7px;width:28px;height:28px;border-radius:50%;background:rgba(108,99,255,0.25);border:1px solid rgba(108,99,255,0.4);color:#a099ff;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.25s,background 0.2s;backdrop-filter:blur(6px);}
-.admin-item:hover .admin-item-edit{opacity:1;}
+.admin-item-{position:absolute;top:7px;left:7px;width:28px;height:28px;border-radius:50%;background:rgba(108,99,255,0.25);border:1px solid rgba(108,99,255,0.4);color:#a099ff;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.25s,background 0.2s;backdrop-filter:blur(6px);}
+.admin-item:hover .admin-item-{opacity:1;}
 .admin-item-edit:hover{background:rgba(108,99,255,0.5);}
 .edit-modal-bg{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px;}
 .edit-modal-bg.open{display:flex;}
@@ -326,6 +326,15 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#
     <div class="form-group">
       <label>Deskripsi</label>
       <textarea id="editDesc"></textarea>
+    </div>
+    
+    <div class="form-group">
+      <label>Daftar Link Media (Gambar/Video)</label>
+      <div id="editMediaList" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; max-height: 200px; overflow-y: auto; padding-right: 5px;">
+        </div>
+      <button type="button" onclick="addMediaRow()" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px dashed rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white; cursor: pointer; font-size: 0.9rem;">
+        + Tambah Media Baru
+      </button>
     </div>
     <div class="modal-btns" style="margin-top:8px;">
       <button class="btn-cancel" onclick="closeEditModal()">Batal</button>
@@ -731,6 +740,27 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+// Fungsi untuk membuat baris input media baru
+function createMediaRow(value = '') {
+  const container = document.getElementById('editMediaList');
+  const row = document.createElement('div');
+  row.className = 'media-row';
+  row.style.display = 'flex';
+  row.style.gap = '5px';
+  row.style.marginBottom = '5px';
+  
+  row.innerHTML = `
+    <input type="text" class="media-input text-input" value="${value}" style="flex:1; margin-bottom:0;" placeholder="Link GDrive/Image">
+    <button type="button" onclick="this.parentElement.remove()" style="background:#ff4d4d; color:white; border:none; border-radius:6px; padding:0 10px; cursor:pointer;">✕</button>
+  `;
+  container.appendChild(row);
+}
+
+// Fungsi yang dipanggil oleh tombol "+ Tambah Media Baru"
+function addMediaRow() {
+  createMediaRow('');
+}
+  
 // ── EDIT ──
 let editTargetId = null;
 
@@ -741,6 +771,22 @@ function openEditModal(id) {
   document.getElementById('editTitle').value = item.title || '';
   document.getElementById('editCat').value = item.category || 'promotional';
   document.getElementById('editDesc').value = item.desc || '';
+
+  // --- TAMBAHAN: Reset & Isi Media List ---
+  const container = document.getElementById('editMediaList');
+  container.innerHTML = ''; // Kosongkan list lama
+  
+  // Ambil link dari 'image' atau 'src', pecah berdasarkan koma
+  const rawLinks = item.image || item.src || '';
+  const links = rawLinks.split(',').filter(l => l.trim() !== '');
+  
+  if (links.length > 0) {
+    links.forEach(link => createMediaRow(link.trim()));
+  } else {
+    createMediaRow(''); // Beri 1 baris kosong jika tidak ada data
+  }
+  // ----------------------------------------
+
   document.getElementById('editModal').classList.add('open');
 }
 
@@ -752,9 +798,28 @@ function closeEditModal() {
 async function saveEdit() {
   const item = allItems.find(i => i.id === editTargetId);
   if (!item) return;
+  
   item.title = document.getElementById('editTitle').value.trim();
   item.category = document.getElementById('editCat').value;
   item.desc = document.getElementById('editDesc').value.trim();
+
+  // --- TAMBAHAN: Ambil semua link dari baris-baris ---
+  const mediaInputs = document.querySelectorAll('.media-input');
+  let linksArray = [];
+  mediaInputs.forEach(input => {
+    if (input.value.trim() !== '') {
+      linksArray.push(input.value.trim());
+    }
+  });
+  
+  // Gabungkan jadi string koma (Misal: "link1,link2,link3")
+  const finalSrc = linksArray.join(',');
+  
+  // Simpan ke field yang kamu gunakan (disarankan update dua-duanya agar sinkron)
+  item.src = finalSrc;
+  item.image = finalSrc; 
+  // --------------------------------------------------
+
   try {
     await pushDataJson();
     toast('✦ Karya berhasil diupdate!', 'ok');
