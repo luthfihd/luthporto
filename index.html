@@ -806,6 +806,33 @@ function openLightbox(item) {
     modal.onclick = (e) => { if (e.target === modal) closeModal(); };
 } // <--- Tutup fungsi openLightbox di sini
 
+// Fungsi Pembantu untuk menghitung lebar modal agar FIT dengan konten
+function applyFit(w, h) {
+    const content = document.getElementById('modal-content');
+    if (!content) return;
+
+    const maxHeight = window.innerHeight * 0.7; // Batas tinggi 70% layar
+    const aspectRatio = w / h;
+    
+    let finalWidth;
+    
+    // Jika tinggi asli lebih besar dari batas maxHeight
+    if (h > maxHeight) {
+        finalWidth = maxHeight * aspectRatio;
+    } else {
+        finalWidth = w;
+    }
+
+    // Batasi agar lebar tidak melebihi 90% lebar layar (biar gak kepotong di HP)
+    const maxWidth = window.innerWidth * 0.9;
+    if (finalWidth > maxWidth) {
+        finalWidth = maxWidth;
+    }
+
+    // Terapkan ke elemen modal
+    content.style.width = Math.floor(finalWidth) + 'px';
+}
+  
   function closeModal() {
     const modal = document.getElementById('modal');
     const content = document.getElementById('modal-content');
