@@ -221,6 +221,7 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#
           <label>Kategori</label>
           <select id="fCat">
             <option value="promotional">Promotional</option>
+            <option value="branding">Branding</option>
             <option value="educational">Educational</option>
             <option value="video">Video</option>
           </select>
@@ -274,6 +275,7 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#
           <div class="filter-mini">
             <button class="active" data-f="all" onclick="filterAdmin('all',this)">Semua</button>
             <button data-f="promotional" onclick="filterAdmin('promotional',this)">Promo</button>
+            <button data-f="branding" onclick="filterAdmin('branding',this)">Brand</button>
             <button data-f="educational" onclick="filterAdmin('educational',this)">Edu</button>
             <button data-f="video" onclick="filterAdmin('video',this)">Video</button>
           </div>
@@ -316,6 +318,7 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#
       <label>Kategori</label>
       <select id="editCat">
         <option value="promotional">Promotional</option>
+        <option value="branding">Branding</option>
         <option value="educational">Educational</option>
         <option value="video">Video</option>
       </select>
@@ -446,6 +449,15 @@ function renderAdminGrid() {
     const el = document.createElement('div');
     el.className = 'admin-item';
     el.style.animationDelay = `${idx * 0.05}s`;
+
+    // --- 1. TAMBAHKAN LOGIKA WARNA DI SINI ---
+    const tagClass = {
+        promotional: 'tag-promo',
+        branding: 'tag-brand',
+        educational: 'tag-edu',
+        video: 'tag-video',
+    }[item.category] || 'tag-promo';
+    
     let media = '';
     
     if (item.type === 'image') {
@@ -489,14 +501,16 @@ function renderAdminGrid() {
     }
     
     el.innerHTML = `
-  ${media}
-  <div class="admin-item-info">
-    <div class="admin-item-title">${escapeHtml(item.title)}</div>
-    <div class="admin-item-cat">${item.category}</div>
-  </div>
-  <button class="admin-item-edit" onclick="openEditModal('${item.id}')" title="Edit">✎</button>
-  <button class="admin-item-del" onclick="confirmDelete('${item.id}')" title="Hapus">✕</button>
-`;
+      ${media}
+      <div class="admin-item-info">
+        <div class="admin-item-title">${escapeHtml(item.title)}</div>
+        <div class="admin-item-cat tag ${tagClass}" style="display:inline-block; font-size:10px; padding:2px 8px; border-radius:4px; margin-top:4px;">
+            ${item.category}
+        </div>
+      </div>
+      <button class="admin-item-edit" onclick="openEditModal('${item.id}')" title="Edit">✎</button>
+      <button class="admin-item-del" onclick="confirmDelete('${item.id}')" title="Hapus">✕</button>
+    `;
     grid.appendChild(el);
   });
 }
