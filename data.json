@@ -270,16 +270,6 @@
     "date": "2026-04-21"
   },
   {
-    "id": "demo3",
-    "title": "Infografis — Iklim & Bumi",
-    "category": "educational",
-    "desc": "Seri infografis interaktif tentang perubahan iklim. Data dari BMKG divisualisasikan secara kreatif.",
-    "type": "placeholder",
-    "gradientClass": "gradient-4",
-    "icon": "●",
-    "date": "2025-01-03"
-  },
-  {
     "id": "demo4",
     "title": "Campaign Visual — Kopi Nusantara",
     "category": "promotional",
