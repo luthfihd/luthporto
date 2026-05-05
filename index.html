@@ -730,68 +730,78 @@ function openLightbox(item) {
     // ----------------------------------------------
   
     allLinks.forEach((link, index) => {
-        let rawSrc = link.trim();
-        let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
-        
-        // 1. Deteksi apakah ini Video atau Gambar
-        const isVideo = rawSrc.match(/\.(mp4|webm|ogg|mov)$/i) || item.category === 'video' || item.type === 'video';
-        let mediaElement;
+    let rawSrc = link.trim();
+    let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
+    
+    // --- LOGIKA DETEKSI PINTAR ---
+    // Kita anggap konten adalah VIDEO jika:
+    // 1. Ekstensi filenya video (mp4, mov, dll)
+    // 2. ATAU kategorinya adalah 'video' (ini kunci buat link GDrive kamu)
+    const isVideo = rawSrc.match(/\.(mp4|webm|ogg|mov)$/i) || item.category === 'video';
+    
+    let mediaElement;
 
-        if (isVideo) {
-            // --- JIKA KONTEN VIDEO ---
+    if (isVideo) {
+        // --- JIKA TERDETEKSI SEBAGAI VIDEO ---
+        if (rawSrc.includes('drive.google.com')) {
+            // Jika GDrive Video: Pakai Iframe Embed
+            mediaElement = document.createElement('iframe');
+            let fileId = getGoogleDriveId(rawSrc);
+            mediaElement.src = `https://drive.google.com/file/d/${fileId}/preview`;
+            mediaElement.className = "opacity-0 transition-opacity duration-500 w-full";
+            mediaElement.style.height = "70vh";
+            mediaElement.style.border = "none";
+            mediaElement.style.borderRadius = "12px";
+            mediaElement.setAttribute('allow', 'autoplay');
+        } else {
+            // Jika MP4 Biasa: Pakai Tag Video
             mediaElement = document.createElement('video');
             mediaElement.src = fullSrc;
-            mediaElement.controls = true; // Munculkan tombol play/pause
+            mediaElement.controls = true;
             mediaElement.className = "opacity-0 transition-opacity duration-500 w-full h-auto";
             mediaElement.style.maxHeight = "70vh";
-            
-            // Logika Fit-to-Content untuk Video (Hanya konten pertama)
-            if (index === 0) {
-                mediaElement.onloadedmetadata = function() {
-                    const maxHeight = window.innerHeight * 0.7;
-                    const aspectRatio = mediaElement.videoWidth / mediaElement.videoHeight;
-                    let finalWidth = (mediaElement.videoHeight > maxHeight) ? maxHeight * aspectRatio : mediaElement.videoWidth;
-                    
-                    const maxWidth = window.innerWidth * 0.9;
-                    if (finalWidth > maxWidth) finalWidth = maxWidth;
-
-                    document.getElementById('modal-content').style.width = Math.floor(finalWidth) + 'px';
-                    mediaElement.classList.remove('opacity-0');
-                };
-            } else {
-                mediaElement.classList.remove('opacity-0');
-            }
-        } else {
-            // --- JIKA KONTEN GAMBAR ---
-            mediaElement = document.createElement('img');
-            mediaElement.className = "opacity-0 transition-opacity duration-500";
-
-            // Convert GDrive link ke Thumbnail jika gambar
-            if (fullSrc.includes('drive.google.com')) {
-                let fileId = getGoogleDriveId(fullSrc);
-                fullSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
-            }
-            mediaElement.src = fullSrc;
-
-            if (index === 0) {
-                mediaElement.onload = function() {
-                    const maxHeight = window.innerHeight * 0.7;
-                    const aspectRatio = mediaElement.naturalWidth / mediaElement.naturalHeight;
-                    let finalWidth = (mediaElement.naturalHeight > maxHeight) ? maxHeight * aspectRatio : mediaElement.naturalWidth;
-                    
-                    const maxWidth = window.innerWidth * 0.9;
-                    if (finalWidth > maxWidth) finalWidth = maxWidth;
-
-                    document.getElementById('modal-content').style.width = Math.floor(finalWidth) + 'px';
-                    mediaElement.classList.remove('opacity-0');
-                };
-            } else {
-                mediaElement.classList.remove('opacity-0');
-            }
         }
 
-        // Masukkan elemen (baik video/img) ke dalam container modal
-        container.appendChild(mediaElement);
+        // Logika Fit-to-Content Video
+        if (index === 0) {
+            if (rawSrc.includes('drive.google.com')) {
+                // Video GDrive (Iframe) kita kasih standar 16:9
+                const maxHeight = window.innerHeight * 0.7;
+                document.getElementById('modal-content').style.width = Math.floor(maxHeight * 1.77) + 'px';
+                setTimeout(() => mediaElement.classList.remove('opacity-0'), 500);
+            } else {
+                mediaElement.onloadedmetadata = function() {
+                    applyFit(mediaElement.videoWidth, mediaElement.videoHeight);
+                    mediaElement.classList.remove('opacity-0');
+                };
+            }
+        } else {
+            mediaElement.classList.remove('opacity-0');
+        }
+
+    } else {
+        // --- JIKA TERDETEKSI SEBAGAI GAMBAR ---
+        mediaElement = document.createElement('img');
+        mediaElement.className = "opacity-0 transition-opacity duration-500";
+        
+        if (fullSrc.includes('drive.google.com')) {
+            let fileId = getGoogleDriveId(fullSrc);
+            fullSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
+        }
+        mediaElement.src = fullSrc;
+
+        if (index === 0) {
+            mediaElement.onload = function() {
+                applyFit(mediaElement.naturalWidth, mediaElement.naturalHeight);
+                mediaElement.classList.remove('opacity-0');
+            };
+        } else {
+            mediaElement.classList.remove('opacity-0');
+        }
+    }
+
+    container.appendChild(mediaElement);
+});
 
         // Buat Dots jika gambar lebih dari satu
         if (allLinks.length > 1 && dotsContainer) {
@@ -812,6 +822,15 @@ function openLightbox(item) {
     if (app) { app.style.filter = 'none'; app.style.transform = 'scale(1)'; }
     document.body.style.overflow = 'hidden';
     modal.onclick = (e) => { if (e.target === modal) closeModal(); };
+}
+
+function applyFit(w, h) {
+    const maxHeight = window.innerHeight * 0.7;
+    const aspectRatio = w / h;
+    let finalWidth = (h > maxHeight) ? maxHeight * aspectRatio : w;
+    const maxWidth = window.innerWidth * 0.9;
+    if (finalWidth > maxWidth) finalWidth = maxWidth;
+    document.getElementById('modal-content').style.width = Math.floor(finalWidth) + 'px';
 }
 
 function closeModal() {
