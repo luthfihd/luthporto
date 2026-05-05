@@ -270,16 +270,6 @@
     "date": "2026-04-21"
   },
   {
-    "id": "demo4",
-    "title": "Campaign Visual — Kopi Nusantara",
-    "category": "promotional",
-    "desc": "Visual campaign untuk brand kopi lokal menembus pasar premium.",
-    "type": "placeholder",
-    "gradientClass": "gradient-5",
-    "icon": "★",
-    "date": "2025-01-04"
-  },
-  {
     "id": "demo5",
     "title": "Explainer Video — FinTech",
     "category": "video",
