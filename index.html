@@ -732,52 +732,66 @@ function openLightbox(item) {
     allLinks.forEach((link, index) => {
         let rawSrc = link.trim();
         let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
+        
+        // 1. Deteksi apakah ini Video atau Gambar
+        const isVideo = rawSrc.match(/\.(mp4|webm|ogg|mov)$/i) || item.category === 'video' || item.type === 'video';
+        let mediaElement;
 
-        // Convert GDrive link ke Thumbnail HD
-        if (fullSrc.includes('drive.google.com')) {
-            let fileId = getGoogleDriveId(fullSrc);
-            fullSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
-        }
-
-        const img = document.createElement('img');
-        img.className = "opacity-0 transition-opacity duration-500"; 
-        img.src = fullSrc;
-
-        // HANYA GAMBAR PERTAMA: Yang menentukan lebar modal agar tetap FIT
-        if (index === 0) {
-            img.onload = function() {
-                // Logika Fit-to-Content yang kamu inginkan
-                const maxHeight = window.innerHeight * 0.7;
-                const nativeWidth = img.naturalWidth;
-                const nativeHeight = img.naturalHeight;
-                const aspectRatio = nativeWidth / nativeHeight;
-
-            let finalWidth;
+        if (isVideo) {
+            // --- JIKA KONTEN VIDEO ---
+            mediaElement = document.createElement('video');
+            mediaElement.src = fullSrc;
+            mediaElement.controls = true; // Munculkan tombol play/pause
+            mediaElement.className = "opacity-0 transition-opacity duration-500 w-full h-auto";
+            mediaElement.style.maxHeight = "70vh";
             
-            // Jika tinggi gambar asli lebih besar dari batas 70vh
-            if (nativeHeight > maxHeight) {
-                finalWidth = maxHeight * aspectRatio;
+            // Logika Fit-to-Content untuk Video (Hanya konten pertama)
+            if (index === 0) {
+                mediaElement.onloadedmetadata = function() {
+                    const maxHeight = window.innerHeight * 0.7;
+                    const aspectRatio = mediaElement.videoWidth / mediaElement.videoHeight;
+                    let finalWidth = (mediaElement.videoHeight > maxHeight) ? maxHeight * aspectRatio : mediaElement.videoWidth;
+                    
+                    const maxWidth = window.innerWidth * 0.9;
+                    if (finalWidth > maxWidth) finalWidth = maxWidth;
+
+                    document.getElementById('modal-content').style.width = Math.floor(finalWidth) + 'px';
+                    mediaElement.classList.remove('opacity-0');
+                };
             } else {
-                finalWidth = nativeWidth;
+                mediaElement.classList.remove('opacity-0');
             }
-
-            // Batasi agar tidak lebih lebar dari 90% layar
-            const maxWidth = window.innerWidth * 0.9;
-            if (finalWidth > maxWidth) {
-                finalWidth = maxWidth;
-            }
-
-            // TERAPKAN LEBAR KE MODAL CONTENT
-            // Ini akan membuat modal "menjepit" gambar tanpa sisa black bar
-            document.getElementById('modal-content').style.width = Math.floor(finalWidth) + 'px';
-            
-            img.classList.remove('opacity-0');
-        };
         } else {
-            img.classList.remove('opacity-0');
+            // --- JIKA KONTEN GAMBAR ---
+            mediaElement = document.createElement('img');
+            mediaElement.className = "opacity-0 transition-opacity duration-500";
+
+            // Convert GDrive link ke Thumbnail jika gambar
+            if (fullSrc.includes('drive.google.com')) {
+                let fileId = getGoogleDriveId(fullSrc);
+                fullSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
+            }
+            mediaElement.src = fullSrc;
+
+            if (index === 0) {
+                mediaElement.onload = function() {
+                    const maxHeight = window.innerHeight * 0.7;
+                    const aspectRatio = mediaElement.naturalWidth / mediaElement.naturalHeight;
+                    let finalWidth = (mediaElement.naturalHeight > maxHeight) ? maxHeight * aspectRatio : mediaElement.naturalWidth;
+                    
+                    const maxWidth = window.innerWidth * 0.9;
+                    if (finalWidth > maxWidth) finalWidth = maxWidth;
+
+                    document.getElementById('modal-content').style.width = Math.floor(finalWidth) + 'px';
+                    mediaElement.classList.remove('opacity-0');
+                };
+            } else {
+                mediaElement.classList.remove('opacity-0');
+            }
         }
 
-        container.appendChild(img);
+        // Masukkan elemen (baik video/img) ke dalam container modal
+        container.appendChild(mediaElement);
 
         // Buat Dots jika gambar lebih dari satu
         if (allLinks.length > 1 && dotsContainer) {
