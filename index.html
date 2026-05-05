@@ -263,6 +263,52 @@ footer{margin-top:60px;padding:60px 0 40px;}
     margin-bottom: 8px;
     color: white;
 }
+
+/* Navigasi Modal Next/Prev */
+.modal-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10005;
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0; /* Sembunyi, muncul saat hover modal-content */
+}
+#modal-content:hover .modal-nav-btn { opacity: 1; }
+.modal-nav-btn:hover { background: rgba(255, 255, 255, 0.2); scale: 1.1; }
+.btn-prev { left: 15px; }
+.btn-next { right: 15px; }
+
+/* Ikon Multiple di Masonry */
+.multi-indicator {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    padding: 6px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    opacity: 0;
+    transform: translateY(-5px);
+    transition: all 0.3s ease;
+}
+.masonry-item:hover .multi-indicator {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 .tag-promo, .tag-promotional { background: #6366f1; }
 .tag-edu, .tag-educational { background: #10b981; }
 .video { background: #ef4444; }
@@ -431,21 +477,25 @@ footer{margin-top:60px;padding:60px 0 40px;}
 <div id="modal" class="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-[2px] transition-opacity duration-300" style="display: none; opacity: 0;">
     <button onclick="closeModal()" class="fixed top-5 right-5 z-[10001] w-12 h-12 rounded-full border border-white/20 bg-white/10 text-white text-3xl flex items-center justify-center hover:bg-white/20 transition-all">×</button>
 
-    <div id="modal-content" class="scale-95 opacity-0 mx-auto relative">
-        <a id="btn-gdrive-link" href="#" target="_blank" class="absolute top-4 right-4 z-[10002] w-10 h-10 rounded-full bg-black/50 border border-white/20 flex items-center justify-center text-white hover:bg-indigo-600 transition-all">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-        </a>
+    <div id="modal-content" class="scale-95 opacity-0 mx-auto relative group">
+    <button id="modal-prev" onclick="moveGallery(-1)" class="modal-nav-btn btn-prev">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+    <button id="modal-next" onclick="moveGallery(1)" class="modal-nav-btn btn-next">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>
 
-        <div id="modal-media-container" class="flex overflow-x-auto scroll-snap-x mandatory scrollbar-hide" style="scroll-snap-type: x mandatory; -ms-overflow-style: none; scrollbar-width: none;">
-            </div>
+    <a id="btn-gdrive-link" href="#" target="_blank" class="absolute top-4 right-4 z-[10002] w-10 h-10 rounded-full bg-black/50 border border-white/20 flex items-center justify-center text-white hover:bg-indigo-600 transition-all">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+    </a>
 
-        <div id="modal-dots" class="flex justify-center gap-2 py-3 bg-black/20"></div>
-        
-        <div class="modal-info-box">
-            <div id="modal-tag" class="modal-tag">Category</div>
-            <h2 id="modal-title" class="text-white text-xl font-bold mb-1">Title</h2>
-            <p id="modal-desc" class="text-white/60 text-xs">Description...</p>
-        </div>
+    <div id="modal-media-container" class="flex overflow-x-auto scroll-snap-x mandatory scrollbar-hide" style="scroll-snap-type: x mandatory; -ms-overflow-style: none; scrollbar-width: none;"></div>
+    <div id="modal-dots" class="flex justify-center gap-2 py-3 bg-black/20"></div>
+    
+    <div class="modal-info-box">
+        <div id="modal-tag" class="modal-tag">Category</div>
+        <h2 id="modal-title" class="text-white text-xl font-bold mb-1">Title</h2>
+        <p id="modal-desc" class="text-white/60 text-xs">Description...</p>
     </div>
 </div>
 
@@ -558,18 +608,36 @@ function renderGrid() {
   }
   grid.className = 'masonry-grid';
   grid.innerHTML = '';
+  
   items.forEach((item, idx) => {
     const el = document.createElement('div');
-    el.className = 'masonry-item';
+    el.className = 'masonry-item relative'; // Tambah class relative
     el.style.animationDelay = `${idx * 0.06}s`;
     el.onclick = () => openLightbox(item);
+    
     const tagClass = {promotional:'tag-promo',educational:'tag-edu',video:'tag-video'}[item.category]||'tag-promo';
     const tagLabel = {promotional:'Promotional',educational:'Educational',video:'Video'}[item.category]||item.category;
+
+    const allLinks = (item.image || item.src || "").split(',');
+    const multiIndicator = allLinks.length > 1 ? `
+      <div class="multi-indicator">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      </div>` : '';
+
+    let mediaHtml = '';
+    const firstLink = allLinks[0].trim();
+    const src = firstLink.startsWith('http') ? firstLink : IMAGES_BASE + firstLink;
+
+    if (item.type === 'image' || allLinks.length > 0) {
+      mediaHtml = `<img class="masonry-thumb" src="${src}" alt="${item.title}" loading="lazy" onerror="this.src='https://placehold.co/600x400/1a1a3e/white?text=No+Image'">`;
+    }
+    
     let mediaHtml = '';
     if (item.type === 'image') {
       const src = item.src.startsWith('http') ? item.src : IMAGES_BASE + item.src;
       mediaHtml = `<img class="masonry-thumb" src="${src}" alt="${item.title}" loading="lazy">`;
     } else if (item.type === 'video' || item.type === 'gdrive') {
+      
       // INI BAGIAN YANG DIGANTI
       const thumbUrl = getGoogleDriveThumbnail(item.src);
       if (thumbUrl) {
@@ -597,6 +665,12 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 });
 
 // ── MODAL ──
+function moveGallery(direction) {
+    const container = document.getElementById('modal-media-container');
+    const width = container.offsetWidth;
+    container.scrollBy({ left: direction * width, behavior: 'smooth' });
+}
+
 function openLightbox(item) {
     const modal = document.getElementById('modal');
     const content = document.getElementById('modal-content');
@@ -634,6 +708,16 @@ function openLightbox(item) {
     // Kita pecah link berdasarkan koma (jika ada)
     const allLinks = (item.image || item.src).split(',');
 
+    // --- TAMBAHAN DI SINI: Kontrol Tombol Navigasi ---
+    const prevBtn = document.getElementById('modal-prev');
+    const nextBtn = document.getElementById('modal-next');
+    if (prevBtn && nextBtn) {
+        const isMultiple = allLinks.length > 1;
+        prevBtn.style.display = isMultiple ? 'flex' : 'none';
+        nextBtn.style.display = isMultiple ? 'flex' : 'none';
+    }
+    // ----------------------------------------------
+  
     allLinks.forEach((link, index) => {
         let rawSrc = link.trim();
         let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
