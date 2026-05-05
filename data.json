@@ -268,15 +268,5 @@
     "desc": "HG Floor Sticker",
     "icon": "🎬",
     "date": "2026-04-21"
-  },
-  {
-    "id": "demo6",
-    "title": "Panduan Desain — UI Basics",
-    "category": "educational",
-    "desc": "Modul pembelajaran desain UI untuk pemula. Mencakup tipografi, warna, dan grid system.",
-    "type": "placeholder",
-    "gradientClass": "gradient-3",
-    "icon": "◉",
-    "date": "2025-01-06"
   }
 ]
