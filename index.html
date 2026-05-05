@@ -824,15 +824,6 @@ function openLightbox(item) {
     modal.onclick = (e) => { if (e.target === modal) closeModal(); };
 }
 
-function applyFit(w, h) {
-    const maxHeight = window.innerHeight * 0.7;
-    const aspectRatio = w / h;
-    let finalWidth = (h > maxHeight) ? maxHeight * aspectRatio : w;
-    const maxWidth = window.innerWidth * 0.9;
-    if (finalWidth > maxWidth) finalWidth = maxWidth;
-    document.getElementById('modal-content').style.width = Math.floor(finalWidth) + 'px';
-}
-
 function closeModal() {
     const modal = document.getElementById('modal');
     const content = document.getElementById('modal-content');
