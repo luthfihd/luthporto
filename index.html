@@ -822,8 +822,9 @@ function openLightbox(item) {
     if (app) { app.style.filter = 'none'; app.style.transform = 'scale(1)'; }
     document.body.style.overflow = 'hidden';
     modal.onclick = (e) => { if (e.target === modal) closeModal(); };
+  }
 
-function closeModal() {
+  function closeModal() {
     const modal = document.getElementById('modal');
     const content = document.getElementById('modal-content');
     const app = document.getElementById('app');
