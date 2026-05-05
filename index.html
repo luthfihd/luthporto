@@ -310,6 +310,7 @@ footer{margin-top:60px;padding:60px 0 40px;}
 }
 
 .tag-promo, .tag-promotional { background: #6366f1; }
+.tag-brand, .tag-branding { background: #adab31; }
 .tag-edu, .tag-educational { background: #10b981; }
 .video { background: #ef4444; }
 
@@ -432,6 +433,7 @@ footer{margin-top:60px;padding:60px 0 40px;}
     <div class="filter-wrap reveal">
       <button class="filter-btn active" data-filter="all">All Works</button>
       <button class="filter-btn" data-filter="promotional">Promotional</button>
+      <button class="filter-btn" data-filter="branding">Branding</button>
       <button class="filter-btn" data-filter="educational">Educational</button>
       <button class="filter-btn" data-filter="video">Video</button>
     </div>
@@ -618,8 +620,8 @@ function renderGrid() {
     el.style.animationDelay = `${idx * 0.06}s`;
     el.onclick = () => openLightbox(item);
 
-    const tagClass = {promotional:'tag-promo',educational:'tag-edu',video:'tag-video'}[item.category]||'tag-promo';
-    const tagLabel = {promotional:'Promotional',educational:'Educational',video:'Video'}[item.category]||item.category;
+    const tagClass = {promotional:'tag-promo',branding:'tag-brand',educational:'tag-edu',video:'tag-video'}[item.category]||'tag-promo';
+    const tagLabel = {promotional:'Promotional',branding:'Branding',educational:'Educational',video:'Video'}[item.category]||item.category;
 
     // 1. Logika Pecah Link & Indikator Multiple
     const allLinks = (item.image || item.src || "").split(',');
