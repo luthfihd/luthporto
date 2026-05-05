@@ -263,7 +263,6 @@ footer{margin-top:60px;padding:60px 0 40px;}
     margin-bottom: 8px;
     color: white;
 }
-  
 .tag-promo, .tag-promotional { background: #6366f1; }
 .tag-edu, .tag-educational { background: #10b981; }
 .video { background: #ef4444; }
@@ -605,9 +604,6 @@ function openLightbox(item) {
     const dotsContainer = document.getElementById('modal-dots');
     const gdriveBtn = document.getElementById('btn-gdrive-link');
     const app = document.getElementById('app');
-
-    const allLinks = (item.image || item.src).split(',');
-    const navButtons = document.getElementById('nav-buttons');
 
     // 1. Reset & Persiapan Awal
     container.innerHTML = '';
