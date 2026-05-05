@@ -15,10 +15,11 @@
     "type": "gdrive",
     "src": "https://drive.google.com/file/d/1RTpG7KGszAQSi7TxOLZM-JbYH5Fb-SOc/view?usp=drive_link",
     "title": "Youtube Video Bumper",
-    "category": "branding",
+    "category": "video",
     "desc": "L-Tech Media Youtube Video Bumper",
     "icon": "🎬",
-    "date": "2026-05-05"
+    "date": "2026-05-05",
+    "image": "https://drive.google.com/file/d/1RTpG7KGszAQSi7TxOLZM-JbYH5Fb-SOc/view?usp=drive_link"
   },
   {
     "id": "item_1778007248817_692bo7",
