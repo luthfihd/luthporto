@@ -741,33 +741,45 @@ function openLightbox(item) {
     modal.style.pointerEvents = 'auto';
     content.style.width = '300px'; 
    
-    // 2. LOGIKA TOMBOL GDRIVE (Kondisional: Gambar vs Video)
+    // 2. LOGIKA TOMBOL GDRIVE (Versi Fix: Muncul di Gambar, Hilang di Video)
     if(gdriveBtn) {
         const rawLinksForBtn = (item.image || item.src || "").split(',');
         const cleanLink = rawLinksForBtn[0].trim();
-        const isVideoContent = cleanLink.match(/\.(mp4|webm|ogg|mov)$/i) || item.category === 'video' || cleanLink.includes('drive.google.com/file');
+        
+        // Cek apakah ini video atau bukan
+        const isVideoFile = cleanLink.match(/\.(mp4|webm|ogg|mov)$/i);
+        const isVideoCat = item.category === 'video';
+        const isGDriveVideo = cleanLink.includes('drive.google.com/file');
 
-        gdriveBtn.href = cleanLink;
-
-        if (isVideoContent) {
-            // JIKA VIDEO: Sembunyikan tombol kita (biar gak numpuk sama tombol GDrive Player)
+        if (isVideoFile || isVideoCat || isGDriveVideo) {
+            // JIKA VIDEO: Sembunyikan tombol buatan kita (biar pake tombol bawaan player)
             gdriveBtn.style.display = 'none';
         } else {
-            // JIKA GAMBAR: Munculkan tombol kita dengan background seperti awal
-            gdriveBtn.style.display = 'flex';
+            // JIKA GAMBAR: PAKSA MUNCUL
+            gdriveBtn.href = cleanLink;
+            gdriveBtn.style.display = 'flex'; // Gunakan flex agar icon di tengah
             gdriveBtn.style.visibility = 'visible';
             gdriveBtn.style.opacity = '1';
             
-            // Beri background blur/kaca biar tombolnya kelihatan jelas di atas gambar
+            // Style background bulat (seperti awal)
             gdriveBtn.style.background = 'rgba(255, 255, 255, 0.2)';
             gdriveBtn.style.backdropFilter = 'blur(10px)';
             gdriveBtn.style.borderRadius = '50%';
             gdriveBtn.style.width = '40px';
             gdriveBtn.style.height = '40px';
+            gdriveBtn.style.position = 'absolute';
+            gdriveBtn.style.zIndex = '9999';
             gdriveBtn.style.border = '1px solid rgba(255, 255, 255, 0.3)';
+            gdriveBtn.style.alignItems = 'center';
+            gdriveBtn.style.justifyContent = 'center';
 
-            // Isi dengan icon SVG putih
-            gdriveBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`;
+            // Masukkan icon SVG
+            gdriveBtn.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>`;
         }
     }
   
