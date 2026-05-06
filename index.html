@@ -731,7 +731,7 @@ function openLightbox(item) {
     modal.style.pointerEvents = 'auto';
     content.style.width = '300px';     
 
-    // 2. LOGIKA TOMBOL GDRIVE (Versi Mini & Rapih)
+    // 2. LOGIKA TOMBOL GDRIVE (Ukuran Mini & Proteksi Ikon)
     if (gdriveBtn) {
         const rawLinksForBtn = (item.image || item.src || "").split(',');
         const firstLink = rawLinksForBtn[0].trim();
@@ -742,10 +742,10 @@ function openLightbox(item) {
 
         if (!isVid) {
             gdriveBtn.href = firstLink;
-            // Kita bungkus SVG-nya supaya tidak meluber
+            // Kunci ukuran DIV dan SVG agar tidak bisa meluber
             gdriveBtn.innerHTML = `
-                <div style="width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 100%; height: 100%; display: block;">
+                <div style="width: 16px !important; height: 16px !important; display: flex !important; align-items: center !important; justify-content: center !important;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 16px !important; height: 16px !important; min-width: 16px !important; min-height: 16px !important; display: block !important;">
                         <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                         <polyline points="15 3 21 3 21 9"></polyline>
                         <line x1="10" y1="14" x2="21" y2="3"></line>
@@ -757,26 +757,24 @@ function openLightbox(item) {
                 display: flex !important;
                 visibility: visible !important;
                 opacity: 1 !important;
-                position: absolute;
-                top: 15px;
-                right: 15px;
-                width: 38px;
-                height: 38px;
-                background: rgba(0, 0, 0, 0.4) !important;
-                backdrop-filter: blur(8px);
-                -webkit-backdrop-filter: blur(8px);
-                border-radius: 10px;
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                z-index: 9999;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                transition: all 0.2s ease;
+                position: absolute !important;
+                top: 15px !important;
+                right: 15px !important;
+                width: 32px !important;
+                height: 32px !important;
+                background: rgba(0, 0, 0, 0.5) !important;
+                backdrop-filter: blur(8px) !important;
+                -webkit-backdrop-filter: blur(8px) !important;
+                border-radius: 8px !important;
+                border: 1px solid rgba(255, 255, 255, 0.2) !important;
+                z-index: 99999 !important;
+                align-items: center !important;
+                justify-content: center !important;
+                cursor: pointer !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                box-sizing: border-box !important;
             `;
-            
-            // Efek hover sederhana lewat JS
-            gdriveBtn.onmouseover = () => gdriveBtn.style.background = "rgba(0, 0, 0, 0.6)";
-            gdriveBtn.onmouseout = () => gdriveBtn.style.background = "rgba(0, 0, 0, 0.4)";
 
         } else {
             gdriveBtn.style.setProperty('display', 'none', 'important');
