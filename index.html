@@ -315,41 +315,10 @@ footer{margin-top:60px;padding:60px 0 40px;}
 .tag-edu, .tag-educational { background: #10b981; !important; color: white; }
 .video { background: #ef4444; !important; color: white; }
 
-/* CSS untuk memperbaiki icon GDrive numpuk */
-.gdrive-button-container {
-  position: absolute;
-  top: 15px; /* Sesuaikan posisi sesuai desainmu */
-  right: 15px; /* Sesuaikan posisi sesuai desainmu */
-  width: 40px;
-  height: 40px;
-  background: transparent; /* Hilangkan background standar */
-  border: none; /* Hilangkan border standar */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  cursor: pointer;
-  overflow: visible; /* Penting biar icon ga kepotong */
-}
-
-/* Memaksa hanya icon GDrive kita yang muncul di paling atas */
-.gdrive-clean-icon {
-  width: 24px;
-  height: 24px;
-  color: white; /* Warna putih bersih */
-  z-index: 999; /* Pastikan di paling atas */
-}
-
-/* Sembunyikan SEMUA elemen ekstra yang muncul di dalam container tombol ini */
-.gdrive-button-container > *:not(.gdrive-clean-icon) {
-  display: none !important;
-}
-
+/* CSS GDrive Button */
 #btn-gdrive-link:empty {
     display: none !important;
 }
-
-/* Pastikan tombol kita punya posisi yang kuat */
 #btn-gdrive-link {
     z-index: 9999 !important;
     pointer-events: auto !important;
