@@ -729,29 +729,42 @@ function openLightbox(item) {
     if(dotsContainer) dotsContainer.innerHTML = '';
     modal.style.display = 'flex';
     modal.style.pointerEvents = 'auto';
-    content.style.width = '300px'; 
-   
-    // 2. LOGIKA TOMBOL GDRIVE (Versi Fix: Muncul di Gambar, Hilang di Video)
+    content.style.width = '300px';     
+
+    // 2. LOGIKA TOMBOL GDRIVE (Ditaruh di sini agar aman dari error iframe di bawah)
     if (gdriveBtn) {
-        const allLinksForBtn = (item.image || item.src || "").split(',');
-        const firstLink = allLinksForBtn[0].trim();
+        const rawLinksForBtn = (item.image || item.src || "").split(',');
+        const firstLink = rawLinksForBtn[0].trim();
         
-        // Cek apakah video
+        // Cek apakah ini video/link file drive
         const isVid = firstLink.match(/\.(mp4|webm|ogg|mov)$/i) || 
                       item.category === 'video' || 
                       firstLink.includes('drive.google.com/file');
 
         if (!isVid) {
-            // JIKA GAMBAR: Paksa Muncul
+            // --- JIKA GAMBAR: PAKSA TAMPILKAN TOMBOL GDRIVE ---
             gdriveBtn.href = firstLink;
+            
+            // Masukkan icon SVG putih bersih
+            gdriveBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`;
+            
+            // Gunakan setProperty 'important' supaya tidak kalah sama CSS lain
             gdriveBtn.style.setProperty('display', 'flex', 'important');
             gdriveBtn.style.setProperty('opacity', '1', 'important');
             gdriveBtn.style.setProperty('visibility', 'visible', 'important');
             
-            // Isi Icon
-            gdriveBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`;
+            // Tambahkan styling tombol kaca langsung di sini biar aman
+            gdriveBtn.style.background = 'rgba(255, 255, 255, 0.2)';
+            gdriveBtn.style.backdropFilter = 'blur(10px)';
+            gdriveBtn.style.webkitBackdropFilter = 'blur(10px)';
+            gdriveBtn.style.borderRadius = '50%';
+            gdriveBtn.style.border = '1px solid rgba(255, 255, 255, 0.3)';
+            gdriveBtn.style.width = '42px';
+            gdriveBtn.style.height = '42px';
+            gdriveBtn.style.justifyContent = 'center';
+            gdriveBtn.style.alignItems = 'center';
         } else {
-            // JIKA VIDEO: Sembunyikan (biar player GDrive yang ambil alih)
+            // --- JIKA VIDEO: SEMBUNYIKAN (Biar player GDrive yang muncul sendiri) ---
             gdriveBtn.style.setProperty('display', 'none', 'important');
         }
     }
