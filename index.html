@@ -724,14 +724,29 @@ function openLightbox(item) {
     const gdriveBtn = document.getElementById('btn-gdrive-link');
     const app = document.getElementById('app');
 
+      // GDrive Button
     if(gdriveBtn) {
-        gdriveBtn.innerHTML = '🔗'; // Bersihkan total isi sebelumnya, lalu isi icon link simple
-        // Atau kalau mau pakai icon SVG putih bersih yang kemarin:
-        gdriveBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`;
-        
-        // Pastikan background tombolnya bersih
-        gdriveBtn.style.background = "none";
-        gdriveBtn.style.border = "none";
+        gdriveBtn.innerHTML = '';
+
+        gdriveBtn.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+        `;
+
+        // Set Link GDrive
+        const allLinksForBtn = (item.image || item.src).split(',');
+        gdriveBtn.href = allLinksForBtn[0].trim();
+
+        // Pastikan styling tombolnya bersih
+        gdriveBtn.style.display = 'flex';
+        gdriveBtn.style.alignItems = 'center';
+        gdriveBtn.style.justifyContent = 'center';
+        gdriveBtn.style.background = 'transparent';
+        gdriveBtn.style.border = 'none';
+        gdriveBtn.title = "Buka Link Google Drive"; // Tooltip tetap muncul
     }
   
     // 1. Reset & Persiapan Awal
