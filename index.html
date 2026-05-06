@@ -789,7 +789,7 @@ container.onscroll = () => {
     const idx = Math.round(container.scrollLeft / container.offsetWidth);
     const dots = document.querySelectorAll('.modal-dot');
     dots.forEach((dot, i) => dot.classList.toggle('active', i === idx));
-};
+}
 
 // 4. Efek Background
 if (app) { app.style.filter = 'none'; app.style.transform = 'scale(1)'; }
