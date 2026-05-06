@@ -717,31 +717,52 @@ function moveGallery(direction) {
 }
 
 function openLightbox(item) {
-    // 1. Ambil Elemen
     const modal = document.getElementById('modal');
+    const content = document.getElementById('modal-content');
     const container = document.getElementById('modal-media-container');
     const dotsContainer = document.getElementById('modal-dots');
     const gdriveBtn = document.getElementById('btn-gdrive-link');
     const app = document.getElementById('app');
 
-    if (!modal || !container) return;
-
-    // 2. Buka Modal Dulu (Biar gak macet)
-    modal.classList.add('open');
+    // 1. Reset & Persiapan Awal
     container.innerHTML = '';
-    if (dotsContainer) dotsContainer.innerHTML = '';
-
-    // 3. Siapkan Data Link
-    const rawLinks = item.image || item.src || "";
-    const allLinks = rawLinks.split(',').filter(l => l.trim() !== "");
+    if(dotsContainer) dotsContainer.innerHTML = '';
+    modal.style.display = 'flex';
+    modal.style.pointerEvents = 'auto';
+    content.style.width = '300px'; 
     
-    // Pastikan IMAGES_BASE ada, kalau tidak ada pakai string kosong
-    const base = typeof IMAGES_BASE !== 'undefined' ? IMAGES_BASE : '';
+    if(gdriveBtn) gdriveBtn.href = item.src;
 
-    // 4. Loop Media
+    setTimeout(() => {
+        modal.style.opacity = '1';
+        content.classList.remove('opacity-0', 'scale-95');
+        content.classList.add('opacity-100', 'scale-100');
+    }, 10);
+
+    document.getElementById('modal-title').textContent = item.title;
+    document.getElementById('modal-desc').textContent = item.desc || '';
+    const tag = document.getElementById('modal-tag');
+    if(tag) {
+        tag.textContent = item.category;
+        tag.className = `modal-tag tag-${item.category}`;
+    }
+
+    // 2. LOGIKA MULTIPLE MEDIA
+    const allLinks = (item.image || item.src).split(',');
+
+    const prevBtn = document.getElementById('modal-prev');
+    const nextBtn = document.getElementById('modal-next');
+    if (prevBtn && nextBtn) {
+        const isMultiple = allLinks.length > 1;
+        prevBtn.style.display = isMultiple ? 'flex' : 'none';
+        nextBtn.style.display = isMultiple ? 'flex' : 'none';
+    }
+  
+    // PERBAIKAN DI SINI:
     allLinks.forEach((link, index) => {
         let rawSrc = link.trim();
-        let fullSrc = rawSrc.startsWith('http') ? rawSrc : base + rawSrc;
+        let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
+        
         const isVideo = rawSrc.match(/\.(mp4|webm|ogg|mov)$/i) || item.category === 'video';
         let mediaElement;
 
@@ -750,73 +771,74 @@ function openLightbox(item) {
                 mediaElement = document.createElement('iframe');
                 let fileId = getGoogleDriveId(rawSrc);
                 mediaElement.src = `https://drive.google.com/file/d/${fileId}/preview`;
+                mediaElement.className = "opacity-0 transition-opacity duration-500 w-full";
                 mediaElement.style.height = "70vh";
                 mediaElement.style.border = "none";
                 mediaElement.style.borderRadius = "12px";
+                mediaElement.setAttribute('allow', 'autoplay');
             } else {
+                mediaElement.createElement('video'); // Perbaikan typo sebelumnya
                 mediaElement = document.createElement('video');
                 mediaElement.src = fullSrc;
                 mediaElement.controls = true;
+                mediaElement.className = "opacity-0 transition-opacity duration-500 w-full h-auto";
                 mediaElement.style.maxHeight = "70vh";
+            }
+
+            if (index === 0) {
+                if (rawSrc.includes('drive.google.com')) {
+                    const maxHeight = window.innerHeight * 0.7;
+                    document.getElementById('modal-content').style.width = Math.floor(maxHeight * 1.77) + 'px';
+                    setTimeout(() => mediaElement.classList.remove('opacity-0'), 500);
+                } else {
+                    mediaElement.onloadedmetadata = function() {
+                        applyFit(mediaElement.videoWidth, mediaElement.videoHeight);
+                        mediaElement.classList.remove('opacity-0');
+                    };
+                }
+            } else {
+                mediaElement.classList.remove('opacity-0');
             }
         } else {
             mediaElement = document.createElement('img');
-            let imgUrl = fullSrc;
+            mediaElement.className = "opacity-0 transition-opacity duration-500";
             if (fullSrc.includes('drive.google.com')) {
                 let fileId = getGoogleDriveId(fullSrc);
-                imgUrl = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
+                fullSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
             }
-            mediaElement.src = imgUrl;
-            mediaElement.style.maxHeight = "80vh";
-            mediaElement.style.width = "auto";
-            mediaElement.style.objectFit = "contain";
+            mediaElement.src = fullSrc;
+            if (index === 0) {
+                mediaElement.onload = function() {
+                    applyFit(mediaElement.naturalWidth, mediaElement.naturalHeight);
+                    mediaElement.classList.remove('opacity-0');
+                };
+            } else {
+                mediaElement.classList.remove('opacity-0');
+            }
         }
 
-        mediaElement.className = "opacity-0 transition-opacity duration-500 w-full";
         container.appendChild(mediaElement);
 
-        // Langsung munculkan tanpa nunggu onload (biar gak macet kalau koneksi lambat)
-        setTimeout(() => {
-            mediaElement.classList.remove('opacity-0');
-        }, 100);
-
-        // Buat Dots
+        // DOTS harus di dalam loop forEach agar variabel 'index' terbaca
         if (allLinks.length > 1 && dotsContainer) {
             const dot = document.createElement('div');
             dot.className = `modal-dot ${index === 0 ? 'active' : ''}`;
             dotsContainer.appendChild(dot);
         }
-    });
+    }); // <--- Tutup loop forEach di sini
 
-    // 5. Update Tombol GDrive (Fix Numpuk & Muncul di Semua Konten)
-    if (gdriveBtn) {
-        if (allLinks.length > 0) {
-            gdriveBtn.style.display = 'flex';
-            gdriveBtn.href = allLinks[0].trim();
-            gdriveBtn.innerHTML = `
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                    <polyline points="15 3 21 3 21 9"></polyline>
-                    <line x1="10" y1="14" x2="21" y2="3"></line>
-                </svg>
-            `;
-            gdriveBtn.style.background = 'transparent';
-            gdriveBtn.style.zIndex = '9999';
-        } else {
-            gdriveBtn.style.display = 'none';
-        }
-    }
-
-    // 6. Kontrol Tambahan
+    // 3. LOGIKA SCROLL UNTUK DOTS
     container.onscroll = () => {
         const idx = Math.round(container.scrollLeft / container.offsetWidth);
         const dots = document.querySelectorAll('.modal-dot');
         dots.forEach((dot, i) => dot.classList.toggle('active', i === idx));
     };
 
+    // 4. Efek Background
+    if (app) { app.style.filter = 'none'; app.style.transform = 'scale(1)'; }
     document.body.style.overflow = 'hidden';
     modal.onclick = (e) => { if (e.target === modal) closeModal(); };
-}
+} // <--- Tutup fungsi openLightbox di sini
   
 // Fungsi Pembantu untuk menghitung lebar modal agar FIT dengan konten
 function applyFit(w, h) {
