@@ -732,6 +732,12 @@ function openLightbox(item) {
     content.style.width = '300px'; 
     
     if(gdriveBtn) gdriveBtn.href = item.src;
+    if(gdriveBtn) {
+        gdriveBtn.innerHTML = ''; // 1. Buang icon numpuk
+        gdriveBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`; // 2. Pasang icon bersih
+        gdriveBtn.style.background = 'transparent'; // 3. Buang kotak hitam
+        gdriveBtn.style.display = 'flex'; // 4. Pastikan muncul di semua konten (gambar/video)
+    }
 
     setTimeout(() => {
         modal.style.opacity = '1';
