@@ -723,36 +723,6 @@ function openLightbox(item) {
     const dotsContainer = document.getElementById('modal-dots');
     const gdriveBtn = document.getElementById('btn-gdrive-link');
     const app = document.getElementById('app');
-
-      // GDrive Button
-    if(gdriveBtn) {
-        // 1. Bersihkan & Paksa Muncul
-        gdriveBtn.innerHTML = ''; 
-        gdriveBtn.style.display = 'flex'; // Paksa tampil
-        gdriveBtn.style.visibility = 'visible';
-        gdriveBtn.style.opacity = '1';
-        
-        // 2. Masukkan Icon
-        gdriveBtn.innerHTML = `
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                <polyline points="15 3 21 3 21 9"></polyline>
-                <line x1="10" y1="14" x2="21" y2="3"></line>
-            </svg>
-        `;
-        
-        // 3. Set Link GDrive
-        const allLinksForBtn = (item.image || item.src || "").split(',');
-        if (allLinksForBtn.length > 0) {
-            gdriveBtn.href = allLinksForBtn[0].trim();
-        }
-
-        // 4. Reset Styling (Hapus background kotak item dari bug sebelumnya)
-        gdriveBtn.style.background = 'transparent';
-        gdriveBtn.style.border = 'none';
-        gdriveBtn.style.position = 'absolute'; // Pastikan posisinya tetap di pojok
-        gdriveBtn.style.zIndex = '9999';
-    }
   
     // 1. Reset & Persiapan Awal
     container.innerHTML = '';
@@ -868,6 +838,35 @@ function openLightbox(item) {
     if (app) { app.style.filter = 'none'; app.style.transform = 'scale(1)'; }
     document.body.style.overflow = 'hidden';
     modal.onclick = (e) => { if (e.target === modal) closeModal(); };
+
+  // PINDAHKAN INI KE BAGIAN PALING BAWAH FUNGSI openLightbox
+    if (gdriveBtn) {
+        const rawLinks = item.image || item.src || "";
+        const allLinksForBtn = rawLinks.split(',').filter(l => l.trim() !== "");
+
+        if (allLinksForBtn.length > 0) {
+            // Jika ada link, tampilkan dan isi icon
+            gdriveBtn.style.display = 'flex';
+            gdriveBtn.style.visibility = 'visible';
+            gdriveBtn.style.opacity = '1';
+            gdriveBtn.href = allLinksForBtn[0].trim();
+            gdriveBtn.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+            `;
+            // Pastikan styling bersih
+            gdriveBtn.style.background = 'transparent';
+            gdriveBtn.style.border = 'none';
+            gdriveBtn.style.zIndex = '9999';
+        } else {
+            // Jika tidak ada link sama sekali, sembunyikan saja
+            gdriveBtn.style.display = 'none';
+        }
+    }
+  
 } // <--- Tutup fungsi openLightbox di sini
 
 // Fungsi Pembantu untuk menghitung lebar modal agar FIT dengan konten
