@@ -726,8 +726,13 @@ function openLightbox(item) {
 
       // GDrive Button
     if(gdriveBtn) {
-        gdriveBtn.innerHTML = '';
-
+        // 1. Bersihkan & Paksa Muncul
+        gdriveBtn.innerHTML = ''; 
+        gdriveBtn.style.display = 'flex'; // Paksa tampil
+        gdriveBtn.style.visibility = 'visible';
+        gdriveBtn.style.opacity = '1';
+        
+        // 2. Masukkan Icon
         gdriveBtn.innerHTML = `
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
@@ -735,17 +740,18 @@ function openLightbox(item) {
                 <line x1="10" y1="14" x2="21" y2="3"></line>
             </svg>
         `;
+        
+        // 3. Set Link GDrive
+        const allLinksForBtn = (item.image || item.src || "").split(',');
+        if (allLinksForBtn.length > 0) {
+            gdriveBtn.href = allLinksForBtn[0].trim();
+        }
 
-        // Set Link GDrive
-        const allLinksForBtn = (item.image || item.src).split(',');
-        gdriveBtn.href = allLinksForBtn[0].trim();
-
-        // Pastikan styling tombolnya bersih
-        gdriveBtn.style.alignItems = 'center';
-        gdriveBtn.style.justifyContent = 'center';
+        // 4. Reset Styling (Hapus background kotak item dari bug sebelumnya)
         gdriveBtn.style.background = 'transparent';
         gdriveBtn.style.border = 'none';
-        gdriveBtn.title = "Buka Link Google Drive"; // Tooltip tetap muncul
+        gdriveBtn.style.position = 'absolute'; // Pastikan posisinya tetap di pojok
+        gdriveBtn.style.zIndex = '9999';
     }
   
     // 1. Reset & Persiapan Awal
