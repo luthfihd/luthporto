@@ -518,7 +518,7 @@ footer{margin-top:60px;padding:60px 0 40px;}
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
     </button>
 
-    <a id="btn-gdrive-link" href="#" target="_blank" class="gdrive-button-container" title="Buka Link Google Drive">
+    <a id="btn-gdrive-link" href="#" target="_blank" title="Buka Link Google Drive"></a>
   <svg class="gdrive-clean-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M10 6H6C4.89543 6 4 6.89543 4 8V18C4 19.1046 4.89543 20 6 20H16C17.1046 20 18 19.1046 18 18V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     <path d="M14 4H20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -731,50 +731,61 @@ function openLightbox(item) {
     modal.style.pointerEvents = 'auto';
     content.style.width = '300px';     
 
-    // 2. LOGIKA TOMBOL GDRIVE (Ditaruh di sini agar aman dari error iframe di bawah)
+    // 2. LOGIKA TOMBOL GDRIVE (Pintar: Gambar vs Video)
     if (gdriveBtn) {
         const rawLinksForBtn = (item.image || item.src || "").split(',');
         const firstLink = rawLinksForBtn[0].trim();
         
-        // Cek apakah ini video/link file drive
+        // Deteksi apakah konten adalah video
         const isVid = firstLink.match(/\.(mp4|webm|ogg|mov)$/i) || 
                       item.category === 'video' || 
                       firstLink.includes('drive.google.com/file');
 
         if (!isVid) {
-            // --- JIKA GAMBAR: PAKSA TAMPILKAN TOMBOL GDRIVE ---
+            // JIKA GAMBAR: PAKSA TAMPILKAN
             gdriveBtn.href = firstLink;
+            gdriveBtn.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>`;
             
-            // Masukkan icon SVG putih bersih
-            gdriveBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`;
-            
-            // Gunakan setProperty 'important' supaya tidak kalah sama CSS lain
-            gdriveBtn.style.setProperty('display', 'flex', 'important');
-            gdriveBtn.style.setProperty('opacity', '1', 'important');
-            gdriveBtn.style.setProperty('visibility', 'visible', 'important');
-            
-            // Tambahkan styling tombol kaca langsung di sini biar aman
-            gdriveBtn.style.background = 'rgba(255, 255, 255, 0.2)';
-            gdriveBtn.style.backdropFilter = 'blur(10px)';
-            gdriveBtn.style.webkitBackdropFilter = 'blur(10px)';
-            gdriveBtn.style.borderRadius = '50%';
-            gdriveBtn.style.border = '1px solid rgba(255, 255, 255, 0.3)';
-            gdriveBtn.style.width = '42px';
-            gdriveBtn.style.height = '42px';
-            gdriveBtn.style.justifyContent = 'center';
-            gdriveBtn.style.alignItems = 'center';
+            // Terapkan Style Kaca (Inline agar menang dari CSS)
+            gdriveBtn.className = ""; // Reset class agar tidak kena aturan CSS lama
+            gdriveBtn.style.cssText = `
+                display: flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                width: 44px;
+                height: 44px;
+                background: rgba(255, 255, 255, 0.2) !important;
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                border-radius: 50%;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                z-index: 9999;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+            `;
         } else {
-            // --- JIKA VIDEO: SEMBUNYIKAN (Biar player GDrive yang muncul sendiri) ---
+            // JIKA VIDEO: SEMBUNYIKAN TOTAL
             gdriveBtn.style.setProperty('display', 'none', 'important');
         }
     }
   
+    // 3. Jalankan Animasi Muncul
     setTimeout(() => {
         modal.style.opacity = '1';
         content.classList.remove('opacity-0', 'scale-95');
         content.classList.add('opacity-100', 'scale-100');
     }, 10);
 
+    // 4. Isi Informasi Teks
     document.getElementById('modal-title').textContent = item.title;
     document.getElementById('modal-desc').textContent = item.desc || '';
     const tag = document.getElementById('modal-tag');
@@ -783,7 +794,7 @@ function openLightbox(item) {
         tag.className = `modal-tag tag-${item.category}`;
     }
 
-    // 3. LOGIKA MULTIPLE MEDIA
+    // 5. Logika Navigasi (Next/Prev)
     const allLinks = (item.image || item.src).split(',');
     const prevBtn = document.getElementById('modal-prev');
     const nextBtn = document.getElementById('modal-next');
@@ -793,6 +804,7 @@ function openLightbox(item) {
         nextBtn.style.display = isMultiple ? 'flex' : 'none';
     }
   
+    // 6. Loop Media Rendering
     allLinks.forEach((link, index) => {
         let rawSrc = link.trim();
         let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
@@ -816,7 +828,7 @@ function openLightbox(item) {
                 mediaElement.className = "opacity-0 transition-opacity duration-500 w-full h-auto";
                 mediaElement.style.maxHeight = "70vh";
             }
-
+            // Logic resize video
             if (index === 0) {
                 if (rawSrc.includes('drive.google.com')) {
                     const maxHeight = window.innerHeight * 0.7;
@@ -832,6 +844,7 @@ function openLightbox(item) {
                 setTimeout(() => mediaElement.classList.remove('opacity-0'), 100);
             }
         } else {
+            // Logika Gambar
             mediaElement = document.createElement('img');
             mediaElement.className = "opacity-0 transition-opacity duration-500";
             if (fullSrc.includes('drive.google.com')) {
@@ -858,6 +871,7 @@ function openLightbox(item) {
         }
     });
 
+    // 7. Scroll Dots
     container.onscroll = () => {
         const idx = Math.round(container.scrollLeft / container.offsetWidth);
         const dots = document.querySelectorAll('.modal-dot');
