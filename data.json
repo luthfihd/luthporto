@@ -1,5 +1,15 @@
 [
   {
+    "id": "item_1778058161378_9gsvzf",
+    "type": "gdrive",
+    "src": "https://drive.google.com/file/d/1BCkjoMdJ6r1pL5uB9pzs-exy47WfaBdE/view?usp=drive_link, https://drive.google.com/file/d/1GseEOCvFLC7N5P8avbh19-cyeE6S_GTe/view?usp=drive_link, https://drive.google.com/file/d/1Z_fTyZL9ihNaA0DE2t04ftOo1UFkpwhn/view?usp=drive_link",
+    "title": "Profile Book Design",
+    "category": "branding",
+    "desc": "The profile book is a form of disseminating information about an institution.",
+    "icon": "🎬",
+    "date": "2026-05-06"
+  },
+  {
     "id": "item_1778051716184_p1olb7",
     "type": "gdrive",
     "src": "https://drive.google.com/file/d/1KXXpeDnu0ZyNCbSP2KP8nETWCGOO4J2F/view?usp=drive_link",
