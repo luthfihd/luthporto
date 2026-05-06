@@ -782,7 +782,7 @@ let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
         dot.className = `modal-dot ${index === 0 ? 'active' : ''}`;
         dotsContainer.appendChild(dot);
     }
-}); // <--- Tutup loop forEach di sini
+};
 
 // 3. LOGIKA SCROLL UNTUK DOTS
 container.onscroll = () => {
