@@ -2,12 +2,13 @@
   {
     "id": "item_1778308820289_d5pkat",
     "type": "gdrive",
-    "src": "https://drive.google.com/file/d/1rArDZcjpsQdaEKrcuAqTq7YD3VuBmyNr/view?usp=drive_link",
+    "src": "https://drive.google.com/file/d/1AH15YntHK0JQXhqZs5sL9__Ymut1OwUA/view?usp=drive_link,https://drive.google.com/file/d/1rArDZcjpsQdaEKrcuAqTq7YD3VuBmyNr/view?usp=drive_link",
     "title": "Product Promotion Billboard",
     "category": "promotional",
     "desc": "Using a minimalist theme so the viewer immediately focuses on the product and its advantages.",
     "icon": "🎬",
-    "date": "2026-05-09"
+    "date": "2026-05-09",
+    "image": "https://drive.google.com/file/d/1AH15YntHK0JQXhqZs5sL9__Ymut1OwUA/view?usp=drive_link,https://drive.google.com/file/d/1rArDZcjpsQdaEKrcuAqTq7YD3VuBmyNr/view?usp=drive_link"
   },
   {
     "id": "item_1778308172282_1qn9o5",
