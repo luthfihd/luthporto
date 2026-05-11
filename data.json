@@ -342,10 +342,11 @@
     "type": "gdrive",
     "src": "https://drive.google.com/file/d/1M6LhbQLlSfzG_h-o5c1hPHQ02sMMFfRe/view?usp=sharing",
     "title": "Video Profile",
-    "category": "video",
+    "category": "branding",
     "desc": "Video Profile of TemanKreasi Pekalongan by smartfren",
     "icon": "🎬",
-    "date": "2026-05-05"
+    "date": "2026-05-05",
+    "image": "https://drive.google.com/file/d/1M6LhbQLlSfzG_h-o5c1hPHQ02sMMFfRe/view?usp=sharing"
   },
   {
     "id": "item_1777955540736_3adsa6",
