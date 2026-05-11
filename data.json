@@ -332,10 +332,11 @@
     "type": "gdrive",
     "src": "https://drive.google.com/file/d/1jPKx_7I3vPcmBbF0wOVjH3gi0FbEZhi-/view?usp=sharing",
     "title": "Video Profile",
-    "category": "video",
+    "category": "branding",
     "desc": "Video Profile of TemanKreasi Tangerang Selatan by smartfren",
     "icon": "🎬",
-    "date": "2026-05-05"
+    "date": "2026-05-05",
+    "image": "https://drive.google.com/file/d/1jPKx_7I3vPcmBbF0wOVjH3gi0FbEZhi-/view?usp=sharing"
   },
   {
     "id": "item_1778006703326_iz2ant",
