@@ -678,9 +678,10 @@
     "type": "gdrive",
     "src": "https://drive.google.com/file/d/1W5W1BZgxCb1ZeRASPsjdVZQXNztdssqx/view?usp=sharing",
     "title": "Work Highlight",
-    "category": "video",
+    "category": "branding",
     "desc": "Construction Work Highlight",
     "icon": "🎬",
-    "date": "2026-04-21"
+    "date": "2026-04-21",
+    "image": "https://drive.google.com/file/d/1W5W1BZgxCb1ZeRASPsjdVZQXNztdssqx/view?usp=sharing"
   }
 ]
