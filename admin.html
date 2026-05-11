@@ -9,10 +9,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  /* Ubah variabel agar tidak menggunakan blur */
-  --glass-bg: rgba(20, 20, 20, 0.95); /* Lebih solid agar teks tetap terbaca tanpa blur */
+  --glass-bg: rgba(22, 01, 43, 0.95);
   --glass-border: rgba(255, 255, 255, 0.1);
   --glass-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  --radius-xl:50px;--radius-lg:20px;--radius-md:15px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#fff;background:#080812;}
@@ -26,19 +26,13 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
-  /* Hapus backdrop-filter: blur(...) */
-  backdrop-filter: none !important; 
-  -webkit-backdrop-filter: none !important;
 }
 
 .glass-input {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--glass-border);
-  /* Hapus backdrop-filter di input juga agar enteng */
-  backdrop-filter: none !important;
 }
 
-/* Hapus animasi hover yang tersisa di card admin jika ada */
 .item-card:hover {
   transform: none !important;
 }
@@ -327,11 +321,11 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#
             <div class="gallery-count" id="galleryCount">— items</div>
           </div>
           <div class="filter-mini">
-            <button class="active" data-f="all" onclick="filterAdmin('all',this)">Semua</button>
-            <button data-f="promotional" onclick="filterAdmin('promotional',this)">Promo</button>
-            <button data-f="branding" onclick="filterAdmin('branding',this)">Brand</button>
-            <button data-f="educational" onclick="filterAdmin('educational',this)">Edu</button>
-            <button data-f="video" onclick="filterAdmin('video',this)">Video</button>
+            <button class="active" data-f="all" onclick="filterAdmin('all',this)">All</button>
+            <button data-f="educational" onclick="filterAdmin('educational',this)">Educational</button>
+            <button data-f="promotional" onclick="filterAdmin('promotional',this)">Promotional</button>
+            <button data-f="branding" onclick="filterAdmin('branding',this)">Branding</button>
+            <button data-f="explore" onclick="filterAdmin('explore',this)">Exploration</button>
           </div>
         </div>
         <div id="adminGrid">
@@ -371,10 +365,10 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#
     <div class="form-group">
       <label>Kategori</label>
       <select id="editCat">
+        <option value="educational">Educational</option>
         <option value="promotional">Promotional</option>
         <option value="branding">Branding</option>
-        <option value="educational">Educational</option>
-        <option value="video">Video</option>
+        <option value="explore">Exploration</option>
       </select>
     </div>
     <div class="form-group">
@@ -518,7 +512,7 @@ function renderAdminGrid() {
         promotional: 'tag-promo',
         branding: 'tag-brand',
         educational: 'tag-edu',
-        video: 'tag-video',
+        exploration: 'tag-explore',
     }[item.category] || 'tag-promo';
     
     let media = '';
@@ -558,7 +552,7 @@ function renderAdminGrid() {
         // FALLBACK kalau gagal extract ID
         media = `<div class="admin-placeholder" style="background: linear-gradient(135deg, rgba(108,99,255,0.2), rgba(255,107,157,0.2)); height:130px; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px;">
           <div style="font-size: 2.5rem;">${item.icon || '🎬'}</div>
-          <div style="font-size: 10px; color: rgba(255,255,255,0.6);">${item.type === 'gdrive' ? 'Google Drive' : 'Video'}</div>
+          <div style="font-size: 10px; color: rgba(255,255,255,0.6);">${item.type === 'gdrive' ? 'Google Drive' : 'Explore'}</div>
         </div>`;
       }
     }
