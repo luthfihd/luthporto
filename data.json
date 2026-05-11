@@ -322,10 +322,11 @@
     "type": "gdrive",
     "src": "https://drive.google.com/file/d/1hqv_2o-52mzPVVakGD6W8MVuVXDhfv6I/view?usp=drive_link",
     "title": "Multimedia Services Adds",
-    "category": "video",
+    "category": "branding",
     "desc": "Multimedia Services Adds by FDI Media",
     "icon": "🎬",
-    "date": "2026-05-05"
+    "date": "2026-05-05",
+    "image": "https://drive.google.com/file/d/1hqv_2o-52mzPVVakGD6W8MVuVXDhfv6I/view?usp=drive_link"
   },
   {
     "id": "item_1778006767355_45ytn2",
