@@ -120,7 +120,7 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
 .tag-promo{background:rgba(108,99,255,0.55);color:#c5c0ff;}
 .tag-brand{background:rgba(173,171,49,0.55);color:#adab31;}
 .tag-edu{background:rgba(78,205,196,0.55);color:#b0eeeb;}
-.tag-video{background:rgba(255,107,157,0.55);color:#ffcce0;}
+.tag-explore{background:rgba(31,21,33,0.55);color:#1f1521;}
 .gradient-1{background:linear-gradient(135deg,#1a0a3e,#6C63FF);}
 .gradient-2{background:linear-gradient(135deg,#2d0a20,#FF6B9D);}
 .gradient-3{background:linear-gradient(135deg,#1a2d10,#A8FF78);}
@@ -320,10 +320,10 @@ footer{margin-top:60px;padding:60px 0 40px;}
     transform: translateY(0);
 }
 
+.tag-edu, .tag-educational { background: #10b981; !important; color: white; }
 .tag-promo, .tag-promotional { background: #6366f1; !important; color: white; }
 .tag-brand, .tag-branding { background: #adab31; !important; color: white; }
-.tag-edu, .tag-educational { background: #10b981; !important; color: white; }
-.video { background: #ef4444; !important; color: white; }
+.tag-explore, .tag-explore { background: #1f1521; !important; color: white; }
   
 /* 1. MOTTO */
 .motto-text {
@@ -494,6 +494,7 @@ footer{margin-top:60px;padding:60px 0 40px;}
       <button class="filter-btn active" data-filter="educational">Educational</button>
       <button class="filter-btn" data-filter="promotional">Promotional</button>
       <button class="filter-btn" data-filter="branding">Branding</button>
+      <button class="filter-btn" data-filter="explore">Exploration</button>
       <button class="filter-btn" data-filter="all">All Projects</button>
     </div>
     <div id="masonryGrid">
@@ -662,7 +663,7 @@ async function loadPortfolio() {
 // ── RENDER ──
 function renderGrid() {
   const grid = document.getElementById('masonryGrid');
-  const items = currentFilter === 'all' ? allItems : allItems.filter(i => i.category === currentFilter);
+  const items = currentFilter === 'edu' ? allItems : allItems.filter(i => i.category === currentFilter);
   
   if (!items.length) {
     grid.innerHTML = `<div class="empty-state"><span class="empty-icon">✦</span><p>Belum ada karya di kategori ini.</p></div>`;
@@ -679,8 +680,19 @@ function renderGrid() {
     el.style.animationDelay = `${idx * 0.06}s`;
     el.onclick = () => openLightbox(item);
 
-    const tagClass = {educational:'tag-edu',promotional:'tag-promo',branding:'tag-brand',video:'tag-video'}[item.category]||'tag-promo';
-    const tagLabel = {educational:'Educational',promotional:'Promotional',branding:'Branding',video:'Video'}[item.category]||item.category;
+    const tagClass = {
+    educational: 'tag-edu',
+    promotional: 'tag-promo',
+    branding: 'tag-brand',
+    exploration: 'tag-explore' 
+}[item.category] || 'tag-promo';
+
+const tagLabel = {
+    educational: 'Educational',
+    promotional: 'Promotional',
+    branding: 'Branding',
+    exploration: 'Exploration' 
+}[item.category] || item.category;
 
     // 1. Logika Pecah Link & Indikator Multiple
     const allLinks = (item.image || item.src || "").split(',');
@@ -724,10 +736,14 @@ function renderGrid() {
 
 // ── FILTER ──
 document.querySelectorAll('.filter-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
+  btn.onclick = () => {
+    // 1. Hapus class active dari semua tombol
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    // 2. Tambah class active ke tombol yang diklik
     btn.classList.add('active');
-    currentFilter = btn.dataset.filter;
+    // 3. Update variabel currentFilter dengan data-filter dari tombol
+    currentFilter = btn.getAttribute('data-filter');
+    // 4. Render ulang grid
     renderGrid();
   });
 });
