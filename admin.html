@@ -558,7 +558,14 @@ function renderAdminGrid() {
     }
     
     el.innerHTML = `
-      ${media}
+      <div style="position:relative;">
+        <div style="position:absolute; top:8px; left:8px; background:rgba(0,0,0,0.8); color:white; font-family:'Space Mono',monospace; font-size:10px; padding:2px 6px; border-radius:4px; z-index:10; border:1px solid rgba(255,255,255,0.1);">
+          #${idx + 1}
+        </div>
+        
+        ${media}
+      </div>
+
       <div class="admin-item-info">
         <div class="admin-item-title">${escapeHtml(item.title)}</div>
         <div class="admin-item-cat tag ${tagClass}" style="display:inline-block; font-size:10px; padding:2px 8px; border-radius:4px; margin-top:4px;">
@@ -813,9 +820,19 @@ function addMediaRow() {
 let editTargetId = null;
 
 function openEditModal(id) {
-  const item = allItems.find(i => i.id === id);
+// 1. Cari index-nya dulu (tambah +1 supaya tidak mulai dari 0)
+  const itemIndex = allItems.findIndex(i => i.id === id);
+  const item = allItems[itemIndex];
+  
   if (!item) return;
   editTargetId = id;
+
+  // 2. Tampilkan nomor urut di Judul Modal Edit
+  const modalTitle = document.querySelector('#editModal h2');
+  if (modalTitle) {
+    modalTitle.innerText = `Edit Karya #${itemIndex + 1}`;
+  }
+  
   document.getElementById('editTitle').value = item.title || '';
   document.getElementById('editCat').value = item.category || 'promotional';
   document.getElementById('editDesc').value = item.desc || '';
