@@ -491,11 +491,10 @@ footer{margin-top:60px;padding:60px 0 40px;}
       <h2 class="section-title">Significant <span>Projects</span></h2>
     </div>
     <div class="filter-wrap reveal">
-      <button class="filter-btn active" data-filter="all">All Works</button>
+      <button class="filter-btn active" data-filter="educational">Educational</button>
       <button class="filter-btn" data-filter="promotional">Promotional</button>
       <button class="filter-btn" data-filter="branding">Branding</button>
-      <button class="filter-btn" data-filter="educational">Educational</button>
-      <button class="filter-btn" data-filter="video">Video</button>
+      <button class="filter-btn" data-filter="all">All Projects</button>
     </div>
     <div id="masonryGrid">
       <div class="loading-grid">
@@ -680,8 +679,8 @@ function renderGrid() {
     el.style.animationDelay = `${idx * 0.06}s`;
     el.onclick = () => openLightbox(item);
 
-    const tagClass = {promotional:'tag-promo',branding:'tag-brand',educational:'tag-edu',video:'tag-video'}[item.category]||'tag-promo';
-    const tagLabel = {promotional:'Promotional',branding:'Branding',educational:'Educational',video:'Video'}[item.category]||item.category;
+    const tagClass = {educational:'tag-edu',promotional:'tag-promo',branding:'tag-brand',video:'tag-video'}[item.category]||'tag-promo';
+    const tagLabel = {educational:'Educational',promotional:'Promotional',branding:'Branding',video:'Video'}[item.category]||item.category;
 
     // 1. Logika Pecah Link & Indikator Multiple
     const allLinks = (item.image || item.src || "").split(',');
