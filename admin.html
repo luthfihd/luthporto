@@ -799,16 +799,35 @@ document.addEventListener('DOMContentLoaded', function() {
 function createMediaRow(value = '') {
   const container = document.getElementById('editMediaList');
   const row = document.createElement('div');
-  row.className = 'media-row';
+  row.className = 'media-row'; // Pastikan class ini ada untuk penghitungan
   row.style.display = 'flex';
-  row.style.gap = '5px';
-  row.style.marginBottom = '5px';
+  row.style.gap = '8px';
+  row.style.marginBottom = '8px';
+  row.style.alignItems = 'center';
   
+  // Hitung jumlah baris yang sudah ada
+  const currentRows = container.getElementsByClassName('media-row').length;
+  const rowNumber = currentRows + 1;
+
   row.innerHTML = `
-    <input type="text" class="media-input text-input" value="${value}" style="flex:1; margin-bottom:0;" placeholder="Link GDrive/Image">
-    <button type="button" onclick="this.parentElement.remove()" style="background:#ff4d4d; color:white; border:none; border-radius:6px; padding:0 10px; cursor:pointer;">✕</button>
+    <span class="row-number" style="font-family:'Space Mono',monospace; font-size:10px; color:rgba(255,255,255,0.4); width:15px;">${rowNumber}</span>
+    <input type="text" class="media-input text-input" value="${value}" style="flex:1; margin-bottom:0; font-size:12px; padding:8px;" placeholder="Link GDrive/Image">
+    <button type="button" onclick="this.parentElement.remove(); updateMediaNumbers();" style="background:rgba(255,77,77,0.2); color:#ff4d4d; border:1px solid rgba(255,77,77,0.3); border-radius:6px; padding:5px 10px; cursor:pointer; transition:0.3s;" onmouseover="this.style.background='rgba(255,77,77,0.4)'" onmouseout="this.style.background='rgba(255,77,77,0.2)'">✕</button>
   `;
   container.appendChild(row);
+}
+
+function updateMediaNumbers() {
+  const container = document.getElementById('editMediaList');
+  const rows = container.getElementsByClassName('media-row');
+  
+  // Iterasi semua baris yang tersisa dan update teks nomornya
+  Array.from(rows).forEach((row, index) => {
+    const numberSpan = row.querySelector('.row-number');
+    if (numberSpan) {
+      numberSpan.textContent = index + 1;
+    }
+  });
 }
 
 // Fungsi yang dipanggil oleh tombol "+ Tambah Media Baru"
