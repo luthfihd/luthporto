@@ -595,7 +595,7 @@ function applyProfile() {
 
 // ── STATE ──
 let allItems = [];
-let currentFilter = 'all';
+let currentFilter = 'educational';
   
 // ── GDRIVE THUMBNAIL ──
 function getGoogleDriveId(url) {
@@ -663,7 +663,7 @@ async function loadPortfolio() {
 // ── RENDER ──
 function renderGrid() {
   const grid = document.getElementById('masonryGrid');
-  const items = currentFilter === 'educational' ? allItems : allItems.filter(i => i.category === currentFilter);
+  const items = currentFilter === 'all' ? allItems : allItems.filter(i => i.category === currentFilter);
   
   if (!items.length) {
     grid.innerHTML = `<div class="empty-state"><span class="empty-icon">✦</span><p>Belum ada karya di kategori ini.</p></div>`;
