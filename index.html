@@ -103,7 +103,20 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
 @media(max-width:1100px){.masonry-grid{columns:4;}}
 @media(max-width:768px){.masonry-grid{columns:3;}}
 @media(max-width:480px){.masonry-grid{columns:1;}}
-.masonry-item{break-inside:avoid;margin-bottom:16px;border-radius:var(--radius-lg);overflow:hidden;cursor:pointer;position:relative;background:transparent;transition:transform 0.3s var(--spring),box-shadow 0.4s;animation:masonryIn 0.5s var(--spring) both;}
+.masonry-item {
+  break-inside:avoid;
+  margin-bottom:16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius:var(--radius-lg);
+  overflow:hidden;
+  cursor:pointer;
+  position:relative;
+  background:rgba(255, 255, 255, 0.03);
+  transition:transform 0.3s var(--spring),box-shadow 0.4s;
+  animation:masonryIn 0.5s var(--spring) both;
+  display: flex;
+  flex-direction: column;
+}
 .masonry-item:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 24px 60px rgba(0,0,0,0.5),0 0 0 1px rgba(255,255,255,0.12);z-index:10;}
 .masonry-item img {transition: transform 0.4s var(--spring);}
 .masonry-item:hover img {transform: scale(1.05);}
@@ -115,22 +128,54 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
 .masonry-item-tag{font-size:11px;font-family:'Space Mono',monospace;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:50px;display:inline-block;width:fit-content;}
 /* Container Info di Bawah Thumbnail */
 .masonry-item-info {
-    padding: 4px 8px; /* Ruang untuk judul & tag di bawah gambar */
+    padding: 16px; /* Jarak teks ke outline kartu */
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .masonry-item-title {
     color: #fff;
     font-size: 15px;
     font-weight: 600;
-    margin-bottom: 6px;
+    margin: 0px;
     display: block;
 }
 
 /* Biar ada jarak dikit kalau tag-nya muncul */
 .masonry-item-tag {
+    align-self: flex-start; /* Agar kapsul tidak melebar full width */
     margin-top: 4px;
 }
-/* Pembungkus Thumbnail dengan Outline */
+.masonry-item:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Deskripsi Singkat di Bawah Judul */
+.masonry-item-desc {
+    display: block;
+    font-size: 11.5px;
+    color: rgba(255, 255, 255, 0.4);
+    line-height: 1.5;
+    margin: 4px 0 8px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* Batasi maksimal 1 baris */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-family: 'DM Sans', sans-serif;
+}
+.masonry-item:hover .hover-overlay {
+    opacity: 1;
+}
+.masonry-item:hover .show-details-text {
+    transform: translateY(0);
+}
+.masonry-overlay {
+    display: none !important; 
+}
+/* Pembungkus konten dengan Outline */
 .card-wrapper {
     position: relative;
     overflow: hidden;
@@ -140,23 +185,10 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
     margin-bottom: 16px; /* Jarak antara kartu dengan teks di bawahnya */
     transition: border-color 0.3s ease;
 }
-
-.masonry-item:hover .card-wrapper {
-    border-color: rgba(255, 255, 255, 0.4); /* Outline lebih terang saat hover */
-}
-
-/* Deskripsi Singkat di Bawah Judul */
-.masonry-item-desc {
-    display: block;
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.4);
-    line-height: 1.5;
-    margin-bottom: 10px;
-    display: -webkit-box;
-    -webkit-line-clamp: 2; /* Batasi maksimal 2 baris */
-    -webkit-box-orient: vertical;
+.card-image-wrapper {
+    position: relative;
+    width: 100%;
     overflow: hidden;
-    font-family: 'DM Sans', sans-serif;
 }
 /* Hover Overlay "Show Details" */
 .hover-overlay {
@@ -172,7 +204,6 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
     z-index: 15;
     border-radius: var(--radius-lg);
 }
-
 .show-details-text {
     font-family: 'Space Mono', monospace;
     font-size: 11px;
@@ -186,18 +217,6 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
     transition: all 0.3s var(--spring);
 }
 
-.masonry-item:hover .hover-overlay {
-    opacity: 1;
-}
-
-.masonry-item:hover .show-details-text {
-    transform: translateY(0);
-}
-
-/* Penyesuaian Masonry Overlay Lama (Kita matikan gradient hitamnya karena teks pindah ke bawah) */
-.masonry-overlay {
-    display: none !important; 
-}
 .gradient-1{background:linear-gradient(135deg,#1a0a3e,#6C63FF);}
 .gradient-2{background:linear-gradient(135deg,#2d0a20,#FF6B9D);}
 .gradient-3{background:linear-gradient(135deg,#1a2d10,#A8FF78);}
@@ -768,7 +787,7 @@ function renderGrid() {
     el.style.animationDelay = `${idx * 0.06}s`;
     el.onclick = () => openLightbox(item);
 
-    // Filter Tag logic
+    // Tag Logic
     const tagClass = {
         educational: 'tag-edu',
         promotional: 'tag-promo',
@@ -801,8 +820,8 @@ function renderGrid() {
     }
 
     el.innerHTML = `
-        <div class="card-wrapper relative">
-            <img class="masonry-thumb" src="${finalSrc}" alt="${item.title}" loading="lazy">
+        <div class="card-image-wrapper">
+            <img class="masonry-thumb" src="${finalSrc}" alt="${item.title}" loading="lazy" style="display:block;">
             
             <div class="hover-overlay">
                 <span class="show-details-text">Show Details</span>
@@ -816,7 +835,7 @@ function renderGrid() {
         </div>
 
         <div class="masonry-item-info">
-            <span class="masonry-item-title">${item.title}</span>
+            <h3 class="masonry-item-title">${item.title}</h3>
             <p class="masonry-item-desc">${item.desc || 'No description available for this project.'}</p>
             ${tagHtml}
         </div>
