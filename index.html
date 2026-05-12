@@ -314,10 +314,10 @@ footer{margin-top:60px;padding:60px 0 40px;}
 }
 
 /* 0.TAG COLOR */
-.tag-educational, .tag-edu { background: #6c63ff !important; color: white !important; }
-.tag-promotional, .tag-promo { background: #ff6b9d !important; color: white !important; }
-.tag-branding, .tag-brand { background: #0fa34a !important; color: white !important; }
-.tag-exploration, .tag-explore { background: #a38a0f !important; color: white !important; }
+.tag-educational, .tag-edu { background: #6c63ff !important; color: white !important; opacity: 1 !important; }
+.tag-promotional, .tag-promo { background: #ff6b9d !important; color: white !important; opacity: 1 !important; }
+.tag-branding, .tag-brand { background: #0fa34a !important; color: white !important; opacity: 1 !important; }
+.tag-exploration, .tag-explore { background: #a38a0f !important; color: white !important; opacity: 1 !important; }
   
 /* 1. MOTTO */
 .motto-text {
@@ -679,14 +679,14 @@ function renderGrid() {
     promotional: 'tag-promo',
     branding: 'tag-brand',
     exploration: 'tag-explore' 
-}[item.category] || 'tag-promo';
+    }[item.category] || 'tag-promo';
 
-const tagLabel = {
+    const tagLabel = {
     educational: 'Educational',
     promotional: 'Promotional',
     branding: 'Branding',
     exploration: 'Exploration' 
-}[item.category] || item.category;
+    }[item.category] || item.category;
 
     // 1. Logika Pecah Link & Indikator Multiple
     const allLinks = (item.image || item.src || "").split(',');
@@ -773,12 +773,20 @@ function openLightbox(item) {
     document.getElementById('modal-desc').textContent = item.desc || '';
 
     const tag = document.getElementById('modal-tag');
-if(tag) {
+    if(tag) {
     tag.textContent = item.category;
-    // Hapus class lama dan pasang yang baru
-    tag.className = 'modal-tag'; 
-    tag.classList.add(`tag-${item.category.toLowerCase()}`);
-}
+    
+    // Gunakan pemetaan yang sama dengan Masonry
+    const mappedClass = {
+        educational: 'tag-edu',
+        promotional: 'tag-promo',
+        branding: 'tag-brand',
+        exploration: 'tag-explore' 
+    }[item.category.toLowerCase()] || 'tag-promo';
+
+    tag.className = 'modal-tag'; // Reset class dasar
+    tag.classList.add(mappedClass); // Tambah class warna yang sama (tag-edu, dsb)
+    }
   
     // 2. Logika Media
     const allLinks = (item.image || item.src || "").split(',').filter(l => l.trim() !== "");
