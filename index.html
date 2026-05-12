@@ -773,12 +773,12 @@ function openLightbox(item) {
     document.getElementById('modal-desc').textContent = item.desc || '';
 
     const tag = document.getElementById('modal-tag');
-    if(tag) {
-        tag.textContent = item.category;
-        // Update warna tag sesuai kategori
-        tag.className = `modal-tag';
-        tag.classList.add(`tag-${item.category.toLowerCase()}`);
-    }
+if(tag) {
+    tag.textContent = item.category;
+    // Hapus class lama dan pasang yang baru
+    tag.className = 'modal-tag'; 
+    tag.classList.add(`tag-${item.category.toLowerCase()}`);
+}
   
     // 2. Logika Media
     const allLinks = (item.image || item.src || "").split(',').filter(l => l.trim() !== "");
