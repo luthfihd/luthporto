@@ -776,7 +776,8 @@ function openLightbox(item) {
     if(tag) {
         tag.textContent = item.category;
         // Update warna tag sesuai kategori
-        tag.className = `modal-tag tag-${item.category.toLowerCase()}`;
+        tag.className = `modal-tag';
+        tag.classList.add(`tag-${item.category.toLowerCase()}`);
     }
   
     // 2. Logika Media
