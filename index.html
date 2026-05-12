@@ -672,20 +672,17 @@ function renderGrid() {
 
   items.forEach((item, idx) => {
     const el = document.createElement('div');
-    // Hilangkan overflow-hidden di sini supaya teks gak kepotong radius
-    el.className = 'masonry-item relative group mb-6 cursor-pointer'; 
+    el.className = 'masonry-item relative group mb-8 cursor-pointer'; 
     el.style.animationDelay = `${idx * 0.06}s`;
     el.onclick = () => openLightbox(item);
 
-    // ── 1. LOGIKA MEDIA ──
     const allLinks = (item.image || item.src || "").split(',');
     const mediaCount = allLinks.length;
     const firstLink = allLinks[0].trim();
     
-    // DETEKSI VIDEO: Hanya jika tipenya 'video' ATAU 'gdrive' (tapi bukan link thumbnail biasa)
-    const isVideo = item.type === 'video' || item.type === 'gdrive';
+    // Deteksi video untuk play button
+    const isVideo = item.type === 'video' || item.type === 'gdrive' || firstLink.includes('drive.google.com');
 
-    // ── 2. THUMBNAIL ──
     let finalSrc = item.thumb || firstLink; 
     if (finalSrc.includes('drive.google.com')) {
         let fileId = getGoogleDriveId(finalSrc);
@@ -699,10 +696,9 @@ function renderGrid() {
         exploration: 'tag-explore' 
     }[item.category] || 'tag-promo';
 
-    // ── 3. HTML STRUCTURE ──
     el.innerHTML = `
-        <div class="relative overflow-hidden rounded-2xl bg-black/20 aspect-video mb-3">
-            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+        <div class="relative rounded-2xl bg-black/20 overflow-hidden mb-3">
+            <img class="w-full h-auto block transition-transform duration-700 group-hover:scale-105" 
                  src="${finalSrc}" 
                  alt="${item.title}" 
                  loading="lazy">
@@ -729,12 +725,11 @@ function renderGrid() {
                     ${item.category}
                 </span>
             </div>
-            <h3 class="text-[13px] font-medium text-white/90 leading-snug font-sans truncate">
+            <h3 class="text-[13px] font-medium text-white/90 leading-snug font-sans">
                 ${item.title}
             </h3>
         </div>
     `;
-
     grid.appendChild(el);
   });
 }
@@ -766,20 +761,16 @@ function openLightbox(item) {
     const container = document.getElementById('modal-media-container');
     const dotsContainer = document.getElementById('modal-dots');
 
-    // 1. Reset & Persiapan
+    // 1. Reset Awal (Penting!)
     container.innerHTML = '';
     if(dotsContainer) dotsContainer.innerHTML = '';
+    
+    // Set lebar awal yang netral supaya tidak kaget saat transisi
+    content.style.width = 'auto'; 
+    content.style.maxWidth = '95vw'; 
+    content.style.minWidth = '300px';
+
     modal.style.display = 'flex';
-    modal.style.pointerEvents = 'auto';
-    content.style.width = '90%'; // Set default lebar mobile dulu
-    content.style.maxWidth = '1200px';
-
-    setTimeout(() => {
-        modal.style.opacity = '1';
-        content.classList.remove('opacity-0', 'scale-95');
-        content.classList.add('opacity-100', 'scale-100');
-    }, 10);
-
     document.getElementById('modal-title').textContent = item.title;
     document.getElementById('modal-desc').textContent = item.desc || '';
 
@@ -789,57 +780,43 @@ function openLightbox(item) {
         tag.className = `modal-tag tag-${item.category.toLowerCase()}`;
     }
   
-    // 2. Logika Media
+    // 2. Olah Link Media
     const allLinks = (item.image || item.src || "").split(',').filter(l => l.trim() !== "");
     
     allLinks.forEach((link, index) => {
         let rawSrc = link.trim();
         let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
 
-        // perbaikan deteksi video: Cek format file ATAU tipe data dari JSON
-        const isVideo = rawSrc.match(/\.(mp4|webm|ogg|mov)$/i) || 
-                        item.type === 'video' || 
-                        item.type === 'gdrive' || 
-                        rawSrc.includes('drive.google.com/file/d/');
+        // Deteksi Video
+        const isVideo = item.type === 'video' || item.type === 'gdrive' || rawSrc.includes('drive.google.com/file/d/');
 
         if (isVideo) {
-            let mediaElement;
+            const mediaWrap = document.createElement('div');
+            mediaWrap.className = "w-full flex-shrink-0 flex items-center justify-center bg-black/40 rounded-xl overflow-hidden";
+            
             if (rawSrc.includes('drive.google.com')) {
-                // Skenario Google Drive Video
-                mediaElement = document.createElement('iframe');
+                const iframe = document.createElement('iframe');
                 let fileId = getGoogleDriveId(rawSrc);
-                mediaElement.src = `https://drive.google.com/file/d/${fileId}/preview`;
-                mediaElement.className = "opacity-0 transition-opacity duration-500 w-full rounded-xl";
-                mediaElement.style.height = "65vh";
-                mediaElement.style.border = "none";
-                mediaElement.setAttribute('allow', 'autoplay');
+                iframe.src = `https://drive.google.com/file/d/${fileId}/preview`;
+                iframe.className = "w-full aspect-video border-none shadow-2xl";
+                iframe.style.height = "70vh"; // Biar gak terlalu kecil
+                mediaWrap.appendChild(iframe);
+                
+                // Jika video pertama adalah GDrive, set lebar modal lebar (16:9)
+                if(index === 0) content.style.width = 'min(1100px, 90vw)';
             } else {
-                // Skenario Video Direct Link / MP4
-                mediaElement = document.createElement('video');
-                mediaElement.src = fullSrc;
-                mediaElement.controls = true;
-                mediaElement.className = "opacity-0 transition-opacity duration-500 w-full h-auto max-h-[70vh] rounded-xl";
+                const video = document.createElement('video');
+                video.src = fullSrc;
+                video.controls = true;
+                video.className = "max-w-full max-h-[75vh] rounded-xl";
+                video.onloadedmetadata = () => { if(index === 0) applyFit(video.videoWidth, video.videoHeight); };
+                mediaWrap.appendChild(video);
             }
-            
-            container.appendChild(mediaElement);
-            
-            // Tampilkan media
-            setTimeout(() => mediaElement.classList.remove('opacity-0'), 300);
-            
-            // Set lebar modal yang pas untuk video (16:9)
-            if (index === 0) {
-                content.style.width = "1000px"; 
-            }
-
+            container.appendChild(mediaWrap);
         } else {
             // Skenario Gambar
-            const wrapper = document.createElement('a');
-            wrapper.href = fullSrc; 
-            wrapper.target = "_blank";
-            wrapper.className = "cursor-zoom-in block w-full";
-            
             const img = document.createElement('img');
-            img.className = "opacity-0 transition-opacity duration-500 w-full h-auto max-h-[75vh] rounded-xl object-contain";
+            img.className = "opacity-0 transition-opacity duration-500 max-w-full max-h-[75vh] rounded-xl object-contain flex-shrink-0 mx-auto";
             
             let displaySrc = fullSrc;
             if (fullSrc.includes('drive.google.com')) {
@@ -852,12 +829,10 @@ function openLightbox(item) {
                 img.classList.remove('opacity-0');
                 if (index === 0) applyFit(img.naturalWidth, img.naturalHeight);
             };
-            
-            wrapper.appendChild(img);
-            container.appendChild(wrapper);
+            container.appendChild(img);
         }
 
-        // DOTS Navigasi
+        // DOTS
         if (allLinks.length > 1 && dotsContainer) {
             const dot = document.createElement('div');
             dot.className = `modal-dot ${index === 0 ? 'active' : ''}`;
@@ -865,49 +840,32 @@ function openLightbox(item) {
         }
     });
 
-    // 3. Kontrol Navigasi
-    const prevBtn = document.getElementById('modal-prev');
-    const nextBtn = document.getElementById('modal-next');
-    if (prevBtn && nextBtn) {
-        prevBtn.style.display = allLinks.length > 1 ? 'flex' : 'none';
-        nextBtn.style.display = allLinks.length > 1 ? 'flex' : 'none';
-    }
-
-    container.onscroll = () => {
-        const idx = Math.round(container.scrollLeft / (container.offsetWidth || 1));
-        const dots = document.querySelectorAll('.modal-dot');
-        dots.forEach((dot, i) => dot.classList.toggle('active', i === idx));
-    };
+    // Jalankan Animasi Buka
+    setTimeout(() => {
+        modal.style.opacity = '1';
+        content.classList.remove('opacity-0', 'scale-95');
+        content.classList.add('opacity-100', 'scale-100');
+    }, 10);
 
     document.body.style.overflow = 'hidden';
-    modal.onclick = (e) => { if (e.target === modal) closeModal(); };
 }
-  
-// Fungsi Pembantu untuk menghitung lebar modal agar FIT dengan konten
+
 function applyFit(w, h) {
     const content = document.getElementById('modal-content');
     if (!content) return;
 
-    const maxHeight = window.innerHeight * 0.7; // Batas tinggi 70% layar
-    const aspectRatio = w / h;
-    
-    let finalWidth;
-    
-    // Jika tinggi asli lebih besar dari batas maxHeight
-    if (h > maxHeight) {
-        finalWidth = maxHeight * aspectRatio;
-    } else {
-        finalWidth = w;
-    }
+    const winW = window.innerWidth;
+    const winH = window.innerHeight;
+    const ratio = w / h;
 
-    // Batasi agar lebar tidak melebihi 90% lebar layar (biar gak kepotong di HP)
-    const maxWidth = window.innerWidth * 0.9;
-    if (finalWidth > maxWidth) {
-        finalWidth = maxWidth;
-    }
+    // Hitung lebar berdasarkan tinggi layar (75% dari tinggi layar)
+    let targetW = (winH * 0.75) * ratio;
+    
+    // Batasi lebar maksimal 1100px, minimal 320px, dan tidak boleh lewat lebar layar
+    let finalW = Math.min(Math.max(targetW, 320), 1100);
+    if (finalW > winW * 0.9) finalW = winW * 0.9;
 
-    // Terapkan ke elemen modal
-    content.style.width = Math.floor(finalWidth) + 'px';
+    content.style.width = Math.floor(finalW) + 'px';
 }
   
   function closeModal() {
