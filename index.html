@@ -107,7 +107,7 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
   break-inside:avoid;
   margin-bottom:16px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius:var(--radius-lg) !important;
+  border-radius:var(--radius-lg);
   overflow:hidden;
   cursor:pointer;
   position:relative;
@@ -117,7 +117,12 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
   display: flex;
   flex-direction: column;
 }
-.masonry-item:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 24px 60px rgba(0,0,0,0.5),0 0 0 1px rgba(255,255,255,0.12);z-index:10;}
+.masonry-item:hover {
+    transform:translateY(-8px) scale(1.02);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+}
 .masonry-item img {transition: transform 0.4s var(--spring);}
 .masonry-item:hover img {transform: scale(1.05);}
 @keyframes masonryIn{from{opacity:0;transform:scale(0.9) translateY(24px);}to{opacity:1;transform:scale(1) translateY(0);}}
@@ -146,11 +151,6 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
 .masonry-item-tag {
     align-self: flex-start; /* Agar kapsul tidak melebar full width */
     margin-top: 4px;
-}
-.masonry-item:hover {
-    border-color: rgba(255, 255, 255, 0.3);
-    transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.05);
 }
 
 /* Deskripsi Singkat di Bawah Judul */
