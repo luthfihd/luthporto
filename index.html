@@ -100,9 +100,6 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
 
 /* ── MASONRY ── */
 .masonry-grid{columns:5;column-gap:12px;}
-@media(max-width:1100px){.masonry-grid{columns:4;}}
-@media(max-width:768px){.masonry-grid{columns:3;}}
-@media(max-width:480px){.masonry-grid{columns:1;}}
 .masonry-item {
   break-inside:avoid;
   margin-bottom:16px;
@@ -145,12 +142,14 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
 .masonry-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.88) 0%,rgba(0,0,0,0.15) 55%,transparent 100%);opacity:0;transition:opacity 0.35s;border-radius:var(--radius-lg);display:flex;flex-direction:column;justify-content:flex-end;padding:16px;}
 .masonry-item:hover .masonry-overlay{opacity:1;}
 .masonry-item-tag{font-size:11px;font-family:'Space Mono',monospace;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:50px;display:inline-block;width:fit-content;}
+
 /* Container Info di Bawah Thumbnail */
 .masonry-item-info {
     padding: 16px; /* Jarak teks ke outline kartu */
     display: flex;
     flex-direction: column;
     gap: 4px;
+    background: rgba(0, 0, 0, 0.5); /* Ini untuk warna background-nya */
 }
 
 .masonry-item-title {
@@ -171,7 +170,7 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
 .masonry-item-desc {
     display: block;
     font-size: 11.5px;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.6);
     line-height: 1.5;
     margin: 4px 0 8px 0;
     display: -webkit-box;
@@ -465,7 +464,10 @@ footer{margin-top:60px;padding:60px 0 40px;}
     aspect-ratio: 1 / 1; 
 }
 
-/* 2. MOBILE DISPLAY */
+/* 2. MOBILE DISPLAY CONFIG */
+@media(max-width:1100px){.masonry-grid{columns:4;}}
+@media(max-width:768px){.masonry-grid{columns:3;}}
+@media(max-width:480px){.masonry-grid{columns:1;}}
 @media (max-width: 768px) {
     .hero-container {
         padding: 2rem 1.5rem; 
