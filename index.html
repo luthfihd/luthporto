@@ -744,6 +744,7 @@ function renderGrid() {
     el.style.animationDelay = `${idx * 0.06}s`;
     el.onclick = () => openLightbox(item);
 
+    // --- LOGIKA TAG KHUSUS ALL PROJECTS ---
     const tagClass = {
         educational: 'tag-edu',
         promotional: 'tag-promo',
@@ -761,22 +762,21 @@ function renderGrid() {
     // HANYA TAMPILKAN TAG JIKA FILTER ADALAH 'ALL'
     const tagHtml = currentFilter === 'all' 
         ? `<span class="masonry-item-tag ${tagClass}">${tagLabel}</span>` 
-        : '';
-    
-    // Media Logic
+        : ''; 
+
+    // --- LOGIKA MEDIA ---
     const allLinks = (item.image || item.src || "").split(',');
     const isMultiple = allLinks.length > 1;
     const firstLink = allLinks[0].trim();
     
     let finalSrc = firstLink.startsWith('http') ? firstLink : IMAGES_BASE + firstLink;
-    if (item.type === 'video' || item.type === 'gdrive') {
+    if (item.type === 'video' || item.type === 'gdrive' || firstLink.includes('drive.google.com')) {
         if (finalSrc.includes('drive.google.com')) {
             let fileId = getGoogleDriveId(finalSrc);
             finalSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w600&id=${fileId}`;
         }
     }
 
-    // HTML Structure: Thumbnail + Overlay (Show Details) + Info (Title & Tag Below)
     el.innerHTML = `
         <div class="relative overflow-hidden rounded-[var(--radius-lg)]">
             <img class="masonry-thumb" src="${finalSrc}" alt="${item.title}" loading="lazy">
@@ -794,13 +794,11 @@ function renderGrid() {
 
         <div class="masonry-item-info">
             <span class="masonry-item-title">${item.title}</span>
-            <span class="masonry-item-tag ${tagClass}">${tagLabel}</span>
-        </div>
+            ${tagHtml} </div>
     `;
 
     grid.appendChild(el);
   });
-}
 
 // ── FILTER ──
 document.querySelectorAll('.filter-btn').forEach(btn => {
