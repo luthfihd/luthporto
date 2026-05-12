@@ -672,58 +672,67 @@ function renderGrid() {
 
   items.forEach((item, idx) => {
     const el = document.createElement('div');
-    // Tambahkan class 'group' agar multi-indicator muncul saat hover
-    el.className = 'masonry-item relative group'; 
+    // Tambahkan mb-8 atau mb-10 agar ada jarak antar baris karena sekarang ada teks di bawah
+    el.className = 'masonry-item relative group mb-8 cursor-pointer'; 
     el.style.animationDelay = `${idx * 0.06}s`;
     el.onclick = () => openLightbox(item);
 
+    // ── LOGIKA DETEKSI VIDEO (Karena di JSON cuma ada gdrive) ──
+    const firstLink = (item.image || item.src || "").split(',')[0].trim();
+    const isVideo = firstLink.includes('drive.google.com') || firstLink.includes('youtube.com');
+
     const tagClass = {
-    educational: 'tag-edu',
-    promotional: 'tag-promo',
-    branding: 'tag-brand',
-    exploration: 'tag-explore' 
-}[item.category] || 'tag-promo';
+        educational: 'tag-edu',
+        promotional: 'tag-promo',
+        branding: 'tag-brand',
+        exploration: 'tag-explore' 
+    }[item.category] || 'tag-promo';
 
-const tagLabel = {
-    educational: 'Educational',
-    promotional: 'Promotional',
-    branding: 'Branding',
-    exploration: 'Exploration' 
-}[item.category] || item.category;
+    const tagLabel = {
+        educational: 'Educational',
+        promotional: 'Promotional',
+        branding: 'Branding',
+        exploration: 'Exploration' 
+    }[item.category] || item.category;
 
-    // 1. Logika Pecah Link & Indikator Multiple
-    const allLinks = (item.image || item.src || "").split(',');
-    const isMultiple = allLinks.length > 1;
-
-    // 2. Tentukan Media Utama (Thumbnail)
-    const firstLink = allLinks[0].trim();
+    // ── THUMBNAIL LOGIC ──
     let finalSrc = firstLink.startsWith('http') ? firstLink : IMAGES_BASE + firstLink;
-
-    // Jika tipe video/gdrive, pastikan thumbnailnya benar
-    if (item.type === 'video' || item.type === 'gdrive') {
-        if (finalSrc.includes('drive.google.com')) {
-            let fileId = getGoogleDriveId(finalSrc);
-            finalSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w600&id=${fileId}`;
-        }
+    if (firstLink.includes('drive.google.com')) {
+        let fileId = getGoogleDriveId(firstLink);
+        finalSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w600&id=${fileId}`;
     }
 
-    // 3. Bangun HTML (Hanya gunakan SATU variabel mediaHtml)
-    let mediaHtml = `<img class="masonry-thumb" src="${finalSrc}" alt="${item.title}" loading="lazy" onerror="this.src='https://placehold.co/600x400/1a1a3e/white?text=Image+Not+Found'">`;
-
-    // 4. Indikator Jumlah Konten (Selalu tampil di mobile, Hover di desktop)
-    const mediaCount = allLinks.length;
-    const multiIndicator = isMultiple ? `
-      <div class="badge-multiple">
-        <div class="badge-dot"></div>
-        <span class="badge-text">${mediaCount} </span>
-      </div>` : '';
-
+    // ── HTML STRUCTURE ──
     el.innerHTML = `
-        ${mediaHtml}
-        ${multiIndicator}
-        <div class="masonry-overlay">
-            <div class="masonry-item-title">${item.title}</div>
-            <span class="masonry-item-tag ${tagClass}">${tagLabel}</span>
+        <div class="relative overflow-hidden rounded-2xl bg-black/20 shadow-lg transition-all duration-500 group-hover:shadow-2xl group-hover:-translate-y-1">
+            <img class="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105" 
+                 src="${finalSrc}" 
+                 alt="${item.title}" 
+                 loading="lazy">
+            
+            ${isVideo ? `
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div class="w-10 h-10 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 group-hover:scale-110 transition-transform duration-300">
+                  <svg class="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+              </div>
+            ` : ''}
+
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500"></div>
+        </div>
+
+        <div class="mt-4 px-1">
+            <div class="flex items-center gap-2 mb-1.5">
+                <span class="text-[9px] font-mono uppercase tracking-[0.15em] px-2 py-0.5 rounded border border-white/10 text-white/50 ${tagClass}">
+                    ${tagLabel}
+                </span>
+                <span class="text-[8px] font-mono text-white/20 tracking-widest uppercase">
+                    ${isVideo ? 'Motion' : 'Archive'}
+                </span>
+            </div>
+            <h3 class="text-[13px] font-medium text-white/90 leading-tight font-sans tracking-wide group-hover:text-white transition-colors">
+                ${item.title}
+            </h3>
         </div>
     `;
 
