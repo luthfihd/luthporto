@@ -672,14 +672,25 @@ function renderGrid() {
 
   items.forEach((item, idx) => {
     const el = document.createElement('div');
-    // Tambahkan mb-8 atau mb-10 agar ada jarak antar baris karena sekarang ada teks di bawah
-    el.className = 'masonry-item relative group mb-8 cursor-pointer'; 
+    // Hilangkan overflow-hidden di sini supaya teks gak kepotong radius
+    el.className = 'masonry-item relative group mb-6 cursor-pointer'; 
     el.style.animationDelay = `${idx * 0.06}s`;
     el.onclick = () => openLightbox(item);
 
-    // ── LOGIKA DETEKSI VIDEO (Karena di JSON cuma ada gdrive) ──
-    const firstLink = (item.image || item.src || "").split(',')[0].trim();
-    const isVideo = firstLink.includes('drive.google.com') || firstLink.includes('youtube.com');
+    // ── 1. LOGIKA MEDIA ──
+    const allLinks = (item.image || item.src || "").split(',');
+    const mediaCount = allLinks.length;
+    const firstLink = allLinks[0].trim();
+    
+    // DETEKSI VIDEO: Hanya jika tipenya 'video' ATAU 'gdrive' (tapi bukan link thumbnail biasa)
+    const isVideo = item.type === 'video' || item.type === 'gdrive';
+
+    // ── 2. THUMBNAIL ──
+    let finalSrc = item.thumb || firstLink; 
+    if (finalSrc.includes('drive.google.com')) {
+        let fileId = getGoogleDriveId(finalSrc);
+        finalSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w600&id=${fileId}`;
+    }
 
     const tagClass = {
         educational: 'tag-edu',
@@ -688,49 +699,37 @@ function renderGrid() {
         exploration: 'tag-explore' 
     }[item.category] || 'tag-promo';
 
-    const tagLabel = {
-        educational: 'Educational',
-        promotional: 'Promotional',
-        branding: 'Branding',
-        exploration: 'Exploration' 
-    }[item.category] || item.category;
-
-    // ── THUMBNAIL LOGIC ──
-    let finalSrc = firstLink.startsWith('http') ? firstLink : IMAGES_BASE + firstLink;
-    if (firstLink.includes('drive.google.com')) {
-        let fileId = getGoogleDriveId(firstLink);
-        finalSrc = `https://drive.google.com/thumbnail?authuser=0&sz=w600&id=${fileId}`;
-    }
-
-    // ── HTML STRUCTURE ──
+    // ── 3. HTML STRUCTURE ──
     el.innerHTML = `
-        <div class="relative overflow-hidden rounded-2xl bg-black/20 shadow-lg transition-all duration-500 group-hover:shadow-2xl group-hover:-translate-y-1">
-            <img class="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105" 
+        <div class="relative overflow-hidden rounded-2xl bg-black/20 aspect-video mb-3">
+            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
                  src="${finalSrc}" 
                  alt="${item.title}" 
                  loading="lazy">
             
             ${isVideo ? `
               <div class="absolute inset-0 flex items-center justify-center">
-                <div class="w-10 h-10 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 group-hover:scale-110 transition-transform duration-300">
+                <div class="w-10 h-10 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20">
                   <svg class="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                 </div>
               </div>
             ` : ''}
 
-            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500"></div>
+            ${mediaCount > 1 ? `
+              <div class="badge-multiple absolute top-3 right-3">
+                <div class="badge-dot"></div>
+                <span class="badge-text">${mediaCount}</span>
+              </div>
+            ` : ''}
         </div>
 
-        <div class="mt-4 px-1">
-            <div class="flex items-center gap-2 mb-1.5">
-                <span class="text-[9px] font-mono uppercase tracking-[0.15em] px-2 py-0.5 rounded border border-white/10 text-white/50 ${tagClass}">
-                    ${tagLabel}
-                </span>
-                <span class="text-[8px] font-mono text-white/20 tracking-widest uppercase">
-                    ${isVideo ? 'Motion' : 'Archive'}
+        <div class="px-1">
+            <div class="flex items-center gap-2 mb-1">
+                <span class="text-[9px] font-mono uppercase tracking-widest px-1.5 py-0.5 rounded border border-white/10 text-white/50 ${tagClass}">
+                    ${item.category}
                 </span>
             </div>
-            <h3 class="text-[13px] font-medium text-white/90 leading-tight font-sans tracking-wide group-hover:text-white transition-colors">
+            <h3 class="text-[13px] font-medium text-white/90 leading-snug font-sans truncate">
                 ${item.title}
             </h3>
         </div>
@@ -766,14 +765,14 @@ function openLightbox(item) {
     const content = document.getElementById('modal-content');
     const container = document.getElementById('modal-media-container');
     const dotsContainer = document.getElementById('modal-dots');
-    const app = document.getElementById('app');
 
     // 1. Reset & Persiapan
     container.innerHTML = '';
     if(dotsContainer) dotsContainer.innerHTML = '';
     modal.style.display = 'flex';
     modal.style.pointerEvents = 'auto';
-    content.style.width = '300px'; 
+    content.style.width = '90%'; // Set default lebar mobile dulu
+    content.style.maxWidth = '1200px';
 
     setTimeout(() => {
         modal.style.opacity = '1';
@@ -787,7 +786,6 @@ function openLightbox(item) {
     const tag = document.getElementById('modal-tag');
     if(tag) {
         tag.textContent = item.category;
-        // Update warna tag sesuai kategori
         tag.className = `modal-tag tag-${item.category.toLowerCase()}`;
     }
   
@@ -797,56 +795,51 @@ function openLightbox(item) {
     allLinks.forEach((link, index) => {
         let rawSrc = link.trim();
         let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
-        const isVideo = rawSrc.match(/\.(mp4|webm|ogg|mov)$/i) || item.category === 'video';
+
+        // perbaikan deteksi video: Cek format file ATAU tipe data dari JSON
+        const isVideo = rawSrc.match(/\.(mp4|webm|ogg|mov)$/i) || 
+                        item.type === 'video' || 
+                        item.type === 'gdrive' || 
+                        rawSrc.includes('drive.google.com/file/d/');
 
         if (isVideo) {
-            // --- KONTEN VIDEO (Tanpa Link Klik) ---
             let mediaElement;
             if (rawSrc.includes('drive.google.com')) {
+                // Skenario Google Drive Video
                 mediaElement = document.createElement('iframe');
                 let fileId = getGoogleDriveId(rawSrc);
                 mediaElement.src = `https://drive.google.com/file/d/${fileId}/preview`;
-                mediaElement.className = "opacity-0 transition-opacity duration-500 w-full";
-                mediaElement.style.height = "70vh";
+                mediaElement.className = "opacity-0 transition-opacity duration-500 w-full rounded-xl";
+                mediaElement.style.height = "65vh";
                 mediaElement.style.border = "none";
-                mediaElement.style.borderRadius = "12px";
+                mediaElement.setAttribute('allow', 'autoplay');
             } else {
+                // Skenario Video Direct Link / MP4
                 mediaElement = document.createElement('video');
                 mediaElement.src = fullSrc;
                 mediaElement.controls = true;
-                mediaElement.className = "opacity-0 transition-opacity duration-500 w-full h-auto";
-                mediaElement.style.maxHeight = "70vh";
+                mediaElement.className = "opacity-0 transition-opacity duration-500 w-full h-auto max-h-[70vh] rounded-xl";
             }
+            
             container.appendChild(mediaElement);
             
-            // Penyesuaian ukuran video
+            // Tampilkan media
+            setTimeout(() => mediaElement.classList.remove('opacity-0'), 300);
+            
+            // Set lebar modal yang pas untuk video (16:9)
             if (index === 0) {
-                if (rawSrc.includes('drive.google.com')) {
-                    const maxHeight = window.innerHeight * 0.7;
-                    content.style.width = Math.floor(maxHeight * 1.77) + 'px';
-                    setTimeout(() => mediaElement.classList.remove('opacity-0'), 500);
-                } else {
-                    mediaElement.onloadedmetadata = () => {
-                        applyFit(mediaElement.videoWidth, mediaElement.videoHeight);
-                        mediaElement.classList.remove('opacity-0');
-                    };
-                }
-            } else {
-                setTimeout(() => mediaElement.classList.remove('opacity-0'), 100);
+                content.style.width = "1000px"; 
             }
 
         } else {
-            // --- KONTEN GAMBAR (Bisa Diklik ke GDrive) ---
+            // Skenario Gambar
             const wrapper = document.createElement('a');
-            wrapper.href = fullSrc; // Link asli GDrive
+            wrapper.href = fullSrc; 
             wrapper.target = "_blank";
-            wrapper.title = "Klik untuk buka di Google Drive";
-            wrapper.style.display = "block";
-            wrapper.style.width = "100%";
-            wrapper.className = "cursor-zoom-in";
+            wrapper.className = "cursor-zoom-in block w-full";
             
             const img = document.createElement('img');
-            img.className = "opacity-0 transition-opacity duration-500 w-full h-auto";
+            img.className = "opacity-0 transition-opacity duration-500 w-full h-auto max-h-[75vh] rounded-xl object-contain";
             
             let displaySrc = fullSrc;
             if (fullSrc.includes('drive.google.com')) {
@@ -855,15 +848,10 @@ function openLightbox(item) {
             }
             
             img.src = displaySrc;
-            
-            if (index === 0) {
-                img.onload = () => {
-                    applyFit(img.naturalWidth, img.naturalHeight);
-                    img.classList.remove('opacity-0');
-                };
-            } else {
-                setTimeout(() => img.classList.remove('opacity-0'), 100);
-            }
+            img.onload = () => {
+                img.classList.remove('opacity-0');
+                if (index === 0) applyFit(img.naturalWidth, img.naturalHeight);
+            };
             
             wrapper.appendChild(img);
             container.appendChild(wrapper);
@@ -877,7 +865,7 @@ function openLightbox(item) {
         }
     });
 
-    // 3. Tombol Prev/Next
+    // 3. Kontrol Navigasi
     const prevBtn = document.getElementById('modal-prev');
     const nextBtn = document.getElementById('modal-next');
     if (prevBtn && nextBtn) {
@@ -886,7 +874,7 @@ function openLightbox(item) {
     }
 
     container.onscroll = () => {
-        const idx = Math.round(container.scrollLeft / container.offsetWidth);
+        const idx = Math.round(container.scrollLeft / (container.offsetWidth || 1));
         const dots = document.querySelectorAll('.modal-dot');
         dots.forEach((dot, i) => dot.classList.toggle('active', i === idx));
     };
