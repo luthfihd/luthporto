@@ -1032,8 +1032,7 @@ allLinks.forEach((link, index) => {
             const dot = document.createElement('div');
             dot.className = `modal-dot ${index === 0 ? 'active' : ''}`;
             dotsContainer.appendChild(dot);
-        }
-    };
+        };
 
     // 3. Tombol Prev/Next & Scroll Logic
     const prevBtn = document.getElementById('modal-prev');
@@ -1051,7 +1050,7 @@ allLinks.forEach((link, index) => {
 
     document.body.style.overflow = 'hidden';
     modal.onclick = (e) => { if (e.target === modal) closeModal(); };
-  
+} 
 // Fungsi Pembantu untuk menghitung lebar modal agar FIT dengan konten
 function applyFit(w, h) {
     const content = document.getElementById('modal-content');
