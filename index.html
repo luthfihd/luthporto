@@ -781,54 +781,33 @@ function setFaviconFromDirectLink(imageUrl) {
 // PANGGIL FUNGSINYA (ganti dengan link Google Drive kamu)
 setFaviconFromDirectLink('https://lh3.googleusercontent.com/d/1jkLbUA9ENzlOCrmIo6__zexMv-RF9ODS=w64-h64');
 
-// PERBAIKI DATA SECARA OTOMATIS SEBELUM DIPAKAI
-function fixDataTypes(data) {
-    return data.map(item => {
-        // Gabungin semua teks jadi satu biar gampang dicarinya
-        const title = (item.title || "").toLowerCase();
-        const category = (item.category || "").toLowerCase();
-        const contentString = (item.image || item.src || "").toLowerCase();
-        
-        // Radar pendeteksi video (tambahin keyword di sini kalau ada yang kurang)
-        const hasVideoKeyword = title.includes('video') || 
-                               title.includes('motion') ||
-                               category.includes('video') || 
-                               category.includes('motion') ||
-                               category.includes('cinematic') ||
-                               category.includes('reels');
-
-        const hasVideoExtension = contentString.includes('.mp4') || 
-                                 contentString.includes('.mov') || 
-                                 contentString.includes('.webm') ||
-                                 contentString.includes('.m4v');
-
-        // Jika salah satu terpenuhi, paksa jadi video
-        if (hasVideoKeyword || hasVideoExtension) {
-            item.type = 'video';
-            console.log(`✅ AUTO-VIDEO: ${item.title}`);
-        } else {
-            console.log(`🖼️ AUTO-IMAGE: ${item.title}`);
-        }
-        return item;
-    });
-}
-
-// ── JSON DATA CLEANER ──
+// ── FIX JSON DATA ──
 function autoFixJSON(data) {
     return data.map(item => {
-        // Ambil semua link, pecah jadi array
         const links = (item.image || "").split(',').filter(l => l.trim() !== "");
+        const title = (item.title || "").toLowerCase();
+        const category = (item.category || "").toLowerCase();
         
-        // Buat array tipe baru berdasarkan deteksi link
+        // Buat array tipe baru
         const newTypes = links.map(link => {
             const l = link.toLowerCase();
-            if (l.includes('.mp4') || l.includes('.mov') || l.includes('.webm') || l.includes('video')) {
+            
+            // Cek apakah link mengandung ekstensi video
+            const isVideoLink = l.includes('.mp4') || l.includes('.mov') || l.includes('.webm') || l.includes('.m4v');
+            
+            // Cek apakah judul atau kategori mengandung kata video/motion
+            const isVideoProject = title.includes('video') || title.includes('motion') || 
+                                   category.includes('video') || category.includes('motion') || 
+                                   category.includes('reels') || category.includes('cinematic');
+
+            // Jika ini project video dan link-nya GDrive (yang biasanya gak ada ekstensinya), 
+            // atau jika link-nya memang eksplisit video, set jadi 'video'
+            if (isVideoLink || isVideoProject) {
                 return 'video';
             }
             return 'image';
         });
 
-        // Gabungkan kembali jadi string koma: "image, video, image"
         item.type = newTypes.join(', ');
         return item;
     });
@@ -840,12 +819,12 @@ async function loadPortfolio() {
         const res = await fetch(DATA_URL + '?t=' + Date.now());
         const rawData = await res.json();
         
-        // INI KUNCINYA: Data "kotor" dari JSON langsung diperbaiki di sini
+        // Panggil fungsi hybrid kita
         allItems = autoFixJSON(rawData); 
         
         renderGrid();
     } catch(e) {
-        console.error(e);
+        console.error("Fetch Error:", e);
     }
 }
 
