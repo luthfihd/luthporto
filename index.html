@@ -400,26 +400,27 @@ footer{margin-top:60px;padding:60px 0 40px;}
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 60px;
-    height: 60px;
-    background: rgba(108, 99, 255, 0.9); /* Ungu sesuai brand kamu */
+    width: 65px;
+    height: 65px;
+    background: rgba(108, 99, 255, 0.9); /* Ungu Playful */
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    box-shadow: 0 0 25px rgba(0,0,0,0.5);
     z-index: 10;
-    pointer-events: none; /* Supaya klik tembus ke link di bawahnya */
+    pointer-events: none; /* Klik akan tembus ke link GDrive di bawahnya */
+    transition: all 0.3s ease;
 }
 
-/* Segitiga Play */
+/* Segitiga Putih */
 .play-icon {
     width: 0;
     height: 0;
-    border-top: 12px solid transparent;
-    border-bottom: 12px solid transparent;
-    border-left: 20px solid white;
-    margin-left: 5px;
+    border-top: 14px solid transparent;
+    border-bottom: 14px solid transparent;
+    border-left: 22px solid white;
+    margin-left: 6px;
 }
 
 /* Ikon Multiple di Masonry */
@@ -939,35 +940,39 @@ function openLightbox(item) {
     
     allLinks.forEach((link, index) => {
         let rawSrc = link.trim();
-        let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
         
-        // Gunakan fungsi deteksi yang baru kamu tambah
-        const isVideo = checkIfVideo(rawSrc);
+        // --- RADAR VIDEO ---
+        // Cek apakah ada tanda #video di akhir link
+        const isVideo = rawSrc.includes('#video');
 
-        // --- WRAPPER (Semua konten dibungkus link agar bisa diklik ke GDrive) ---
+        // --- PEMBERSIHAN LINK ---
+        // Hapus tanda #video agar link Google Drive kembali normal/valid
+        let cleanSrc = rawSrc.replace('#video', '');
+        let fullSrc = cleanSrc.startsWith('http') ? cleanSrc : IMAGES_BASE + cleanSrc;
+
+        // --- WRAPPER ---
         const wrapper = document.createElement('a');
         wrapper.href = fullSrc;
         wrapper.target = "_blank";
-        wrapper.title = isVideo ? "Klik untuk putar video" : "Klik untuk buka di Google Drive";
+        wrapper.title = isVideo ? "Klik untuk putar video" : "Klik untuk lihat detail";
         wrapper.style.display = "block";
         wrapper.style.width = "100%";
-        // Jika video, beri class video-wrapper untuk CSS tombol play
-        wrapper.className = isVideo ? "video-wrapper cursor-pointer relative" : "cursor-zoom-in";
+        // Pasang class video-wrapper jika terdeteksi video
+        wrapper.className = isVideo ? "video-wrapper cursor-pointer relative mb-4" : "cursor-zoom-in mb-4";
         
         const img = document.createElement('img');
-        img.className = "opacity-0 transition-opacity duration-500 w-full h-auto rounded-xl";
+        img.className = "opacity-0 transition-opacity duration-500 w-full h-auto rounded-xl shadow-lg";
         
-        // --- THUMBNAIL LOGIC ---
+        // Ambil ID GDrive dari link yang sudah bersih
         let displaySrc = fullSrc;
         if (fullSrc.includes('drive.google.com')) {
             let fileId = getGoogleDriveId(fullSrc);
             displaySrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
         }
         img.src = displaySrc;
-        
         wrapper.appendChild(img);
 
-        // --- JIKA VIDEO: Tambahkan Icon Play di Tengah ---
+        // --- SISIPKAN ICON PLAY ---
         if (isVideo) {
             const playBtn = document.createElement('div');
             playBtn.className = "play-button-overlay";
@@ -977,7 +982,13 @@ function openLightbox(item) {
 
         container.appendChild(wrapper);
 
-        // LOGIKA LOADING (Tetap stabil untuk Fit & Opacity)
+        // Logic Dots & Loading (Tetap stabil sesuai kode asli kamu)
+        if (allLinks.length > 1 && dotsContainer) {
+            const dot = document.createElement('div');
+            dot.className = `modal-dot ${index === 0 ? 'active' : ''}`;
+            dotsContainer.appendChild(dot);
+        }
+
         img.onload = () => {
             if (index === 0) applyFit(img.naturalWidth, img.naturalHeight);
             img.classList.remove('opacity-0');
