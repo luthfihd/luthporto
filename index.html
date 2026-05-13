@@ -967,6 +967,13 @@ function openLightbox(item) {
                         item.type === 'video' ||
                         (rawSrc.includes('drive.google.com') && item.type === 'video');
 
+        console.log("Checking Media:", {
+            title: item.title,
+            link: rawSrc,
+            type: item.type,
+            detectedAsVideo: isVideo
+        });
+        
         if (isVideo) {
             const wrapper = document.createElement('a');
             wrapper.href = fullSrc; 
