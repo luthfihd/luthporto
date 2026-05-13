@@ -75,7 +75,7 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
 .section-header{text-align:center;margin-bottom:48px;}
 .section-eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--c3);text-transform:uppercase;margin-bottom:12px;}
 .section-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:700;color:#fff;line-height:1.15;}
-.section-title span{background:linear-gradient(135deg,#ffffff,#ffffff,#ffffff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.section-title span{background:#ffffff;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .filter-btn.active{color:#fff;border-color:rgba(108,99,255,0.6);background:linear-gradient(135deg,#6C63FF,#c026d3,#FF6B9D);box-shadow:0 0 20px rgba(108,99,255,0.3),inset 0 1px 0 rgba(255,255,255,0.2);transform:translateY(-2px);opacity:1;}
 .filter-btn:hover{transform:translateY(-2px);color:#fff;background:linear-gradient(135deg,rgba(108,99,255,0.75),rgba(192,38,211,0.75),rgba(255,107,157,0.75));opacity:0.75;}
 
@@ -941,29 +941,25 @@ function openLightbox(item) {
     allLinks.forEach((link, index) => {
         let rawSrc = link.trim();
         
-        // --- RADAR VIDEO ---
-        // Cek apakah ada tanda #video di akhir link
+        // 1. Deteksi Video
         const isVideo = rawSrc.includes('#video');
 
-        // --- PEMBERSIHAN LINK ---
-        // Hapus tanda #video agar link Google Drive kembali normal/valid
+        // 2. Pembersihan Link
         let cleanSrc = rawSrc.replace('#video', '');
         let fullSrc = cleanSrc.startsWith('http') ? cleanSrc : IMAGES_BASE + cleanSrc;
 
-        // --- WRAPPER ---
+        // 3. Buat Wrapper
         const wrapper = document.createElement('a');
         wrapper.href = fullSrc;
         wrapper.target = "_blank";
-        wrapper.title = isVideo ? "Klik untuk putar video" : "Klik untuk lihat detail";
+        wrapper.className = isVideo ? "video-wrapper cursor-pointer relative mb-4" : "cursor-zoom-in mb-4";
         wrapper.style.display = "block";
         wrapper.style.width = "100%";
-        // Pasang class video-wrapper jika terdeteksi video
-        wrapper.className = isVideo ? "video-wrapper cursor-pointer relative mb-4" : "cursor-zoom-in mb-4";
         
+        // 4. Buat Gambar Thumbnail
         const img = document.createElement('img');
         img.className = "opacity-0 transition-opacity duration-500 w-full h-auto rounded-xl shadow-lg";
         
-        // Ambil ID GDrive dari link yang sudah bersih
         let displaySrc = fullSrc;
         if (fullSrc.includes('drive.google.com')) {
             let fileId = getGoogleDriveId(fullSrc);
@@ -972,7 +968,7 @@ function openLightbox(item) {
         img.src = displaySrc;
         wrapper.appendChild(img);
 
-        // --- SISIPKAN ICON PLAY ---
+        // 5. Jika Video, tambah Icon Play
         if (isVideo) {
             const playBtn = document.createElement('div');
             playBtn.className = "play-button-overlay";
@@ -982,24 +978,18 @@ function openLightbox(item) {
 
         container.appendChild(wrapper);
 
-        // Logic Dots & Loading (Tetap stabil sesuai kode asli kamu)
+        // 6. DOTS NAVIGASI (Pastikan ini di dalam forEach dan hanya ada SATU kali)
         if (allLinks.length > 1 && dotsContainer) {
             const dot = document.createElement('div');
             dot.className = `modal-dot ${index === 0 ? 'active' : ''}`;
             dotsContainer.appendChild(dot);
         }
 
+        // 7. Load Logic
         img.onload = () => {
             if (index === 0) applyFit(img.naturalWidth, img.naturalHeight);
             img.classList.remove('opacity-0');
         };
-
-        // DOTS Navigasi (Tetap stabil)
-        if (allLinks.length > 1 && dotsContainer) {
-            const dot = document.createElement('div');
-            dot.className = `modal-dot ${index === 0 ? 'active' : ''}`;
-            dotsContainer.appendChild(dot);
-        }
     });
 
     // 3. Tombol Prev/Next
