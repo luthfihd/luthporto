@@ -13,7 +13,7 @@
 
 /* ── DESIGN TOKENS ── */
 :root {
-  --glass-bg: rgba(255,255,255,0.10);
+  --glass-bg: #1b0324
   --glass-border: rgba(255,255,255,0.25);
   --glass-shadow: 0 8px 32px rgba(0,0,0,0.2);
   --glass-highlight: rgba(255,255,255,0.5);
@@ -25,18 +25,7 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#fff;background:#0a0a18;}
-
-  /* ── BACKGROUND ── */
-#bg-canvas{position:fixed;inset:0;z-index:0;}
-.bg-orb{position:absolute;border-radius:50%;filter:blur(20px);opacity:0.5;}
-.bg-orb:nth-child(1){width:650px;height:650px;background:radial-gradient(circle,#6C63FF,transparent 70%);top:-15%;left:-10%;}
-.bg-orb:nth-child(2){width:550px;height:550px;background:radial-gradient(circle,#FF6B9D,transparent 70%);top:25%;right:-10%;}
-.bg-orb:nth-child(3){width:500px;height:500px;background:radial-gradient(circle,#FFD93D,transparent 70%);bottom:-10%;left:15%;}
-.bg-orb:nth-child(4){width:420px;height:420px;background:radial-gradient(circle,#4ECDC4,transparent 70%);top:55%;left:55%;}
-.bg-orb:nth-child(5){width:380px;height:380px;background:radial-gradient(circle,#FF8C42,transparent 70%);top:10%;left:38%;}
-@keyframes drift{0%{transform:translate(0,0) scale(1);}50%{transform:translate(35px,-25px) scale(1.07);}100%{transform:translate(-15px,45px) scale(0.94);}}
-body::before{content:'';position:fixed;inset:0;z-index:1;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;opacity:0.25;}
+body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#ffffff;background:#1b0324;}
 
 /* ── GLASS ── */
 .glass{background:var(--glass-bg);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-highlight);position:relative;overflow:hidden;}
@@ -247,7 +236,7 @@ footer{margin-top:60px;padding:60px 0 40px;}
 .social-x:hover { background: linear-gradient(135deg,rgba(79,195,247,0.3),rgba(108,99,255,0.3)); border-color: #fff; color: #fff; }
 .social-li:hover { background: linear-gradient(135deg,rgba(79,195,247,0.3),rgba(108,99,255,0.3)); border-color: #fff; color: #fff; }
 .social-ig:hover { background: linear-gradient(135deg,rgba(79,195,247,0.3),rgba(108,99,255,0.3)); border-color: #fff; color: #fff; }
-.footer-copy{color:rgba(255,255,255,0.25);font-size:12px;font-family:'Space Mono',monospace;letter-spacing:1px;}
+.footer-copy{color:#ffffff);font-size:12px;font-family:'Space Mono',monospace;letter-spacing:1px;}
 .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent);margin:20px 0;}
 
 /* ── ANIMATIONS ── */
@@ -674,7 +663,7 @@ footer{margin-top:60px;padding:60px 0 40px;}
         </a>
       </div>
       <div class="divider"></div>
-      <div class="footer-copy">© 2026 M.A.S — All Rights Reserved</div>
+      <div class="footer-copy">© 2026 Luthfi Hidayat — All Rights Reserved</div>
     </div>
   </div>
 </footer>
@@ -822,24 +811,41 @@ function fixDataTypes(data) {
         return item;
     });
 }
- 
+
+// ── JSON DATA CLEANER ──
+function autoFixJSON(data) {
+    return data.map(item => {
+        // Ambil semua link, pecah jadi array
+        const links = (item.image || "").split(',').filter(l => l.trim() !== "");
+        
+        // Buat array tipe baru berdasarkan deteksi link
+        const newTypes = links.map(link => {
+            const l = link.toLowerCase();
+            if (l.includes('.mp4') || l.includes('.mov') || l.includes('.webm') || l.includes('video')) {
+                return 'video';
+            }
+            return 'image';
+        });
+
+        // Gabungkan kembali jadi string koma: "image, video, image"
+        item.type = newTypes.join(', ');
+        return item;
+    });
+}
+
 // ── FETCH DATA ──
 async function loadPortfolio() {
-  try {
-    const res = await fetch(DATA_URL + '?t=' + Date.now());
-    if (!res.ok) throw new Error('fetch failed');
-    
-    const rawData = await res.json(); // Ambil data mentah dari JSON
-    
-    // --- DI SINI KITA PERBAIKI DATANYA ---
-    allItems = fixDataTypes(rawData); 
-    
-    renderGrid();
-  } catch(e) {
-    console.error(e); // Biar kamu bisa pantau error di console
-    document.getElementById('masonryGrid').innerHTML =
-      `<div class="empty-state"><span class="empty-icon">✦</span><p>Failed to load data. Please check you connection or set config GITHUB_USER/REPO.</p></div>`;
-  }
+    try {
+        const res = await fetch(DATA_URL + '?t=' + Date.now());
+        const rawData = await res.json();
+        
+        // INI KUNCINYA: Data "kotor" dari JSON langsung diperbaiki di sini
+        allItems = autoFixJSON(rawData); 
+        
+        renderGrid();
+    } catch(e) {
+        console.error(e);
+    }
 }
 
 // ── RENDER ──
@@ -978,82 +984,56 @@ function openLightbox(item) {
     }
   
     // 2. Logika Media
-    const allLinks = (item.image || item.src || "").split(',').filter(l => l.trim() !== "");
+const allLinks = (item.image || "").split(',').filter(l => l.trim() !== "");
+const allTypes = (item.type || "").split(',').map(t => t.trim());
+
+allLinks.forEach((link, index) => {
+    let rawSrc = link.trim();
+    let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
     
-    allLinks.forEach((link, index) => {
-        let rawSrc = link.trim();
-        let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
-        const isVideo = rawSrc.match(/\.(mp4|webm|ogg|mov)$/i) || 
-                item.type === 'video' || 
-                item.category.toLowerCase().includes('video') ||
-                item.category.toLowerCase().includes('motion');
+    // Sekarang isVideo akan akurat per urutan link!
+    const isVideo = allTypes[index] === 'video';
 
-        console.log("Checking Media:", {
-            title: item.title,
-            link: rawSrc,
-            type: item.type,
-            detectedAsVideo: isVideo
-        });
-        
-        if (isVideo) {
-            const wrapper = document.createElement('a');
-            wrapper.href = fullSrc; 
-            wrapper.target = "_blank";
-            wrapper.className = "video-wrapper cursor-pointer block w-full relative";
-            
-            const img = document.createElement('img');
-            img.className = "opacity-0 transition-opacity duration-500 w-full h-auto rounded-xl";
-            
-            let displaySrc = fullSrc;
-            if (fullSrc.includes('drive.google.com')) {
-                let fileId = getGoogleDriveId(fullSrc);
-                displaySrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
-            }
-            img.src = displaySrc;
+    const wrapper = document.createElement('a');
+    wrapper.href = fullSrc;
+    wrapper.target = "_blank";
+    
+    const img = document.createElement('img');
+    img.className = "opacity-0 transition-opacity duration-500 w-full h-auto rounded-xl shadow-lg mb-4";
+    
+    let displaySrc = fullSrc;
+    if (fullSrc.includes('drive.google.com')) {
+        let fileId = getGoogleDriveId(fullSrc);
+        displaySrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
+    }
+    img.src = displaySrc;
 
-            const playBtn = document.createElement('div');
-            playBtn.className = "play-button-overlay";
-            playBtn.innerHTML = '<div class="play-icon"></div>';
+    if (isVideo) {
+        wrapper.className = "video-wrapper cursor-pointer block w-full relative";
+        const playBtn = document.createElement('div');
+        playBtn.className = "play-button-overlay"; // Pastikan CSS ini ada di <style>
+        playBtn.innerHTML = '<div class="play-icon"></div>';
+        wrapper.appendChild(img);
+        wrapper.appendChild(playBtn);
+    } else {
+        wrapper.className = "cursor-zoom-in block w-full";
+        wrapper.appendChild(img);
+    }
 
-            wrapper.appendChild(img);
-            wrapper.appendChild(playBtn);
-            container.appendChild(wrapper);
+    container.appendChild(wrapper);
 
-            img.onload = () => {
-                if (index === 0) applyFit(img.naturalWidth, img.naturalHeight);
-                img.classList.remove('opacity-0');
-            };
-        } else {
-            const wrapper = document.createElement('a');
-            wrapper.href = fullSrc;
-            wrapper.target = "_blank";
-            wrapper.className = "cursor-zoom-in block w-full";
-            
-            const img = document.createElement('img');
-            img.className = "opacity-0 transition-opacity duration-500 w-full h-auto rounded-xl";
-            
-            let displaySrc = fullSrc;
-            if (fullSrc.includes('drive.google.com')) {
-                let fileId = getGoogleDriveId(fullSrc);
-                displaySrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
-            }
-            img.src = displaySrc;
-            
-            wrapper.appendChild(img);
-            container.appendChild(wrapper);
-
-            img.onload = () => {
-                if (index === 0) applyFit(img.naturalWidth, img.naturalHeight);
-                img.classList.remove('opacity-0');
-            };
-        }
+    img.onload = () => {
+        if (index === 0) applyFit(img.naturalWidth, img.naturalHeight);
+        img.classList.remove('opacity-0');
+    };
+});
 
         if (allLinks.length > 1 && dotsContainer) {
             const dot = document.createElement('div');
             dot.className = `modal-dot ${index === 0 ? 'active' : ''}`;
             dotsContainer.appendChild(dot);
         }
-    }); // <--- INI PENUTUP forEach YANG TADI KURANG
+    };
 
     // 3. Tombol Prev/Next & Scroll Logic
     const prevBtn = document.getElementById('modal-prev');
