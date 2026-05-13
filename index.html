@@ -912,7 +912,7 @@ function openLightbox(item) {
     allLinks.forEach((link, index) => {
         let rawSrc = link.trim();
         let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
-        const isVideo = rawSrc.match(/\.(mp4|webm|ogg|mov)$/i) || item.category === 'video';
+        const isVideo = rawSrc.match(/\.(mp4|webm|ogg|mov)$/i) || item.type === 'video';
 
         if (isVideo) {
             // --- KONTEN VIDEO (Tanpa Link Klik) ---
@@ -955,7 +955,7 @@ function openLightbox(item) {
             const wrapper = document.createElement('a');
             wrapper.href = fullSrc; // Link asli GDrive
             wrapper.target = "_blank";
-            wrapper.title = "Klik untuk buka di Google Drive";
+            wrapper.title = "View more in Google Drive";
             wrapper.style.display = "block";
             wrapper.style.width = "100%";
             wrapper.className = "cursor-zoom-in";
