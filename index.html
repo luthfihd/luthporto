@@ -342,6 +342,7 @@ footer{margin-top:60px;padding:60px 0 40px;}
     display: none; 
 }
 
+/* Container Video */
 .video-wrapper {
     position: relative;
 }
@@ -951,11 +952,10 @@ function openLightbox(item) {
     const content = document.getElementById('modal-content');
     const container = document.getElementById('modal-media-container');
     const dotsContainer = document.getElementById('modal-dots');
-    const app = document.getElementById('app');
 
     // 1. Reset & Persiapan
     container.innerHTML = '';
-    if(dotsContainer) dotsContainer.innerHTML = '';
+    if (dotsContainer) dotsContainer.innerHTML = '';
     modal.style.display = 'flex';
     modal.style.pointerEvents = 'auto';
     content.style.width = '300px'; 
@@ -970,7 +970,7 @@ function openLightbox(item) {
     document.getElementById('modal-desc').textContent = item.desc || '';
 
     const tag = document.getElementById('modal-tag');
-    if(tag) {
+    if (tag) {
         tag.textContent = item.category;
         const mappedClass = {
             educational: 'tag-edu',
@@ -978,68 +978,73 @@ function openLightbox(item) {
             branding: 'tag-brand',
             exploration: 'tag-explore' 
         }[item.category.toLowerCase()] || 'tag-promo';
-
-        tag.className = 'modal-tag';
-        tag.classList.add(mappedClass);
+        tag.className = 'modal-tag ' + mappedClass;
     }
   
     // 2. Logika Media
-const allLinks = (item.image || "").split(',').filter(l => l.trim() !== "");
-const allTypes = (item.type || "").split(',').map(t => t.trim());
+    const allLinks = (item.image || "").split(',').filter(l => l.trim() !== "");
+    const allTypes = (item.type || "").split(',').map(t => t.trim().toLowerCase());
 
-allLinks.forEach((link, index) => {
-    let rawSrc = link.trim();
-    let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
-    
-    // Sekarang isVideo akan akurat per urutan link!
-    const isVideo = allTypes[index] === 'video';
+    allLinks.forEach((link, index) => {
+        let rawSrc = link.trim();
+        let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
+        
+        // Cek tipe berdasarkan index
+        const isVideo = allTypes[index] === 'video';
 
-    const wrapper = document.createElement('a');
-    wrapper.href = fullSrc;
-    wrapper.target = "_blank";
-    
-    const img = document.createElement('img');
-    img.className = "opacity-0 transition-opacity duration-500 w-full h-auto rounded-xl shadow-lg mb-4";
-    
-    let displaySrc = fullSrc;
-    if (fullSrc.includes('drive.google.com')) {
-        let fileId = getGoogleDriveId(fullSrc);
-        displaySrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
-    }
-    img.src = displaySrc;
+        const wrapper = document.createElement('a');
+        wrapper.href = fullSrc;
+        wrapper.target = "_blank";
+        
+        const img = document.createElement('img');
+        img.className = "opacity-0 transition-opacity duration-500 w-full h-auto rounded-xl shadow-lg mb-4";
+        
+        let displaySrc = fullSrc;
+        if (fullSrc.includes('drive.google.com')) {
+            let fileId = getGoogleDriveId(fullSrc);
+            displaySrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
+        }
+        img.src = displaySrc;
 
-    if (isVideo) {
-        wrapper.className = "video-wrapper cursor-pointer block w-full relative";
-        const playBtn = document.createElement('div');
-        playBtn.className = "play-button-overlay"; // Pastikan CSS ini ada di <style>
-        playBtn.innerHTML = '<div class="play-icon"></div>';
-        wrapper.appendChild(img);
-        wrapper.appendChild(playBtn);
-    } else {
-        wrapper.className = "cursor-zoom-in block w-full";
-        wrapper.appendChild(img);
-    }
+        if (isVideo) {
+            wrapper.className = "video-wrapper cursor-pointer block w-full relative mb-4";
+            const playBtn = document.createElement('div');
+            playBtn.className = "play-button-overlay";
+            playBtn.innerHTML = '<div class="play-icon"></div>';
+            wrapper.appendChild(img);
+            wrapper.appendChild(playBtn);
+        } else {
+            wrapper.className = "cursor-zoom-in block w-full mb-4";
+            wrapper.appendChild(img);
+        }
 
-    container.appendChild(wrapper);
+        container.appendChild(wrapper);
 
-    img.onload = () => {
-        if (index === 0) applyFit(img.naturalWidth, img.naturalHeight);
-        img.classList.remove('opacity-0');
-    };
-});
-
+        // Dots Navigasi (Harus di dalam forEach!)
         if (allLinks.length > 1 && dotsContainer) {
             const dot = document.createElement('div');
             dot.className = `modal-dot ${index === 0 ? 'active' : ''}`;
             dotsContainer.appendChild(dot);
+        }
+
+        img.onload = () => {
+            if (index === 0) applyFit(img.naturalWidth, img.naturalHeight);
+            img.classList.remove('opacity-0');
         };
+    });
 
     // 3. Tombol Prev/Next & Scroll Logic
     const prevBtn = document.getElementById('modal-prev');
     const nextBtn = document.getElementById('modal-next');
+    
     if (prevBtn && nextBtn) {
-        prevBtn.style.display = allLinks.length > 1 ? 'flex' : 'none';
-        nextBtn.style.display = allLinks.length > 1 ? 'flex' : 'none';
+        if (allLinks.length > 1) {
+            prevBtn.style.setProperty('display', 'flex', 'important');
+            nextBtn.style.setProperty('display', 'flex', 'important');
+        } else {
+            prevBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+        }
     }
 
     container.onscroll = () => {
@@ -1051,6 +1056,7 @@ allLinks.forEach((link, index) => {
     document.body.style.overflow = 'hidden';
     modal.onclick = (e) => { if (e.target === modal) closeModal(); };
 } 
+
 // Fungsi Pembantu untuk menghitung lebar modal agar FIT dengan konten
 function applyFit(w, h) {
     const content = document.getElementById('modal-content');
