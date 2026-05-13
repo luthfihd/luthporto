@@ -704,8 +704,8 @@ function applyProfile() {
 
 // ── STATE ──
 let allItems = [];
-let currentFilter = 'educational';
-  
+let currentFilter = 'educational';  
+
 // ── GDRIVE THUMBNAIL ──
 function getGoogleDriveId(url) {
   if (!url) return null;
@@ -756,16 +756,34 @@ function setFaviconFromDirectLink(imageUrl) {
 // PANGGIL FUNGSINYA (ganti dengan link Google Drive kamu)
 setFaviconFromDirectLink('https://lh3.googleusercontent.com/d/1jkLbUA9ENzlOCrmIo6__zexMv-RF9ODS=w64-h64');
 
-  // ── FETCH DATA ──
+// PERBAIKI DATA SECARA OTOMATIS SEBELUM DIPAKAI
+function fixDataTypes(data) {
+    return data.map(item => {
+        const allLinks = (item.image || item.src || "").toLowerCase();
+        // Jika ada ekstensi video di dalam link, paksa type jadi video
+        if (allLinks.includes('.mp4') || allLinks.includes('.mov') || allLinks.includes('.webm')) {
+            item.type = 'video';
+        }
+        return item;
+    });
+}
+ 
+// ── FETCH DATA ──
 async function loadPortfolio() {
   try {
     const res = await fetch(DATA_URL + '?t=' + Date.now());
     if (!res.ok) throw new Error('fetch failed');
-    allItems = await res.json();
+    
+    const rawData = await res.json(); // Ambil data mentah dari JSON
+    
+    // --- DI SINI KITA PERBAIKI DATANYA ---
+    allItems = fixDataTypes(rawData); 
+    
     renderGrid();
   } catch(e) {
+    console.error(e); // Biar kamu bisa pantau error di console
     document.getElementById('masonryGrid').innerHTML =
-      `<div class="empty-state"><span class="empty-icon">✦</span><p>Gagal memuat portfolio. Cek koneksi atau config GITHUB_USER/REPO.</p></div>`;
+      `<div class="empty-state"><span class="empty-icon">✦</span><p>Failed to load data. Please check you connection or set config GITHUB_USER/REPO.</p></div>`;
   }
 }
 
