@@ -983,7 +983,10 @@ function openLightbox(item) {
     allLinks.forEach((link, index) => {
         let rawSrc = link.trim();
         let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
-        const isVideo = item.type === 'video' || rawSrc.match(/\.(mp4|webm|ogg|mov)$/i);
+        const isVideo = rawSrc.match(/\.(mp4|webm|ogg|mov)$/i) || 
+                item.type === 'video' || 
+                item.category.toLowerCase().includes('video') ||
+                item.category.toLowerCase().includes('motion');
 
         console.log("Checking Media:", {
             title: item.title,
