@@ -913,7 +913,7 @@ function openLightbox(item) {
         let rawSrc = link.trim();
         let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
         const isVideo = rawSrc.match(/\.(mp4|webm|ogg|mov)$/i) ||
-                        item.type === 'video'; ||
+                        item.type === 'video';
                         (rawSrc.includes('drive.google.com') && item.type === 'video');
 
         if (isVideo) {
