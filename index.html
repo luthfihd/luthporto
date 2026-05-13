@@ -970,16 +970,15 @@ function openLightbox(item) {
                         (rawSrc.includes('drive.google.com') && item.type === 'video');
 
         if (isVideo) {
-            // --- KONTEN VIDEO (Mode Ringan: Thumbnail + Tombol Play) ---
+            // --- KONTEN VIDEO (Thumbnail + Play Button) ---
             const wrapper = document.createElement('a');
-            wrapper.href = fullSrc; // Link video asli
+            wrapper.href = fullSrc; 
             wrapper.target = "_blank";
             wrapper.className = "video-wrapper cursor-pointer block w-full relative";
             
             const img = document.createElement('img');
             img.className = "opacity-0 transition-opacity duration-500 w-full h-auto rounded-xl";
             
-            // Ambil thumbnail dari GDrive
             let displaySrc = fullSrc;
             if (fullSrc.includes('drive.google.com')) {
                 let fileId = getGoogleDriveId(fullSrc);
@@ -987,7 +986,6 @@ function openLightbox(item) {
             }
             img.src = displaySrc;
 
-            // Tambahkan Overlay Tombol Play
             const playBtn = document.createElement('div');
             playBtn.className = "play-button-overlay";
             playBtn.innerHTML = '<div class="play-icon"></div>';
@@ -996,7 +994,6 @@ function openLightbox(item) {
             wrapper.appendChild(playBtn);
             container.appendChild(wrapper);
 
-            // Penyesuaian Ukuran Modal
             img.onload = () => {
                 if (index === 0) applyFit(img.naturalWidth, img.naturalHeight);
                 img.classList.remove('opacity-0');
@@ -1026,22 +1023,15 @@ function openLightbox(item) {
                 if (index === 0) applyFit(img.naturalWidth, img.naturalHeight);
                 img.classList.remove('opacity-0');
             };
-
-          } else {
-                setTimeout(() => img.classList.remove('opacity-0'), 100);
-            }
-            
-            wrapper.appendChild(img);
-            container.appendChild(wrapper);
         }
+      }
 
-        // DOTS Navigasi
+        // DOTS Navigasi (Tetap di bawah sini)
         if (allLinks.length > 1 && dotsContainer) {
             const dot = document.createElement('div');
             dot.className = `modal-dot ${index === 0 ? 'active' : ''}`;
             dotsContainer.appendChild(dot);
         }
-    });
 
     // 3. Tombol Prev/Next
     const prevBtn = document.getElementById('modal-prev');
