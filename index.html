@@ -794,19 +794,30 @@ setFaviconFromDirectLink('https://lh3.googleusercontent.com/d/1jkLbUA9ENzlOCrmIo
 // PERBAIKI DATA SECARA OTOMATIS SEBELUM DIPAKAI
 function fixDataTypes(data) {
     return data.map(item => {
-        // Ambil semua teks dari field image/src untuk dicek
+        // Gabungin semua teks jadi satu biar gampang dicarinya
+        const title = (item.title || "").toLowerCase();
+        const category = (item.category || "").toLowerCase();
         const contentString = (item.image || item.src || "").toLowerCase();
         
-        // Cek apakah ada indikasi video (ekstensi atau kata kunci)
-        const hasVideo = contentString.includes('.mp4') || 
-                         contentString.includes('.mov') || 
-                         contentString.includes('.webm') ||
-                         item.category.toLowerCase().includes('video') ||
-                         item.category.toLowerCase().includes('motion');
+        // Radar pendeteksi video (tambahin keyword di sini kalau ada yang kurang)
+        const hasVideoKeyword = title.includes('video') || 
+                               title.includes('motion') ||
+                               category.includes('video') || 
+                               category.includes('motion') ||
+                               category.includes('cinematic') ||
+                               category.includes('reels');
 
-        if (hasVideo) {
-            item.type = 'video'; // Paksa jadi video
-            console.log(`✅ Fixed: ${item.title} is now VIDEO`);
+        const hasVideoExtension = contentString.includes('.mp4') || 
+                                 contentString.includes('.mov') || 
+                                 contentString.includes('.webm') ||
+                                 contentString.includes('.m4v');
+
+        // Jika salah satu terpenuhi, paksa jadi video
+        if (hasVideoKeyword || hasVideoExtension) {
+            item.type = 'video';
+            console.log(`✅ AUTO-VIDEO: ${item.title}`);
+        } else {
+            console.log(`🖼️ AUTO-IMAGE: ${item.title}`);
         }
         return item;
     });
@@ -972,10 +983,7 @@ function openLightbox(item) {
     allLinks.forEach((link, index) => {
         let rawSrc = link.trim();
         let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
-        const isVideo = rawSrc.match(/\.(mp4|webm|ogg|mov)$/i) || 
-                item.type === 'video' || 
-                item.category.toLowerCase().includes('video') ||
-                item.category.toLowerCase().includes('motion');
+        const isVideo = item.type === 'video' || rawSrc.match(/\.(mp4|webm|ogg|mov)$/i);
 
         console.log("Checking Media:", {
             title: item.title,
