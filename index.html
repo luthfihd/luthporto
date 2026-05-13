@@ -945,18 +945,16 @@ function openLightbox(item) {
 
     const tag = document.getElementById('modal-tag');
     if(tag) {
-    tag.textContent = item.category;
-    
-    // Gunakan pemetaan yang sama dengan Masonry
-    const mappedClass = {
-        educational: 'tag-edu',
-        promotional: 'tag-promo',
-        branding: 'tag-brand',
-        exploration: 'tag-explore' 
-    }[item.category.toLowerCase()] || 'tag-promo';
+        tag.textContent = item.category;
+        const mappedClass = {
+            educational: 'tag-edu',
+            promotional: 'tag-promo',
+            branding: 'tag-brand',
+            exploration: 'tag-explore' 
+        }[item.category.toLowerCase()] || 'tag-promo';
 
-    tag.className = 'modal-tag'; // Reset class dasar
-    tag.classList.add(mappedClass); // Tambah class warna yang sama (tag-edu, dsb)
+        tag.className = 'modal-tag';
+        tag.classList.add(mappedClass);
     }
   
     // 2. Logika Media
@@ -970,7 +968,6 @@ function openLightbox(item) {
                         (rawSrc.includes('drive.google.com') && item.type === 'video');
 
         if (isVideo) {
-            // --- KONTEN VIDEO (Thumbnail + Play Button) ---
             const wrapper = document.createElement('a');
             wrapper.href = fullSrc; 
             wrapper.target = "_blank";
@@ -998,9 +995,7 @@ function openLightbox(item) {
                 if (index === 0) applyFit(img.naturalWidth, img.naturalHeight);
                 img.classList.remove('opacity-0');
             };
-
         } else {
-            // --- KONTEN GAMBAR ---
             const wrapper = document.createElement('a');
             wrapper.href = fullSrc;
             wrapper.target = "_blank";
@@ -1025,15 +1020,14 @@ function openLightbox(item) {
             };
         }
 
-        // DOTS Navigasi (Tetap di bawah sini)
         if (allLinks.length > 1 && dotsContainer) {
             const dot = document.createElement('div');
             dot.className = `modal-dot ${index === 0 ? 'active' : ''}`;
             dotsContainer.appendChild(dot);
         }
-    });
-    
-    // 3. Tombol Prev/Next
+    }); // <--- INI PENUTUP forEach YANG TADI KURANG
+
+    // 3. Tombol Prev/Next & Scroll Logic
     const prevBtn = document.getElementById('modal-prev');
     const nextBtn = document.getElementById('modal-next');
     if (prevBtn && nextBtn) {
