@@ -520,10 +520,11 @@
     "type": "gdrive",
     "src": "https://drive.google.com/file/d/1zr-l3eyWSuczuWpc3rZxphkebu_-u8-q/view?usp=sharing",
     "title": "AI Poster",
-    "category": "promotional",
+    "category": "exploration",
     "desc": "AI-Generated Coffee Promotion Poster",
     "icon": "🎬",
-    "date": "2026-04-21"
+    "date": "2026-04-21",
+    "image": "https://drive.google.com/file/d/1zr-l3eyWSuczuWpc3rZxphkebu_-u8-q/view?usp=sharing"
   },
   {
     "id": "item_1776784695620_r9v23e",
