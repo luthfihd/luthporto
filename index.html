@@ -385,10 +385,57 @@ footer{margin-top:60px;padding:60px 0 40px;}
     display: none !important;
 }
 
-/* Container Video di Modal */
-.video-wrapper {
+/* Cursor Hover Style */
+.video-wrapper::after {
+    content: "Play Video";
+    position: absolute;
+    top: calc(50% + 45px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0;
+    pointer-events: none;
+}
+
+/* Munculkan teks saat video-wrapper di-hover */
+.video-wrapper:hover::after {
+    opacity: 1;
+    transition: opacity 0s ease 1s;
+}
+
+/* Muncul setelah hover 2 detik */
+.cursor::after {
+    content: "Fullscreen";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0;
+    pointer-events: none;
+}
+
+/* Munculkan teks saat class .cursor di-hover */
+.cursor:hover::after {
+    opacity: 1;
+    transition: opacity 0s ease 1s;
+}
+
+/* Pastikan elemen cursor relatif agar teks muncul di tengahnya */
+.cursor {
     position: relative;
-    width: 100%;
 }
 
 /* Lingkaran Tombol Play */
