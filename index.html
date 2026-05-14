@@ -384,9 +384,6 @@ footer{margin-top:60px;padding:60px 0 40px;}
 #btn-gdrive-link {
     display: none !important;
 }
-.cursor-zoom-in {
-    cursor: zoom-in;
-}
 
 /* Container Video di Modal */
 .video-wrapper {
@@ -952,7 +949,7 @@ function openLightbox(item) {
         const wrapper = document.createElement('a');
         wrapper.href = fullSrc;
         wrapper.target = "_blank";
-        wrapper.className = isVideo ? "video-wrapper cursor-pointer relative mb-4" : "cursor-zoom-in mb-4";
+        wrapper.className = isVideo ? "video-wrapper cursor-pointer relative mb-4" : "cursor mb-4";
         wrapper.style.display = "block";
         wrapper.style.width = "100%";
         
