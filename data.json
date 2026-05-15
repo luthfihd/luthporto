@@ -434,6 +434,17 @@
     "image": "https://drive.google.com/file/d/1BkvRMT6GjBQ7WS3-UbmCy7b17lAFV_c8/view?usp=drive_link,https://drive.google.com/file/d/1c73R3VSn9XUHUq9GtU-ztx7FYAp7YX-t/view?usp=drive_link,https://drive.google.com/file/d/19OTCZLi5y71h8j8kmC4n3yESrLmSpHPi/view?usp=drive_link"
   },
   {
+    "id": "item_1777694646482_7t1ghz",
+    "type": "gdrive",
+    "src": "https://drive.google.com/file/d/1SbvAZKT-qw2O05p49R85STx9QLuSSSWZ/view?usp=drive_link,https://drive.google.com/file/d/1gvj9n6Ytk7DwlcQhyH8yQRS5MR6LSsTW/view?usp=drive_link",
+    "title": "Certificate",
+    "category": "branding",
+    "desc": "Student Event Certificate of Apreciation",
+    "icon": "🎬",
+    "date": "2026-05-02",
+    "image": "https://drive.google.com/file/d/1SbvAZKT-qw2O05p49R85STx9QLuSSSWZ/view?usp=drive_link,https://drive.google.com/file/d/1gvj9n6Ytk7DwlcQhyH8yQRS5MR6LSsTW/view?usp=drive_link"
+  },
+  {
     "id": "item_1777694144066_k2so2s",
     "type": "gdrive",
     "src": "https://drive.google.com/file/d/1SVG-goYyetXuLVP6uAH6Ujy9ZJ9NaT83/view?usp=drive_link,https://drive.google.com/file/d/1SWcW45m5IPMPo3Hrt9SR7XyPQ8jf0D7D/view?usp=drive_link",
@@ -478,11 +489,12 @@
     "id": "item_1776847385718_gsu5mn",
     "type": "gdrive",
     "src": "https://drive.google.com/file/d/1mA47foTBa54nuMxuUKe2DxkFwNyzoZQF/view?usp=sharing",
-    "title": "Mascott",
+    "title": "AI Mascot Design",
     "category": "educational",
-    "desc": "Cyber Awareness mascott design",
+    "desc": "This mascot designed to make audien interest and curious about cybersecurity materials.",
     "icon": "🎬",
-    "date": "2026-04-22"
+    "date": "2026-04-22",
+    "image": "https://drive.google.com/file/d/1mA47foTBa54nuMxuUKe2DxkFwNyzoZQF/view?usp=sharing"
   },
   {
     "id": "item_1776784975039_jqvzs0",
