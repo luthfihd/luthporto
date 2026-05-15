@@ -617,6 +617,20 @@ footer{margin-top:60px;padding:60px 0 40px;}
         opacity: 1;
     }
 }
+/* Hanya jalankan efek hover jika perangkat memiliki kursor (PC/Laptop) */
+@media (hover: hover) and (pointer: fine) {
+    .cursor:hover::after {
+        opacity: 1;
+        transition: opacity 0s ease 1s; 
+    }
+}
+
+/* Untuk Mobile (Touchscreen), pastikan dia tetap tersembunyi */
+@media (pointer: coarse) {
+    .cursor::after {
+        display: none !important;
+    }
+}
   
 </style>
 </head>
