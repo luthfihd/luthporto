@@ -280,12 +280,13 @@
   {
     "id": "item_1778007167372_tw0g0x",
     "type": "gdrive",
-    "src": "https://drive.google.com/file/d/1RsJx4d-sVvJ9oHAtjcAwJT0yw-yyldna/view?usp=drive_link, https://drive.google.com/file/d/1ia5bZLilUdq77fwMLMU8x07WBluZvlhL/view?usp=drive_link, https://drive.google.com/file/d/1zTg49h45gzsDHN6XypjGkJd1IU1fn_CV/view?usp=drive_link",
-    "title": "Work Highlight",
+    "src": "https://drive.google.com/file/d/1RsJx4d-sVvJ9oHAtjcAwJT0yw-yyldna/view?usp=drive_link,https://drive.google.com/file/d/1ia5bZLilUdq77fwMLMU8x07WBluZvlhL/view?usp=drive_link,https://drive.google.com/file/d/1zTg49h45gzsDHN6XypjGkJd1IU1fn_CV/view?usp=drive_link",
+    "title": "Project Gallery",
     "category": "branding",
-    "desc": "Construction Work Highlight",
+    "desc": "These gallery tiles speak louder than words turning every project into a living testament of craftsmanship. Each tile pulls visitors in with clean, minimalist design, then delivers the impact, real results across a full spectrum of construction work. No clutter, no distraction just undeniable proof that builds trust, fast.",
     "icon": "🎬",
-    "date": "2026-05-05"
+    "date": "2026-05-05",
+    "image": "https://drive.google.com/file/d/1RsJx4d-sVvJ9oHAtjcAwJT0yw-yyldna/view?usp=drive_link,https://drive.google.com/file/d/1ia5bZLilUdq77fwMLMU8x07WBluZvlhL/view?usp=drive_link,https://drive.google.com/file/d/1zTg49h45gzsDHN6XypjGkJd1IU1fn_CV/view?usp=drive_link"
   },
   {
     "id": "item_1778007030758_2md1iy",
