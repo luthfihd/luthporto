@@ -12,12 +12,13 @@
   {
     "id": "item_1778323575315_4xag8o",
     "type": "gdrive",
-    "src": "https://drive.google.com/file/d/1XnZCIFm7_A2ttDigkw06ai8vxsZFycjV/view?usp=drivesdk, https://drive.google.com/file/d/1nmNN_L4Upq5U26QVkxsWrmZ44gAuLV8j/view?usp=drivesdk",
-    "title": "Phishing Wallpaper",
+    "src": "https://drive.google.com/file/d/1XnZCIFm7_A2ttDigkw06ai8vxsZFycjV/view?usp=drivesdk,https://drive.google.com/file/d/1MN8DreqHAK906Et94lRs2aS9k1aWcZp5/view?usp=drive_link",
+    "title": "Indications of Phishing Emails",
     "category": "educational",
-    "desc": "Wallpaper to increase awareness about Phishing Attacks",
+    "desc": "Digital Imaging design approach to better represent key points of the presented material, allowing the audience to immediately grasp the message without relying on excessive imagery or text.",
     "icon": "🎬",
-    "date": "2026-05-09"
+    "date": "2026-05-09",
+    "image": "https://drive.google.com/file/d/1XnZCIFm7_A2ttDigkw06ai8vxsZFycjV/view?usp=drivesdk,https://drive.google.com/file/d/1MN8DreqHAK906Et94lRs2aS9k1aWcZp5/view?usp=drive_link"
   },
   {
     "id": "item_1778308820289_d5pkat",
