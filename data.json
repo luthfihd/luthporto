@@ -583,12 +583,13 @@
   {
     "id": "item_1776782914313_pe2y2p",
     "type": "gdrive",
-    "src": "https://drive.google.com/file/d/1Ygktokw9wWRkeDD-P8Om3tzNmzJd3Aj5/view?usp=drive_link",
-    "title": "Wallpaper",
+    "src": "https://drive.google.com/file/d/1Ygktokw9wWRkeDD-P8Om3tzNmzJd3Aj5/view?usp=drive_link,https://drive.google.com/file/d/1m_xgvrOdGV2pHU7AqAU44zs8w7svJHY_/view?usp=sharing",
+    "title": "Social Media Security",
     "category": "educational",
-    "desc": "Social Media Security Wallpaper",
+    "desc": "A dark theme designed to keep the audience focused, paired with graphic elements that represent security and safety in social media use. Key points are presented clearly and concisely.",
     "icon": "🎬",
-    "date": "2026-04-21"
+    "date": "2026-04-21",
+    "image": "https://drive.google.com/file/d/1Ygktokw9wWRkeDD-P8Om3tzNmzJd3Aj5/view?usp=drive_link,https://drive.google.com/file/d/1m_xgvrOdGV2pHU7AqAU44zs8w7svJHY_/view?usp=sharing"
   },
   {
     "id": "item_1776782634069_si5edi",
