@@ -388,12 +388,13 @@
   {
     "id": "item_1777955131803_vib25b",
     "type": "gdrive",
-    "src": "https://drive.google.com/file/d/1u4g-JBNgM2lE8nSajeuRIzPYJsVvGafT/view?usp=drive_link, https://drive.google.com/file/d/1wj_vD7olRBZcBOoDMTiMC9dtNbZLKK_c/view?usp=drive_link",
-    "title": "Email Poster",
+    "src": "https://drive.google.com/file/d/1u4g-JBNgM2lE8nSajeuRIzPYJsVvGafT/view?usp=drive_link,https://drive.google.com/file/d/1wj_vD7olRBZcBOoDMTiMC9dtNbZLKK_c/view?usp=drive_link",
+    "title": "Safety Ramadhan Tips",
     "category": "educational",
-    "desc": "Tips and Tricks for a Safer Ramadan",
+    "desc": "Using a theme aligned with the spirit of Ramadan, combined with steps and tips for employees to observe their worship safely and comfortably.",
     "icon": "🎬",
-    "date": "2026-05-05"
+    "date": "2026-05-05",
+    "image": "https://drive.google.com/file/d/1u4g-JBNgM2lE8nSajeuRIzPYJsVvGafT/view?usp=drive_link,https://drive.google.com/file/d/1wj_vD7olRBZcBOoDMTiMC9dtNbZLKK_c/view?usp=drive_link"
   },
   {
     "id": "item_1777954892054_zyxbr2",
