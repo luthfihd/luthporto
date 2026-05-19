@@ -401,12 +401,13 @@
   {
     "id": "item_1777955170470_nbbii3",
     "type": "gdrive",
-    "src": "https://drive.google.com/file/d/1kqHgJHZ85sAfrWab1l3ZndFmcJRPRJFy/view?usp=drive_link, https://drive.google.com/file/d/1SOMHGVjrnFA5Bxr9_H-OvxRX9-Tbt5ha/view?usp=drive_link",
-    "title": "Email Poster",
+    "src": "https://drive.google.com/file/d/1kqHgJHZ85sAfrWab1l3ZndFmcJRPRJFy/view?usp=drive_link,https://drive.google.com/file/d/1SOMHGVjrnFA5Bxr9_H-OvxRX9-Tbt5ha/view?usp=drive_link",
+    "title": "Email Poster of Secure Design Principles for Developer",
     "category": "educational",
-    "desc": "Secure Design Principles for Developer",
+    "desc": "This posters designed with a dark background and high-contrast white text, ensuring key information is immediately and clearly conveyed. Each point is further enhanced by illustrative icons, visually reinforcing its core message.",
     "icon": "🎬",
-    "date": "2026-05-05"
+    "date": "2026-05-05",
+    "image": "https://drive.google.com/file/d/1kqHgJHZ85sAfrWab1l3ZndFmcJRPRJFy/view?usp=drive_link,https://drive.google.com/file/d/1SOMHGVjrnFA5Bxr9_H-OvxRX9-Tbt5ha/view?usp=drive_link"
   },
   {
     "id": "item_1777955131803_vib25b",
