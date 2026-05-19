@@ -434,12 +434,13 @@
   {
     "id": "item_1777954854119_mn5mw7",
     "type": "gdrive",
-    "src": "https://drive.google.com/file/d/13PRIXXXP_kGQa6GnE-yqE4P_HVxjmvgB/view?usp=drive_link, https://drive.google.com/file/d/1hmqcRBD189Pm208QO4GSdR962xKIPJ7v/view?usp=drive_link",
-    "title": "Email Poster",
+    "src": "https://drive.google.com/file/d/13PRIXXXP_kGQa6GnE-yqE4P_HVxjmvgB/view?usp=drive_link,https://drive.google.com/file/d/1hmqcRBD189Pm208QO4GSdR962xKIPJ7v/view?usp=drive_link",
+    "title": "The Fraud Impersonating of Specific Institutions Poster",
     "category": "educational",
-    "desc": "Never trust messages from unknown organizations",
+    "desc": "This two-slide campaign employs a clean, modern aesthetic with a focus on bold typography and strategic use of red accents to highlight key warnings. The first slide effectively poses a rhetorical question about trusting suspicious messages in \"2026,\" while the second visually reinforces the manipulative nature of scammers with an illustrative phone screen showing a \"SCAM\" notification.",
     "icon": "🎬",
-    "date": "2026-05-05"
+    "date": "2026-05-05",
+    "image": "https://drive.google.com/file/d/13PRIXXXP_kGQa6GnE-yqE4P_HVxjmvgB/view?usp=drive_link,https://drive.google.com/file/d/1hmqcRBD189Pm208QO4GSdR962xKIPJ7v/view?usp=drive_link"
   },
   {
     "id": "item_1777954775836_qm1djn",
