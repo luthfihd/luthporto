@@ -11,109 +11,96 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 
-/* ── DESIGN TOKENS ── */
+/* ── DESIGN LIGHT MODE ── */
 :root {
-  --glass-bg: #1b0324
-  --glass-border: rgba(255,255,255,0.25);
-  --glass-shadow: 0 8px 32px rgba(0,0,0,0.2);
-  --glass-highlight: rgba(255,255,255,0.5);
-  --blur: blur(22px) saturate(180%);
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-shadow: 0 8px 32px rgba(108, 99, 255, 0.05);
+  --glass-highlight: rgba(255, 255, 255, 0.7);
+  --blur: blur(20px) saturate(160%);
   --c1:#6C63FF; --c2:#FF6B9D; --c3:#FFD93D;
   --c4:#4ECDC4; --c5:#FF8C42; --c6:#A8FF78;
-  --radius-xl:28px; --radius-lg:20px; --radius-md:14px;
+  --radius-xl:32px;
+  --radius-lg:24px;
+  --radius-md:16px;
   --spring: cubic-bezier(0.34,1.56,0.64,1);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#ffffff;background:#1b0324;}
+body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#1A1A1A;background:#f7f2fc;}
 
-/* ── GLASS ── */
+/* ── GLASS (LIGHT VERSION) ── */
 .glass{background:var(--glass-bg);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-highlight);position:relative;overflow:hidden;}
 
 /* ── LAYOUT ── */
 #app{position:relative;z-index:2;max-width:1300px;margin:0 auto;padding:0 24px;}
 
-/* ── NAV ── */
-nav{position:fixed;top:20px;left:0;right:0;margin:0 auto;z-index:100;display:flex;align-items:center;gap:4px;padding:10px 18px;border-radius:50px;animation:fadeUp 0.8s ease 0.1s both;width:fit-content;}
+/* ── NAV (LIGHT) ── */
+nav{position:fixed;top:20px;left:0;right:0;margin:0 auto;z-index:100;display:flex;align-items:center;gap:4px;padding:10px 18px;border-radius:50px;animation:fadeUp 0.8s ease 0.1s both;width:fit-content;box-shadow: 0 4px 20px rgba(0,0,0,0.04);}
 .nav-logo{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;letter-spacing:1px;margin-right:12px;text-decoration:none;background:linear-gradient(135deg,#6C63FF,#FF6B9D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.nav-link{padding:6px 14px;border-radius:50px;font-size:13px;color:rgba(255,255,255,0.65);text-decoration:none;transition:all 0.25s;}
-.nav-link:hover{background:rgba(255,255,255,0.1);color:#fff;}
+.nav-link{padding:6px 14px;border-radius:50px;font-size:13px;color:rgba(0,0,0,0.6);text-decoration:none;transition:all 0.25s;}
+.nav-link:hover{background:rgba(108, 99, 255, 0.08);color:#6C63FF;}
 @media(max-width:600px){nav{top:10px;padding:8px 14px;}}
 
 /* ── HEADER / HERO ── */
 header{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 20px 80px;gap:0;}
 .profile-wrap{position:relative;margin-bottom:36px;animation:floatIn 1s var(--spring) forwards;}
-.profile-ring{width:180px;height:180px;border-radius:50%;padding:3px;background:conic-gradient(from 0deg,#6C63FF,#FF6B9D,#FFD93D,#4ECDC4,#6C63FF);animation:none;box-shadow:0 0 40px rgba(108,99,255,0.5),0 0 80px rgba(255,107,157,0.25);}
-@keyframes spinRing{to{transform:rotate(360deg);}}
-.profile-img-inner{width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#1a1a3e,#2d1b69);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.profile-ring{width:180px;height:180px;border-radius:50%;padding:3px;background:conic-gradient(from 0deg,#6C63FF,#FF6B9D,#FFD93D,#4ECDC4,#6C63FF);animation:none;box-shadow:0 10px 40px rgba(108,99,255,0.2),0 0 60px rgba(255,107,157,0.1);}
+.profile-img-inner{width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#f0f0f5,#e4e4ed);display:flex;align-items:center;justify-content:center;overflow:hidden;}
 .profile-img-inner img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
-.profile-placeholder{font-size:52px;}
-.status-dot{position:absolute;bottom:8px;right:8px;width:18px;height:18px;background:#4ECDC4;border-radius:50%;border:3px solid rgba(10,10,24,0.9);animation:pulse 2.2s ease-in-out infinite;}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(78,205,196,0.7);}50%{box-shadow:0 0 0 9px rgba(78,205,196,0);}}
-.hero-tag{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:50px;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#FFD93D;background:rgba(255,217,61,0.1);border:1px solid rgba(255,217,61,0.3);margin-bottom:20px;animation:fadeUp 0.8s ease 0.2s both;}
-.hero-tag-dot{width:7px;height:7px;background:#FFD93D;border-radius:50%;animation:pulse 2s ease-in-out infinite;}
+.profile-placeholder{font-size:52px;color:#6C63FF;}
+.status-dot{position:absolute;bottom:8px;right:8px;width:18px;height:18px;background:#4ECDC4;border-radius:50%;border:3px solid #FFFFFF;animation:pulse 2.2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(78,205,196,0.6);}50%{box-shadow:0 0 0 9px rgba(78,205,196,0);}}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:50px;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#c026d3;background:rgba(192,38,211,0.06);border:1px solid rgba(192,38,211,0.2);margin-bottom:20px;animation:fadeUp 0.8s ease 0.2s both;}
+.hero-tag-dot{width:7px;height:7px;background:#c026d3;border-radius:50%;}
 h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.5rem);font-weight:900;line-height:1.2;letter-spacing:-1.5px;margin-bottom:24px;animation:fadeUp 0.8s ease 0.3s both;}
-.hero-title .line1{display:block;color:#fff;}
-.hero-title .line2{display:block;color:#fff;}
-@keyframes gradShift{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
-.hero-card{border-radius:var(--radius-xl);padding:32px 40px;max-width:680px;width:100%;margin:0 auto 36px;animation:fadeUp 0.8s ease 0.5s both;}
-.designer-name{font-family:'DM Sans';font-size:20px;font-weight:800;background:#ffffff;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px;}
-.hero-desc{font-size:1.05rem;line-height:1.75;color:rgba(255,255,255,0.8);}
-.skill-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px;}
-.chip{padding:6px 16px;border-radius:50px;font-size:12px;font-weight:600;cursor:default;transition:transform 0.2s var(--spring),box-shadow 0.2s;}
-.chip-1{background:rgba(108,99,255,0.2);border:1px solid rgba(108,99,255,0.5);color:#a099ff;}
-.chip-2{background:rgba(255,107,157,0.2);border:1px solid rgba(255,107,157,0.5);color:#ff99c0;}
-.chip-3{background:rgba(255,217,61,0.2);border:1px solid rgba(255,217,61,0.5);color:#ffe070;}
-.chip-4{background:rgba(78,205,196,0.2);border:1px solid rgba(78,205,196,0.5);color:#7ee8e2;}
-.chip-5{background:rgba(255,140,66,0.2);border:1px solid rgba(255,140,66,0.5);color:#ffaa6b;}
-.scroll-hint{display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,0.35);font-size:11px;letter-spacing:2px;text-transform:uppercase;animation:fadeUp 0.8s ease 0.9s both;}
-.scroll-wheel{width:26px;height:44px;border:2px solid rgba(255,255,255,0.25);border-radius:13px;display:flex;justify-content:center;padding-top:8px;}
-.scroll-wheel::after{content:'';width:4px;height:8px;background:rgba(255,255,255,0.55);border-radius:2px;animation:scrollDot 2s ease-in-out infinite;}
-@keyframes scrollDot{0%,100%{transform:translateY(0);opacity:1;}80%{transform:translateY(14px);opacity:0;}}
+.hero-title .line1{display:block;color:#1A1A1A;}
+.hero-title .line2{display:block;color:#6C63FF;}
+.hero-card{border-radius:var(--radius-xl);padding:32px 40px;max-width:680px;width:100%;margin:0 auto 36px;animation:fadeUp 0.8s ease 0.5s both;border: 1px solid rgba(0,0,0,0.05);box-shadow: 0 10px 30px rgba(0,0,0,0.02);}
+.designer-name{font-family:'DM Sans';font-size:20px;font-weight:800;color:#1A1A1A;margin-bottom:12px;}
+.hero-desc{font-size:1.05rem;line-height:1.75;color:#4A4A4A;}
 
 /* ── SECTION ── */
 .section-header{text-align:center;margin-bottom:48px;}
-.section-eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--c3);text-transform:uppercase;margin-bottom:12px;}
-.section-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:700;color:#fff;line-height:1.15;}
-.section-title span{background:#ffffff;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.filter-btn.active{color:#fff;border-color:rgba(108,99,255,0.6);background:linear-gradient(135deg,#6C63FF,#c026d3,#FF6B9D);box-shadow:0 0 20px rgba(108,99,255,0.3),inset 0 1px 0 rgba(255,255,255,0.2);transform:translateY(-2px);opacity:1;}
-.filter-btn:hover{transform:translateY(-2px);color:#fff;background:linear-gradient(135deg,rgba(108,99,255,0.75),rgba(192,38,211,0.75),rgba(255,107,157,0.75));opacity:0.75;}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:800;color:#1A1A1A;line-height:1.15;}
+.section-title span{background:linear-gradient(135deg,#6C63FF,#c026d3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 
-/* ── PORTFOLIO ── */
+/* ── PORTFOLIO FILTER ── */
 #portfolio{padding:80px 0 40px;width:100vw;margin-left:calc(-50vw + 50%);padding-left:16px;padding-right:16px;}
 .filter-wrap{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:48px;}
-.filter-btn{padding:10px 24px;border-radius:50px;border:1.5px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.65);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all 0.3s var(--spring);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);position:relative;overflow:hidden;}
-.filter-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(108,99,255,0.3),rgba(255,107,157,0.3));opacity:0;transition:opacity 0.3s;border-radius:inherit;}
-.filter-btn:hover::before,.filter-btn.active::before{opacity:1;}
+.filter-btn{padding:10px 24px;border-radius:50px;border:1px solid rgba(0,0,0,0.06);background:rgba(255,255,255,0.7);color:rgba(0,0,0,0.6);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all 0.3s var(--spring);box-shadow: 0 2px 10px rgba(0,0,0,0.01);}
+.filter-btn.active{color:#fff;border-color:transparent;background:linear-gradient(135deg,#6C63FF,#b042ff);box-shadow:0 8px 24px rgba(108,99,255,0.25);transform:translateY(-2px);}
+.filter-btn:hover:not(.active){transform:translateY(-2px);color:#6C63FF;background:#fff;border-color:rgba(108,99,255,0.3);}
 
-/* ── MASONRY ── */
-.masonry-grid{columns:5;column-gap:12px;}
+/* ── MASONRY (APPLE APPS LAYOUT) ── */
+.masonry-grid{columns:5;column-gap:16px;}
 .masonry-item {
   break-inside:avoid;
-  margin-bottom:16px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  margin-bottom:20px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
   border-radius:var(--radius-lg);
   overflow:hidden;
   cursor:pointer;
   position:relative;
-  background:rgba(255, 255, 255, 0.03);
-  transition:transform 0.3s var(--spring),box-shadow 0.4s;
+  background:#FFFFFF;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.02);
+  transition:transform 0.3s var(--spring), box-shadow 0.4s, border-color 0.3s;
   animation:masonryIn 0.5s var(--spring) both;
   display: flex;
   flex-direction: column;
 }
 .masonry-item:hover {
-    transform:translateY(-5px) scale(1.02);
-    border-radius: var(--radius-lg);
-    border-color: rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.05);
+    transform:translateY(-6px);
+    border-color: rgba(108, 99, 255, 0.15);
+    box-shadow: 0 16px 36px rgba(108, 99, 255, 0.08);
 }
-/* Hover Overlay "Show Details" */
+/* Hover Overlay "Show Details" (Material style Blur) */
 .hover-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(10, 10, 24, 0.6);
-    backdrop-filter: blur(2px);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -122,160 +109,113 @@ h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,6vw,5.
     z-index: 15;
     border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
 }
-.masonry-item img {transition: transform 0.4s var(--spring);}
-.masonry-item:hover img {transform: scale(1.05);}
-@keyframes masonryIn{from{opacity:0;transform:scale(0.9) translateY(24px);}to{opacity:1;transform:scale(1) translateY(0);}}
-.masonry-thumb{width:100%;display:block;object-fit:cover;border-radius:var(--radius-lg);}
-.masonry-placeholder{width:100%;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-lg);min-height:180px;}
-.masonry-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.88) 0%,rgba(0,0,0,0.15) 55%,transparent 100%);opacity:0;transition:opacity 0.35s;border-radius:var(--radius-lg);display:flex;flex-direction:column;justify-content:flex-end;padding:16px;}
-.masonry-item:hover .masonry-overlay{opacity:1;}
-.masonry-item-tag{font-size:11px;font-family:'Space Mono',monospace;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:50px;display:inline-block;width:fit-content;}
+.masonry-item img {transition: transform 0.5s ease;}
+.masonry-item:hover img {transform: scale(1.03);}
+@keyframes masonryIn{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+.masonry-thumb{width:100%;display:block;object-fit:cover;border-radius:var(--radius-lg) var(--radius-lg) 0 0;}
+.masonry-overlay{display: none !important;}
 
 /* Container Info di Bawah Thumbnail */
 .masonry-item-info {
-    padding: 16px; /* Jarak teks ke outline kartu */
+    padding: 18px;
     display: flex;
     flex-direction: column;
     gap: 4px;
+    background: #FFFFFF;
 }
-
 .masonry-item-title {
-    color: #fff;
+    color: #1A1A1A;
     font-size: 15px;
     font-weight: 600;
     margin: 0px;
-    display: block;
 }
-
-/* Biar ada jarak dikit kalau tag-nya muncul */
-.masonry-item-tag {
-    align-self: flex-start; /* Agar kapsul tidak melebar full width */
-    margin-top: 4px;
-}
-
-/* Deskripsi Singkat di Bawah Judul */
 .masonry-item-desc {
-    display: block;
-    font-size: 11.5px;
-    color: rgba(255, 255, 255, 0.8);
+    font-size: 12px;
+    color: #666666;
     line-height: 1.5;
-    margin: 4px 0 8px 0;
+    margin: 2px 0 8px 0;
     display: -webkit-box;
-    -webkit-line-clamp: 1; /* Batasi maksimal 1 baris */
+    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    font-family: 'DM Sans', sans-serif;
 }
-.masonry-item:hover .hover-overlay {
-    opacity: 1;
-}
-.masonry-item:hover .show-details-text {
-    transform: translateY(0);
-}
-.masonry-overlay {
-    display: none !important; 
-}
+.masonry-item:hover .hover-overlay { opacity: 1; }
+.masonry-item:hover .show-details-text { transform: translateY(0); }
+
 /* Pembungkus konten dengan Outline */
 .card-wrapper {
     position: relative;
     overflow: hidden;
     border-radius: var(--radius-lg);
-    border: 1px solid rgba(255, 255, 255, 0.15); /* Outline tipis elegan */
-    background: rgba(255, 255, 255, 0.5); /* Sedikit warna dasar kartu */
-    margin-bottom: 16px; /* Jarak antara kartu dengan teks di bawahnya */
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    background: #FFFFFF;
+    margin-bottom: 16px;
     transition: border-color 0.3s ease;
 }
 .card-image-wrapper {
     position: relative;
     width: 100%;
     overflow: hidden;
+    background: #F4F5F7;
 }
 .show-details-text {
     font-family: 'Space Mono', monospace;
     font-size: 11px;
     letter-spacing: 1px;
     text-transform: uppercase;
-    color: #fff;
-    border: 1px solid rgba(255,255,255,0.4);
-    padding: 6px 14px;
+    color: #FFFFFF;
+    background: #6C63FF; /* Tombol details ungu solid */
+    box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+    padding: 8px 16px;
     border-radius: 50px;
     transform: translateY(10px);
     transition: all 0.3s var(--spring);
 }
 
-.gradient-1{background:linear-gradient(135deg,#1a0a3e,#6C63FF);}
-.gradient-2{background:linear-gradient(135deg,#2d0a20,#FF6B9D);}
-.gradient-3{background:linear-gradient(135deg,#1a2d10,#A8FF78);}
-.gradient-4{background:linear-gradient(135deg,#0a2d2d,#4ECDC4);}
-.gradient-5{background:linear-gradient(135deg,#2d1a0a,#FF8C42);}
-.gradient-6{background:linear-gradient(135deg,#2d2a0a,#FFD93D);}
-.gradient-7{background:linear-gradient(135deg,#0a102d,#6C63FF 60%,#FF6B9D);}
-.gradient-8{background:linear-gradient(135deg,#0a2d1a,#4ECDC4 50%,#A8FF78);}
-
 /* ── LOADING ── */
 .loading-grid{display:flex;justify-content:center;align-items:center;min-height:300px;flex-direction:column;gap:16px;}
-.spinner{width:44px;height:44px;border-radius:50%;border:3px solid rgba(108,99,255,0.2);border-top-color:#6C63FF;animation:spin 0.8s linear infinite;}
+.spinner{width:44px;height:44px;border-radius:50%;border:3px solid rgba(108,99,255,0.1);border-top-color:#6C63FF;animation:spin 0.8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.loading-text{color:rgba(255,255,255,0.4);font-size:13px;font-family:'Space Mono',monospace;letter-spacing:2px;}
-.empty-state{text-align:center;padding:60px 20px;color:rgba(255,255,255,0.3);}
-.empty-icon{font-size:3rem;margin-bottom:12px;display:block;}
+.loading-text{color:rgba(0,0,0,0.4);font-size:13px;font-family:'Space Mono',monospace;letter-spacing:2px;}
+.empty-state{text-align:center;padding:60px 20px;color:rgba(0,0,0,0.4);}
+.empty-icon{font-size:3rem;margin-bottom:12px;display:block;color:#6C63FF;}
 
 /* ── FOOTER ── */
 footer{margin-top:60px;padding:60px 0 40px;}
-.footer-card{border-radius:var(--radius-xl);padding:52px 40px;max-width:900px;margin:0 auto;text-align:center;}
-.footer-motto{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,3rem);font-style:italic;font-weight:800;background:linear-gradient(135deg,#fdf7ff,#FFFFFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:32px;line-height:1.4;}
+.footer-card{border-radius:var(--radius-xl);padding:52px 40px;max-width:900px;margin:0 auto;text-align:center;border: 1px solid rgba(0,0,0,0.06);box-shadow: 0 10px 40px rgba(0,0,0,0.02);}
+.footer-motto{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,3rem);font-style:italic;font-weight:800;color:#6C63FF;margin-bottom:32px;line-height:1.4;}
 .footer-contacts{display:flex;justify-content:center;flex-wrap:wrap;gap:16px;margin-bottom:28px;}
-.contact-pill{display:flex;align-items:center;gap:8px;padding:11px 22px;border-radius:50px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);color:rgba(255,255,255,0.72);font-size:14px;text-decoration:none;transition:all 0.3s var(--spring);}
-.contact-pill:hover{transform:translateY(-3px);background:rgba(255,255,255,0.12);color:#fff;border-color:rgba(255,255,255,0.28);box-shadow:0 10px 28px rgba(0,0,0,0.3);}
+.contact-pill{display:flex;align-items:center;gap:8px;padding:11px 22px;border-radius:50px;background:#FFFFFF;border:1px solid rgba(0,0,0,0.06);color:#4A4A4A;font-size:14px;text-decoration:none;transition:all 0.3s var(--spring);box-shadow: 0 4px 12px rgba(0,0,0,0.01);}
+.contact-pill:hover{transform:translateY(-3px);background:#FFFFFF;color:#6C63FF;border-color:rgba(108,99,255,0.3);box-shadow:0 10px 28px rgba(108,99,255,0.1);}
 .social-row{display:flex;justify-content:center;gap:14px;margin-bottom:28px;}
-.social-btn{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;text-decoration:none;color:rgba(255,255,255,0.75);border:1.5px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.05);transition:all 0.3s var(--spring);}
-.social-btn:hover{transform:translateY(-4px) scale(1.12);box-shadow:0 12px 30px rgba(0,0,0,0.4);}
-.social-gmail:hover { background: linear-gradient(135deg,rgba(79,195,247,0.3),rgba(108,99,255,0.3)); border-color: #fff; color: #fff; }
-.social-wa:hover { background: linear-gradient(135deg,rgba(79,195,247,0.3),rgba(108,99,255,0.3)); border-color: #fff; color: #fff; }
-.social-x:hover { background: linear-gradient(135deg,rgba(79,195,247,0.3),rgba(108,99,255,0.3)); border-color: #fff; color: #fff; }
-.social-li:hover { background: linear-gradient(135deg,rgba(79,195,247,0.3),rgba(108,99,255,0.3)); border-color: #fff; color: #fff; }
-.social-ig:hover { background: linear-gradient(135deg,rgba(79,195,247,0.3),rgba(108,99,255,0.3)); border-color: #fff; color: #fff; }
-.footer-copy{color:#ffffff);font-size:12px;font-family:'Space Mono',monospace;letter-spacing:1px;}
-.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent);margin:20px 0;}
+.social-btn{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;text-decoration:none;color:#4A4A4A;border:1px solid rgba(0,0,0,0.06);background:#FFFFFF;transition:all 0.3s var(--spring);box-shadow: 0 4px 12px rgba(0,0,0,0.01);}
+.social-btn:hover{transform:translateY(-4px) scale(1.08);color:#6C63FF;border-color:rgba(108,99,255,0.3);box-shadow:0 8px 24px rgba(108,99,255,0.12);}
+.footer-copy{color:rgba(0,0,0,0.4);font-size:12px;font-family:'Space Mono',monospace;letter-spacing:1px;}
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(0,0,0,0.06),transparent);margin:20px 0;}
 
-/* ── ANIMATIONS ── */
-@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
-@keyframes floatIn{from{opacity:0;transform:scale(0.65);}to{opacity:1;transform:scale(1);}}
-@keyframes pageIn{from{transform:scale(0.96);opacity:0.5;}to{transform:scale(1);opacity:1;}} 
-@keyframes lbIn{from{transform:scale(0.82) translateY(32px);opacity:0;}to{transform:scale(1) translateY(0);opacity:1;}} 
-@keyframes lbOut{from{transform:scale(1) translateY(0);opacity:1;}to{transform:scale(0.82) translateY(32px);opacity:0;}}
-@keyframes imgIn{from{opacity:0;transform:scale(0.88);}to{opacity:1;transform:scale(1);}}
-.reveal{opacity:0;transform:translateY(32px);transition:opacity 0.7s ease,transform 0.7s var(--spring);}
-.reveal.visible{opacity:1;transform:translateY(0);}
-::-webkit-scrollbar{width:5px;}
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:6px;}
 ::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:rgba(108,99,255,0.4);border-radius:3px;}
+::-webkit-scrollbar-thumb{background:rgba(108,99,255,0.2);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:rgba(108,99,255,0.4);}
 
-/* Badge Multiple (Content Count) Tetap di Pojok */
-.badge-multiple {
-    opacity: 1 !important; /* Selalu muncul */
-    z-index: 20;
-}
-
-/* --- KUNCI MODAL FIT-TO-CONTENT --- */
-/* 1. Background Modal */
+/* ── MODAL SYSTEM (LIGHT OVERHAUL) ── */
 #modal {
     display: none;
     position: fixed;
     inset: 0;
     z-index: 9999;
-    background: rgba(0, 0, 0, 0.95);
-    backdrop-filter: none;
+    background: rgba(26, 26, 36, 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     opacity: 0;
     transition: opacity 0.3s ease;
     align-items: center;
     justify-content: center;
 }
-
-/* 2. Kotak Kaca (Kunci Ramping) */
+/* Kotak Kaca */
 #modal-content {
-    background: rgba(0, 0, 0, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: #FFFFFF;
     border-radius: 32px;
     overflow: hidden;
     position: relative;
@@ -285,164 +225,141 @@ footer{margin-top:60px;padding:60px 0 40px;}
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: none;
-    -ms-overflow-style: none;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
+    box-shadow: 0 24px 64px rgba(26, 26, 36, 0.15);
 }
-
-/* 3. Aturan Gambar di Dalamnya */
-.modal-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.3);
-    transition: all 0.1s ease;
-}
-.modal-dot.active {
-    background: #6C63FF;
-    transform: scale(1.4);
-}
-
-.modal-dots-container {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    padding: 10px 0;
-    background: #0a0a18;
-}
-
 #modal-media-container {
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE/Edge */
+    scrollbar-width: none;
     align-items: center;
-    background: transparent;
+    background: #F8F9FA;
 }
-#modal-media-container::-webkit-scrollbar { display: none; } /* Chrome/Safari */
 #modal-media-container img {
     display: block;
     width: auto;
     height: auto;
     flex-shrink: 0;
     scroll-snap-align: center;
-    max-width: 90vw;   /* Maksimal 90% lebar layar */
-    max-height: 70vh;  /* Maksimal 70% tinggi layar biar gak kepotong info teks */
+    max-width: 90vw;
+    max-height: 70vh;
     object-fit: contain;
     margin: 0 auto;
+    border-radius: 0px;
 }
-
-/* 4. Box Info Teks */
 .modal-info-box {
-    padding: 0px 24px 24px 24px !important;
-    background: rgba(0, 0, 0, 0.5);
+    padding: 12px 28px 28px 28px !important;
+    background: #FFFFFF;
     width: 100%;
     box-sizing: border-box;
 }
+#modal-title { color: #1A1A1A !important; }
+#modal-desc { color: #555555 !important; font-size: 13px !important; line-height: 1.6; }
 
-/* Pengaman agar tidak menghalangi klik saat tertutup */
-#modal.hidden { 
-    pointer-events: none; 
-    display: none; 
+/* Modal Close Button */
+#modal button[onclick="closeModal()"] {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0,0,0,0.08);
+    color: #1A1A1A;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+#modal button[onclick="closeModal()"]:hover {
+    background: #FF4A4A;
+    color: #FFFFFF;
+    border-color: transparent;
 }
 
-/* Styling untuk Tag/Label */
-.modal-tag {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 99px;
-    font-size: 10px;
-    text-transform: uppercase;
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: white;
+/* Dots Navigasi Modal */
+.modal-dots-container {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 0;
+    background: #FFFFFF;
+}
+.modal-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+}
+.modal-dot.active {
+    background: #6C63FF;
+    transform: scale(1.3);
 }
 
-/* Navigasi Modal Next/Prev */
+/* Navigasi Panah Modal */
 .modal-nav-btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     z-index: 10005;
-    width: 45px;
-    height: 45px;
-    background: rgba(0, 0, 0, 0.3) !important; 
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    filter: drop-shadow(0px 0px 10px rgba(0,0,0,0.8));
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 50%;
-    color: white;
+    color: #1A1A1A;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s ease;
-    opacity: 0; /* Sembunyi, muncul saat hover modal-content */
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    transition: all 0.25s ease;
+    opacity: 0;
 }
 #modal-content:hover .modal-nav-btn { opacity: 1; }
-.modal-nav-btn:hover { background: rgba(255, 255, 255, 0.2); scale: 1.1; }
-.btn-prev { left: 15px; }
-.btn-next { right: 15px; }
+.modal-nav-btn:hover { background: #FFFFFF !important; scale: 1.08; color: #6C63FF; }
+.btn-prev { left: 16px; }
+.btn-next { right: 16px; }
 
-/* CSS GDrive Button */
-#btn-gdrive-link {
-    display: none !important;
-}
-
-/* Cursor Hover Style */
+/* ── INTERACTIVE CURSOR HOVER (LIGHT CONF) ── */
+/* Teks untuk Video */
 .video-wrapper::after {
     content: "Play Video";
     position: absolute;
     top: calc(50% + 45px);
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(26, 26, 26, 0.9);
     color: white;
-    padding: 5px 12px;
-    border-radius: 10px;
+    padding: 6px 14px;
+    border-radius: 20px;
     font-size: 10px;
     font-weight: bold;
+    letter-spacing: 0.5px;
     opacity: 0;
     transition: opacity 0;
     pointer-events: none;
 }
-
-/* Munculkan teks saat video-wrapper di-hover */
 .video-wrapper:hover::after {
     opacity: 1;
     transition: opacity 0s ease 1s;
 }
 
-/* Muncul setelah hover 2 detik */
+/* Teks untuk Gambar (Fullscreen) */
 .cursor::after {
     content: "Fullscreen";
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(26, 26, 26, 0.9); /* Gelap pekat agar terbaca jelas di atas gambar terang */
     color: white;
-    padding: 5px 12px;
-    border-radius: 10px;
+    padding: 6px 14px;
+    border-radius: 20px;
     font-size: 10px;
     font-weight: bold;
     opacity: 0;
     transition: opacity 0;
     pointer-events: none;
 }
-
-/* Munculkan teks saat class .cursor di-hover */
 .cursor:hover::after {
     opacity: 1;
     transition: opacity 0s ease 1s;
 }
-
-/* Pastikan elemen cursor relatif agar teks muncul di tengahnya */
-.cursor {
-    position: relative;
-}
+.cursor { position: relative; }
 
 /* Lingkaran Tombol Play */
 .play-button-overlay {
@@ -452,200 +369,99 @@ footer{margin-top:60px;padding:60px 0 40px;}
     transform: translate(-50%, -50%);
     width: 65px;
     height: 65px;
-    background: rgba(108, 99, 255, 0.9); /* Ungu Playful */
+    background: rgba(108, 99, 255, 0.95);
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 0 25px rgba(0,0,0,0.5);
+    box-shadow: 0 8px 24px rgba(108, 99, 255, 0.3);
     z-index: 10;
-    pointer-events: none; /* Klik akan tembus ke link GDrive di bawahnya */
+    pointer-events: none;
     transition: all 0.3s ease;
 }
-
-/* Segitiga Putih */
 .play-icon {
-    width: 0;
-    height: 0;
+    width: 0; height: 0;
     border-top: 14px solid transparent;
     border-bottom: 14px solid transparent;
     border-left: 22px solid white;
     margin-left: 6px;
 }
+.video-wrapper:hover .play-button-overlay {
+    transform: translate(-50%, -50%) scale(1.06);
+    background: rgba(108, 99, 255, 1);
+}
 
-/* Ikon Multiple di Masonry */
-.multi-indicator {
+/* Badge Penghitung Jumlah File */
+.badge-multiple {
     position: absolute;
     top: 12px;
     right: 12px;
-    z-index: 10;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(8px);
-    padding: 6px;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    opacity: 0;
-    transform: translateY(-5px);
-    transition: all 0.3s ease;
-}
-.masonry-item:hover .multi-indicator {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* 0.TAG COLOR */
-.tag-educational, .tag-edu { background: #6c63ff !important; color: white !important; opacity: 1 !important; }
-.tag-promotional, .tag-promo { background: #d1366a !important; color: white !important; opacity: 1 !important; }
-.tag-branding, .tag-brand { background: #0fa34a !important; color: white !important; opacity: 1 !important; }
-.tag-exploration, .tag-explore { background: #a38a0f !important; color: white !important; opacity: 1 !important; }
-.masonry-item-tag, .modal-tag {
-    border: none !important;
-    box-shadow: none !important;
-    display: inline-block;
-}
-  
-/* 1. MOTTO */
-.motto-text {
-    display: block;
-    width: 100%;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    word-break: break-word; 
-    font-size: clamp(1.2rem, 4vw, 3rem); 
-    padding: 0 1rem;
-    text-align: center;
-}
-
-.social-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    width: 100%;
-}
-
-.social-icon {
-    width: 42px;
-    height: 42px;
-    flex-shrink: 0; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    aspect-ratio: 1 / 1; 
-}
-
-/* 2. MOBILE DISPLAY CONFIG */
-@media(max-width:1100px){.masonry-grid{columns:4;}}
-@media(max-width:768px){.masonry-grid{columns:3;}}
-@media(max-width:480px){.masonry-grid{columns:1;}}
-@media (max-width: 768px) {
-    .hero-container {
-        padding: 2rem 1.5rem; 
-    }
-
-    .social-row {
-      max-width: 200px;  
-      margin: 0 auto;
-      gap: 0.8rem; 
-    }
-
-    .modal-nav-btn {
-        display: none !important;
-    }
-    
-    /* 1. Kurangi padding pembungkus luar agar ruang teks lebih lebar */
-    #footer div[style*="padding:0 24px"] {
-        padding: 0 10px !important; 
-    }
-
-    /* 2. Pastikan kartu tidak terlalu sempit */
-    .footer-card {
-        padding: 40px 15px !important; /* Kecilkan padding kiri-kanan kartu */
-    }
-
-    /* 3. Paksa teks motto untuk muat */
-    .footer-motto {
-        font-size: 2.8rem !important;
-        display: block !important;
-        width: 100% !important;
-        white-space: normal !important;
-        word-wrap: break-word !important;
-        overflow-wrap: anywhere !important;
-        text-align: center;
-        line-height: 1.2;
-        padding-bottom: 5px;
-    }
-}
-
-/* Badge untuk Mobile & Desktop (Selalu Terlihat) */
-.badge-multiple {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 4px 10px;
     border-radius: 50px;
     display: flex;
     align-items: center;
     gap: 5px;
-    z-index: 20;
     pointer-events: none;
+    z-index: 20;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.04);
 }
+.badge-dot { width: 5px; height: 5px; background: #6C63FF; border-radius: 50%; }
+.badge-text { color: #1A1A1A; font-family: 'DM Sans'; font-size: 10px; font-weight: bold; }
 
-.badge-dot {
-    width: 5px;
-    height: 5px;
-    background: #ffffff;
-    border-radius: 50%;
-    box-shadow: 0 0 8px #10b981;
-}
-
-.badge-text {
-    color: white;
-    font-family: 'DM Sans';
-    font-size: 10px;
-    font-weight: bold;
-    letter-spacing: 0.05em;
-}
-
-/* Opsional: Jika ingin badge agak redup di desktop dan terang saat hover */
 @media (min-width: 1024px) {
-    .badge-multiple {
-        opacity: 0.1;
-        transition: opacity 0.3s ease;
-    }
-    .masonry-item:hover .badge-multiple {
-        opacity: 1;
-    }
-}
-/* Hanya jalankan efek hover jika perangkat memiliki kursor (PC/Laptop) */
-@media (hover: hover) and (pointer: fine) {
-    .cursor:hover::after {
-        opacity: 1;
-        transition: opacity 0s ease 1s; 
-    }
+    .badge-multiple { opacity: 0.2; transition: opacity 0.3s ease; }
+    .masonry-item:hover .badge-multiple { opacity: 1; }
 }
 
-/* Untuk Mobile (Touchscreen), pastikan dia tetap tersembunyi */
-@media (pointer: coarse) {
-    .cursor::after {
-        display: none !important;
-    }
+/* ── CONFIG BRANDING TAGS COLOR ── */
+.tag-educational, .tag-edu { background: rgba(108, 99, 255, 0.08) !important; color: #544ae6 !important; border: 1px solid rgba(108, 99, 255, 0.15) !important; }
+.tag-promotional, .tag-promo { background: rgba(209, 54, 106, 0.08) !important; color: #cf2359 !important; border: 1px solid rgba(209, 54, 106, 0.15) !important; }
+.tag-branding, .tag-brand { background: rgba(15, 163, 74, 0.08) !important; color: #0d8a3e !important; border: 1px solid rgba(15, 163, 74, 0.15) !important; }
+.tag-exploration, .tag-explore { background: rgba(163, 138, 15, 0.08) !important; color: #8f7909 !important; border: 1px solid rgba(163, 138, 15, 0.15) !important; }
+
+.masonry-item-tag, .modal-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-family: 'DM Sans';
+    font-weight: 700;
+    margin-top: 4px;
+    align-self: flex-start;
+    text-transform: uppercase;
 }
+.modal-tag { margin-top: 12px; margin-bottom: 8px; }
+
+/* Responsive Grid & Text Config */
+.motto-text { display: block; width: 100%; word-wrap: break-word; font-size: clamp(1.2rem, 4vw, 3rem); text-align: center; }
+@media(max-width:1100px){.masonry-grid{columns:4;}}
+@media(max-width:768px){.masonry-grid{columns:3;}}
+@media(max-width:480px){.masonry-grid{columns:1;}}
+@media (max-width: 768px) {
+    .hero-container { padding: 2rem 1.5rem; }
+    .social-row { max-width: 200px; margin: 0 auto; gap: 0.8rem; }
+    .modal-nav-btn { display: none !important; }
+    #footer div[style*="padding:0 24px"] { padding: 0 10px !important; }
+    .footer-card { padding: 40px 15px !important; }
+    .footer-motto { font-size: 2.8rem !important; text-align: center; line-height: 1.2; }
+}
+
+/* Disable Hover Text di Touchscreen Mobile */
+@media (hover: hover) and (pointer: fine) {
+    .cursor:hover::after { opacity: 1; transition: opacity 0s ease 1s; }
+}
+@media (pointer: coarse) {
+    .cursor::after { display: none !important; }
+}
+
+/* CLEAN BACKGROUND ANIMATION (NO BLUR OVERLAPPING) */
+#bg-canvas { display: none !important; }
   
 </style>
 </head>
 <body>
-
-<div id="bg-canvas">
-  <div class="bg-orb"></div><div class="bg-orb"></div><div class="bg-orb"></div>
-  <div class="bg-orb"></div><div class="bg-orb"></div>
-</div>
 
 <nav class="glass">
   <a href="#" class="nav-logo">Home</a>
@@ -655,7 +471,6 @@ footer{margin-top:60px;padding:60px 0 40px;}
 
 <div id="app">
 
-  <!-- HERO -->
   <header>
     <div class="profile-wrap">
       <div class="profile-ring">
@@ -670,18 +485,11 @@ footer{margin-top:60px;padding:60px 0 40px;}
     </h1>
     <div class="hero-card glass">
       <div class="designer-name" id="heroName">✦ Your Name Here ✦</div>
-      <p class="hero-desc" id="heroDesc">Visual designer dengan keahlian dalam brand identity, motion graphics, dan desain konten digital. Lebih dari 3 tahun pengalaman membantu brand dan kreator tumbuh lewat visual yang kuat dan bercerita.</p>
-      <div class="skill-chips" id="heroChips">
-        <span class="chip chip-1"> </span>
-        <span class="chip chip-2"> </span>
-        <span class="chip chip-3"> </span>
-        <span class="chip chip-4"> </span>
-        <span class="chip chip-5"> </span>
-      </div>
+      <p class="hero-desc" id="heroDesc">Visual designer dengan keahlian dalam brand identity, motion graphics, dan desain konten digital.</p>
+      <div class="skill-chips" id="heroChips"></div>
     </div>
   </header>
 
-  <!-- PORTFOLIO -->
   <section id="portfolio">
     <div class="section-header reveal">
       <h2 class="section-title">Significant <span>Projects</span></h2>
@@ -703,97 +511,86 @@ footer{margin-top:60px;padding:60px 0 40px;}
 
 </div>
 
-<!-- FOOTER -->
 <footer id="footer">
   <div style="max-width:1300px;margin:0 auto;padding:0 24px;">
     <div class="footer-card glass reveal">
       <div class="footer-motto">Create to discover, design to inspire.</div>
       <div class="social-row">
-        <a href="https://www.linkedin.com/in/luthfihd/" class="social-btn social-li" title="LinkedIn">
+        <a href="https://www.linkedin.com" class="social-btn" title="LinkedIn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
         </a>
-        <a href="mailto:luthfi.hd77@gmail.com " class="social-btn social-gmail" title="Gmail">
+        <a href="mailto:my@gmail.com" class="social-btn" title="Gmail">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
         </a>
-        <a href="https://wa.me/6285779677264" class="social-btn social-wa" title="WhatsApp">
+        <a href="https://wa.me/6285776889009" class="social-btn" title="WhatsApp">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
         </a>
-        <a href="https://x.com/lut_hfihd" class="social-btn social-x" title="X">
+        <a href="https://x.com" class="social-btn" title="X">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
         </a>
-        <a href="https://www.instagram.com/luth.fihd" class="social-btn social-ig" title="Instagram">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+        <a href="https://www.instagram.com" class="social-btn" title="Instagram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204 013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
         </a>
       </div>
       <div class="divider"></div>
-      <div class="footer-copy">© 2026 Luthfi Hidayat — All Rights Reserved</div>
+      <div class="footer-copy">© 2026 — All Rights Reserved</div>
     </div>
   </div>
 </footer>
 
-<!-- HTML MODAL -->
-<div id="modal" class="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-[2px] transition-opacity duration-300" style="display: none; opacity: 0;">
-    <button onclick="closeModal()" 
-  class="fixed top-5 right-5 z-[10001] w-12 h-12 rounded-full border border-red-400/30 bg-red-950/20 backdrop-blur-md text-white text-3xl flex items-center justify-center hover:bg-red-800/80 hover:border-red-500 transition-all shadow-2xl" 
-  style="filter: drop-shadow(0px 0px 10px rgba(0,0,0,0.8));">
-  &times;
-</button>
+<div id="modal" style="display: none; opacity: 0;">
+  <button onclick="closeModal()" class="fixed top-5 right-5 z-[10001] w-12 h-12 rounded-full border border-gray-200 bg-white/90 text-gray-800 text-3xl flex items-center justify-center hover:bg-gray-100 transition-all shadow-xl">
+    ×
+  </button>
 
-    <div id="modal-content" class="scale-95 opacity-0 mx-auto relative group">
+  <div id="modal-content" class="scale-95 opacity-0 mx-auto relative group">
     <button id="modal-prev" onclick="moveGallery(-1)" class="modal-nav-btn btn-prev">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
     </button>
     <button id="modal-next" onclick="moveGallery(1)" class="modal-nav-btn btn-next">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
     </button>
   
-    <div id="modal-media-container" class="flex overflow-x-auto scroll-snap-x mandatory scrollbar-hide" style="scroll-snap-type: x mandatory; -ms-overflow-style: none; scrollbar-width: none;"></div>
-    <div id="modal-dots" class="flex justify-center gap-2 py-3 bg-black/20"></div>
+    <div id="modal-media-container"></div>
+    <div id="modal-dots" class="modal-dots-container"></div>
     
     <div class="modal-info-box">
-        <div id="modal-tag" class="modal-tag">Category</div>
-        <h2 id="modal-title" class="text-white text-xl font-bold mb-1">Title</h2>
-        <p id="modal-desc" class="text-white/60 text-xs">Description...</p>
+      <div id="modal-tag" class="modal-tag">Category</div>
+      <h2 id="modal-title" class="text-xl font-bold mb-1">Title</h2>
+      <p id="modal-desc">Description...</p>
     </div>
+  </div>
 </div>
 
 <script>
-// ── CONFIG: ganti sesuai repo kamu ──
-const GITHUB_USER = 'luthfihd';   // ← ganti
-const GITHUB_REPO = 'luthporto'; // ← ganti
+// ── CONFIG: Repository ──
+const GITHUB_USER = 'luthfihd';   
+const GITHUB_REPO = 'luthporto'; 
 const DATA_URL    = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/data.json`;
 const IMAGES_BASE = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/images/`;
 
-// ── PROFILE config (opsional, bisa diedit langsung di sini) ──
+// ── PROFILE CONFIG ──
 const PROFILE = {
   name:   'Luthfi Hidayat',
   title:  'I am Luthfi Hidayat,',
   desc:   'I design content that makes people stop, think, and act. From cybersecurity awareness for Pegadaian to soft-sell video campaigns for Smartfren, and even training students across 10 schools. See my work below.',
-  photo:  'images/profile.png',    // kosongkan atau isi 'images/profile.jpg'
-  chips:  ['','','','',''],
-  chipClasses: ['chip-1','chip-2','chip-3','chip-4','chip-5'],
-  email:  '',
-  phone:  '',
-  social: { x: '', linkedin: '', instagram: '' }
+  photo:  'images/profile.png',    
+  email:  'luthfi.hd77@gmail.com',
+  phone:  '6285779677264',
+  social: { x: 'https://x.com/lut_hfihd/', linkedin: 'https://www.linkedin.com/luthfihd/', instagram: 'https://www.instagram.com/luth.fihd/' }
 };
 
-// ── APPLY PROFILE ──
 function applyProfile() {
   document.getElementById('heroName').textContent = PROFILE.title;
   document.getElementById('heroDesc').textContent = PROFILE.desc;
   if (PROFILE.photo) {
     document.getElementById('profileInner').innerHTML = `<img src="${PROFILE.photo}" alt="${PROFILE.name}">`;
   }
-  const chips = document.getElementById('heroChips');
-  chips.innerHTML = PROFILE.chips.map((c,i) =>
-    `<span class="chip ${PROFILE.chipClasses[i]||'chip-1'}">${c}</span>`).join('');
 }
 
-// ── STATE ──
 let allItems = [];
 let currentFilter = 'educational';
   
-// ── GDRIVE THUMBNAIL ──
 function getGoogleDriveId(url) {
   if (!url) return null;
   let fileId = null;
@@ -812,7 +609,6 @@ function getGoogleDriveThumbnail(url) {
   return fileId ? `https://drive.google.com/thumbnail?id=${fileId}&sz=w600` : null;
 }
   
-// ──  FUNGSI FAVICON  ──
 function setFaviconFromDirectLink(imageUrl) {
   const img = new Image();
   img.crossOrigin = "Anonymous";
@@ -840,10 +636,8 @@ function setFaviconFromDirectLink(imageUrl) {
   img.src = imageUrl;
 }
 
-// PANGGIL FUNGSINYA (ganti dengan link Google Drive kamu)
 setFaviconFromDirectLink('https://lh3.googleusercontent.com/d/1jkLbUA9ENzlOCrmIo6__zexMv-RF9ODS=w64-h64');
 
-  // ── FETCH DATA ──
 async function loadPortfolio() {
   try {
     const res = await fetch(DATA_URL + '?t=' + Date.now());
@@ -852,11 +646,10 @@ async function loadPortfolio() {
     renderGrid();
   } catch(e) {
     document.getElementById('masonryGrid').innerHTML =
-      `<div class="empty-state"><span class="empty-icon">✦</span><p>Gagal memuat portfolio. Cek koneksi atau config GITHUB_USER/REPO.</p></div>`;
+      `<div class="empty-state"><span class="empty-icon">✦</span><p>Gagal memuat portfolio.</p></div>`;
   }
 }
 
-// ── RENDER ──
 function renderGrid() {
   const grid = document.getElementById('masonryGrid');
   const items = currentFilter === 'all' ? allItems : allItems.filter(i => i.category === currentFilter);
@@ -875,7 +668,6 @@ function renderGrid() {
     el.style.animationDelay = `${idx * 0.06}s`;
     el.onclick = () => openLightbox(item);
 
-    // Tag Logic
     const tagClass = {
         educational: 'tag-edu',
         promotional: 'tag-promo',
@@ -894,7 +686,6 @@ function renderGrid() {
         ? `<span class="masonry-item-tag ${tagClass}">${tagLabel}</span>` 
         : ''; 
 
-    // Media Logic
     const allLinks = (item.image || item.src || "").split(',');
     const isMultiple = allLinks.length > 1;
     const firstLink = allLinks[0].trim();
@@ -933,42 +724,27 @@ function renderGrid() {
   });
 }
 
-// ── FILTER ──
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.onclick = () => {
-    // 1. Hapus class active dari semua tombol
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    // 2. Tambah class active ke tombol yang diklik
     btn.classList.add('active');
-    // 3. Update variabel currentFilter dengan data-filter dari tombol
     currentFilter = btn.getAttribute('data-filter');
-    // 4. Render ulang grid
     renderGrid();
   };
 });
 
-// ── GALERY ──
 function moveGallery(direction) {
     const container = document.getElementById('modal-media-container');
     const width = container.offsetWidth;
     container.scrollBy({ left: direction * width, behavior: 'smooth' });
 }
-// ── VIDEO CHECKER ──
-function checkIfVideo(link) {
-    const l = link.toLowerCase();
-    return l.match(/\.(mp4|webm|ogg|mov|m4v)$/i) || 
-           l.includes('drive.google.com/file/d/') || 
-           l.includes('drive.google.com/preview');
-}
-// OPENLIGHTBOX
+
 function openLightbox(item) {
     const modal = document.getElementById('modal');
     const content = document.getElementById('modal-content');
     const container = document.getElementById('modal-media-container');
     const dotsContainer = document.getElementById('modal-dots');
-    const app = document.getElementById('app');
 
-    // 1. Reset & Persiapan
     container.innerHTML = '';
     if(dotsContainer) dotsContainer.innerHTML = '';
     modal.style.display = 'flex';
@@ -986,33 +762,26 @@ function openLightbox(item) {
 
     const tag = document.getElementById('modal-tag');
     if(tag) {
-    tag.textContent = item.category;
-    
-    const mappedClass = {
-        educational: 'tag-edu',
-        promotional: 'tag-promo',
-        branding: 'tag-brand',
-        exploration: 'tag-explore' 
-    }[item.category.toLowerCase()] || 'tag-promo';
+        tag.textContent = item.category;
+        const mappedClass = {
+            educational: 'tag-edu',
+            promotional: 'tag-promo',
+            branding: 'tag-brand',
+            exploration: 'tag-explore' 
+        }[item.category.toLowerCase()] || 'tag-promo';
 
-    tag.className = 'modal-tag'; // Reset class dasar
-    tag.classList.add(mappedClass); // Tambah class warna yang sama (tag-edu, dsb)
+        tag.className = 'modal-tag'; 
+        tag.classList.add(mappedClass); 
     }
   
-    // 2. Logika Media
     const allLinks = (item.image || item.src || "").split(',').filter(l => l.trim() !== "");
     
     allLinks.forEach((link, index) => {
         let rawSrc = link.trim();
-        
-        // 1. Deteksi Video
         const isVideo = rawSrc.includes('#video');
-
-        // 2. Pembersihan Link
         let cleanSrc = rawSrc.replace('#video', '');
         let fullSrc = cleanSrc.startsWith('http') ? cleanSrc : IMAGES_BASE + cleanSrc;
 
-        // 3. Buat Wrapper
         const wrapper = document.createElement('a');
         wrapper.href = fullSrc;
         wrapper.target = "_blank";
@@ -1020,9 +789,8 @@ function openLightbox(item) {
         wrapper.style.display = "block";
         wrapper.style.width = "100%";
         
-        // 4. Buat Gambar Thumbnail
         const img = document.createElement('img');
-        img.className = "opacity-0 transition-opacity duration-500 w-full h-auto";
+        img.className = "opacity-0 transition-opacity duration-500 w-full h-auto rounded-t-[24px]"; /* Mengikuti style Material 3 */
         
         let displaySrc = fullSrc;
         if (fullSrc.includes('drive.google.com')) {
@@ -1032,7 +800,6 @@ function openLightbox(item) {
         img.src = displaySrc;
         wrapper.appendChild(img);
 
-        // 5. Jika Video, tambah Icon Play
         if (isVideo) {
             const playBtn = document.createElement('div');
             playBtn.className = "play-button-overlay";
@@ -1042,21 +809,18 @@ function openLightbox(item) {
 
         container.appendChild(wrapper);
 
-        // 6. DOTS NAVIGASI (Pastikan ini di dalam forEach dan hanya ada SATU kali)
         if (allLinks.length > 1 && dotsContainer) {
             const dot = document.createElement('div');
             dot.className = `modal-dot ${index === 0 ? 'active' : ''}`;
             dotsContainer.appendChild(dot);
         }
 
-        // 7. Load Logic
         img.onload = () => {
             if (index === 0) applyFit(img.naturalWidth, img.naturalHeight);
             img.classList.remove('opacity-0');
         };
     });
 
-    // 3. Tombol Prev/Next
     const prevBtn = document.getElementById('modal-prev');
     const nextBtn = document.getElementById('modal-next');
     if (prevBtn && nextBtn) {
@@ -1074,50 +838,39 @@ function openLightbox(item) {
     modal.onclick = (e) => { if (e.target === modal) closeModal(); };
 }
   
-// Fungsi Pembantu untuk menghitung lebar modal agar FIT dengan konten
 function applyFit(w, h) {
     const content = document.getElementById('modal-content');
     if (!content) return;
 
-    const maxHeight = window.innerHeight * 0.7; // Batas tinggi 70% layar
+    const maxHeight = window.innerHeight * 0.7; 
     const aspectRatio = w / h;
-    
     let finalWidth;
     
-    // Jika tinggi asli lebih besar dari batas maxHeight
     if (h > maxHeight) {
         finalWidth = maxHeight * aspectRatio;
     } else {
         finalWidth = w;
     }
 
-    // Batasi agar lebar tidak melebihi 90% lebar layar (biar gak kepotong di HP)
     const maxWidth = window.innerWidth * 0.9;
     if (finalWidth > maxWidth) {
         finalWidth = maxWidth;
     }
 
-    // Terapkan ke elemen modal
     content.style.width = Math.floor(finalWidth) + 'px';
 }
   
-  function closeModal() {
+function closeModal() {
     const modal = document.getElementById('modal');
     const content = document.getElementById('modal-content');
-    const app = document.getElementById('app');
 
-    // Animasi Keluar
     modal.style.opacity = '0';
-    modal.style.pointerEvents = 'none'; // Biar gak bisa diklik selama transisi
+    modal.style.pointerEvents = 'none'; 
     content.classList.remove('scale-100', 'opacity-100');
     content.classList.add('scale-95', 'opacity-0');
 
     setTimeout(() => {
         modal.style.display = 'none';
-        if (app) {
-            app.style.filter = '';
-            app.style.transform = '';
-        }
         document.body.style.overflow = '';
         document.getElementById('modal-media-container').innerHTML = '';
     }, 300);
@@ -1126,22 +879,6 @@ function applyFit(w, h) {
 window.closeModal = closeModal;
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
 
-// ── SCROLL BG ──
-const bgPalettes = [
-  ['#6C63FF','#FF6B9D','#FFD93D','#4ECDC4','#FF8C42'],
-  ['#FF6B9D','#FFD93D','#A8FF78','#6C63FF','#4ECDC4'],
-  ['#4ECDC4','#A8FF78','#6C63FF','#FF8C42','#FF6B9D'],
-  ['#FFD93D','#FF8C42','#FF6B9D','#4ECDC4','#6C63FF'],
-  ['#A8FF78','#4ECDC4','#FFD93D','#FF6B9D','#6C63FF'],
-];
-const orbs = document.querySelectorAll('.bg-orb');
-let lastP = -1;
-window.addEventListener('scroll', () => {
-  const p = Math.min(Math.floor((window.scrollY/(document.body.scrollHeight-window.innerHeight))*bgPalettes.length), bgPalettes.length-1);
-  if (p !== lastP) { lastP=p; bgPalettes[p].forEach((c,i)=>{ orbs[i].style.background=`radial-gradient(circle,${c},transparent 70%)`; }); }
-},{passive:true});
-
-// ── SCROLL REVEAL ──
 const observer = new IntersectionObserver(entries => {
   entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);} });
 },{threshold:0.1});
