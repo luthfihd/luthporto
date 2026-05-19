@@ -423,12 +423,13 @@
   {
     "id": "item_1777954892054_zyxbr2",
     "type": "gdrive",
-    "src": "https://drive.google.com/file/d/1oGczZpdRN6TaQqrzNZmpxkYq8vGE-eNB/view?usp=drive_link, https://drive.google.com/file/d/1P9cGyKzF-LIQevxE2vdfthz2ABmKwASD/view?usp=drive_link",
-    "title": "Email Poster",
+    "src": "https://drive.google.com/file/d/1oGczZpdRN6TaQqrzNZmpxkYq8vGE-eNB/view?usp=drive_link,https://drive.google.com/file/d/1P9cGyKzF-LIQevxE2vdfthz2ABmKwASD/view?usp=drive_link",
+    "title": "Phishing Email Poster",
     "category": "educational",
-    "desc": "Phishing Email Poster",
+    "desc": "This two-part infographic effectively communicates a cybersecurity warning against phishing through clean, minimalist design and strong visual metaphors. The first slide graphically depicts the threat with a worried figure and a phishing lure, while the second offers a memorable \"3K\" strategy, reinforced by a clear lightbulb icon, to combat it.",
     "icon": "🎬",
-    "date": "2026-05-05"
+    "date": "2026-05-05",
+    "image": "https://drive.google.com/file/d/1oGczZpdRN6TaQqrzNZmpxkYq8vGE-eNB/view?usp=drive_link,https://drive.google.com/file/d/1P9cGyKzF-LIQevxE2vdfthz2ABmKwASD/view?usp=drive_link"
   },
   {
     "id": "item_1777954854119_mn5mw7",
