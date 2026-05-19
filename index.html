@@ -226,6 +226,8 @@ footer{margin-top:60px;padding:60px 0 40px;}
     overflow-x: hidden;
     scrollbar-width: none;
     box-shadow: 0 24px 64px rgba(26, 26, 36, 0.15);
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
 }
 #modal-media-container {
@@ -235,6 +237,8 @@ footer{margin-top:60px;padding:60px 0 40px;}
     scrollbar-width: none;
     align-items: center;
     background: #F8F9FA;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
 }
 #modal-media-container img {
     display: block;
@@ -406,6 +410,7 @@ footer{margin-top:60px;padding:60px 0 40px;}
     pointer-events: none;
     z-index: 20;
     box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+    opacity: 1 !important;
 }
 .badge-dot { width: 5px; height: 5px; background: #6C63FF; border-radius: 50%; }
 .badge-text { color: #1A1A1A; font-family: 'DM Sans'; font-size: 10px; font-weight: bold; }
