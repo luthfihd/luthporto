@@ -390,12 +390,13 @@
   {
     "id": "item_1777955540736_3adsa6",
     "type": "gdrive",
-    "src": "https://drive.google.com/file/d/1HnEyU344BO6FAyrxsIpka--QSjrKirAy/view?usp=drive_link, https://drive.google.com/file/d/1ImuWtSuz_Bx8_LU0h24WAiKm4h5CuelT/view?usp=drive_link",
-    "title": "Email Poster",
+    "src": "https://drive.google.com/file/d/1HnEyU344BO6FAyrxsIpka--QSjrKirAy/view?usp=drive_link,https://drive.google.com/file/d/1ImuWtSuz_Bx8_LU0h24WAiKm4h5CuelT/view?usp=drive_link",
+    "title": "Email Poster About Fraud Alerts",
     "category": "educational",
-    "desc": "Scams and their types",
+    "desc": "This posters designed with a dark background and high-contrast white text, ensuring key information is immediately and clearly conveyed. Each point is further enhanced by illustrative icons, visually reinforcing its core message.",
     "icon": "🎬",
-    "date": "2026-05-05"
+    "date": "2026-05-05",
+    "image": "https://drive.google.com/file/d/1HnEyU344BO6FAyrxsIpka--QSjrKirAy/view?usp=drive_link,https://drive.google.com/file/d/1ImuWtSuz_Bx8_LU0h24WAiKm4h5CuelT/view?usp=drive_link"
   },
   {
     "id": "item_1777955170470_nbbii3",
