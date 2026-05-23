@@ -619,12 +619,13 @@
   {
     "id": "item_1776782634069_si5edi",
     "type": "gdrive",
-    "src": "https://drive.google.com/file/d/1aRb47DOnFbXoPEV8JA_nd2ZC-5H6LTt2/view?usp=drive_link",
-    "title": "Wallpaper",
+    "src": "https://drive.google.com/file/d/1aRb47DOnFbXoPEV8JA_nd2ZC-5H6LTt2/view?usp=drive_link,https://drive.google.com/file/d/1jyXluBdjI52weHTNRXs0mMwYnxlxRop3/view?usp=drive_link",
+    "title": "Fake QR Code Wallpaper",
     "category": "educational",
-    "desc": "Fake QR Code Wallpaper",
+    "desc": "",
     "icon": "🎬",
-    "date": "2026-04-21"
+    "date": "2026-04-21",
+    "image": "https://drive.google.com/file/d/1aRb47DOnFbXoPEV8JA_nd2ZC-5H6LTt2/view?usp=drive_link,https://drive.google.com/file/d/1jyXluBdjI52weHTNRXs0mMwYnxlxRop3/view?usp=drive_link"
   },
   {
     "id": "item_1776782583082_9lj3qg",
