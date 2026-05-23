@@ -2,12 +2,13 @@
   {
     "id": "item_1779550720851_iyuukt",
     "type": "gdrive",
-    "src": "https://drive.google.com/file/d/1vnZVpPXZO9_ljYcmshAi-hFm1JHnr90F/view?usp=drive_link, https://drive.google.com/file/d/1QJyVgFadoG3gVUc6g8OjDVkgkrcAAQra/view?usp=drive_link, https://drive.google.com/file/d/1uOVjf0UIaVk1K119nz498uHH1WeufrDa/view?usp=drive_link",
+    "src": "https://drive.google.com/file/d/1vnZVpPXZO9_ljYcmshAi-hFm1JHnr90F/view?usp=drive_link,https://drive.google.com/file/d/1QJyVgFadoG3gVUc6g8OjDVkgkrcAAQra/view?usp=drive_link,https://drive.google.com/file/d/1uOVjf0UIaVk1K119nz498uHH1WeufrDa/view?usp=drive_link",
     "title": "Real Estate Flying Banner",
     "category": "promotional",
     "desc": "A detailed house promotion banner covering everything from the facade to the floor plan, along with several benefits of choosing this property. With a clear and strong CTA.",
     "icon": "🎬",
-    "date": "2026-05-23"
+    "date": "2026-05-23",
+    "image": "https://drive.google.com/file/d/1vnZVpPXZO9_ljYcmshAi-hFm1JHnr90F/view?usp=drive_link,https://drive.google.com/file/d/1QJyVgFadoG3gVUc6g8OjDVkgkrcAAQra/view?usp=drive_link,https://drive.google.com/file/d/1uOVjf0UIaVk1K119nz498uHH1WeufrDa/view?usp=drive_link"
   },
   {
     "id": "item_1779550658304_jox56f",
