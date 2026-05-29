@@ -1,5 +1,15 @@
 [
   {
+    "id": "item_1780049344158_73nvr1",
+    "type": "gdrive",
+    "src": "https://drive.google.com/file/d/1O0-mmfoqPdtvUErIb5QQ9k3w62QW0keq/view?usp=drive_link",
+    "title": "Document Safety Sharing Poster",
+    "category": "educational",
+    "desc": "This poster effectively communicates crucial data security practices within an organization, particularly for Google Drive, through its direct and action-oriented design. The bold \"STOP! JANGAN ASAL BERBAGI\" (STOP! DON'T JUST SHARE) immediately grabs attention, while the clear, numbered steps and visual example of a sharing interface make the instructions easy to follow, ultimately empowering users to safeguard company data.",
+    "icon": "🎬",
+    "date": "2026-05-29"
+  },
+  {
     "id": "item_1780048764315_kshm0q",
     "type": "gdrive",
     "src": "https://drive.google.com/file/d/1OloWGLNZaxCld1eOduFk2xkyOfx7v3om/view?usp=drive_link",
