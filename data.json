@@ -1,5 +1,15 @@
 [
   {
+    "id": "item_1780048764315_kshm0q",
+    "type": "gdrive",
+    "src": "https://drive.google.com/file/d/1OloWGLNZaxCld1eOduFk2xkyOfx7v3om/view?usp=drive_link",
+    "title": "Data Theft Poster",
+    "category": "educational",
+    "desc": "This data theft awareness poster powerfully conveys the severity of data breaches through its striking visual of a hooded figure with a laptop, immediately establishing a sense of threat. The clear, concise breakdowns of hacker activities, paired with relevant icons, make the abstract concept of data theft tangible and educates the audience on the real-world implications of compromised data.",
+    "icon": "🎬",
+    "date": "2026-05-29"
+  },
+  {
     "id": "item_1780048488100_c1ywap",
     "type": "gdrive",
     "src": "https://drive.google.com/file/d/1Wh6gBVPdN7bYMtEbh6CLYHCKyukl01ei/view?usp=drive_link",
