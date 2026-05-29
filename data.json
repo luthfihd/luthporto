@@ -1,5 +1,15 @@
 [
   {
+    "id": "item_1780048488100_c1ywap",
+    "type": "gdrive",
+    "src": "https://drive.google.com/file/d/1Wh6gBVPdN7bYMtEbh6CLYHCKyukl01ei/view?usp=drive_link",
+    "title": "Social Engineering Poster",
+    "category": "educational",
+    "desc": "This poster effectively warns against social engineering by vividly illustrating its manipulative nature and various attack methods. The impactful imagery of a puppet master and fearful individuals immediately conveys the sense of being controlled and vulnerable, while clear examples like phishing and smishing make the abstract concept relatable and actionable for the audience.",
+    "icon": "🎬",
+    "date": "2026-05-29"
+  },
+  {
     "id": "item_1780048231848_3wok98",
     "type": "gdrive",
     "src": "https://drive.google.com/file/d/1L1jlfK12QdGtJOJucKcd_jzXaC3m686r/view?usp=drive_link",
