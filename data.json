@@ -1,5 +1,15 @@
 [
   {
+    "id": "item_1780047843632_jipclr",
+    "type": "gdrive",
+    "src": "https://drive.google.com/file/d/1nU9lbSdt2yJ5VRuhr2S91BAQxMxV0XMK/view?usp=drive_link",
+    "title": "Doxing Alert Poster",
+    "category": "educational",
+    "desc": "This poster effectively educates about doxing with a striking title, relevant visuals, and clear details on types, attack methods, and prevention tips. Its digestible design, with icons and bullet points, creates a strong digital security awareness campaign.",
+    "icon": "🎬",
+    "date": "2026-05-29"
+  },
+  {
     "id": "item_1780047277702_jfrr87",
     "type": "gdrive",
     "src": "https://drive.google.com/file/d/1oGNe98bs01ZFxFtMLniK8upNTvsGcAZK/view?usp=drive_link",
