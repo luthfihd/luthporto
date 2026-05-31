@@ -13,12 +13,13 @@
   {
     "id": "item_1780150753342_557ni9",
     "type": "gdrive",
-    "src": "https://drive.google.com/file/d/1sBIMNmSOSBJ5WiRHkq2n9C33gTnTlaOD/view?usp=drive_link",
+    "src": "https://drive.google.com/file/d/1sBIMNmSOSBJ5WiRHkq2n9C33gTnTlaOD/view?usp=drive_link#video",
     "title": "Partition Work Highlight",
     "category": "branding",
     "desc": "This highlight video serves as compelling evidence of the company's capability to execute projects according to plan, consistently delivering optimal results. It is an invaluable asset for presentations to prospective clients and functions as a vital component of our corporate archives.",
     "icon": "🎬",
-    "date": "2026-05-30"
+    "date": "2026-05-30",
+    "image": "https://drive.google.com/file/d/1sBIMNmSOSBJ5WiRHkq2n9C33gTnTlaOD/view?usp=drive_link#video"
   },
   {
     "id": "item_1780150643258_ecchfq",
