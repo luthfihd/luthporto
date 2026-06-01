@@ -270,12 +270,13 @@
   {
     "id": "item_1779550658304_jox56f",
     "type": "gdrive",
-    "src": "https://drive.google.com/file/d/1WKPBd9-9xwGKmEK8oMVkTLCuhKTXwUdY/view?usp=drive_link",
-    "title": "Real Estate Poster",
+    "src": "https://drive.google.com/file/d/19UuxKm7MDygVQl1WkeEZIYqvkaaysZ3n/view?usp=drive_link,https://drive.google.com/file/d/1AH-hwsOxvTCo-fkowVQYgcqSMXyhb2Lp/view?usp=drive_link",
+    "title": "Real Estate Banner",
     "category": "promotional",
     "desc": "A detailed house promotion banner covering everything from the facade to the floor plan, along with several benefits of choosing this property. With a clear and strong CTA.",
     "icon": "🎬",
-    "date": "2026-05-23"
+    "date": "2026-05-23",
+    "image": "https://drive.google.com/file/d/19UuxKm7MDygVQl1WkeEZIYqvkaaysZ3n/view?usp=drive_link,https://drive.google.com/file/d/1AH-hwsOxvTCo-fkowVQYgcqSMXyhb2Lp/view?usp=drive_link"
   },
   {
     "id": "item_1779550611962_4tul95",
