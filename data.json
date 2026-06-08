@@ -1,5 +1,15 @@
 [
   {
+    "id": "item_1780908167773_tqn6bm",
+    "type": "gdrive",
+    "src": "https://drive.google.com/file/d/1U02r6q_OMyQWB_ImWjWspz0fAn1BEiHZ/view?usp=drive_link",
+    "title": "Phishing: Jebakan dari Ujung Jari",
+    "category": "educational",
+    "desc": "A cybersecurity awareness video using a monologue-style explainer format, following the current trend of direct-to-camera storytelling. Delivered in a serious, focused tone to emphasize the real threat of phishing attacks in daily digital activity. Distributed via internal employee channels.",
+    "icon": "🎬",
+    "date": "2026-06-08"
+  },
+  {
     "id": "item_1780907545310_s0chp0",
     "type": "gdrive",
     "src": "https://drive.google.com/file/d/1jSV1iouIOcWrb82rxDMLqzuKYh9rxIV6/view?usp=drive_link",
