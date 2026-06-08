@@ -271,7 +271,7 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#
             <option value="promotional">Promotional</option>
             <option value="branding">Branding</option>
             <option value="educational">Educational</option>
-            <option value="exploration">Exploration</option>
+            <option value="labs">Labs</option>
           </select>
         </div>
         <div class="form-group">
@@ -325,7 +325,7 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#
             <button data-f="educational" onclick="filterAdmin('educational',this)">Educational</button>
             <button data-f="promotional" onclick="filterAdmin('promotional',this)">Promotional</button>
             <button data-f="branding" onclick="filterAdmin('branding',this)">Branding</button>
-            <button data-f="exploration" onclick="filterAdmin('exploration',this)">Exploration</button>
+            <button data-f="labs" onclick="filterAdmin('labs',this)">Labs</button>
           </div>
         </div>
         <div id="adminGrid">
@@ -368,7 +368,7 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;color:#
         <option value="educational">Educational</option>
         <option value="promotional">Promotional</option>
         <option value="branding">Branding</option>
-        <option value="exploration">Exploration</option>
+        <option value="labs">Labs</option>
       </select>
     </div>
     <div class="form-group">
@@ -512,7 +512,7 @@ function renderAdminGrid() {
         promotional: 'tag-promo',
         branding: 'tag-brand',
         educational: 'tag-edu',
-        exploration: 'tag-explore',
+        labs: 'tag-labs',
     }[item.category] || 'tag-promo';
     
     let media = '';
@@ -552,7 +552,7 @@ function renderAdminGrid() {
         // FALLBACK kalau gagal extract ID
         media = `<div class="admin-placeholder" style="background: linear-gradient(135deg, rgba(108,99,255,0.2), rgba(255,107,157,0.2)); height:130px; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px;">
           <div style="font-size: 2.5rem;">${item.icon || '🎬'}</div>
-          <div style="font-size: 10px; color: rgba(255,255,255,0.6);">${item.type === 'gdrive' ? 'Google Drive' : 'Explore'}</div>
+          <div style="font-size: 10px; color: rgba(255,255,255,0.6);">${item.type === 'gdrive' ? 'Google Drive' : 'Labs'}</div>
         </div>`;
       }
     }
