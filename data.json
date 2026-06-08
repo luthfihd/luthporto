@@ -1,5 +1,15 @@
 [
   {
+    "id": "item_1780909729479_yznsb2",
+    "type": "gdrive",
+    "src": "https://drive.google.com/file/d/1gxb6bh9aqiEBKwcLhivwmm4nhWvOvEyy/view?usp=drive_link",
+    "title": "Jangan Sampe Nyesel, Save Password di Browser Belum Tentu Aman!",
+    "category": "educational",
+    "desc": "A cybersecurity awareness video using an explainer format with voiceover dubbing and supporting footage assets, covering the dangers of credential leaks from browser-saved passwords. Delivered in a serious tone to emphasize the real and ongoing risk of this habit in everyday digital activity. Distributed via internal employee channels.",
+    "icon": "🎬",
+    "date": "2026-06-08"
+  },
+  {
     "id": "item_1780909291724_jecvsq",
     "type": "gdrive",
     "src": "https://drive.google.com/file/d/10ct43tKh0T1k4yiwoWqyiBF_pIrzXi_h/view?usp=drive_link",
