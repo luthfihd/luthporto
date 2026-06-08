@@ -425,7 +425,7 @@ footer{margin-top:60px;padding:60px 0 40px;}
 .tag-educational, .tag-edu { background: rgba(108, 99, 255, 0.08) !important; color: #544ae6 !important; border: 1px solid rgba(108, 99, 255, 0.15) !important; }
 .tag-promotional, .tag-promo { background: rgba(209, 54, 106, 0.08) !important; color: #cf2359 !important; border: 1px solid rgba(209, 54, 106, 0.15) !important; }
 .tag-branding, .tag-brand { background: rgba(15, 163, 74, 0.08) !important; color: #0d8a3e !important; border: 1px solid rgba(15, 163, 74, 0.15) !important; }
-.tag-exploration, .tag-explore { background: rgba(163, 138, 15, 0.08) !important; color: #8f7909 !important; border: 1px solid rgba(163, 138, 15, 0.15) !important; }
+.tag-labs, .tag-labs { background: rgba(163, 138, 15, 0.08) !important; color: #8f7909 !important; border: 1px solid rgba(163, 138, 15, 0.15) !important; }
 
 .masonry-item-tag, .modal-tag {
     display: inline-block;
@@ -504,7 +504,7 @@ footer{margin-top:60px;padding:60px 0 40px;}
       <button class="filter-btn active" data-filter="educational">Educational</button>
       <button class="filter-btn" data-filter="promotional">Promotional</button>
       <button class="filter-btn" data-filter="branding">Branding</button>
-      <button class="filter-btn" data-filter="exploration">Exploration</button>
+      <button class="filter-btn" data-filter="labs">Labs</button>
       <button class="filter-btn" data-filter="all">All Projects</button>
     </div>
     <div id="masonryGrid">
@@ -675,14 +675,14 @@ function renderGrid() {
         educational: 'tag-edu',
         promotional: 'tag-promo',
         branding: 'tag-brand',
-        exploration: 'tag-explore' 
+        labs: 'tag-labs' 
     }[item.category.toLowerCase()] || 'tag-promo';
 
     const tagLabel = {
         educational: 'Educational',
         promotional: 'Promotional',
         branding: 'Branding',
-        exploration: 'Exploration' 
+        labs: 'Labs' 
     }[item.category.toLowerCase()] || item.category;
 
     const tagHtml = currentFilter === 'all' 
@@ -770,7 +770,7 @@ function openLightbox(item) {
             educational: 'tag-edu',
             promotional: 'tag-promo',
             branding: 'tag-brand',
-            exploration: 'tag-explore' 
+            labs: 'tag-labs' 
         }[item.category.toLowerCase()] || 'tag-promo';
 
         tag.className = 'modal-tag'; 
