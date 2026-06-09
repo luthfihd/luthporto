@@ -1,5 +1,15 @@
 [
   {
+    "id": "item_1780996062659_redcig",
+    "type": "gdrive",
+    "src": "https://drive.google.com/file/d/1nQ6eir9T81FRVfdvwta3GpUQ9vNqPRnO/view?usp=drive_link, https://drive.google.com/file/d/1pMMp6B-aJA_nWeJbCRwBDwfFoDgKlGuk/view?usp=drive_link, https://drive.google.com/file/d/1RXf6z_Cd1KBZQBn0lT3S0wIvuAgLjk3z/view?usp=drive_link",
+    "title": "Kali365 Threat Security Alert Poster",
+    "category": "educational",
+    "desc": "I developed this series of three posters to clearly communicate the threat of the Kali365 security vulnerability. The first poster serves as a security alert, introducing the Kali365 attack method that bypasses MFA using AI. The second poster visually breaks down the step-by-step flow of the attack, making a complex process understandable. Finally, the third poster provides actionable prevention steps, guiding users on how to protect themselves by emphasizing strong passwords, MFA, phishing awareness, and secure data storage practices. My goal was to demystify this sophisticated cyber threat and empower users with essential knowledge for defense.",
+    "icon": "🎬",
+    "date": "2026-06-09"
+  },
+  {
     "id": "item_1780995600024_kj1j6f",
     "type": "gdrive",
     "src": "https://drive.google.com/file/d/1CGp0yf-yAr5acRKUCqD1bPC583j661Qm/view?usp=drive_link, https://drive.google.com/file/d/11CvtzIsxU7fM3SijPxMT0I9y2ezWKLwv/view?usp=drive_link",
