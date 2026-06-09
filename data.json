@@ -1,5 +1,15 @@
 [
   {
+    "id": "item_1780997351955_43b6xe",
+    "type": "gdrive",
+    "src": "https://drive.google.com/file/d/1jOl093OHl6YSPyT3fhVYizBiq3UD6OX5/view?usp=drive_link, https://drive.google.com/file/d/1-_7z5Nzdl8TkLDHBt3r9203b2hdyOvDm/view?usp=drive_link",
+    "title": "The Danger of Smishing Poster",
+    "category": "educational",
+    "desc": "I created these two posters to comprehensively address the threat of \"smishing\" – phishing attempts via SMS or chat. The first poster defines smishing, explains its mechanics, and provides clear prevention tips like avoiding suspicious links, activating MFA, and regularly updating software. The second poster then dives into specific \"smishing\" modus operandi, offering concrete examples of deceptive messages such as fake prize notifications, delivery confirmations, and urgent requests from contacts. My objective was to equip users with the knowledge to identify and avoid these scams, safeguarding their data and identity.",
+    "icon": "🎬",
+    "date": "2026-06-09"
+  },
+  {
     "id": "item_1780996511941_vgyy5n",
     "type": "gdrive",
     "src": "https://drive.google.com/file/d/1tO6weRdJ55uIYePh7smqSelG_kN-8-3o/view?usp=drive_link",
