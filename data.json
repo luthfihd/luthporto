@@ -2,12 +2,13 @@
   {
     "id": "item_1782049448954_tf4gcs",
     "type": "gdrive",
-    "src": "https://drive.google.com/file/d/1RBQVGdfXZ2zHdYBqrWisHramHCSV1A3Q/view?usp=drive_link, https://drive.google.com/file/d/10JuuVbwZswY6F7RQ0YkVSZcvfsnQh18M/view?usp=drive_link, https://drive.google.com/file/d/135M-vgSz7Z1hl6UB41X1wUaUBii4YkjY/view?usp=drive_link",
+    "src": "https://drive.google.com/file/d/1RBQVGdfXZ2zHdYBqrWisHramHCSV1A3Q/view?usp=drive_link,https://drive.google.com/file/d/10JuuVbwZswY6F7RQ0YkVSZcvfsnQh18M/view?usp=drive_link,https://drive.google.com/file/d/135M-vgSz7Z1hl6UB41X1wUaUBii4YkjY/view?usp=drive_link",
     "title": "Toothpaste Promotional Promo",
-    "category": "promotional",
+    "category": "labs",
     "desc": "This work test project was overhaul-driven: re-engineering the copywriting into punchy, active value propositions while intentionally scaling key typography across all three PDP-images. The final layout maximizes visual hierarchy, ensuring instant product scannability for fast-scrolling consumers without losing the brand's essential converting hooks.",
     "icon": "🎬",
-    "date": "2026-06-21"
+    "date": "2026-06-21",
+    "image": "https://drive.google.com/file/d/1RBQVGdfXZ2zHdYBqrWisHramHCSV1A3Q/view?usp=drive_link,https://drive.google.com/file/d/10JuuVbwZswY6F7RQ0YkVSZcvfsnQh18M/view?usp=drive_link,https://drive.google.com/file/d/135M-vgSz7Z1hl6UB41X1wUaUBii4YkjY/view?usp=drive_link"
   },
   {
     "id": "item_1781686469919_jhpdr8",
