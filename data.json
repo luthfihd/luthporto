@@ -2,12 +2,13 @@
   {
     "id": "item_1782098087190_rvq0li",
     "type": "gdrive",
-    "src": "https://drive.google.com/file/d/1n4PB6-FEPSw5pcRdGgfVkab4ccO1ezZ3/view?usp=drive_link, https://drive.google.com/file/d/1u_oGH65KlbORlUa_WXLNwNrliKNWrW6S/view?usp=drive_link",
+    "src": "https://drive.google.com/file/d/1n4PB6-FEPSw5pcRdGgfVkab4ccO1ezZ3/view?usp=drive_link,https://drive.google.com/file/d/1u_oGH65KlbORlUa_WXLNwNrliKNWrW6S/view?usp=drive_link",
     "title": "Security Awareness Poster in TRING! App",
     "category": "educational",
-    "desc": "TRING!",
+    "desc": "I designed this TRING! App pop-up poster in a vibrant, high-contrast green palette to immediately command attention and signal urgency around mobile security. Structurally, the layout features dynamic illustrations of figures actively warding off digital scams and threat indicators. To ensure the critical safety warnings aren't just seen but easily digested, I strategically placed bold, clear typography at the top and utilized clean icon-driven checkmarks at the base to map out actionable security steps for the user.",
     "icon": "🎬",
-    "date": "2026-06-22"
+    "date": "2026-06-22",
+    "image": "https://drive.google.com/file/d/1n4PB6-FEPSw5pcRdGgfVkab4ccO1ezZ3/view?usp=drive_link,https://drive.google.com/file/d/1u_oGH65KlbORlUa_WXLNwNrliKNWrW6S/view?usp=drive_link"
   },
   {
     "id": "item_1782049448954_tf4gcs",
