@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luthfi - Creative Content</title>
+<title>Luth's Art</title>
 
+<!-- Font Barlow sesuai permintaan -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- Menggunakan Barlow sesuai instruksi -->
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-/* ── 1. VARIABEL & PALET WARNA BARU ── */
+/* ── 1. VARIABEL & PALET WARNA ── */
 :root {
   --magenta: #8a2889;
   --purple: #8c52ff;
@@ -30,7 +30,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Latar Belakang Grid (Lebih lebar sesuai Sample 1) */
+/* Latar Belakang Grid */
 .grid-bg {
   background-size: 60px 60px;
   background-image: 
@@ -38,206 +38,218 @@ body {
     linear-gradient(to bottom, var(--border-grid) 1px, transparent 1px);
 }
 
-/* ── 2. MORPHING NAVIGATION (PILL TO HAMBURGER) ── */
+/* ── 2. MORPHING FLYING BUTTON (NAVIGASI) ── */
 #nav-container {
   position: fixed; top: 30px; left: 50%; transform: translateX(-50%);
-  z-index: 1000; transition: all 0.5s var(--spring);
+  z-index: 9999; transition: all 0.6s var(--spring);
 }
 .nav-pill {
   background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
-  border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.06);
   border-radius: 50px; display: flex; align-items: center; justify-content: center;
-  padding: 6px; overflow: hidden; width: 320px; height: 56px;
-  transition: all 0.5s var(--spring);
+  padding: 8px 12px; width: 340px; height: 60px; overflow: hidden;
+  transition: all 0.6s var(--spring);
 }
 .nav-links {
-  display: flex; gap: 4px; width: 100%; justify-content: center; transition: opacity 0.3s;
+  display: flex; gap: 8px; width: 100%; justify-content: center; transition: opacity 0.3s;
 }
 .nav-links a {
-  text-decoration: none; color: #555; font-weight: 800; font-size: 14px;
-  text-transform: uppercase; padding: 10px 24px; border-radius: 50px; transition: all 0.2s;
-  cursor: pointer;
+  text-decoration: none; color: #555; font-weight: 800; font-size: 15px;
+  text-transform: uppercase; padding: 10px 20px; border-radius: 50px; transition: all 0.2s;
+  cursor: pointer; white-space: nowrap;
 }
 .nav-links a:hover, .nav-links a.active { background: rgba(140, 82, 255, 0.1); color: var(--purple); }
+
+/* Hamburger (Hidden by default) */
 .nav-hamburger {
-  display: none; width: 24px; height: 24px; flex-direction: column; justify-content: space-around; cursor: pointer;
-  position: absolute;
+  display: none; width: 24px; height: 20px; flex-direction: column; justify-content: space-between;
+  cursor: pointer; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
 }
 .nav-hamburger span {
   display: block; width: 100%; height: 3px; background: var(--magenta); border-radius: 2px;
+  transition: all 0.3s ease;
 }
 
-/* State saat di-scroll (Pill morphing jadi Hamburger di Kanan Atas) */
+/* SCROLLED STATE (Pindah ke Kanan Atas & Jadi Hamburger) */
 #nav-container.scrolled {
-  top: 20px; left: calc(100% - 20px); transform: translateX(-100%);
+  top: 20px; left: calc(100% - 30px); transform: translateX(-100%);
 }
 #nav-container.scrolled .nav-pill {
-  width: 56px; padding: 0; border-radius: 50%; cursor: pointer;
+  width: 60px; padding: 0; border-radius: 50%; cursor: pointer;
 }
 #nav-container.scrolled .nav-links { opacity: 0; pointer-events: none; position: absolute; }
 #nav-container.scrolled .nav-hamburger { display: flex; }
 #nav-container.scrolled .nav-pill:hover { box-shadow: 0 5px 20px rgba(140, 82, 255, 0.3); }
 
-/* ── 3. HERO SECTION (SKALA LEBIH BESAR & KOMPOSISI PRESISI) ── */
+/* MENU OPEN STATE (Vertikal Dropdown saat Hamburger di-klik) */
+#nav-container.scrolled.menu-open .nav-pill {
+  width: 160px; height: auto; border-radius: 20px; padding: 20px 10px;
+  flex-direction: column; cursor: default;
+}
+#nav-container.scrolled.menu-open .nav-hamburger {
+  position: relative; top: 0; left: 0; transform: none; margin-bottom: 16px; align-self: flex-end; margin-right: 10px;
+}
+#nav-container.scrolled.menu-open .nav-hamburger span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+#nav-container.scrolled.menu-open .nav-hamburger span:nth-child(2) { opacity: 0; }
+#nav-container.scrolled.menu-open .nav-hamburger span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+#nav-container.scrolled.menu-open .nav-links {
+  opacity: 1; pointer-events: auto; position: relative; flex-direction: column; align-items: stretch;
+}
+#nav-container.scrolled.menu-open .nav-links a { text-align: right; padding: 12px 20px; }
+
+/* Mobile Mode Adjustment untuk Morphing Nav */
+@media(max-width: 768px) {
+  #nav-container { top: 20px; width: 90%; }
+  .nav-pill { width: 100%; height: 56px; }
+  .nav-links a { font-size: 13px; padding: 10px 12px; }
+  #nav-container.scrolled { left: calc(100% - 20px); width: auto; }
+}
+
+/* ── 3. HERO SECTION (SANDWICH & PRESISI TYPOGRAPHY) ── */
 header {
   min-height: 100vh; display: flex; align-items: center; justify-content: center;
-  position: relative; padding: 80px 40px 0; max-width: 1400px; margin: 0 auto;
+  position: relative; padding: 100px 40px 0; max-width: 1400px; margin: 0 auto;
 }
 .hero-wrapper {
-  display: flex; align-items: center; justify-content: space-between;
-  width: 100%; position: relative;
+  display: flex; align-items: center; justify-content: space-between; width: 100%; position: relative;
 }
 
-/* KIRI: Sandwich Effect (LUTH 1.png & Profile.png) */
+/* KIRI: Layer Sandwich (File lokal LUTH 1.png dan Profile.png) */
 .hero-visual {
-  position: relative; width: 550px; height: 550px; flex-shrink: 0;
+  position: relative; width: 600px; height: 600px; flex-shrink: 0;
 }
-/* Memotong tepat di bagian "LU" untuk layer belakang */
 .logo-back {
-  position: absolute; inset: 0;
-  background-image: url('LUTH 1.png'); background-position: top center;
-  background-size: 100% auto; background-repeat: no-repeat;
-  clip-path: inset(0 0 50% 0); /* Tampil hanya separuh atas */
-  z-index: 1;
+  position: absolute; inset: 0; background-image: url('LUTH 1.png');
+  background-position: center; background-size: contain; background-repeat: no-repeat;
+  clip-path: inset(0 0 50% 0); z-index: 1;
 }
-/* Memotong tepat di bagian "TH" untuk layer depan */
 .logo-front {
-  position: absolute; inset: 0;
-  background-image: url('LUTH 1.png'); background-position: top center;
-  background-size: 100% auto; background-repeat: no-repeat;
-  clip-path: inset(50% 0 0 0); /* Tampil hanya separuh bawah */
-  z-index: 3; mix-blend-mode: multiply; opacity: 0.9;
+  position: absolute; inset: 0; background-image: url('LUTH 1.png');
+  background-position: center; background-size: contain; background-repeat: no-repeat;
+  clip-path: inset(50% 0 0 0); z-index: 3; mix-blend-mode: multiply; opacity: 0.9;
 }
 .hero-model {
-  position: absolute; bottom: -8%; left: 50%; transform: translateX(-50%);
+  position: absolute; bottom: -5%; left: 50%; transform: translateX(-50%);
   height: 110%; object-fit: contain; z-index: 2;
+  /* Jika Profile.png tidak ada di lokal, otomatis fallback ke Github */
 }
 
-/* TENGAH: Typography & Tombol Sudut Siku */
-.hero-text { flex-grow: 1; padding-left: 60px; z-index: 4; }
+/* TENGAH: Presisi Teks & Tombol Kotak Tajam */
+.hero-text { flex-grow: 1; padding-left: 40px; z-index: 4; }
 .hero-text h1 {
-  font-size: clamp(3rem, 5vw, 4.5rem); /* Skala teks masif */
-  font-weight: 400; line-height: 1.25; color: var(--text-dark); letter-spacing: -1px;
+  font-size: clamp(3rem, 4.5vw, 4.2rem); font-weight: 500; line-height: 1.2;
+  color: var(--text-dark); letter-spacing: -0.5px;
 }
-.hero-text h1 span { font-weight: 900; }
-.c-mag { color: var(--magenta); }
-.c-purp { color: var(--purple); }
+.c-mag { color: var(--magenta); font-weight: 900; }
+.c-purp { color: var(--purple); font-weight: 900; }
 
 .hero-actions { display: flex; gap: 16px; margin-top: 40px; }
 .btn {
-  padding: 16px 32px; font-size: 16px; font-weight: 900; font-family: 'Barlow', sans-serif;
+  padding: 18px 36px; font-size: 16px; font-weight: 900; font-family: 'Barlow', sans-serif;
   text-transform: uppercase; text-decoration: none; border: none; cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease; 
-  border-radius: 0; /* Kotak siku sempurna */
+  transition: transform 0.2s ease, box-shadow 0.2s ease; border-radius: 0; 
 }
 .btn-purp { background: var(--purple); color: #fff; }
 .btn-purp:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(140, 82, 255, 0.3); }
 .btn-mag { background: var(--magenta); color: #fff; }
 .btn-mag:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(138, 40, 137, 0.3); }
 
-/* KANAN: Pattern Blok dari Potongan LUTH 1.png */
+/* KANAN: Pattern Logo Grid (Membentuk puzzle abstrak sesuai Sample Page 1) */
 .side-pattern {
-  position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
-  display: grid; grid-template-columns: repeat(2, 60px); grid-template-rows: repeat(4, 60px); gap: 10px;
+  position: absolute; right: -40px; top: 50%; transform: translateY(-50%);
+  display: grid; grid-template-columns: repeat(2, 60px); grid-template-rows: repeat(4, 60px); gap: 8px;
   z-index: 0; opacity: 0.9;
 }
 .pattern-block {
   width: 100%; height: 100%; background-image: url('LUTH 1.png');
-  background-size: 200% 200%; /* Membesar agar bisa ambil per huruf */
+  background-size: 200% 200%; background-repeat: no-repeat;
 }
-/* Mapping kordinat background untuk membentuk pattern abstrak */
-.pb-u { background-position: 100% 0; }   /* Top Right (U) */
-.pb-l { background-position: 0 0; }      /* Top Left (L) */
-.pb-h { background-position: 100% 100%;} /* Bot Right (H) */
-.pb-t { background-position: 0 100%; }   /* Bot Left (T) */
+.pb-u { background-position: 100% 0; }
+.pb-l { background-position: 0 0; }
+.pb-h { background-position: 100% 100%;}
+.pb-t { background-position: 0 100%; }
 
-/* ── 4. CATEGORY MENU & GOOGLE PHOTOS STACK GALLERY ── */
-section { padding: 60px 24px 100px; max-width: 1200px; margin: 0 auto; }
+/* Responsive Hero */
+@media(max-width: 1100px) {
+  header { padding-top: 140px; }
+  .hero-wrapper { flex-direction: column; text-align: center; }
+  .hero-text { padding-left: 0; margin-top: 30px; }
+  .hero-actions { justify-content: center; }
+  .side-pattern { display: none; }
+  .hero-visual { width: 450px; height: 450px; }
+}
+
+/* ── 4. KATEGORI & ACCORDION GALLERY (FIT CONTENT RATIO) ── */
+section { padding: 60px 24px 100px; max-width: 1300px; margin: 0 auto; }
 
 .category-menu {
   display: flex; justify-content: center; gap: 12px; margin-bottom: 50px; flex-wrap: wrap;
 }
 .cat-btn {
-  padding: 8px 24px; font-family: 'Barlow', sans-serif; font-weight: 800; text-transform: uppercase;
+  padding: 10px 28px; font-family: 'Barlow', sans-serif; font-weight: 800; text-transform: uppercase; font-size: 14px;
   background: transparent; border: 2px solid rgba(0,0,0,0.1); border-radius: 50px;
   color: #555; cursor: pointer; transition: all 0.2s;
 }
 .cat-btn.active, .cat-btn:hover { border-color: var(--purple); color: var(--purple); background: rgba(140, 82, 255, 0.05); }
 
 .gallery-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 60px 40px;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 60px 40px;
 }
-
-/* Logika "Google Photos Stack" Accordion */
 .project-card { display: flex; flex-direction: column; gap: 16px; cursor: pointer; }
+
+/* Wrapper Gallery Dinamis */
 .stack-wrapper {
-  position: relative; width: 100%; height: 350px; display: flex;
-  border-radius: 16px; overflow: hidden; background: transparent;
+  position: relative; width: 100%; height: 380px; display: flex; align-items: center; justify-content: center;
+  border-radius: 16px; background: transparent; transition: all 0.4s var(--spring); overflow: visible;
 }
 
 /* Kondisi Awal: Bertumpuk (Collapsed) */
 .stack-slice {
-  position: absolute; top: 0; left: 0; height: 100%; width: 100%;
+  position: absolute; height: 100%; width: 100%;
   border-radius: 16px; overflow: hidden; transition: all 0.5s var(--spring);
   box-shadow: -4px 0 15px rgba(0,0,0,0.1); border: 2px solid #FFF; background: var(--bg-light);
 }
-.stack-slice img { width: 100%; height: 100%; object-fit: cover; transition: object-fit 0.3s; }
-
-/* Mengatur posisi tumpukan awal */
+.stack-slice img { width: 100%; height: 100%; object-fit: cover; transition: all 0.4s ease; }
 .stack-slice:nth-child(1) { z-index: 4; transform: scale(1) translateX(0); }
-.stack-slice:nth-child(2) { z-index: 3; transform: scale(0.95) translateX(15px); opacity: 0.9; }
-.stack-slice:nth-child(3) { z-index: 2; transform: scale(0.9) translateX(30px); opacity: 0.7; }
-.stack-slice:nth-child(4) { z-index: 1; transform: scale(0.85) translateX(45px); opacity: 0.5; }
+.stack-slice:nth-child(2) { z-index: 3; transform: scale(0.95) translateX(20px); opacity: 0.9; }
+.stack-slice:nth-child(3) { z-index: 2; transform: scale(0.9) translateX(40px); opacity: 0.7; }
 
-/* Kondisi Di-Hover/Ditahan: Mekar Jadi Akordion Kapsul */
-.project-card:hover .stack-wrapper { justify-content: center; }
+/* Kondisi Di-Hover/Di-Scroll (Mobile): Expand & Fit Ratio Asli */
+.project-card:hover .stack-wrapper {
+  justify-content: flex-start; gap: 8px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 10px;
+}
 .project-card:hover .stack-slice {
-  position: relative; flex: 1; transform: none; opacity: 1; margin-left: -2px; border-radius: 30px; /* Bentuk Kapsul */
+  position: relative; flex: 0 0 80px; /* Bentuk kapsul awal */
+  transform: none; opacity: 1; border-radius: 40px; scroll-snap-align: center;
 }
-/* Item yang disorot saat sudah mekar (Expanded - Fit to ratio) */
-.project-card:hover .stack-slice:hover { flex: 4; border-radius: 16px; }
+.project-card:hover .stack-slice:hover {
+  flex: 1 0 auto; /* Membesar dinamis sesuai lebar konten asli */
+  border-radius: 16px;
+}
 .project-card:hover .stack-slice:hover img { 
-  object-fit: contain; /* Tidak terpotong sesuai instruksi */
-  background: #EEE; /* Latar abu agar rasio asli terlihat jelas */
+  width: auto; /* Kunci rahasia agar fit-to-ratio asli tanpa gepeng */
+  max-width: 100%; object-fit: contain; background: #eee;
 }
 
-.project-info h3 { font-size: 22px; font-weight: 900; color: var(--text-dark); margin-bottom: 6px; }
+.project-info h3 { font-size: 24px; font-weight: 900; color: var(--text-dark); margin-bottom: 6px; letter-spacing: -0.5px;}
 .project-badge {
-  display: inline-block; padding: 4px 12px; background: rgba(140, 82, 255, 0.1);
-  color: var(--purple); font-weight: 800; font-size: 13px; text-transform: uppercase; border-radius: 4px;
+  display: inline-block; padding: 6px 14px; background: rgba(140, 82, 255, 0.1);
+  color: var(--purple); font-weight: 800; font-size: 12px; text-transform: uppercase; border-radius: 6px;
 }
 
-/* ── 5. LIGHTBOX (FIT CONTENT) ── */
-#modal {
-  display: none; position: fixed; inset: 0; z-index: 9999;
-  background: rgba(10, 10, 10, 0.95); align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s;
-}
-#modal-content {
-  position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
-}
-#modal-media-container {
-  display: flex; width: 100%; height: 85vh; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
-}
+/* ── 5. LIGHTBOX ── */
+#modal { display: none; position: fixed; inset: 0; z-index: 99999; background: rgba(10, 10, 10, 0.95); align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
+#modal-content { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#modal-media-container { display: flex; width: 100%; height: 85vh; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
 #modal-media-container::-webkit-scrollbar { display: none; }
-#modal-media-container img {
-  flex: 0 0 100%; scroll-snap-align: center; width: 100%; height: 100%;
-  object-fit: contain; padding: 0 60px;
-}
-.modal-close {
-  position: absolute; top: 20px; right: 30px; background: transparent; color: #FFF; border: none; font-size: 40px; cursor: pointer; z-index: 1000;
-}
-.modal-nav {
-  position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); border: none; color: #FFF;
-  width: 50px; height: 50px; border-radius: 50%; font-size: 24px; cursor: pointer; transition: background 0.2s; z-index: 1000;
-}
+#modal-media-container img { flex: 0 0 100%; scroll-snap-align: center; width: 100%; height: 100%; object-fit: contain; padding: 0 60px; }
+.modal-close { position: absolute; top: 20px; right: 30px; background: transparent; color: #FFF; border: none; font-size: 40px; cursor: pointer; z-index: 1000; }
+.modal-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); border: none; color: #FFF; width: 50px; height: 50px; border-radius: 50%; font-size: 24px; cursor: pointer; transition: background 0.2s; z-index: 1000; }
 .modal-nav:hover { background: var(--purple); }
-.nav-prev { left: 20px; }
-.nav-next { right: 20px; }
-.modal-info-bar {
-  position: absolute; bottom: 0; width: 100%; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); text-align: center; color: #FFF;
-}
+.nav-prev { left: 20px; } .nav-next { right: 20px; }
+.modal-info-bar { position: absolute; bottom: 0; width: 100%; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); text-align: center; color: #FFF; }
 
-/* ── 6. FOOTER DENGAN 5 IKON ── */
+/* ── 6. FOOTER 5 ICON ── */
 footer { padding: 80px 0 60px; background: #fff; border-top: 1px solid rgba(0,0,0,0.05); }
 .footer-card { max-width: 900px; margin: 0 auto; text-align: center; }
 .footer-motto { font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; color: var(--magenta); margin-bottom: 32px; letter-spacing: -1px; }
@@ -249,26 +261,20 @@ footer { padding: 80px 0 60px; background: #fff; border-top: 1px solid rgba(0,0,
 .social-btn:hover { background: var(--purple); color: #fff; border-color: var(--purple); transform: translateY(-4px); }
 .footer-copy { font-family: 'Barlow', monospace; font-size: 13px; font-weight: 700; color: #999; text-transform: uppercase; }
 
-/* Responsive */
-@media(max-width: 1024px) {
-  header { flex-direction: column; padding-top: 120px; }
-  .hero-text { padding-left: 0; margin-top: 20px; text-align: center; }
-  .hero-actions { justify-content: center; }
-  .side-pattern { display: none; }
-}
 </style>
 </head>
 <body class="grid-bg">
 
-<!-- NAVIGATION MORPH -->
+<!-- NAVIGATION MORPHING -->
 <div id="nav-container">
-  <nav class="nav-pill" id="nav-element" onclick="scrollToTop()">
+  <nav class="nav-pill" id="nav-element">
     <div class="nav-links">
-      <a onclick="event.stopPropagation()" href="#home">Home</a>
-      <a onclick="event.stopPropagation()" href="#portfolio" class="active">Overview</a>
-      <a onclick="event.stopPropagation()" href="#footer">Contact</a>
+      <a href="#home">Home</a>
+      <a href="#portfolio" class="active">Projects</a>
+      <a href="#footer">Contact</a>
     </div>
-    <div class="nav-hamburger">
+    <!-- Hamburger Trigger -->
+    <div class="nav-hamburger" onclick="toggleMenu()">
       <span></span><span></span><span></span>
     </div>
   </nav>
@@ -277,14 +283,14 @@ footer { padding: 80px 0 60px; background: #fff; border-top: 1px solid rgba(0,0,
 <!-- HERO SECTION -->
 <header id="home">
   <div class="hero-wrapper">
-    <!-- Visual Kiri (Presisi LUTH Sandwich) -->
+    <!-- Visual Kiri (Sandwich LUTH 1.png & Profile) -->
     <div class="hero-visual">
       <div class="logo-back"></div>
-      <img src="Profile.png" alt="Luthfi" class="hero-model" onerror="this.style.display='none'">
+      <img src="Profile.png" alt="Luthfi" class="hero-model" onerror="this.src='https://raw.githubusercontent.com/luthfihd/luthporto/main/images/Profile.png'">
       <div class="logo-front"></div>
     </div>
     
-    <!-- Teks Tengah -->
+    <!-- Teks Tengah Presisi -->
     <div class="hero-text">
       <h1>Hi! I'm Luthfi,<br>Lets create design<br>to make people <span class="c-mag">stop</span>,<br><span class="c-purp">think</span>, and <span class="c-mag">act</span>.</h1>
       <div class="hero-actions">
@@ -293,7 +299,7 @@ footer { padding: 80px 0 60px; background: #fff; border-top: 1px solid rgba(0,0,
       </div>
     </div>
 
-    <!-- Pattern Kanan (Replika Sample 1.png via Grid) -->
+    <!-- Pattern Kanan Grid Logo -->
     <div class="side-pattern">
       <div class="pattern-block pb-u"></div> <div class="pattern-block pb-h"></div>
       <div class="pattern-block pb-l"></div> <div class="pattern-block pb-t"></div>
@@ -303,18 +309,15 @@ footer { padding: 80px 0 60px; background: #fff; border-top: 1px solid rgba(0,0,
   </div>
 </header>
 
-<!-- PORTFOLIO / OVERVIEW SECTION -->
+<!-- PORTFOLIO SECTION -->
 <section id="portfolio">
-  <!-- Baris Kategori -->
+  <!-- Baris Kategori: Overview (Menggantikan All Projects) jadi First Active -->
   <div class="category-menu" id="categoryMenu">
-    <button class="cat-btn active" onclick="filterGallery('Overview')">Overview</button>
-    <button class="cat-btn" onclick="filterGallery('Branding')">Branding</button>
-    <button class="cat-btn" onclick="filterGallery('Motion')">Motion</button>
-    <button class="cat-btn" onclick="filterGallery('UI/UX')">UI/UX</button>
+    <!-- Konten Kategori di-render dinamis oleh JS untuk mempertahankan Base Code -->
   </div>
 
   <div id="galleryGrid" class="gallery-grid">
-    <!-- Konten di-render via JS -->
+    <!-- Galeri di-render JS -->
   </div>
 </section>
 
@@ -323,22 +326,17 @@ footer { padding: 80px 0 60px; background: #fff; border-top: 1px solid rgba(0,0,
   <div class="footer-card">
     <div class="footer-motto">Create to discover,<br>design to inspire.</div>
     <div class="social-row">
-      <!-- LinkedIn -->
       <a href="#" class="social-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
-      <!-- Gmail -->
       <a href="mailto:mail@gmail.com" class="social-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg></a>
-      <!-- WhatsApp -->
       <a href="#" class="social-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg></a>
-      <!-- X -->
       <a href="#" class="social-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-      <!-- Instagram -->
       <a href="#" class="social-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204 013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
     </div>
     <div class="footer-copy">© 2026 LUTH DIGITAL CREATIVE</div>
   </div>
 </footer>
 
-<!-- LIGHTBOX -->
+<!-- LIGHTBOX MODAL -->
 <div id="modal">
   <div id="modal-content">
     <button onclick="closeModal()" class="modal-close">&times;</button>
@@ -353,59 +351,80 @@ footer { padding: 80px 0 60px; background: #fff; border-top: 1px solid rgba(0,0,
 </div>
 
 <script>
-// ── 1. ANIMASI NAV SCROLL ──
+// ── LOGIKA NAVIGASI MORPHING & TOGGLE MENU ──
+const navContainer = document.getElementById('nav-container');
 window.addEventListener('scroll', () => {
-  const nav = document.getElementById('nav-container');
-  if (window.scrollY > 100) nav.classList.add('scrolled');
-  else nav.classList.remove('scrolled');
+  if (window.scrollY > 80) {
+    navContainer.classList.add('scrolled');
+  } else {
+    // Reset kembali ke Pill saat di atas
+    navContainer.classList.remove('scrolled');
+    navContainer.classList.remove('menu-open');
+  }
 });
-function scrollToTop() {
-  if (document.getElementById('nav-container').classList.contains('scrolled')) {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+function toggleMenu() {
+  if (navContainer.classList.contains('scrolled')) {
+    navContainer.classList.toggle('menu-open');
   }
 }
 
-// ── 2. DATA & PROXY ──
-const GITHUB_USER = 'luthfihd';   
-const GITHUB_REPO = 'luthporto'; 
-const DATA_URL    = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/data.json`;
-const IMAGES_BASE = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/images/`;
-let allProjects = [];
+// ── LOGIKA FETCH DATA & KATEGORI ──
+const DATA_URL = 'https://raw.githubusercontent.com/luthfihd/luthporto/main/data.json';
+const IMAGES_BASE = 'https://raw.githubusercontent.com/luthfihd/luthporto/main/images/';
+let portfolioData = [];
+let categories = ['Overview']; // Default
 
 function getDriveUrl(url, size) {
   let fileId = null;
   if (url.includes('/file/d/')) fileId = url.split('/file/d/')[1]?.split('/')[0];
   else if (url.includes('id=')) fileId = url.split('id=')[1]?.split('&')[0];
   if (fileId) {
-    let gdrive = `https://drive.google.com/thumbnail?authuser=0&sz=w${size}&id=${fileId}`;
-    return `https://images.weserv.nl/?url=${encodeURIComponent(gdrive)}&output=webp`;
+    return `https://images.weserv.nl/?url=${encodeURIComponent(`https://drive.google.com/thumbnail?authuser=0&sz=w${size}&id=${fileId}`)}&output=webp`;
   }
   return url;
 }
 
-// ── 3. GALERI & FILTER (STACK TO ACCORDION) ──
 async function loadPortfolio() {
   try {
     const res = await fetch(DATA_URL);
-    allProjects = await res.json();
-    filterGallery('Overview'); // Default awal
+    portfolioData = await res.json();
+    
+    // Mengekstrak Kategori Unik dari Base Code
+    portfolioData.forEach(item => {
+      if (item.category && !categories.includes(item.category)) {
+        categories.push(item.category);
+      }
+    });
+    
+    // Render Tombol Kategori
+    const catMenu = document.getElementById('categoryMenu');
+    categories.forEach(cat => {
+      const btn = document.createElement('button');
+      btn.className = cat === 'Overview' ? 'cat-btn active' : 'cat-btn';
+      btn.textContent = cat;
+      btn.onclick = (e) => filterGallery(cat, e);
+      catMenu.appendChild(btn);
+    });
+
+    filterGallery('Overview');
   } catch(e) {
     document.getElementById('galleryGrid').innerHTML = '<p>Gagal memuat data.</p>';
   }
 }
 
-function filterGallery(category) {
-  // Update UI Button
-  document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-  event.target.classList.add('active');
-
+function filterGallery(category, event) {
+  if (event) {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+  
   const grid = document.getElementById('galleryGrid');
   grid.innerHTML = '';
   
-  // Overview = Top 10 All Category. Lainnya sesuai filter.
-  let filtered = category === 'Overview' ? allProjects.slice(0, 10) : allProjects.filter(p => p.category === category);
+  // Overview memuat max 12 data (First Showing), kategori lain sesuai filter
+  let filteredData = category === 'Overview' ? portfolioData.slice(0, 12) : portfolioData.filter(p => p.category === category);
 
-  filtered.forEach(item => {
+  filteredData.forEach(item => {
     const rawLinks = (item.image || item.src || "").split(',').filter(l => l.trim() !== "");
     const totalFiles = rawLinks.length;
     
@@ -413,7 +432,6 @@ function filterGallery(category) {
     card.className = 'project-card';
 
     let slicesHtml = '';
-    // Batasi render preview max 4 untuk efek stack ringan
     rawLinks.slice(0, 4).forEach((link, idx) => {
       let src = link.trim().replace('#video', '');
       src = src.startsWith('http') ? src : IMAGES_BASE + src;
@@ -430,11 +448,10 @@ function filterGallery(category) {
   });
 }
 
-// ── 4. LIGHTBOX ──
+// ── LOGIKA LIGHTBOX ──
 function moveGallery(direction) {
   const container = document.getElementById('modal-media-container');
-  const width = container.offsetWidth;
-  container.scrollBy({ left: direction * width, behavior: 'smooth' });
+  container.scrollBy({ left: direction * container.offsetWidth, behavior: 'smooth' });
 }
 
 function openLightbox(item, targetIndex) {
@@ -469,10 +486,7 @@ function openLightbox(item, targetIndex) {
 function closeModal() {
   const modal = document.getElementById('modal');
   modal.style.opacity = '0';
-  setTimeout(() => {
-    modal.style.display = 'none';
-    document.body.style.overflow = '';
-  }, 300);
+  setTimeout(() => { modal.style.display = 'none'; document.body.style.overflow = ''; }, 300);
 }
 
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
