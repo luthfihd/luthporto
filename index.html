@@ -5,692 +5,452 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Luth's Art</title>
 
-<!-- Fonts: Space Grotesk untuk Brutalisme, Space Mono untuk aksen retro digital -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,700;0,800;0,900;1,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-/* ── ZCONCEPT / NEO-BRUTALISM VARIABLES ── */
+/* ── 1. VARIABEL & GLOBAL ── */
 :root {
-  --luth-cyan: #00E5FF;
-  --luth-blue: #00205B; 
-  --bg-color: #F4F4F0;
-  --border-color: #111111;
-  --thick-border: 3px solid var(--border-color);
-  --brutal-shadow: 6px 6px 0px var(--border-color);
-  --brutal-shadow-hover: 2px 2px 0px var(--border-color);
+  --magenta: #8a2889;
+  --purple: #8c52ff;
+  --bg-light: #FDFDFD;
+  --text-dark: #111111;
+  --brutal-border: 2px solid var(--text-dark);
+  --brutal-shadow: 5px 5px 0px var(--text-dark); 
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1); 
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; border-radius: 0 !important; }
 html { scroll-behavior: smooth; }
 body { 
-  font-family: 'Space Grotesk', sans-serif; 
-  background-color: var(--bg-color); 
-  color: var(--border-color);
+  font-family: 'Barlow', sans-serif; 
+  background-color: var(--bg-light); 
+  color: var(--text-dark);
   overflow-x: hidden;
-}
-
-/* ── BLUEPRINT GRID BACKGROUND ── */
-.grid-bg {
-  background-size: 40px 40px;
-  background-image: 
-    linear-gradient(to right, rgba(0, 86, 191, 0.1) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 86, 191, 0.1) 1px, transparent 1px);
-}
-
-.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-
-/* ── NAVBAR (RETRO OS STYLE) ── */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  background: var(--bg-color);
-  border-bottom: var(--thick-border);
-  z-index: 100;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 24px;
-}
-.nav-left { display: flex; align-items: center; gap: 20px; }
-
-.logo {
-  font-weight: 900;
-  font-size: 20px;
-  line-height: 0.9;
-  text-decoration: none;
-  display: flex; flex-direction: column;
-}
-.logo .lu { color: var(--luth-blue); }
-.logo .th { color: var(--luth-cyan); text-shadow: 1px 1px 0 #111; }
-
-.status-badge {
-  font-family: 'Space Mono', monospace;
-  font-size: 12px;
-  font-weight: 700;
-  background: #fff;
-  border: 2px solid var(--border-color);
-  padding: 6px 12px;
-  box-shadow: 3px 3px 0 var(--border-color);
-  display: flex; align-items: center; gap: 8px;
-}
-.status-dot { width: 10px; height: 10px; background: #00FF00; border: 2px solid #111; border-radius: 50%; }
-
-.nav-links { display: flex; gap: 12px; }
-.brutal-btn {
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 700;
-  font-size: 14px;
-  text-transform: uppercase;
-  background: #fff;
-  color: var(--border-color);
-  border: var(--thick-border);
-  padding: 8px 16px;
-  text-decoration: none;
-  box-shadow: 4px 4px 0 var(--border-color);
-  transition: all 0.1s ease-out;
-  cursor: pointer;
-}
-.brutal-btn.primary { background: var(--luth-cyan); }
-.brutal-btn:hover { background: var(--luth-blue); color: #fff; }
-.brutal-btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--border-color); }
-
-/* ── HERO SECTION (COLLAGE AESTHETIC) ── */
-header {
-  padding: 140px 20px 80px;
-  position: relative;
-  overflow: hidden;
-}
-.hero-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 40px;
-  flex-wrap: wrap;
-  position: relative;
-  z-index: 2;
-}
-
-.profile-cutout {
-  width: 250px; height: 250px;
-  background: var(--luth-cyan);
-  border: var(--thick-border);
-  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-  box-shadow: var(--brutal-shadow);
-  overflow: hidden;
-  position: relative;
-  transform: rotate(-3deg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.profile-cutout img {
-  width: 100%; height: 100%; object-fit: cover;
-  filter: grayscale(10%) contrast(110%);
-}
-
-.hero-text-wrap { position: relative; max-width: 600px; text-align: left; }
-.hero-title {
-  font-size: clamp(3rem, 7vw, 5.5rem);
-  font-weight: 900;
-  line-height: 0.95;
-  text-transform: uppercase;
-  color: var(--luth-blue);
-  text-shadow: 3px 3px 0 var(--border-color);
-  margin-bottom: 20px;
-}
-.chat-bubble {
-  font-family: 'Space Mono', monospace;
-  font-weight: 700;
-  background: #fff;
-  border: var(--thick-border);
-  padding: 16px 20px;
-  font-size: 16px;
-  box-shadow: var(--brutal-shadow);
-  display: inline-block;
   position: relative;
 }
-.chat-bubble::after {
-  content: ''; position: absolute;
-  top: -12px; left: 20px;
-  width: 20px; height: 20px;
-  background: #fff; border-top: var(--thick-border); border-left: var(--thick-border);
-  transform: rotate(45deg);
+
+/* PATTERN BACKGROUND LOGO (Opacity Dinaikkan agar terlihat) */
+.pattern-bg {
+  position: fixed; inset: 0; z-index: -1;
+  background-image: url('images/luth.png');
+  background-repeat: repeat; background-size: 90px;
+  opacity: 0.08; 
 }
 
-.sticker {
-  position: absolute;
-  background: var(--luth-cyan);
-  border: var(--thick-border);
-  padding: 6px 12px;
-  font-weight: 700;
-  font-size: 14px;
-  text-transform: uppercase;
-  box-shadow: 3px 3px 0 var(--border-color);
-  z-index: 10;
+/* ── 2. FLOATING ACTION BUTTONS (V3 BEHAVIOUR) ── */
+#fab-container {
+  position: fixed; top: 30px; right: 30px; z-index: 9999;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
+  opacity: 0; pointer-events: none; transform: translateY(-20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
-.st-1 { top: -30px; right: 0; transform: rotate(15deg); background: #FFD93D; }
-.st-2 { bottom: -20px; left: -20px; transform: rotate(-10deg); }
+#fab-container.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+#fab-container.idle-mobile { opacity: 0.3; }
+#fab-container.idle-mobile:hover, #fab-container.idle-mobile:active { opacity: 1; }
 
-/* ── OVERVIEW / FOLDER GRID ── */
-section { padding: 40px 0 100px; }
-.section-header {
-  display: flex; justify-content: space-between; align-items: flex-end;
-  margin-bottom: 40px; border-bottom: var(--thick-border); padding-bottom: 10px;
-}
-.section-title { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; }
-
-.filter-wrap { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
-
-.folder-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 40px;
-}
-.folder-item { cursor: pointer; transition: transform 0.2s; position: relative; }
-.folder-item:hover { transform: translateY(-8px); }
-
-.folder-tab {
-  display: inline-block;
-  border: var(--thick-border);
-  border-bottom: none;
-  padding: 6px 16px;
-  font-family: 'Space Mono', monospace;
-  font-size: 12px;
-  font-weight: 700;
-  border-radius: 8px 8px 0 0;
-  text-transform: uppercase;
-}
-.folder-content {
-  background: #fff;
-  border: var(--thick-border);
-  border-radius: 0 8px 8px 8px;
-  box-shadow: var(--brutal-shadow);
-  padding: 12px;
-  position: relative;
-  transition: all 0.2s;
-  height: 100%;
-}
-.folder-item:hover .folder-content { box-shadow: 10px 10px 0 var(--luth-blue); }
-
-.folder-img-wrap {
-  width: 100%;
-  aspect-ratio: 4/3;
-  border: 2px solid var(--border-color);
-  overflow: hidden;
-  background: #E0E0E0;
-}
-.folder-img {
-  width: 100%; height: 100%; object-fit: cover;
-  transition: transform 0.3s;
-}
-.folder-item:hover .folder-img { transform: scale(1.05); }
-
-.folder-badge {
-  position: absolute;
-  bottom: 20px; left: -10px;
-  background: #fff;
-  border: 2px solid var(--border-color);
-  padding: 6px 14px;
-  font-weight: 800; font-size: 14px;
-  box-shadow: 3px 3px 0 var(--border-color);
-  transform: rotate(-3deg);
-  max-width: 90%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.multiple-sticker {
-  position: absolute;
-  top: 10px; right: 10px;
-  background: #FF6B9D; color: #111;
-  border: 2px solid #111; padding: 4px 8px;
-  font-family: 'Space Mono'; font-weight: 700; font-size: 10px;
-  transform: rotate(5deg);
-  box-shadow: 2px 2px 0 #111;
-  z-index: 5;
-}
-
-/* ── LIGHTBOX ZCONCEPT (RETRO OS POPUP) ── */
-#modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: rgba(244, 244, 240, 0.85); /* Solid semi-transparent, no blur */
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  padding: 20px;
-}
-#modal-content {
-  background: #fff;
-  border: var(--thick-border);
-  box-shadow: 12px 12px 0 var(--luth-blue);
-  width: 100%;
-  max-width: 900px;
-  max-height: 90vh;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  transform: translateY(20px);
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  overflow: hidden;
-}
-#modal-content.show { transform: translateY(0); }
-
-/* Modal OS Header */
-.modal-os-header {
-  background: #E0E0E0;
-  border-bottom: var(--thick-border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 16px;
-}
-.modal-os-title {
-  font-family: 'Space Mono', monospace;
-  font-weight: 700;
-  font-size: 14px;
-  color: var(--border-color);
-}
-.modal-close-btn {
-  background: #FF4A4A;
-  border: 2px solid var(--border-color);
-  width: 32px; height: 32px;
-  font-weight: 900;
-  cursor: pointer;
-  box-shadow: 2px 2px 0 var(--border-color);
-}
-.modal-close-btn:active { box-shadow: 0 0 0; transform: translate(2px,2px); }
-
-/* Modal Body */
-.modal-body {
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  position: relative;
-  background: var(--bg-color);
-}
-#modal-media-container {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  background: var(--border-color);
-  position: relative;
-}
-#modal-media-container::-webkit-scrollbar { display: none; }
-#modal-media-container a { display: block; width: 100%; flex-shrink: 0; scroll-snap-align: center; }
-#modal-media-container img {
-  display: block; width: 100%; max-height: 60vh; object-fit: contain; margin: 0 auto;
-}
-
-/* Navigasi Modal ZConcept */
-.modal-nav-btn {
-  position: absolute;
-  top: 40%;
-  transform: translateY(-50%);
-  background: var(--luth-cyan);
-  border: var(--thick-border);
-  width: 48px; height: 48px;
-  font-weight: 900; font-size: 20px;
-  cursor: pointer;
-  box-shadow: 4px 4px 0 var(--border-color);
-  z-index: 100;
-}
-.modal-nav-btn:active { box-shadow: 0 0 0; transform: translateY(-50%) translate(4px,4px); }
-.btn-prev { left: 16px; }
-.btn-next { right: 16px; }
-
-/* Detail Teks Modal */
-.modal-info-box {
-  padding: 24px;
-  background: #fff;
-  border-top: var(--thick-border);
-}
-#modal-title { font-size: 1.8rem; font-weight: 900; text-transform: uppercase; margin-bottom: 8px; }
-#modal-desc { font-size: 15px; line-height: 1.6; font-weight: 600; color: #444; }
-.modal-dots-container { display: flex; justify-content: center; gap: 8px; padding: 12px; background: #fff; border-bottom: var(--thick-border); }
-.modal-dot { width: 12px; height: 12px; background: #fff; border: 2px solid var(--border-color); }
-.modal-dot.active { background: var(--luth-cyan); box-shadow: 2px 2px 0 var(--border-color); }
-
-/* Play Icon Video */
-.play-button-overlay {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  width: 80px; height: 80px; background: var(--luth-cyan); border: var(--thick-border);
-  display: flex; justify-content: center; align-items: center; box-shadow: 6px 6px 0 var(--border-color);
-}
-.play-icon { width: 0; height: 0; border-top: 15px solid transparent; border-bottom: 15px solid transparent; border-left: 25px solid #111; margin-left: 8px; }
-
-/* ── FOOTER ZCONCEPT ── */
-footer { margin-top: 60px; padding: 60px 24px 40px; border-top: var(--thick-border); background: #fff; text-align: center; }
-.footer-motto { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; text-transform: uppercase; margin-bottom: 40px; color: var(--luth-blue); text-shadow: 2px 2px 0 var(--border-color); }
-.social-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; margin-bottom: 40px; }
-.social-btn {
-  width: 60px; height: 60px;
-  background: #F4F4F0;
-  border: var(--thick-border);
+.fab-home {
+  width: 50px; height: 50px; background: rgba(255,255,255,0.95); border: var(--brutal-border);
   display: flex; align-items: center; justify-content: center;
-  color: var(--border-color);
-  box-shadow: 4px 4px 0 var(--border-color);
-  transition: all 0.1s;
+  cursor: pointer; transition: all 0.1s ease-out; box-shadow: var(--brutal-shadow);
 }
-.social-btn:hover { background: var(--luth-cyan); }
-.social-btn:active { box-shadow: 0 0 0; transform: translate(4px, 4px); }
-.social-btn svg { width: 24px; height: 24px; }
-.footer-copy { font-family: 'Space Mono', monospace; font-weight: 700; font-size: 12px; text-transform: uppercase; padding-top: 20px; border-top: 2px dashed #ccc; }
+.fab-home:hover { background: #eee; }
+.fab-home:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0 var(--text-dark); }
+.fab-home img { width: 70%; height: 70%; object-fit: contain; }
 
-/* ── RESPONSIVE ── */
-@media(max-width: 768px){
-  .nav-links { display: none; }
-  .hero-content { flex-direction: column; text-align: center; margin-top: 40px;}
-  .hero-text-wrap { text-align: center; }
-  .chat-bubble::after { left: 50%; transform: translateX(-50%) rotate(45deg); }
-  .modal-nav-btn { display: none !important; }
+.liquid-pill {
+  background: var(--purple); border: var(--brutal-border);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  overflow: hidden; transition: height 0.6s var(--spring), width 0.6s var(--spring), transform 0.1s, box-shadow 0.1s;
+  height: 50px; width: 140px; cursor: pointer; box-shadow: var(--brutal-shadow);
 }
+.liquid-pill.active { height: 380px; width: 50px; }
+.liquid-pill:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0 var(--text-dark); }
+
+.lp-socials { display: flex; flex-direction: column; gap: 12px; align-items: center; opacity: 0; transition: all 0.4s ease; height: 0; pointer-events: none; }
+.liquid-pill.active .lp-socials { opacity: 1; height: auto; padding: 20px 0 10px; pointer-events: auto; }
+
+.soc-mini { width: 34px; height: 34px; background: #fff; display: flex; align-items: center; justify-content: center; color: var(--text-dark); transition: all 0.1s ease-out; text-decoration: none; border: 2px solid var(--text-dark); font-weight: 900; font-size: 14px; box-shadow: 2px 2px 0 var(--text-dark);}
+.soc-mini:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--text-dark); }
+
+.lp-text { font-weight: 900; font-size: 13px; letter-spacing: 0.5px; color: #fff; text-transform: uppercase; transition: all 0.3s; white-space: nowrap; text-shadow: 1px 1px 0 var(--text-dark); }
+.liquid-pill.active .lp-text { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 14px; letter-spacing: 2px; padding: 15px 0; }
+
+@media(max-width: 768px) {
+  #fab-container { top: auto; bottom: 30px; right: 20px; flex-direction: column-reverse; }
+  .liquid-pill { flex-direction: column-reverse; } 
+  .liquid-pill.active .lp-socials { padding: 10px 0 20px; }
+  .liquid-pill.active .lp-text { transform: rotate(0deg); }
+}
+
+/* ── 3. HERO SECTION ── */
+header { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+.hero-wrapper { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+.hero-visual { position: relative; width: 650px; height: 650px; flex-shrink: 0; }
+.logo-back { position: absolute; inset: 0; background-image: url('images/luth.png'); background-position: center; background-size: contain; background-repeat: no-repeat; clip-path: inset(0 0 50% 0); z-index: 1; }
+.logo-front { position: absolute; inset: 0; background-image: url('images/luth.png'); background-position: center; background-size: contain; background-repeat: no-repeat; clip-path: inset(50% 0 0 0); z-index: 3; mix-blend-mode: multiply; opacity: 0.9; }
+.hero-model { position: absolute; bottom: -8%; left: 50%; transform: translateX(-50%); height: 115%; object-fit: contain; z-index: 2; }
+.hero-text { flex-grow: 1; padding-left: 60px; z-index: 4; }
+.hero-text h1 { font-size: clamp(3rem, 5.5vw, 4.5rem); font-weight: 500; line-height: 1.1; color: var(--text-dark); letter-spacing: -1px; text-shadow: 1px 1px 0 #fff; }
+.c-mag { color: var(--magenta); font-weight: 900; }
+.c-purp { color: var(--purple); font-weight: 900; }
+.hero-actions { display: flex; gap: 16px; margin-top: 40px; }
+.btn { padding: 14px 32px; font-size: 16px; font-weight: 900; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: all 0.1s ease-out; background: var(--purple); color: #fff; border: var(--brutal-border); box-shadow: var(--brutal-shadow); }
+.btn:hover { background: var(--magenta); }
+.btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--text-dark); }
+
+@media(max-width: 1024px) {
+  .hero-wrapper { flex-direction: column; text-align: center; }
+  .hero-text { padding-left: 0; margin-top: 40px; }
+  .hero-actions { justify-content: center; }
+  .hero-visual { width: 400px; height: 400px; }
+}
+
+/* ── 4. PORTFOLIO (V3 BEHAVIOUR) ── */
+section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
+.section-title { font-size: 3rem; font-weight: 900; text-transform: uppercase; margin-bottom: 30px; text-align: center; text-shadow: 1px 1px 0 #fff; }
+
+.category-menu { display: flex; justify-content: center; gap: 12px; margin-bottom: 50px; flex-wrap: wrap; }
+.cat-btn { padding: 8px 24px; font-weight: 800; text-transform: uppercase; font-size: 13px; background: #fff; border: var(--brutal-border); color: var(--text-dark); cursor: pointer; transition: all 0.1s ease-out; box-shadow: var(--brutal-shadow); }
+.cat-btn.active, .cat-btn:hover { background: var(--purple); color: #fff; }
+.cat-btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--text-dark); }
+
+.masonry-grid { column-count: 3; column-gap: 30px; width: 100%; }
+@media (max-width: 900px) { .masonry-grid { column-count: 2; column-gap: 20px; } }
+@media (max-width: 600px) { .masonry-grid { column-count: 1; } }
+
+.folder-item { break-inside: avoid; margin-bottom: 30px; cursor: pointer; transition: transform 0.2s; position: relative; }
+.folder-item:hover { transform: translateY(-6px); }
+
+.folder-tab { display: inline-block; border: var(--brutal-border); border-bottom: none; padding: 4px 12px; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; text-transform: uppercase; background: #fff; margin-left: 10px; }
+.folder-content { background: #fff; border: var(--brutal-border); box-shadow: var(--brutal-shadow); padding: 10px; position: relative; transition: all 0.2s; }
+.folder-item:hover .folder-content { box-shadow: 10px 10px 0 var(--magenta); }
+
+.folder-img-wrap { width: 100%; border: 2px solid var(--text-dark); overflow: hidden; background: #E0E0E0; position: relative; display: flex; }
+.item-scroll-container { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; width: 100%; }
+.item-scroll-container::-webkit-scrollbar { display: none; }
+.scroll-img { flex: 0 0 100%; scroll-snap-align: center; width: 100%; height: auto; object-fit: contain; display: block; border-right: 2px solid var(--text-dark); }
+.scroll-img:last-child { border-right: none; }
+.single-img { width: 100%; height: auto; object-fit: cover; display: block; }
+
+.multiple-sticker { position: absolute; top: 8px; right: 8px; background: var(--purple); color: #fff; border: 2px solid var(--text-dark); padding: 4px 8px; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 10px; transform: rotate(4deg); box-shadow: 2px 2px 0 var(--text-dark); z-index: 5; pointer-events: none;}
+.folder-badge { background: #fff; border-top: 2px solid var(--text-dark); padding: 12px 5px 5px; font-weight: 900; font-size: 16px; margin-top: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase;}
+
+/* ── 5. WHO IS ME? (CV BENTO BOX DENGAN V3 BEHAVIOUR) ── */
+.cv-sec { padding-top: 60px; padding-bottom: 100px; }
+.bento-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.bento-box { background: #fff; border: var(--brutal-border); box-shadow: var(--brutal-shadow); padding: 24px; position: relative; transition: transform 0.2s; }
+.bento-box:hover { transform: translateY(-4px); box-shadow: 8px 8px 0 var(--magenta); }
+
+.bento-header { font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 700; text-transform: uppercase; border-bottom: 2px dashed #ccc; padding-bottom: 8px; margin-bottom: 16px; color: var(--magenta); }
+.bento-title { font-size: 24px; font-weight: 900; margin-bottom: 10px; text-transform: uppercase; }
+.bento-text { font-size: 15px; line-height: 1.6; color: #444; }
+
+.bento-span-2 { grid-column: span 2; }
+.bento-span-3 { grid-column: span 3; }
+.bento-highlight { background: var(--purple); color: #fff; }
+.bento-highlight .bento-header { color: #FFD93D; border-bottom-color: rgba(255,255,255,0.3); }
+.bento-highlight:hover { box-shadow: 8px 8px 0 var(--text-dark); }
+
+.retro-list { list-style: none; }
+.retro-list li { padding: 8px 0; border-bottom: 1px solid #eee; display: flex; flex-direction: column; }
+.retro-list li span.year { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--purple); font-weight: 700;}
+.retro-list li span.desc { font-weight: 600; font-size: 15px; }
+
+.tools-wrap { display: flex; flex-wrap: wrap; gap: 10px; }
+.tool-tag { padding: 6px 14px; border: 2px solid var(--text-dark); font-weight: 800; font-size: 13px; text-transform: uppercase; box-shadow: 2px 2px 0 var(--text-dark); background: #FDFDFD; }
+
+@media(max-width: 900px){ .bento-grid { grid-template-columns: repeat(2, 1fr); } .bento-span-3 { grid-column: span 2; } }
+@media(max-width: 600px){ .bento-grid { grid-template-columns: 1fr; } .bento-span-2, .bento-span-3 { grid-column: span 1; } }
+
+/* ── 6. LIGHTBOX (V3 OS WINDOW + V3 CLICK BEHAVIOUR) ── */
+#modal { display: none; position: fixed; inset: 0; z-index: 99999; background: rgba(253, 253, 253, 0.95); align-items: center; justify-content: center; padding: 20px; flex-direction: column; opacity: 0; transition: opacity 0.2s; }
+#modal-content { display: inline-flex; flex-direction: column; background: #fff; border: var(--brutal-border); box-shadow: 12px 12px 0 var(--purple); width: fit-content; max-width: 95vw; max-height: 95vh; position: relative; }
+
+.modal-os-header { background: #eee; border-bottom: var(--brutal-border); display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; }
+.modal-os-title { font-family: 'Space Mono', monospace; font-weight: 700; font-size: 12px; color: var(--text-dark); }
+.modal-close-btn { background: #FF4A4A; border: 2px solid var(--text-dark); width: 32px; height: 32px; font-weight: 900; cursor: pointer; box-shadow: 3px 3px 0 var(--text-dark); display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.1s ease-out;}
+.modal-close-btn:active { box-shadow: 0 0 0 var(--text-dark); transform: translate(3px,3px); }
+
+.modal-body { display: flex; flex-direction: column; position: relative; background: var(--bg-light); overflow: hidden;}
+.modal-img-wrapper { position: relative; display: flex; justify-content: center; background: #000; border-bottom: var(--brutal-border); }
+#lightbox-main-img { max-height: 65vh; width: auto; max-width: 100%; display: block; }
+
+.modal-info-box { padding: 20px 24px; background: #fff; max-width: 600px; }
+#modal-title { font-size: 22px; font-weight: 900; text-transform: uppercase; margin-bottom: 6px; }
+#modal-desc { font-size: 14px; line-height: 1.5; font-weight: 500; color: #444; }
+
+.modal-nav { position: absolute; top: 50%; transform: translateY(-50%); background: var(--magenta); border: 2px solid var(--text-dark); color: #FFF; width: 48px; height: 48px; font-size: 20px; font-weight: 900; cursor: pointer; box-shadow: 4px 4px 0 var(--text-dark); transition: all 0.1s ease-out;}
+.modal-nav:active { box-shadow: 0 0 0 var(--text-dark); transform: translateY(-50%) translate(4px,4px); }
+.nav-prev { left: -24px; } .nav-next { right: -24px; }
+@media(max-width: 768px) { .nav-prev { left: 10px; } .nav-next { right: 10px; } }
+
+/* ── 7. FOOTER ── */
+footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); text-align: center; }
+.footer-copy { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--text-dark); }
 </style>
 </head>
-<body class="grid-bg">
+<body>
 
-<nav>
-  <div class="nav-left">
-    <a href="#" class="logo"><span class="lu">LU</span><span class="th">TH</span></a>
-    <div class="status-badge"><div class="status-dot"></div> AVAILABLE</div>
+<div class="pattern-bg"></div>
+
+<!-- FAB -->
+<div id="fab-container">
+  <a href="#home" class="fab-home" title="Back to Home"><img src="images/luth.png" alt="LUTH" onerror="this.style.display='none'"></a>
+  <div class="liquid-pill" id="liquidPill" onclick="toggleContact()">
+    <div class="lp-socials" id="lpSocials">
+      <a href="#" class="soc-mini">IN</a>
+      <a href="mailto:mail@gmail.com" class="soc-mini">@</a>
+      <a href="#" class="soc-mini">WA</a>
+      <a href="#" class="soc-mini">BE</a>
+    </div>
+    <div class="lp-text" id="lpText">HIT ME UP!</div>
   </div>
-  <div class="nav-links">
-    <a href="#portfolio" class="brutal-btn">Overview</a>
-    <a href="#footer" class="brutal-btn primary">Hit Me Up!</a>
-  </div>
-</nav>
-
-<div id="app">
-  <header>
-    <div class="container hero-content">
-      <div class="profile-cutout">
-        <!-- Avatar Profile Wrapper -->
-        <div id="profileInner" style="width:100%; height:100%;">
-          <img src="luthporto/images/profile.png" alt="Luthfi" onerror="this.src='luthporto/images/profile.png'">
-        </div>
-      </div>
-      
-      <div class="hero-text-wrap">
-        <div class="sticker st-1">100% Original</div>
-        <div class="sticker st-2">Content Specialist</div>
-        <h1 class="hero-title" id="heroName">LUTHFI<br>HIDAYAT</h1>
-        <div class="chat-bubble" id="heroDesc">
-          I design content that makes people stop, think, and act. Built with logical strategy and creative impact.
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <section id="portfolio" class="container">
-    <div class="section-header">
-      <h2 class="section-title">Overview</h2>
-      <span style="font-family:'Space Mono'; font-weight:700; font-size:14px; text-transform:uppercase;">// Selected Works</span>
-    </div>
-
-    <div class="filter-wrap">
-      <button class="brutal-btn primary" data-filter="all">All Projects</button>
-      <button class="brutal-btn" data-filter="educational">Educational</button>
-      <button class="brutal-btn" data-filter="promotional">Promotional</button>
-      <button class="brutal-btn" data-filter="branding">Branding</button>
-      <button class="brutal-btn" data-filter="labs">Labs</button>
-    </div>
-
-    <div id="masonryGrid" class="folder-grid">
-      <!-- Grid Loading State -->
-      <div style="font-family:'Space Mono'; font-weight:700;">Loading files..._</div>
-    </div>
-  </section>
 </div>
 
-<!-- FOOTER ZCONCEPT -->
-<footer id="footer">
-  <div class="container">
-    <div class="footer-motto">Create to discover,<br>design to inspire.</div>
-    <div class="social-row">
-      <a href="https://www.linkedin.com/" class="social-btn" title="LinkedIn">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-      </a>
-      <a href="mailto:mail@gmail.com" class="social-btn" title="Gmail">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
-      </a>
-      <a href="https://wa.me/" class="social-btn" title="WhatsApp">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-      </a>
-      <a href="https://x.com/" class="social-btn" title="X">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-      </a>
-      <a href="https://www.instagram.com/" class="social-btn" title="Instagram">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204 013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
-      </a>
+<!-- HERO -->
+<header id="home">
+  <div class="hero-wrapper">
+    <div class="hero-visual">
+      <div class="logo-back"></div>
+      <img src="images/profile.png" alt="Luthfi" class="hero-model" onerror="this.src='https://via.placeholder.com/650x650/8a2889/FFF?text=Profile'">
+      <div class="logo-front"></div>
     </div>
-    <div class="footer-copy">© 2026 Luthfi Hidayat. Built with Structure.</div>
+    <div class="hero-text">
+      <h1>Hi! I'm Luthfi,<br>Lets create design<br>to make people <span class="c-mag">stop</span>,<br><span class="c-purp">think</span>, and <span class="c-mag">act</span>.</h1>
+      <div class="hero-actions"><a href="#portfolio" class="btn">EXPLORE</a></div>
+    </div>
   </div>
+</header>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <h2 class="section-title">Selected Works</h2>
+  <div class="category-menu" id="categoryMenu"></div>
+  <div id="galleryGrid" class="masonry-grid"></div>
+</section>
+
+<!-- WHO IS ME (BENTO BOX CV) -->
+<section class="cv-sec" id="about">
+  <h2 class="section-title">Who is Me?</h2>
+  <div class="bento-grid">
+    
+    <div class="bento-box bento-span-2">
+      <div class="bento-header">/// SYSTEM.BIO</div>
+      <h3 class="bento-title">Luthfi Hidayat</h3>
+      <p class="bento-text">A digital creative professional obsessed with blending stark structural grids and fluid, high-performance interactions. I don't just build layouts; I engineer visual experiences that leave a lasting imprint.</p>
+    </div>
+
+    <div class="bento-box bento-highlight" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+      <div class="bento-header" style="margin:0; border:none;">PROJECTS DELIVERED</div>
+      <div style="font-size: 4rem; font-weight: 900; line-height: 1; margin: 10px 0; text-shadow: 2px 2px 0 #111;">100+</div>
+      <p style="font-family:'Space Mono'; font-size:11px;">And counting...</p>
+    </div>
+
+    <div class="bento-box">
+      <div class="bento-header">/// JOB_HISTORY.LOG</div>
+      <ul class="retro-list">
+        <li><span class="year">2023 - Present</span><span class="desc">Senior Creative Designer @ LUTH Digital</span></li>
+        <li><span class="year">2021 - 2023</span><span class="desc">UI/UX Specialist @ TechNova</span></li>
+        <li><span class="year">2019 - 2021</span><span class="desc">Visual Brand Architect</span></li>
+      </ul>
+    </div>
+
+    <div class="bento-box">
+      <div class="bento-header">/// EDUCATION.DAT</div>
+      <ul class="retro-list">
+        <li><span class="year">2015 - 2019</span><span class="desc">B.A. Visual Communication Design</span></li>
+        <li><span class="year">Certifications</span><span class="desc">Advanced UX Research (Google)</span></li>
+        <li><span class="year">Masterclass</span><span class="desc">Neo-Brutalism Web Architecture</span></li>
+      </ul>
+    </div>
+
+    <div class="bento-box">
+      <div class="bento-header">/// ACHIEVEMENTS.EXE</div>
+      <ul class="retro-list">
+        <li><span class="year">2025</span><span class="desc">Best Minimalist Site - Awwwards</span></li>
+        <li><span class="year">2024</span><span class="desc">Top 10 Asian Creators</span></li>
+        <li><span class="year">2022</span><span class="desc">Creative Agency of the Year</span></li>
+      </ul>
+    </div>
+
+    <div class="bento-box bento-span-3">
+      <div class="bento-header">/// TOOLS_AND_SKILLS.SYS</div>
+      <div class="tools-wrap">
+        <div class="tool-tag">Figma</div>
+        <div class="tool-tag">Adobe Illustrator</div>
+        <div class="tool-tag">Photoshop</div>
+        <div class="tool-tag">After Effects</div>
+        <div class="tool-tag">HTML/CSS/JS</div>
+        <div class="tool-tag">Webflow</div>
+        <div class="tool-tag">UI/UX Design</div>
+        <div class="tool-tag">Brand Strategy</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-copy">© 2026 LUTH DIGITAL CREATIVE. ALL RIGHTS RESERVED.</div>
 </footer>
 
-<!-- LIGHTBOX ZCONCEPT -->
+<!-- LIGHTBOX -->
 <div id="modal">
   <div id="modal-content">
-    <!-- OS Style Header -->
     <div class="modal-os-header">
       <div class="modal-os-title" id="modal-tag">VIEWER.EXE</div>
       <button onclick="closeModal()" class="modal-close-btn">X</button>
     </div>
     
-    <!-- Body -->
     <div class="modal-body">
-      <button id="modal-prev" onclick="moveGallery(-1)" class="modal-nav-btn btn-prev"><</button>
-      
-      <div id="modal-media-container"></div>
-      
-      <button id="modal-next" onclick="moveGallery(1)" class="modal-nav-btn btn-next">></button>
-      <div id="modal-dots" class="modal-dots-container"></div>
-      
+      <div class="modal-img-wrapper">
+        <img id="lightbox-main-img" src="" alt="View">
+        <button onclick="changeModalImg(-1)" class="modal-nav nav-prev" id="btn-prev">&#8249;</button>
+        <button onclick="changeModalImg(1)" class="modal-nav nav-next" id="btn-next">&#8250;</button>
+      </div>
       <div class="modal-info-box">
-        <h2 id="modal-title">Title</h2>
-        <p id="modal-desc">Description</p>
+        <h3 id="modal-title">Title</h3>
+        <p id="modal-desc" class="desc-text">Description</p>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-// ── CONFIG DATA & GITHUB ──
-const GITHUB_USER = 'luthfihd';   
-const GITHUB_REPO = 'luthporto'; 
-const DATA_URL    = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/data.json`;
-const IMAGES_BASE = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/images/`;
-
-let allItems = [];
-let currentFilter = 'all';
-
-function getGoogleDriveId(url) {
-  if (!url) return null;
-  if (url.includes('/file/d/')) return url.split('/file/d/')[1]?.split('/')[0] || null;
-  if (url.includes('id=')) return url.split('id=')[1]?.split('&')[0] || null;
-  if (url.includes('uc?id=')) return url.split('uc?id=')[1]?.split('&')[0] || null;
-  return null;
+// FAB LOGIC
+const fabContainer = document.getElementById('fab-container');
+const liquidPill = document.getElementById('liquidPill');
+const lpText = document.getElementById('lpText');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > window.innerHeight * 0.5) fabContainer.classList.add('visible');
+  else { fabContainer.classList.remove('visible'); liquidPill.classList.remove('active'); lpText.textContent = 'HIT ME UP!'; }
+});
+function toggleContact() {
+  liquidPill.classList.toggle('active');
+  lpText.textContent = liquidPill.classList.contains('active') ? 'CLOSE' : 'HIT ME UP!';
 }
 
-// ── FETCH DATA ──
+// DATA FETCH & GRID LOGIC
+const OVERVIEW_LIMIT = 9; 
+const DATA_URL = 'https://raw.githubusercontent.com/luthfihd/luthporto/main/data.json';
+const IMAGES_BASE = 'https://raw.githubusercontent.com/luthfihd/luthporto/main/images/';
+
+let portfolioData = [];
+let categories = ['Overview'];
+
+function getDriveUrl(url, size) {
+  let fileId = null;
+  if (url.includes('/file/d/')) fileId = url.split('/file/d/')[1]?.split('/')[0];
+  else if (url.includes('id=')) fileId = url.split('id=')[1]?.split('&')[0];
+  if (fileId) return `https://images.weserv.nl/?url=${encodeURIComponent(`https://drive.google.com/thumbnail?authuser=0&sz=w${size}&id=${fileId}`)}&output=webp`;
+  return url;
+}
+
 async function loadPortfolio() {
   try {
     const res = await fetch(DATA_URL);
-    if (!res.ok) throw new Error('fetch failed');
-    allItems = await res.json();
-    renderGrid();
-  } catch(e) {
-    document.getElementById('masonryGrid').innerHTML = `<p style="font-family:'Space Mono'; font-weight:700;">Error: Could not load data.json_</p>`;
-  }
+    portfolioData = await res.json();
+    portfolioData.forEach(item => { if (item.category && !categories.includes(item.category)) categories.push(item.category); });
+    
+    const catMenu = document.getElementById('categoryMenu');
+    categories.forEach(cat => {
+      const btn = document.createElement('button');
+      btn.className = cat === 'Overview' ? 'cat-btn active' : 'cat-btn';
+      btn.textContent = cat;
+      btn.onclick = (e) => filterGallery(cat, e);
+      catMenu.appendChild(btn);
+    });
+    filterGallery('Overview');
+  } catch(e) {}
 }
 
-// ── RENDER GRID (FOLDER STYLE) ──
-function renderGrid() {
-  const grid = document.getElementById('masonryGrid');
-  const items = currentFilter === 'all' ? allItems : allItems.filter(i => i.category === currentFilter);
-  
+function filterGallery(category, event) {
+  if (event) { document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); }
+  const grid = document.getElementById('galleryGrid');
   grid.innerHTML = '';
-  if (!items.length) {
-    grid.innerHTML = `<p style="font-family:'Space Mono'; font-weight:700;">No files found in this directory._</p>`;
-    return;
-  }
+  
+  let filteredData = category === 'Overview' 
+    ? [...portfolioData].sort(() => 0.5 - Math.random()).slice(0, OVERVIEW_LIMIT) 
+    : portfolioData.filter(p => p.category === category);
 
-  items.forEach((item) => {
-    const el = document.createElement('div');
-    el.className = 'folder-item'; 
-    el.onclick = () => openLightbox(item);
-
-    // Styling Folder Tab
-    let tabColor = '#fff';
-    const cat = item.category.toLowerCase();
-    if(cat === 'educational') tabColor = 'var(--luth-cyan)';
-    else if(cat === 'promotional') tabColor = '#FFEA00';
-    else if(cat === 'branding') tabColor = '#FF6B9D';
-
-    // Image Setup
-    const allLinks = (item.image || item.src || "").split(',');
-    const isMultiple = allLinks.length > 1;
-    let rawSrc = allLinks[0].trim();
-    let finalSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
+  filteredData.forEach(item => {
+    const rawLinks = (item.image || item.src || "").split(',').filter(l => l.trim() !== "");
+    const isMultiple = rawLinks.length > 1;
     
-    // GDrive Image Proxy optimization
-    if (finalSrc.includes('drive.google.com')) {
-        let fileId = getGoogleDriveId(finalSrc);
-        let gdriveUrl = `https://drive.google.com/thumbnail?authuser=0&sz=w600&id=${fileId}`;
-        finalSrc = `https://images.weserv.nl/?url=${encodeURIComponent(gdriveUrl)}&w=600&output=webp`;
-    }
+    let tabColor = '#fff';
+    const cat = (item.category || "").toLowerCase();
+    if(cat === 'educational') tabColor = 'var(--purple)';
+    else if(cat === 'promotional') tabColor = 'var(--magenta)';
+    else if(cat === 'branding') tabColor = '#FFD93D';
 
-    el.innerHTML = `
-      <div class="folder-tab" style="background: ${tabColor};">${item.category}</div>
+    const card = document.createElement('div');
+    card.className = 'folder-item';
+
+    let mediaHtml = isMultiple ? `<div class="item-scroll-container">` : '';
+    rawLinks.forEach(link => {
+      let src = link.trim().replace('#video', '');
+      src = src.startsWith('http') ? src : IMAGES_BASE + src;
+      if (src.includes('drive.google.com')) src = getDriveUrl(src, 600);
+      mediaHtml += `<img src="${src}" class="${isMultiple ? 'scroll-img' : 'single-img'}" onclick="openLightbox(${JSON.stringify(item).replace(/"/g, '&quot;')})">`;
+    });
+    if (isMultiple) mediaHtml += `</div>`;
+    
+    card.innerHTML = `
+      <div class="folder-tab" style="background: ${tabColor}; color: ${cat==='educational'||cat==='promotional'?'#fff':'#111'}">${item.category}</div>
       <div class="folder-content">
         <div class="folder-img-wrap">
-          <img class="folder-img" src="${finalSrc}" alt="${item.title}" loading="lazy" referrerpolicy="no-referrer">
+          ${mediaHtml}
+          ${isMultiple ? `<div class="multiple-sticker">${rawLinks.length} FILES</div>` : ''}
         </div>
-        ${isMultiple ? `<div class="multiple-sticker">${allLinks.length} FILES</div>` : ''}
         <div class="folder-badge">${item.title}</div>
       </div>
     `;
-    grid.appendChild(el);
+    grid.appendChild(card);
   });
 }
 
-// ── FILTER LOGIC ──
-document.querySelectorAll('.filter-wrap .brutal-btn').forEach(btn => {
-  btn.onclick = () => {
-    document.querySelectorAll('.filter-wrap .brutal-btn').forEach(b => {
-      b.classList.remove('primary');
-      b.style.background = '#fff';
-    });
-    btn.classList.add('primary');
-    btn.style.background = 'var(--luth-cyan)';
-    
-    currentFilter = btn.getAttribute('data-filter');
-    renderGrid();
-  };
-});
-
-// ── LIGHTBOX LOGIC ──
-function moveGallery(direction) {
-    const container = document.getElementById('modal-media-container');
-    const width = container.offsetWidth;
-    container.scrollBy({ left: direction * width, behavior: 'smooth' });
-}
+// LIGHTBOX LOGIC
+let currentLightboxImages = [];
+let currentLightboxIndex = 0;
 
 function openLightbox(item) {
-    const modal = document.getElementById('modal');
-    const content = document.getElementById('modal-content');
-    const container = document.getElementById('modal-media-container');
-    const dotsContainer = document.getElementById('modal-dots');
+  document.getElementById('modal').style.display = 'flex';
+  document.getElementById('modal-title').textContent = item.title;
+  document.getElementById('modal-desc').textContent = item.desc || item.category;
+  document.getElementById('modal-tag').textContent = `VIEWER.EXE - [${item.category.toUpperCase()}]`;
 
-    container.innerHTML = '';
-    if(dotsContainer) dotsContainer.innerHTML = '';
-    
-    modal.style.display = 'flex';
-    setTimeout(() => {
-        modal.style.opacity = '1';
-        content.classList.add('show');
-    }, 10);
+  const rawLinks = (item.image || item.src || "").split(',').filter(l => l.trim() !== "");
+  currentLightboxImages = rawLinks.map(link => {
+    let src = link.trim().replace('#video', '');
+    src = src.startsWith('http') ? src : IMAGES_BASE + src;
+    return src.includes('drive.google.com') ? getDriveUrl(src, 1600) : src;
+  });
 
-    document.getElementById('modal-title').textContent = item.title;
-    document.getElementById('modal-desc').textContent = item.desc || 'No description provided.';
-    document.getElementById('modal-tag').textContent = `[ DIR: ${item.category.toUpperCase()} ]`;
+  currentLightboxIndex = 0;
+  document.getElementById('lightbox-main-img').src = currentLightboxImages[0];
+  document.getElementById('btn-prev').style.display = currentLightboxImages.length > 1 ? 'block' : 'none';
+  document.getElementById('btn-next').style.display = currentLightboxImages.length > 1 ? 'block' : 'none';
+  document.body.style.overflow = 'hidden';
   
-    const allLinks = (item.image || item.src || "").split(',').filter(l => l.trim() !== "");
-    
-    allLinks.forEach((link, index) => {
-        let rawSrc = link.trim();
-        const isVideo = rawSrc.includes('#video');
-        let cleanSrc = rawSrc.replace('#video', '');
-        let fullSrc = cleanSrc.startsWith('http') ? cleanSrc : IMAGES_BASE + cleanSrc;
-
-        const wrapper = document.createElement('a');
-        wrapper.href = fullSrc;
-        wrapper.target = "_blank";
-        wrapper.style.position = "relative";
-        
-        let displaySrc = fullSrc;
-        if (fullSrc.includes('drive.google.com')) {
-            let fileId = getGoogleDriveId(fullSrc);
-            displaySrc = `https://drive.google.com/thumbnail?authuser=0&sz=w1600&id=${fileId}`;
-        }
-        
-        wrapper.innerHTML = `<img src="${displaySrc}" alt="Artwork">`;
-
-        if (isVideo) {
-            wrapper.innerHTML += `
-            <div class="play-button-overlay">
-                <div class="play-icon"></div>
-            </div>`;
-        }
-
-        container.appendChild(wrapper);
-
-        if (allLinks.length > 1 && dotsContainer) {
-            const dot = document.createElement('div');
-            dot.className = `modal-dot ${index === 0 ? 'active' : ''}`;
-            dotsContainer.appendChild(dot);
-        }
-    });
-
-    const prevBtn = document.getElementById('modal-prev');
-    const nextBtn = document.getElementById('modal-next');
-    if (prevBtn && nextBtn) {
-        prevBtn.style.display = allLinks.length > 1 ? 'block' : 'none';
-        nextBtn.style.display = allLinks.length > 1 ? 'block' : 'none';
-    }
-
-    container.onscroll = () => {
-        const idx = Math.round(container.scrollLeft / container.offsetWidth);
-        const dots = document.querySelectorAll('.modal-dot');
-        dots.forEach((dot, i) => dot.classList.toggle('active', i === idx));
-    };
-
-    document.body.style.overflow = 'hidden';
-    modal.onclick = (e) => { if (e.target === modal) closeModal(); };
+  setTimeout(() => document.getElementById('modal').style.opacity = '1', 10);
 }
 
-function closeModal() {
-    const modal = document.getElementById('modal');
-    const content = document.getElementById('modal-content');
+function changeModalImg(dir) {
+  currentLightboxIndex = (currentLightboxIndex + dir + currentLightboxImages.length) % currentLightboxImages.length;
+  document.getElementById('lightbox-main-img').src = currentLightboxImages[currentLightboxIndex];
+}
 
-    modal.style.opacity = '0';
-    content.classList.remove('show');
-
+function closeModal() { 
+    document.getElementById('modal').style.opacity = '0';
     setTimeout(() => {
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
-        document.getElementById('modal-media-container').innerHTML = '';
+        document.getElementById('modal').style.display = 'none'; 
+        document.body.style.overflow = ''; 
     }, 200);
 }
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); if(e.key==='ArrowRight') changeModalImg(1); if(e.key==='ArrowLeft') changeModalImg(-1); });
 
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
-
-// INIT
 loadPortfolio();
 </script>
 </body>
