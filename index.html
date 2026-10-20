@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luth's Art V20</title>
+<title>Luth's Art V25</title>
 
-<!-- Preconnect untuk mempercepat load gambar dari CDN -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://images.weserv.nl" crossorigin>
@@ -168,38 +167,95 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 @media(max-width: 900px){ .bento-grid { grid-template-columns: repeat(2, 1fr); } .bento-span-3 { grid-column: span 2; } }
 @media(max-width: 600px){ .bento-grid { grid-template-columns: 1fr; } .bento-span-2, .bento-span-3 { grid-column: span 1; } }
 
-/* ── 6. LIGHTBOX (SCROLL BEBAS & PRESISI) ── */
-#modal { 
-  display: none; position: fixed; inset: 0; z-index: 99999; 
-  background: rgba(253, 253, 253, 0.95); 
-  padding: 40px 20px; opacity: 0; transition: opacity 0.2s;
-  overflow-y: auto; /* Ini akan membuat background modal ikut ter-scroll */
-  align-items: flex-start; justify-content: center;
-}
-#modal-content { 
-  display: flex; flex-direction: column; background: #fff; 
-  border: var(--brutal-border); box-shadow: 12px 12px 0 var(--purple); 
-  width: 100%; max-width: 1000px; /* Diperlebar agar presisi dengan space kanan */
-  position: relative; margin: auto; flex-shrink: 0;
+/* ── 6. LIGHTBOX ZCONCEPT (SCROLL & BUTTON DI LUAR) ── */
+#modal {
+  display: none; position: fixed; inset: 0; z-index: 99999;
+  background: rgba(253, 253, 253, 0.95);
+  align-items: center; justify-content: center;
+  padding: 20px; opacity: 0; transition: opacity 0.2s ease;
+  overflow-y: auto; /* Allow entire modal wrapper to scroll if needed */
 }
 
-.modal-os-header { background: #eee; border-bottom: var(--brutal-border); display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; }
-.modal-os-title { font-family: 'Space Mono', monospace; font-weight: 700; font-size: 16px; color: var(--text-dark); letter-spacing: 0.5px;}
+/* Wrapper Baru Agar Tombol Bisa Berada Tepat di Luar Modal */
+.modal-wrapper {
+  position: relative;
+  width: 100%; max-width: 900px;
+  display: flex; align-items: center; justify-content: center;
+  margin: auto;
+}
 
-.modal-close-btn { background: #FF4A4A; border: 2px solid var(--text-dark); width: 32px; height: 32px; font-weight: 900; cursor: pointer; box-shadow: 3px 3px 0 var(--text-dark); display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.1s ease-out;}
-.modal-close-btn:active { box-shadow: 0 0 0 var(--text-dark); transform: translate(3px,3px); }
+#modal-content {
+  background: #fff; border: var(--brutal-border); box-shadow: 12px 12px 0 var(--purple);
+  width: 100%; max-height: 85vh; /* Jangan lewat dari layar */
+  display: flex; flex-direction: column; position: relative; overflow: hidden;
+}
 
-.modal-body { display: flex; flex-direction: column; position: relative; background: var(--bg-light); }
-.modal-img-wrapper { position: relative; display: flex; justify-content: center; background: #000; border-bottom: var(--brutal-border); }
-#lightbox-main-img { max-height: 80vh; width: 100%; display: block; object-fit: contain; }
+/* Header Lightbox */
+.modal-os-header {
+  background: #eee; border-bottom: var(--brutal-border); display: flex;
+  justify-content: space-between; align-items: center; padding: 12px 16px;
+  flex-shrink: 0;
+}
+.modal-os-title { 
+  font-family: 'Space Mono', monospace; font-weight: 900; font-size: 18px; 
+  color: var(--text-dark); text-transform: uppercase;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 15px;
+}
+.modal-close-btn { 
+  background: #FF4A4A; border: 2px solid var(--text-dark); width: 32px; height: 32px; 
+  font-weight: 900; cursor: pointer; box-shadow: 3px 3px 0 var(--text-dark); 
+  display: flex; align-items: center; justify-content: center; transition: all 0.1s;
+  flex-shrink: 0;
+}
+.modal-close-btn:active { box-shadow: 0 0 0; transform: translate(2px,2px); }
 
-.modal-info-box { padding: 30px 40px; background: #fff; width: 100%; }
-#modal-desc { font-size: 16px; line-height: 1.7; font-weight: 500; color: #444; }
+/* Body Lightbox: Scroll internal V3 Logic */
+.modal-body { 
+  display: flex; flex-direction: column; overflow-y: auto; background: var(--bg-light); 
+  flex: 1; min-height: 0; /* Penting agar area ini bisa di-scroll tanpa memanjang ke bawah */
+}
 
-.modal-nav { position: absolute; top: 50%; transform: translateY(-50%); background: var(--magenta); border: 2px solid var(--text-dark); color: #FFF; width: 48px; height: 48px; font-size: 20px; font-weight: 900; cursor: pointer; box-shadow: 4px 4px 0 var(--text-dark); transition: all 0.0s ease-out;}
-.modal-nav:active { box-shadow: 0 0 0 var(--text-dark); transform: translateY(-50%) translate(4px,4px); }
-.nav-prev { left: 20px; } .nav-next { right: 20px; }
-@media(max-width: 768px) { .nav-prev { left: 10px; } .nav-next { right: 10px; } }
+#modal-media-container {
+  display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; 
+  background: #000; width: 100%; position: relative; flex-shrink: 0;
+}
+#modal-media-container::-webkit-scrollbar { display: none; }
+#modal-media-container a { display: flex; align-items: center; justify-content: center; width: 100%; flex-shrink: 0; scroll-snap-align: center; }
+#modal-media-container img { display: block; max-width: 100%; max-height: 60vh; object-fit: contain; margin: 0 auto; }
+
+/* Detail Info & Dots */
+.modal-info-box { padding: 24px 30px; background: #fff; border-top: var(--brutal-border); width: 100%; }
+#modal-desc { font-size: 16px; line-height: 1.6; font-weight: 600; color: #444; width: 100%; word-wrap: break-word; }
+
+.modal-dots-container { display: flex; justify-content: center; gap: 8px; padding: 12px; background: #fff; border-bottom: var(--brutal-border); flex-shrink: 0; }
+.modal-dot { width: 12px; height: 12px; background: #fff; border: 2px solid var(--text-dark); border-radius: 50% !important; transition: background 0.2s; }
+.modal-dot.active { background: var(--purple); box-shadow: 2px 2px 0 var(--text-dark); }
+
+/* Tombol Next Prev DI LUAR Content */
+.modal-nav-btn {
+  position: absolute; top: 40%; transform: translateY(-50%);
+  background: var(--purple); border: var(--brutal-border);
+  width: 54px; height: 54px; font-weight: 900; font-size: 24px;
+  cursor: pointer; box-shadow: 4px 4px 0 var(--text-dark);
+  z-index: 100000; color: #FFF; display: flex; align-items: center; justify-content: center;
+  transition: all 0.1s;
+}
+.modal-nav-btn:active { box-shadow: 0 0 0; transform: translateY(-50%) translate(4px,4px); }
+.btn-prev { left: -60px; } 
+.btn-next { right: -60px; }
+
+/* Desktop Medium & Mobile OK */
+@media(max-width: 1050px) {
+  .modal-wrapper { max-width: 85vw; }
+  .btn-prev { left: -25px; width: 44px; height: 44px; font-size: 20px;}
+  .btn-next { right: -25px; width: 44px; height: 44px; font-size: 20px;}
+}
+@media(max-width: 768px) {
+  .modal-wrapper { max-width: 92vw; }
+  .btn-prev { left: -10px; width: 38px; height: 38px; font-size: 16px;}
+  .btn-next { right: -10px; width: 38px; height: 38px; font-size: 16px;}
+  .modal-info-box { padding: 20px; }
+}
 
 /* ── 7. FOOTER ── */
 footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); text-align: center; }
@@ -215,11 +271,19 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
   <a href="#home" class="fab-home" title="Back to Home"><img src="images/luth.png" alt="LUTH" onerror="this.style.display='none'"></a>
   <div class="liquid-pill" id="liquidPill" onclick="toggleContact()">
     <div class="lp-socials" id="lpSocials">
-      <!-- Icon Kontak SVG -->
-      <a href="https://instagram.com" class="soc-mini" title="Instagram"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204 013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
-      <a href="mailto:mail@gmail.com" class="soc-mini" title="Email"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg></a>
-      <a href="https://wa.me" class="soc-mini" title="WhatsApp"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg></a>
-      <a href="https://x.com" class="soc-mini" title="X"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <!-- Icon Kontak dengan Vektor Jelas -->
+      <a href="https://instagram.com" class="soc-mini" title="Instagram">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+      </a>
+      <a href="mailto:mail@gmail.com" class="soc-mini" title="Email">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      </a>
+      <a href="https://wa.me" class="soc-mini" title="WhatsApp">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 12.5c0 4.97-4.03 9-9 9-1.57 0-3.04-.4-4.33-1.11L3 21l.66-5.04C2.86 14.6 2.5 13.1 2.5 11.5c0-4.97 4.03-9 9-9s9 4.03 9 9z"></path></svg>
+      </a>
+      <a href="https://x.com" class="soc-mini" title="X">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="4" x2="20" y2="20"></line><line x1="20" y1="4" x2="4" y2="20"></line></svg>
+      </a>
     </div>
     <div class="lp-text" id="lpText">HIT ME UP!</div>
   </div>
@@ -247,7 +311,7 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
   <div id="galleryGrid" class="masonry-grid"></div>
 </section>
 
-<!-- WHO IS ME (BENTO BOX CV) -->
+<!-- WHO IS ME (BENTO BOX) -->
 <section class="cv-sec" id="about">
   <h2 class="section-title">Who is Me?</h2>
   <div class="bento-grid">
@@ -313,24 +377,28 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
   <div class="footer-copy">© 2026 LUTH DIGITAL CREATIVE. ALL RIGHTS RESERVED.</div>
 </footer>
 
-<!-- LIGHTBOX -->
+<!-- LIGHTBOX ZCONCEPT V3 -->
 <div id="modal">
-  <div id="modal-content">
-    <div class="modal-os-header">
-      <div class="modal-os-title" id="modal-title">TITLE</div>
-      <button onclick="closeModal()" class="modal-close-btn">X</button>
+  <div class="modal-wrapper">
+    <button id="modal-prev" onclick="moveGallery(-1)" class="modal-nav-btn btn-prev">&#8249;</button>
+    
+    <div id="modal-content">
+      <div class="modal-os-header">
+        <div class="modal-os-title" id="modal-tag">TITLE</div>
+        <button onclick="closeModal()" class="modal-close-btn">X</button>
+      </div>
+      
+      <div class="modal-body">
+        <div id="modal-media-container"></div>
+        <div id="modal-dots" class="modal-dots-container"></div>
+        
+        <div class="modal-info-box">
+          <p id="modal-desc" class="desc-text">Description</p>
+        </div>
+      </div>
     </div>
     
-    <div class="modal-body">
-      <div class="modal-img-wrapper">
-        <img id="lightbox-main-img" src="" alt="View">
-        <button onclick="changeModalImg(-1)" class="modal-nav nav-prev" id="btn-prev">&#8249;</button>
-        <button onclick="changeModalImg(1)" class="modal-nav nav-next" id="btn-next">&#8250;</button>
-      </div>
-      <div class="modal-info-box">
-        <p id="modal-desc" class="desc-text">Description</p>
-      </div>
-    </div>
+    <button id="modal-next" onclick="moveGallery(1)" class="modal-nav-btn btn-next">&#8250;</button>
   </div>
 </div>
 
@@ -356,7 +424,6 @@ const IMAGES_BASE = 'https://raw.githubusercontent.com/luthfihd/luthporto/main/i
 let portfolioData = [];
 let categories = ['Overview'];
 
-// Speed up load using smaller thumbnail size (w400 for grid instead of w600)
 function getDriveUrl(url, size) {
   let fileId = null;
   if (url.includes('/file/d/')) fileId = url.split('/file/d/')[1]?.split('/')[0];
@@ -370,7 +437,6 @@ async function loadPortfolio() {
     const res = await fetch(DATA_URL);
     portfolioData = await res.json();
     
-    // Sort logic to place "Labs" at the very end
     let foundCats = [];
     portfolioData.forEach(item => { 
         if (item.category && !foundCats.includes(item.category)) foundCats.push(item.category); 
@@ -421,7 +487,7 @@ function filterGallery(category, event) {
     rawLinks.forEach(link => {
       let src = link.trim().replace('#video', '');
       src = src.startsWith('http') ? src : IMAGES_BASE + src;
-      if (src.includes('drive.google.com')) src = getDriveUrl(src, 400); // Speed optimization
+      if (src.includes('drive.google.com')) src = getDriveUrl(src, 400); 
       mediaHtml += `<img src="${src}" class="${isMultiple ? 'scroll-img' : 'single-img'}" onclick="openLightbox(${JSON.stringify(item).replace(/"/g, '&quot;')})">`;
     });
     if (isMultiple) mediaHtml += `</div>`;
@@ -440,59 +506,84 @@ function filterGallery(category, event) {
   });
 }
 
-// LIGHTBOX LOGIC
-let currentLightboxImages = [];
-let currentLightboxIndex = 0;
+// ── LOGIKA LIGHTBOX V3 MURNI ──
+function moveGallery(direction) {
+  const container = document.getElementById('modal-media-container');
+  const width = container.offsetWidth;
+  container.scrollBy({ left: direction * width, behavior: 'smooth' });
+}
 
 function openLightbox(item) {
   const modal = document.getElementById('modal');
+  const container = document.getElementById('modal-media-container');
+  const dotsContainer = document.getElementById('modal-dots');
+
+  container.innerHTML = '';
+  if(dotsContainer) dotsContainer.innerHTML = '';
+
   modal.style.display = 'flex';
-  
-  // Set text Title & Descripsi
-  document.getElementById('modal-title').textContent = item.title.toUpperCase();
+  setTimeout(() => modal.style.opacity = '1', 10);
+
+  // Menuliskan Judul Projek pada Header OS
+  document.getElementById('modal-tag').textContent = item.title.toUpperCase();
   document.getElementById('modal-desc').innerHTML = item.desc || item.category;
 
-  const rawLinks = (item.image || item.src || "").split(',').filter(l => l.trim() !== "");
-  currentLightboxImages = rawLinks.map(link => {
-    let src = link.trim().replace('#video', '');
-    src = src.startsWith('http') ? src : IMAGES_BASE + src;
-    return src.includes('drive.google.com') ? getDriveUrl(src, 1200) : src; // Speed optimization
-  });
-  
-  currentLightboxIndex = 0;
-  document.getElementById('lightbox-main-img').src = currentLightboxImages[0];
-  document.getElementById('btn-prev').style.display = currentLightboxImages.length > 1 ? 'block' : 'none';
-  document.getElementById('btn-next').style.display = currentLightboxImages.length > 1 ? 'block' : 'none';
-  document.body.style.overflow = 'hidden';
-  
-  // Efek transisi opacity dan background preload untuk sisa array image
-  setTimeout(() => {
-    modal.style.opacity = '1';
-    currentLightboxImages.slice(1).forEach(src => {
-        const preloadImg = new Image();
-        preloadImg.src = src; 
-    });
-  }, 10);
-}
+  const allLinks = (item.image || item.src || "").split(',').filter(l => l.trim() !== "");
 
-function changeModalImg(dir) {
-  currentLightboxIndex = (currentLightboxIndex + dir + currentLightboxImages.length) % currentLightboxImages.length;
-  document.getElementById('lightbox-main-img').src = currentLightboxImages[currentLightboxIndex];
+  allLinks.forEach((link, index) => {
+    let rawSrc = link.trim().replace('#video', '');
+    let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
+    let displaySrc = fullSrc.includes('drive.google.com') ? getDriveUrl(fullSrc, 1200) : fullSrc;
+
+    const wrapper = document.createElement('a');
+    wrapper.href = fullSrc;
+    wrapper.target = "_blank";
+    wrapper.innerHTML = `<img src="${displaySrc}" alt="Artwork">`;
+    container.appendChild(wrapper);
+
+    // Render Dots V3
+    if (allLinks.length > 1 && dotsContainer) {
+      const dot = document.createElement('div');
+      dot.className = `modal-dot ${index === 0 ? 'active' : ''}`;
+      dotsContainer.appendChild(dot);
+    }
+  });
+
+  const prevBtn = document.getElementById('modal-prev');
+  const nextBtn = document.getElementById('modal-next');
+  if (prevBtn && nextBtn) {
+    prevBtn.style.display = allLinks.length > 1 ? 'flex' : 'none';
+    nextBtn.style.display = allLinks.length > 1 ? 'flex' : 'none';
+  }
+
+  // Interaksi sinkronisasi scroll dan dots
+  container.onscroll = () => {
+    const idx = Math.round(container.scrollLeft / container.offsetWidth);
+    const dots = document.querySelectorAll('.modal-dot');
+    dots.forEach((dot, i) => dot.classList.toggle('active', i === idx));
+  };
+
+  document.body.style.overflow = 'hidden';
 }
 
 function closeModal() { 
-    document.getElementById('modal').style.opacity = '0';
-    setTimeout(() => {
-        document.getElementById('modal').style.display = 'none'; 
-        document.body.style.overflow = ''; 
-    }, 200);
+  const modal = document.getElementById('modal');
+  modal.style.opacity = '0';
+  setTimeout(() => {
+    modal.style.display = 'none'; 
+    document.body.style.overflow = ''; 
+    document.getElementById('modal-media-container').innerHTML = ''; // Bersihkan buffer
+  }, 200);
 }
 
-// Interaksi klik luar Lightbox & Keyboard support
 document.getElementById('modal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); if(e.key==='ArrowRight') changeModalImg(1); if(e.key==='ArrowLeft') changeModalImg(-1); });
+document.addEventListener('keydown', e => { 
+  if(e.key==='Escape') closeModal(); 
+  if(e.key==='ArrowRight') moveGallery(1); 
+  if(e.key==='ArrowLeft') moveGallery(-1); 
+});
 
 loadPortfolio();
 </script>
