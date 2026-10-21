@@ -355,6 +355,74 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 /* ── 7. FOOTER ── */
 footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); text-align: center; }
 .footer-copy { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; text-transform: none; color: var(--text-dark); }
+
+/* 1. MENGUBAH WARNA TEKS TOMBOL CLOSE (X) JADI HITAM TEGAS (MOBILE & DESKTOP) */
+.modal-close-btn {
+  color: #111111 !important;
+  -webkit-text-fill-color: #111111 !important;
+  opacity: 1 !important;
+}
+
+/* 2. MENGHILANGKAN BORDER RADIUS PADA LOGO DI FAB HOME */
+.fab-home img {
+  border-radius: 0px !important;
+}
+
+/* 3. IKON KONTAK MURNI SVG WARNA PUTIH (TANPA WADAH / BORDER / SHADOW / RADIUS) */
+.soc-mini {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0px !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 4px !important;
+  color: #FFFFFF !important;
+}
+
+.soc-mini svg,
+.soc-mini svg * {
+  border-radius: 0px !important; /* Timpa radius 20px dari root */
+  width: 22px !important;
+  height: 22px !important;
+  fill: #FFFFFF !important; /* Paksa warna ikon jadi Putih */
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.soc-mini:hover svg {
+  transform: scale(1.15);
+  opacity: 0.85;
+}
+
+.soc-mini:active svg {
+  transform: scale(0.95);
+}
+
+/* 4. PERBAIKAN TOTAL MODAL OS HEADER & TEKS JUDUL (BEBAS KETUTUP DI MOBILE) */
+.modal-os-header {
+  border-radius: 0px !important;
+  padding: 8px 12px !important;
+  gap: 8px !important;
+  min-height: 44px !important;
+}
+
+.modal-os-title {
+  font-size: 13px !important;
+  line-height: 1.25 !important;
+  padding-right: 6px !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important; /* Maksimal 2 baris rapi */
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  word-break: break-word !important; /* Mencegah kata panjang nabrak tombol X */
+}
+
+@media (max-width: 768px) {
+  .modal-os-title {
+    font-size: 12px !important; /* Ukuran pas untuk layar HP */
+  }
+}
+
 </style>
 </head>
 <body>
