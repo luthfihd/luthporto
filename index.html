@@ -199,7 +199,7 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 .bento-span-2 { grid-column: span 2; }
 .bento-span-3 { grid-column: span 3; }
 .bento-highlight { background: var(--purple); color: #fff; }
-.bento-highlight .bento-header { color: #FFD93D; border-bottom-color: rgba(255,255,255,0.3); }
+.bento-highlight .bento-header { color: #FFFFFF; border-bottom-color: rgba(255,255,255,0.3); }
 .bento-highlight:hover { box-shadow: 8px 8px 0 var(--text-dark); }
 
 .retro-list { list-style: none; }
@@ -585,7 +585,7 @@ async function loadBioProfile() {
           .filter(j => j.year || j.desc)
           .map(j => `
             <li>
-              <strong>${j.year}</strong> — ${j.desc}
+              <strong>${j.year}</strong> ${j.desc}
             </li>
           `).join('');
       }
@@ -599,7 +599,7 @@ async function loadBioProfile() {
           .filter(e => e.year || e.desc)
           .map(e => `
             <li>
-              <strong>${e.year}</strong> — ${e.desc}
+              <strong>${e.year}</strong> ${e.desc}
             </li>
           `).join('');
       }
@@ -613,7 +613,7 @@ async function loadBioProfile() {
           .filter(a => a.year || a.desc)
           .map(a => `
             <li>
-              <strong>${a.year}</strong> — ${a.desc}
+              <strong>${a.year}</strong> ${a.desc}
             </li>
           `).join('');
       }
