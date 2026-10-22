@@ -486,33 +486,37 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
       <div style="font-size: 4rem; font-weight: 900; line-height: 1; margin: 10px 0; text-shadow: 2px 2px 0 #111;">500+</div>      
       <p style="font-family:'Space Mono'; font-size:11px;">And counting...</p>    
     </div>
-    <div class="bento-box">      
-      <div class="bento-header">/// JOB_HISTORY.LOG</div>      
-      <ul class="retro-list">        
-        <li><span class="year">2023 - Present</span><span class="desc">Creative Content Specialist @ PT PGD </span></li>        
-        <li><span class="year">2022 - 2023</span><span class="desc">Graphic Designer @ HK Group</span></li>        
-        <li><span class="year">2021 - 2025</span><span class="desc">Content Creator @ Smartfren Tangerang Selatan</span></li>        
-        <li><span class="year">2019 - Present</span><span class="desc">Bussiness Owner @ Media</span></li>      
-      </ul>    
-    </div>
-    <div class="bento-box">      
-      <div class="bento-header">/// EDUCATION.DAT</div>      
-      <ul class="retro-list">        
-        <li><span class="year">2015 - 2019</span><span class="desc">B.A. Visual Communication Design</span></li>        
-        <li><span class="year">Certifications</span><span class="desc">Advanced UX Research (Google)</span></li>        
-        <li><span class="year">Masterclass</span><span class="desc">Neo-Brutalism Web Architecture</span></li>      
-      </ul>    
-    </div>
-    <div class="bento-box">      
-      <div class="bento-header">/// ACHIEVEMENTS.EXE</div>      
-      <ul class="retro-list">        
-        <li><span class="year">2025</span><span class="desc">Best Minimalist Site - Awwwards</span></li>        
-        <li><span class="year">2024</span><span class="desc">Top 10 Asian Creators</span></li>        
-        <li><span class="year">2022</span><span class="desc">Creative Agency of the Year</span></li>      
-      </ul>    
-    </div>
+   <!-- JOB HISTORY -->
+<div class="bento-box">
+  <div class="bento-header">/// JOB HISTORY</div>
+  <div class="history-wrap">
+    <ul class="retro-list" id="jobsList">
+      <!-- Diisi otomatis via JS -->
+    </ul>
+  </div>
+</div>
+
+<!-- EDUCATION & CERTIFICATIONS -->
+<div class="bento-box">
+  <div class="bento-header">/// EDUCATION & CERTIFICATIONS</div>
+  <div class="history-wrap">
+    <ul class="retro-list" id="eduList">
+      <!-- Diisi otomatis via JS -->
+    </ul>
+  </div>
+</div>
+
+<!-- ACHIEVEMENTS -->
+<div class="bento-box">
+  <div class="bento-header">/// ACHIEVEMENTS</div>
+  <div class="history-wrap">
+    <ul class="retro-list" id="achievementsList">
+      <!-- Diisi otomatis via JS -->
+    </ul>
+  </div>
+</div>
     <div class="bento-box bento-span-3">      
-      <div class="bento-header">/// TOOLS_AND_SKILLS.SYS</div>      
+      <div class="bento-header">/// TOOLS AND SKILLS</div>      
       <div class="tools-wrap">        
         <div class="tool-tag">Figma</div>        
         <div class="tool-tag">Adobe Illustrator</div>        
@@ -528,7 +532,7 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
 </section>
 
 <footer>  
-  <div class="footer-copy">2026 Luthfi HD. All Right Reserved.</div>
+  <div class="footer-copy">2026 Luthfi HD "Create to discover, design to inspire". All Right Reserved.</div>
 </footer>
 
 <!-- LIGHTBOX ZCONCEPT REVISED -->
@@ -558,93 +562,75 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
 async function loadBioProfile() {
   try {
     const res = await fetch(`profile.json?t=${Date.now()}`);
-    if (!res.ok) {
-      console.error('❌ DEBUG: Gagal mengambil profile.json. Status:', res.status);
-      return;
-    }
-    
+    if (!res.ok) return;
     const data = await res.json();
-    console.log('📦 DEBUG: Isi data dari profile.json:', data);
 
-    // 1. Bio Text
-    const bioEl = document.querySelector('.bento-text');
-    console.log('🔍 DEBUG: Elemen .bento-text ->', bioEl);
-    if (bioEl && data.bio) bioEl.textContent = data.bio;
+    // 1. Update Bio Text
+    if (data.bio) {
+      const bioEl = document.querySelector('.bento-text');
+      if (bioEl) bioEl.textContent = data.bio;
+    }
 
-    // 2. Projects Count
-    const countEl = document.querySelector('.bento-highlight div:nth-child(2)');
-    console.log('🔍 DEBUG: Elemen .bento-highlight ->', countEl);
-    if (countEl && data.projectsCount) countEl.textContent = data.projectsCount;
+    // 2. Update Projects Count
+    if (data.projectsCount) {
+      const countEl = document.querySelector('.bento-highlight div:nth-child(2)');
+      if (countEl) countEl.textContent = data.projectsCount;
+    }
 
-    // 3. Job History
-    const jobsWrap = document.querySelector('#jobsList');
-    console.log('🔍 DEBUG: Elemen #jobsList ->', jobsWrap);
-    if (jobsWrap) {
-      if (data.jobs && data.jobs.length > 0) {
+    // 3. Update Job History (Render ke <li>)
+    if (data.jobs && data.jobs.length > 0) {
+      const jobsWrap = document.querySelector('#jobsList');
+      if (jobsWrap) {
         jobsWrap.innerHTML = data.jobs
           .filter(j => j.year || j.desc)
           .map(j => `
-            <div class="history-item">
-              <span class="history-year">${j.year}</span>
-              <span class="history-desc">${j.desc}</span>
-            </div>
+            <li>
+              <strong>${j.year}</strong> — ${j.desc}
+            </li>
           `).join('');
-      } else {
-        console.warn('⚠️ DEBUG: data.jobs kosong atau bukan Array');
       }
-    } else {
-      console.error('❌ DEBUG: Elemen #jobsList TIDAK DITEMUKAN di HTML!');
     }
 
-    // 4. Education & Certifications
-    const eduWrap = document.querySelector('#eduList');
-    console.log('🔍 DEBUG: Elemen #eduList ->', eduWrap);
-    if (eduWrap) {
-      if (data.edu && data.edu.length > 0) {
+    // 4. Update Education & Certifications (Render ke <li>)
+    if (data.edu && data.edu.length > 0) {
+      const eduWrap = document.querySelector('#eduList');
+      if (eduWrap) {
         eduWrap.innerHTML = data.edu
           .filter(e => e.year || e.desc)
           .map(e => `
-            <div class="history-item">
-              <span class="history-year">${e.year}</span>
-              <span class="history-desc">${e.desc}</span>
-            </div>
+            <li>
+              <strong>${e.year}</strong> — ${e.desc}
+            </li>
           `).join('');
-      } else {
-        console.warn('⚠️ DEBUG: data.edu kosong atau bukan Array');
       }
-    } else {
-      console.error('❌ DEBUG: Elemen #eduList TIDAK DITEMUKAN di HTML!');
     }
 
-    // 5. Achievements
-    const achWrap = document.querySelector('#achievementsList');
-    console.log('🔍 DEBUG: Elemen #achievementsList ->', achWrap);
-    if (achWrap) {
-      if (data.achievements && data.achievements.length > 0) {
+    // 5. Update Achievements (Render ke <li>)
+    if (data.achievements && data.achievements.length > 0) {
+      const achWrap = document.querySelector('#achievementsList');
+      if (achWrap) {
         achWrap.innerHTML = data.achievements
           .filter(a => a.year || a.desc)
           .map(a => `
-            <div class="history-item">
-              <span class="history-year">${a.year}</span>
-              <span class="history-desc">${a.desc}</span>
-            </div>
+            <li>
+              <strong>${a.year}</strong> — ${a.desc}
+            </li>
           `).join('');
-      } else {
-        console.warn('⚠️ DEBUG: data.achievements kosong atau bukan Array');
       }
-    } else {
-      console.error('❌ DEBUG: Elemen #achievementsList TIDAK DITEMUKAN di HTML!');
     }
 
-    // 6. Skills
-    const toolsWrap = document.querySelector('.tools-wrap');
-    console.log('🔍 DEBUG: Elemen .tools-wrap ->', toolsWrap);
-    if (toolsWrap && data.skills) {
-      toolsWrap.innerHTML = data.skills.map(skill => `<div class="tool-tag">${skill}</div>`).join('');
+    // 6. Update Skills & Tools
+    if (data.skills && data.skills.length > 0) {
+      const toolsWrap = document.querySelector('.tools-wrap');
+      if (toolsWrap) {
+        toolsWrap.innerHTML = data.skills.map(skill => `
+          <div class="tool-tag">${skill}</div>
+        `).join('');
+      }
     }
 
   } catch (err) {
-    console.error('💥 DEBUG: Error saat eksekusi loadBioProfile():', err);
+    console.error('Error load profile.json:', err);
   }
 }
 
