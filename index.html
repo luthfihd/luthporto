@@ -553,6 +553,58 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
 </div>
 
 <script>
+
+// Function render otomatis section "Who is Me?" dari profile.json
+async function loadBioProfile() {
+  try {
+    const res = await fetch(`profile.json?t=${Date.now()}`);
+    if (!res.ok) return;
+    const data = await res.json();
+
+    // 1. Render Bio Text
+    if (data.bio) {
+      const bioEl = document.querySelector('.bento-text');
+      if (bioEl) bioEl.textContent = data.bio;
+    }
+
+    // 2. Render Projects Count
+    if (data.projectsCount) {
+      const countEl = document.querySelector('.bento-highlight div:nth-child(2)');
+      if (countEl) countEl.textContent = data.projectsCount;
+    }
+
+    // 3. Render Jobs History
+    if (data.jobs && data.jobs.length > 0) {
+      const jobsWrap = document.querySelector('#jobsList');
+      if (jobsWrap) {
+        jobsWrap.innerHTML = data.jobs.map(j => `
+          <div class="history-item">
+            <span class="history-year">${j.year}</span>
+            <span class="history-desc">${j.desc}</span>
+          </div>
+        `).join('');
+      }
+    }
+
+    // 4. Render Skills & Tools Tags
+    if (data.skills && data.skills.length > 0) {
+      const toolsWrap = document.querySelector('.tools-wrap');
+      if (toolsWrap) {
+        toolsWrap.innerHTML = data.skills.map(skill => `
+          <div class="tool-tag">${skill}</div>
+        `).join('');
+      }
+    }
+  } catch (err) {
+    console.error('Error load profile.json:', err);
+  }
+}
+
+// Jalankan otomatis saat halaman dibuka
+document.addEventListener('DOMContentLoaded', () => {
+  loadBioProfile();
+});
+
 // AUTO FAVICON GENERATOR (WHITE CIRCLE LOGO)
 window.addEventListener('DOMContentLoaded', () => {    
   const canvas = document.createElement('canvas');    
