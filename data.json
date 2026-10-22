@@ -664,7 +664,8 @@
     "category": "branding",
     "desc": "Using a simple design approach with a highly distinctive aesthetic, creating a high-class and premium brand image.",
     "icon": "🎬",
-    "date": "2026-05-23"
+    "date": "2026-05-23",
+    "featured": true
   },
   {
     "id": "item_1779163121567_i0u6n6",
@@ -1025,7 +1026,8 @@
     "desc": "As the Video Editor for this profile project, I focused on dynamic storytelling techniques by seamlessly blending informative interview clips with smooth transitions and fresh greenhouse B-roll footage. Through precise pacing and meticulous audio-visual synchronization, the final edit successfully reinforces TemanKreasi Pekalongan's message of community innovation and brand professionalism from start to finish.",
     "icon": "🎬",
     "date": "2026-05-05",
-    "image": "https://drive.google.com/file/d/1M6LhbQLlSfzG_h-o5c1hPHQ02sMMFfRe/view?usp=sharing#video"
+    "image": "https://drive.google.com/file/d/1M6LhbQLlSfzG_h-o5c1hPHQ02sMMFfRe/view?usp=sharing#video",
+    "featured": true
   },
   {
     "id": "item_1777955540736_3adsa6",
