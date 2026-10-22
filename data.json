@@ -864,7 +864,8 @@
     "category": "branding",
     "desc": "The profile book is a form of disseminating information about an institution.",
     "icon": "🎬",
-    "date": "2026-05-06"
+    "date": "2026-05-06",
+    "featured": true
   },
   {
     "id": "item_1778051716184_p1olb7",
