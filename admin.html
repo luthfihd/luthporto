@@ -151,13 +151,22 @@ body {
 .filter-mini button { padding: 6px 14px; border: var(--brutal-border); background: #FFF; font-weight: 800; font-size: 11px; cursor: pointer; box-shadow: 2px 2px 0 var(--text-dark); }
 .filter-mini button.active { background: var(--purple); color: #FFF; }
 
-.admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+/* TAMPILAN GRID THUMBNAIL ADMIN (DESKTOP & LAPTOP) */
+#adminGrid, .admin-grid { 
+  display: grid !important; 
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important; 
+  gap: 12px !important; 
+  width: 100% !important;
+}
+
+/* PAKSA 2 KOLOM DI MOBILE / HP */
 @media (max-width: 600px) {
-  .admin-grid {
-    grid-template-columns: repeat(2, 1fr) !important; /* Paksa 2 kolom di mobile */
+  #adminGrid, .admin-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
     gap: 10px !important;
   }
 }
+  
 .admin-item { background: #FFF; border: var(--brutal-border); box-shadow: var(--brutal-shadow-sm); position: relative; overflow: hidden; }
 
 /* THUMBNAIL & ACTION OVERLAYS */
