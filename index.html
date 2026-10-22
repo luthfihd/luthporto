@@ -237,6 +237,18 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
   transition: width 0.15s ease-out;
 }
 
+/* PAKSA SHARP (0px) ATAS & BAWAH MEDIA LIGHTBOX */
+.modal-content,
+.modal-body,
+.modal-os-body,
+#modal-media-container,
+#modal-media-container img,
+#modal-media-container iframe,
+#modal-media-container video {
+  border-radius: 0px !important;
+  -webkit-border-radius: 0px !important;
+}
+
 /* Header Lightbox */
 .modal-os-header {  
   background: #eee; border-bottom: var(--brutal-border); display: flex;  
@@ -323,6 +335,12 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 #modal-desc { font-size: 15px; line-height: 1.6; font-weight: 400; color: #333; width: 100%; word-wrap: break-word; }
 
 .modal-dots-container { display: flex; justify-content: center; gap: 8px; padding: 10px; background: #fff; border-bottom: var(--brutal-border); flex-shrink: 0; }
+/* KODE TAMBAHAN UNTUK HILANGIN DOTS KALAU KONTEN CUMA 1 / KOSONG */
+.modal-dots-container:has(.modal-dot:only-child),
+.modal-dots-container:has(.dot:only-child),
+.modal-dots-container:empty {
+  display: none !important;
+}
 .modal-dot { width: 10px; height: 10px; background: #fff; border: 2px solid var(--text-dark); border-radius: 50% !important; transition: background 0.2s; }
 .modal-dot.active { background: var(--purple); box-shadow: 2px 2px 0 var(--text-dark); }
 
@@ -336,8 +354,14 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
   transition: all 0.1s;
 }
 .modal-nav-btn:active { box-shadow: 0 0 0; transform: translateY(-50%) translate(4px,4px); }
-.btn-prev { left: -70px; } 
-.btn-next { right: -70px; }
+.btn-prev { 
+  left: 100px !important; 
+  right: auto !important;
+}
+.btn-next { 
+  right: 100px !important; 
+  left: auto !important;
+}
 
 /* Desktop & Mobile Responsive */
 @media(max-width: 1050px) {  
