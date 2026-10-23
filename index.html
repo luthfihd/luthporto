@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luth's Art V30 HTML 5</title>
+<title>Luth's Art V30</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://images.weserv.nl" crossorigin>
@@ -213,7 +213,7 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 @media(max-width: 900px){ .bento-grid { grid-template-columns: repeat(2, 1fr); } .bento-span-3 { grid-column: span 2; } }
 @media(max-width: 600px){ .bento-grid { grid-template-columns: 1fr; } .bento-span-2, .bento-span-3 { grid-column: span 1; } }
 
-/* ── 6. NATIVE HTML5 DIALOG LIGHTBOX (AUTO SHRINK-WRAP) ── */
+/* ── 6. NATIVE HTML5 DIALOG LIGHTBOX (AUTO SHRINK-WRAP UNIVERSAL) ── */
 #modal {
   border: none;
   background: transparent;
@@ -232,11 +232,12 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 
 .modal-wrapper {  
   position: relative;  
-  width: 100%;
+  width: fit-content;
+  max-width: 100vw;
   display: flex; 
   align-items: center; 
   justify-content: center;  
-  padding: 20px;
+  margin: 0 auto;
 }
 
 #modal-content {  
@@ -250,7 +251,9 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
   display: flex; 
   flex-direction: column; 
   position: relative; 
-  overflow: hidden;  
+  overflow: hidden; 
+  box-sizing: content-box !important;
+  transition: width 0.15s ease-out;
 }
 
 /* Sharp (0px) Media Elements */
@@ -298,24 +301,36 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 /* Body Lightbox */
 .modal-body {   
   display: flex; flex-direction: column; overflow-y: auto; background: var(--bg-light);   
-  flex: 1; min-height: 0; width: 100%;
+  flex: 1; min-height: 0; width: 100%; padding: 0 !important;
 }
 
 #modal-media-container {  
-  display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;   
+  display: flex; 
+  overflow-x: auto; 
+  scroll-snap-type: x mandatory; 
+  scrollbar-width: none;   
   background: #FFFFFF;  
-  width: 100%; position: relative; flex-shrink: 0;
+  width: fit-content !important; 
+  max-width: 92vw !important;
+  position: relative; 
+  flex-shrink: 0;
 }
 #modal-media-container::-webkit-scrollbar { display: none; }
 #modal-media-container a { 
-  display: flex; align-items: center; justify-content: center; 
-  width: 100%; flex: 0 0 100% !important; scroll-snap-align: center; 
-  position: relative; text-decoration: none;
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  flex: 0 0 100% !important; 
+  width: 100% !important;
+  scroll-snap-align: start !important; 
+  scroll-snap-stop: always !important;
+  position: relative; 
+  text-decoration: none;
 }
 
 #modal-media-container img {   
   display: block;   
-  max-width: 100%;   
+  max-width: 92vw;   
   max-height: 72vh;  
   width: auto;  
   height: auto;  
@@ -361,7 +376,7 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 .modal-dot { width: 10px; height: 10px; background: #fff; border: 2px solid var(--text-dark); border-radius: 50% !important; transition: background 0.2s; }
 .modal-dot.active { background: var(--purple); box-shadow: 2px 2px 0 var(--text-dark); }
 
-/* Navigation Buttons */
+/* Navigation Buttons Inside Wrapper */
 .modal-nav-btn {  
   position: absolute; top: 50%; transform: translateY(-50%);  
   background: var(--purple); border: var(--brutal-border);  
@@ -531,14 +546,14 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
   <div class="footer-copy"> © 2026 Luthfi HD "Create to discover, design to inspire". All Right Reserved.</div>
 </footer>
 
-<!-- LIGHTBOX DIALOG ELEMENT (NATIVE AUTO SHRINK-WRAP) -->
+<!-- LIGHTBOX DIALOG ELEMENT (FIXED PREV/NEXT & DYNAMIC FIT) -->
 <dialog id="modal">  
   <div class="modal-wrapper">    
-    <button id="modal-prev" onclick="moveGallery(-1)" class="modal-nav-btn btn-prev">&#8249;</button>        
+    <button id="modal-prev" onclick="moveGallery(-1)" class="modal-nav-btn btn-prev" type="button">&#8249;</button>        
     <div id="modal-content">      
       <div class="modal-os-header">        
         <div class="modal-os-title" id="modal-tag">TITLE</div>        
-        <button onclick="closeModal()" class="modal-close-btn">X</button>      
+        <button onclick="closeModal()" class="modal-close-btn" type="button">X</button>      
       </div>            
       <div class="modal-body">        
         <div id="modal-media-container"></div>        
@@ -548,7 +563,7 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
         </div>      
       </div>    
     </div>        
-    <button id="modal-next" onclick="moveGallery(1)" class="modal-nav-btn btn-next">&#8250;</button>  
+    <button id="modal-next" onclick="moveGallery(1)" class="modal-nav-btn btn-next" type="button">&#8250;</button>  
   </div>
 </dialog>
 
@@ -737,6 +752,41 @@ function filterGallery(category, event) {
   });
 }
 
+// ── LOGIKA FIT MODAL AUTO-SHRINK WRAP ──
+function fitActiveMediaSlide() {  
+  const modalContent = document.getElementById('modal-content');  
+  const container = document.getElementById('modal-media-container');  
+  if (!modalContent || !container) return;
+
+  const imgs = container.querySelectorAll('img');  
+  if (imgs.length === 0) return;
+
+  const containerWidth = container.clientWidth || 1;
+  const idx = Math.min(
+    Math.max(Math.round(container.scrollLeft / containerWidth), 0),
+    imgs.length - 1
+  );
+
+  const dots = document.querySelectorAll('.modal-dot');
+  dots.forEach((dot, i) => dot.classList.toggle('active', i === idx));
+
+  const activeImg = imgs[idx] || imgs[0];
+  if (!activeImg || !activeImg.naturalWidth || activeImg.naturalHeight === 0) {
+    if (activeImg && !activeImg.__hasLoadListener) {
+      activeImg.__hasLoadListener = true;
+      activeImg.addEventListener('load', fitActiveMediaSlide, { once: true });
+    }
+    return;
+  }
+
+  const aspect = activeImg.naturalWidth / activeImg.naturalHeight;
+  const targetHeight = Math.min(window.innerHeight * 0.72, activeImg.naturalHeight);
+  const calculatedWidth = targetHeight * aspect;
+  const finalWidth = Math.round(Math.min(Math.max(calculatedWidth, 320), window.innerWidth * 0.92));
+
+  modalContent.style.setProperty('width', finalWidth + 'px', 'important');
+}
+
 function moveGallery(direction) {  
   const container = document.getElementById('modal-media-container');  
   const imgs = container ? container.querySelectorAll('img') : [];  
@@ -753,6 +803,8 @@ function moveGallery(direction) {
 
   if (targetChild) {    
     container.scrollTo({ left: targetChild.offsetLeft, behavior: 'smooth' });  
+    setTimeout(fitActiveMediaSlide, 150);
+    setTimeout(fitActiveMediaSlide, 350);
   }
 }
 
@@ -807,50 +859,54 @@ function openLightbox(item) {
     nextBtn.style.display = allLinks.length > 1 ? 'flex' : 'none';  
   }
 
-  // Open using HTML5 Native Dialog Top-Layer
+  // Tampilkan modal dialog native
   modal.showModal();
   document.body.style.overflow = 'hidden';
+
+  // Rekalkulasi presisi setelah terbuka
+  setTimeout(fitActiveMediaSlide, 50);
+  setTimeout(fitActiveMediaSlide, 250);
 }
 
 function closeModal() {   
   const modal = document.getElementById('modal');  
-  modal.close();     
-  document.body.style.overflow = '';     
-  document.getElementById('modal-media-container').innerHTML = '';   
+  if (modal.open) {
+    modal.close();     
+    document.body.style.overflow = '';     
+    document.getElementById('modal-media-container').innerHTML = '';   
+  }
 }
 
-// BINDING EVENT SCROLL FOR DOTS
+// BINDING EVENT SCROLL CAROUSEL
 const mediaContainer = document.getElementById('modal-media-container');
 if (mediaContainer) {
-  const handleScrollFinish = () => {
-    const idx = Math.min(
-      Math.max(Math.round(mediaContainer.scrollLeft / mediaContainer.clientWidth), 0),
-      mediaContainer.children.length - 1
-    );
-    const dots = document.querySelectorAll('.modal-dot');
-    dots.forEach((dot, i) => dot.classList.toggle('active', i === idx));
-  };
+  let scrollDebounce;
+  mediaContainer.addEventListener('scroll', () => {
+    clearTimeout(scrollDebounce);
+    scrollDebounce = setTimeout(fitActiveMediaSlide, 60);
+  }, { passive: true });
 
-  mediaContainer.addEventListener('scroll', handleScrollFinish, { passive: true });
+  if ('onscrollend' in window) {
+    mediaContainer.addEventListener('scrollend', fitActiveMediaSlide, { passive: true });
+  }
 }
 
-// BACKDROP & KEYBOARD CLOSE BINDINGS
+// BINDING EVENT BACKDROP CLICK (CEK HANYA BACKDROP DILUAR WRAPPER/BUTTON)
 const modalElement = document.getElementById('modal');
 modalElement.addEventListener('click', function(e) {  
-  const rect = modalElement.getBoundingClientRect();
-  const isInDialog = (rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
-    rect.left <= e.clientX && e.clientX <= rect.left + rect.width);
-  if (!isInDialog || e.target.classList.contains('modal-wrapper')) closeModal();
+  // Jika klik berasal murni dari backdrop #modal (bukan wrapper / tombol prev/next)
+  if (e.target === modalElement) {
+    closeModal();
+  }
 });
 
-modalElement.addEventListener('close', () => {
-  document.body.style.overflow = '';
-  document.getElementById('modal-media-container').innerHTML = '';
-});
+window.addEventListener('resize', fitActiveMediaSlide, { passive: true });
 
 document.addEventListener('keydown', e => {   
-  if(e.key==='ArrowRight') moveGallery(1);   
-  if(e.key==='ArrowLeft') moveGallery(-1); 
+  if (modalElement.open) {
+    if(e.key==='ArrowRight') moveGallery(1);   
+    if(e.key==='ArrowLeft') moveGallery(-1); 
+  }
 });
 
 loadPortfolio();
