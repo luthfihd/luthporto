@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luth's Art</title>
+<title>Luth's Art V30 HTML 5</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://images.weserv.nl" crossorigin>
@@ -15,7 +15,7 @@
 :root { 
   --magenta: #8a2889; 
   --purple: #8c52ff; 
-  --green-labs: #1E8449; /* Warna Tag Labs Hijau Lebih Gelap */
+  --green-labs: #1E8449;
   --bg-light: #FDFDFD; 
   --text-dark: #111111; 
   --brutal-border: 2px solid var(--text-dark); 
@@ -154,7 +154,7 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 .section-title { 
   font-size: 3rem; 
   font-weight: 900; 
-  text-transform: none; /* No Forced Uppercase */
+  text-transform: none; 
   margin-bottom: 30px; 
   text-align: center; 
   text-shadow: 1px 1px 0 #fff; 
@@ -213,34 +213,47 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 @media(max-width: 900px){ .bento-grid { grid-template-columns: repeat(2, 1fr); } .bento-span-3 { grid-column: span 2; } }
 @media(max-width: 600px){ .bento-grid { grid-template-columns: 1fr; } .bento-span-2, .bento-span-3 { grid-column: span 1; } }
 
-/* ── 6. LIGHTBOX ZCONCEPT V3 REVISED (SHRINK-WRAP DYNAMIC FIXED) ── */
-#modal {  
-  display: none; position: fixed; inset: 0; z-index: 99999;  
-  background: rgba(253, 253, 253, 0.95);  
-  align-items: center; justify-content: center;  
-  padding: 10px; opacity: 0; transition: opacity 0.2s ease;  
-  overflow-y: auto; touch-action: none;
+/* ── 6. NATIVE HTML5 DIALOG LIGHTBOX (AUTO SHRINK-WRAP) ── */
+#modal {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: auto;
+  max-width: 100vw;
+  max-height: 100vh;
+  outline: none;
+  overflow: visible;
+}
+
+#modal::backdrop {
+  background: rgba(253, 253, 253, 0.95);
+  backdrop-filter: blur(2px);
 }
 
 .modal-wrapper {  
   position: relative;  
-  width: 100%;  
-  max-width: 100vw !important;
-  display: flex; align-items: center; justify-content: center;  
-  margin: auto;
+  width: 100%;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;  
+  padding: 20px;
 }
 
 #modal-content {  
-  background: #fff; border: var(--brutal-border);   
+  background: #fff; 
+  border: var(--brutal-border);   
   box-shadow: 12px 12px 0 #111111;
-  width: 380px; max-height: 92vh;   
-  max-width: 96vw !important;
-  flex-shrink: 0 !important; /* MENCEGAH MODAL DIKEMPESKAN / DIRELEMBUNGKAN PARENT FLEX */
-  display: flex; flex-direction: column; position: relative; overflow: hidden;  
-  transition: width 0.15s ease-out;
+  width: fit-content !important;
+  min-width: 320px;
+  max-width: 92vw !important;
+  max-height: 92vh;   
+  display: flex; 
+  flex-direction: column; 
+  position: relative; 
+  overflow: hidden;  
 }
 
-/* PAKSA SHARP (0px) ATAS & BAWAH MEDIA LIGHTBOX */
+/* Sharp (0px) Media Elements */
 .modal-content,
 .modal-body,
 .modal-os-body,
@@ -256,7 +269,7 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 .modal-os-header {  
   background: #eee; border-bottom: var(--brutal-border); display: flex;  
   justify-content: space-between; align-items: center; padding: 10px 16px;  
-  flex-shrink: 0;
+  flex-shrink: 0; width: 100%;
 }
 .modal-os-title {   
   font-family: 'Space Mono', monospace; font-weight: 900; font-size: 16px;   
@@ -270,7 +283,7 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
   padding-right: 15px;
 }
 
-/* Tombol Close X High Contrast */
+/* Close Button */
 .modal-close-btn {   
   background: #FF4A4A; border: 2px solid var(--text-dark); width: 32px; height: 32px;   
   font-family: 'Space Mono', monospace; font-weight: 900; font-size: 16px; cursor: pointer; box-shadow: 3px 3px 0 var(--text-dark);   
@@ -285,7 +298,7 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 /* Body Lightbox */
 .modal-body {   
   display: flex; flex-direction: column; overflow-y: auto; background: var(--bg-light);   
-  flex: 1; min-height: 0;
+  flex: 1; min-height: 0; width: 100%;
 }
 
 #modal-media-container {  
@@ -300,18 +313,17 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
   position: relative; text-decoration: none;
 }
 
-/* GAMBAR LIGHTBOX FULLSCREEN & EXPANDED */
 #modal-media-container img {   
   display: block;   
   max-width: 100%;   
-  max-height: 75vh;  
+  max-height: 72vh;  
   width: auto;  
   height: auto;  
   object-fit: contain;   
   margin: 0 auto; 
 }
 
-/* Ikon Video Play Overlay */
+/* Video Play Overlay */
 .video-play-overlay {
   position: absolute;
   top: 50%;
@@ -349,7 +361,7 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 .modal-dot { width: 10px; height: 10px; background: #fff; border: 2px solid var(--text-dark); border-radius: 50% !important; transition: background 0.2s; }
 .modal-dot.active { background: var(--purple); box-shadow: 2px 2px 0 var(--text-dark); }
 
-/* Tombol Navigasi Next/Prev Desktop */
+/* Navigation Buttons */
 .modal-nav-btn {  
   position: absolute; top: 50%; transform: translateY(-50%);  
   background: var(--purple); border: var(--brutal-border);  
@@ -359,24 +371,17 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
   transition: all 0.1s;
 }
 .modal-nav-btn:active { box-shadow: 0 0 0; transform: translateY(-50%) translate(4px,4px); }
-.btn-prev { 
-  left: 100px !important; 
-  right: auto !important;
-}
-.btn-next { 
-  right: 100px !important; 
-  left: auto !important;
-}
+.btn-prev { left: -65px !important; right: auto !important; }
+.btn-next { right: -65px !important; left: auto !important; }
 
-/* Desktop & Mobile Responsive */
 @media(max-width: 1050px) {  
-  .btn-prev { left: -20px; width: 44px; height: 44px; font-size: 20px;}  
-  .btn-next { right: -20px; width: 44px; height: 44px; font-size: 20px;}
+  .btn-prev { left: 10px !important; width: 44px; height: 44px; font-size: 20px; }  
+  .btn-next { right: 10px !important; width: 44px; height: 44px; font-size: 20px; }
 }
 @media(max-width: 768px) {  
-  .modal-wrapper { max-width: 95vw; }  
-  .btn-prev { display:none !important;}  
-  .btn-next { display:none !important;}  
+  .modal-wrapper { padding: 10px; }  
+  .btn-prev { display:none !important; }  
+  .btn-next { display:none !important; }  
   .modal-info-box { padding: 16px; }  
   #modal-media-container img { max-height: 65vh; }
   .modal-os-title { font-size: 12px !important; line-height: 1.3 !important; }
@@ -526,8 +531,8 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
   <div class="footer-copy"> © 2026 Luthfi HD "Create to discover, design to inspire". All Right Reserved.</div>
 </footer>
 
-<!-- LIGHTBOX ZCONCEPT REVISED -->
-<div id="modal">  
+<!-- LIGHTBOX DIALOG ELEMENT (NATIVE AUTO SHRINK-WRAP) -->
+<dialog id="modal">  
   <div class="modal-wrapper">    
     <button id="modal-prev" onclick="moveGallery(-1)" class="modal-nav-btn btn-prev">&#8249;</button>        
     <div id="modal-content">      
@@ -545,7 +550,7 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
     </div>        
     <button id="modal-next" onclick="moveGallery(1)" class="modal-nav-btn btn-next">&#8250;</button>  
   </div>
-</div>
+</dialog>
 
 <script>
 // WHO IS ME FIELD Function
@@ -643,7 +648,7 @@ function toggleContact() {
   lpText.textContent = liquidPill.classList.contains('active') ? 'CLOSE' : 'HIT ME UP!';
 }
 
-// DATA FETCH & GRID LOGIC (PERFECTED ANTI-CACHE + PURE V27)
+// DATA FETCH & GRID LOGIC
 const DATA_URL = 'data.json';
 const IMAGES_BASE = 'https://raw.githubusercontent.com/luthfihd/luthporto/main/images/';
 
@@ -691,7 +696,6 @@ function filterGallery(category, event) {
   const grid = document.getElementById('galleryGrid');  
   grid.innerHTML = '';    
   
-  // Overview: Kunci ke featured===true (Sesuai order Admin)
   let filteredData = category === 'Overview'     
     ? portfolioData.filter(p => p.featured === true || p.featured === "true")     
     : portfolioData.filter(p => p.category === category);
@@ -733,43 +737,6 @@ function filterGallery(category, event) {
   });
 }
 
-// ── LOGIKA DYNAMIC SHRINK-WRAP LANDSCAPE LIGHTBOX (FIXED ACCURATE) ──
-function fitModalAbsolute() {  
-  const modalContent = document.getElementById('modal-content');  
-  const container = document.getElementById('modal-media-container');  
-  if (!modalContent || !container) return;
-
-  const imgs = container.querySelectorAll('img');  
-  if (imgs.length === 0) return;
-
-  const containerWidth = container.clientWidth || 1;
-  const currentIndex = Math.min(
-    Math.max(Math.round(container.scrollLeft / containerWidth), 0),
-    imgs.length - 1
-  );
-  const activeImg = imgs[currentIndex] || imgs[0];
-
-  // Pasang listener 'load' jika gambar belum selesai memuat sempurna dari Weserv/Drive
-  if (!activeImg || !activeImg.naturalWidth || activeImg.naturalHeight === 0) {
-    if (activeImg && !activeImg.__hasLoadListener) {
-      activeImg.__hasLoadListener = true;
-      activeImg.addEventListener('load', fitModalAbsolute, { once: true });
-    }
-    return;
-  }
-
-  // Hitung rasio fisik asli gambar
-  const aspect = activeImg.naturalWidth / activeImg.naturalHeight;
-  const maxVhHeight = window.innerHeight * 0.72;
-  
-  let targetWidth = maxVhHeight * aspect;
-  const maxAllowedWidth = window.innerWidth * 0.96;
-  const finalWidth = Math.round(Math.min(Math.max(targetWidth, 380), maxAllowedWidth));
-
-  // Terapkan ukuran dengan prioritas 'important'
-  modalContent.style.setProperty('width', finalWidth + 'px', 'important');
-}
-
 function moveGallery(direction) {  
   const container = document.getElementById('modal-media-container');  
   const imgs = container ? container.querySelectorAll('img') : [];  
@@ -786,7 +753,6 @@ function moveGallery(direction) {
 
   if (targetChild) {    
     container.scrollTo({ left: targetChild.offsetLeft, behavior: 'smooth' });  
-    setTimeout(fitModalAbsolute, 60);
   }
 }
 
@@ -797,9 +763,6 @@ function openLightbox(item) {
 
   container.innerHTML = '';  
   if(dotsContainer) dotsContainer.innerHTML = '';
-
-  modal.style.display = 'flex';  
-  setTimeout(() => modal.style.opacity = '1', 10);
 
   document.getElementById('modal-tag').textContent = item.title.toUpperCase();  
   document.getElementById('modal-desc').innerHTML = item.desc || item.category;
@@ -844,60 +807,48 @@ function openLightbox(item) {
     nextBtn.style.display = allLinks.length > 1 ? 'flex' : 'none';  
   }
 
-  // EVENT LOAD GAMBAR: UKUR SECARA ASIKRINOK DENGAN RETRY TIMEOUT AMAN
-  const modalImgs = container.querySelectorAll('img');
-  modalImgs.forEach(img => {
-    img.addEventListener('load', fitModalAbsolute);
-    if (img.complete) fitModalAbsolute();
-  });
-  
-  setTimeout(fitModalAbsolute, 50);
-  setTimeout(fitModalAbsolute, 200);
-
+  // Open using HTML5 Native Dialog Top-Layer
+  modal.showModal();
   document.body.style.overflow = 'hidden';
 }
 
 function closeModal() {   
   const modal = document.getElementById('modal');  
-  modal.style.opacity = '0';  
-  setTimeout(() => {    
-    modal.style.display = 'none';     
-    document.body.style.overflow = '';     
-    document.getElementById('modal-media-container').innerHTML = '';   
-  }, 200);
+  modal.close();     
+  document.body.style.overflow = '';     
+  document.getElementById('modal-media-container').innerHTML = '';   
 }
 
-// BINDING EVENT SCROLL UNTUK ACCURATE FIT & DOTS
+// BINDING EVENT SCROLL FOR DOTS
 const mediaContainer = document.getElementById('modal-media-container');
 if (mediaContainer) {
-  let swipeTimer;
   const handleScrollFinish = () => {
-    clearTimeout(swipeTimer);
-    
     const idx = Math.min(
       Math.max(Math.round(mediaContainer.scrollLeft / mediaContainer.clientWidth), 0),
       mediaContainer.children.length - 1
     );
     const dots = document.querySelectorAll('.modal-dot');
     dots.forEach((dot, i) => dot.classList.toggle('active', i === idx));
-
-    swipeTimer = setTimeout(fitModalAbsolute, 50);
   };
 
   mediaContainer.addEventListener('scroll', handleScrollFinish, { passive: true });
-  if ('onscrollend' in window) {
-    mediaContainer.addEventListener('scrollend', fitModalAbsolute, { passive: true });
-  }
 }
 
-// BINDING EVENT RESIZE WINDOW AGAR MODAL KEBAL SAAT DEVTOOLS DITUTUP
-window.addEventListener('resize', fitModalAbsolute, { passive: true });
-
-document.getElementById('modal').addEventListener('click', function(e) {  
-  if (e.target === this || e.target.classList.contains('modal-wrapper')) closeModal();
+// BACKDROP & KEYBOARD CLOSE BINDINGS
+const modalElement = document.getElementById('modal');
+modalElement.addEventListener('click', function(e) {  
+  const rect = modalElement.getBoundingClientRect();
+  const isInDialog = (rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
+    rect.left <= e.clientX && e.clientX <= rect.left + rect.width);
+  if (!isInDialog || e.target.classList.contains('modal-wrapper')) closeModal();
 });
+
+modalElement.addEventListener('close', () => {
+  document.body.style.overflow = '';
+  document.getElementById('modal-media-container').innerHTML = '';
+});
+
 document.addEventListener('keydown', e => {   
-  if(e.key==='Escape') closeModal();   
   if(e.key==='ArrowRight') moveGallery(1);   
   if(e.key==='ArrowLeft') moveGallery(-1); 
 });
