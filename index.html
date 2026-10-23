@@ -714,21 +714,22 @@ function getDriveUrl(url, size) {
   return url;
 }
 
+// 1. PEMUAT DATA JSON (DENGAN TIMESTAMP ANTI-CACHE)
 async function loadPortfolioData() {
   try {
-    // Tambah timestamp Date.now() biar file data.json gak tertahan cache browser/GitHub
     const res = await fetch(`data.json?t=${Date.now()}`);
-    if (!res.ok) throw new Error("Gagal mengambil data.json");
+    if (!res.ok) throw new Error("Gagal memuat data.json");
     
     portfolioData = await res.json();
     
-    // Langsung render kategori awal (Overview)
+    // Tampilkan awal kategori Overview
     filterGallery('Overview');
   } catch (err) {
-    console.error("Error loading data:", err);
+    console.error("Error loading portfolio data:", err);
   }
 }
 
+// 2. FUNGSI FILTER GALLERY (SINKRON DENGAN ADMIN & KUNCI URUTAN)
 function filterGallery(category, event) {
   if (event && event.target) {
     document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
@@ -741,8 +742,8 @@ function filterGallery(category, event) {
 
   let filteredData = [];
 
+  // LOGIKA OVERVIEW: Hanya ambil featured === true (TANPA Math.random)
   if (category === 'Overview' || category === 'overview') {
-    // AMBIL HANYA KONTEN FEATURED & TETAPKAN URUTAN SESUAI DARI JSON/ADMIN
     filteredData = portfolioData.filter(item => item.featured === true || item.featured === "true");
   } else if (category === 'All' || category === 'all') {
     filteredData = portfolioData;
@@ -755,24 +756,26 @@ function filterGallery(category, event) {
     return;
   }
 
-  // RENDER SESUAI URUTAN ASLI ARRAY
+  // RENDER MENGGUNAKAN ELEMEN & CLASS CSS ASLI V27
   filteredData.forEach(item => {
-    // Handling jika ada beberapa link gambar/video yang dipisah koma
+    // Ambil media pertama dari string koma
     const rawSrc = item.src || item.image || '';
     const mediaArray = rawSrc.split(',').map(s => s.trim()).filter(Boolean);
     const firstMedia = mediaArray[0] || '';
 
-    // Generate Thumbnail
+    // Penanganan Link Thumbnail (Google Drive / Direct)
     let thumbUrl = '';
     if (firstMedia.includes('/file/d/')) {
       const fileId = firstMedia.split('/file/d/')[1]?.split('/')[0] || '';
       thumbUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w600`;
     } else {
-      thumbUrl = firstMedia.startsWith('http') ? firstMedia : `images/${firstMedia}`;
+      let base = typeof IMAGES_BASE !== 'undefined' ? IMAGES_BASE : 'images/';
+      thumbUrl = firstMedia.startsWith('http') ? firstMedia : base + firstMedia.replace('#video', '');
     }
 
+    // Tetap menggunakan struktur Card asli kamu
     const card = document.createElement('div');
-    card.className = 'gallery-card'; // Sesuaikan class card V27 kamu
+    card.className = 'gallery-card'; 
     card.onclick = () => openLightbox(item);
 
     card.innerHTML = `
@@ -789,74 +792,13 @@ function filterGallery(category, event) {
   });
 }
 
-// ── LOGIKA PRESISI DYNAMIC SHRINK-WRAP LIGHTBOX ──
-function fitModalAbsolute() {  
-  const modalContent = document.getElementById('modal-content');  
-  const container = document.getElementById('modal-media-container');  
-  if (!modalContent || !container) return;
-
-  const imgs = container.querySelectorAll('img');  
-  if (imgs.length === 0) return;
-
-  // Kunci wrapper <a> slider 1 per slide
-  container.querySelectorAll('a').forEach(a => {
-    a.style.setProperty('width', '100%', 'important');
-    a.style.setProperty('flex', '0 0 100%', 'important');
-  });
-
-  // Hitung gambar aktif berdasar snap rasio scroll presisi
-  const containerWidth = container.clientWidth || 1;
-  const currentIndex = Math.min(
-    Math.max(Math.round(container.scrollLeft / containerWidth), 0),
-    imgs.length - 1
-  );
-  const activeImg = imgs[currentIndex] || imgs[0];
-
-  if (!activeImg || !activeImg.naturalWidth) return;
-
-  const aspect = activeImg.naturalWidth / activeImg.naturalHeight;
-  const maxVhHeight = window.innerHeight * 0.72; // Max tinggi 72vh di layar
-  
-  let exactWidth = maxVhHeight * aspect;
-
-  // Kunci batas aman
-  if (exactWidth > window.innerWidth * 0.92) exactWidth = window.innerWidth * 0.92;
-  const finalWidth = Math.max(exactWidth, 360);
-
-  // Kunci lebar modal
-  modalContent.style.setProperty('width', finalWidth + 'px', 'important');
-  modalContent.style.setProperty('max-width', '92vw', 'important');
-}
-
-function moveGallery(direction) {  
-  const container = document.getElementById('modal-media-container');  
-  const imgs = container ? container.querySelectorAll('img') : [];  
-  if (imgs.length <= 1) return;
-
-  const containerWidth = container.clientWidth || 1;
-  const currentIndex = Math.min(
-    Math.max(Math.round(container.scrollLeft / containerWidth), 0),
-    imgs.length - 1
-  );
-
-  const nextIndex = (currentIndex + direction + imgs.length) % imgs.length;  
-  const targetChild = container.children[nextIndex];
-
-  if (targetChild) {    
-    const nextImg = targetChild.querySelector('img') || targetChild;    
-    if (nextImg && nextImg.naturalWidth) {      
-      const aspect = nextImg.naturalWidth / nextImg.naturalHeight;
-      const exactWidth = Math.min(Math.max((window.innerHeight * 0.72) * aspect, 360), window.innerWidth * 0.92);
-      document.getElementById('modal-content').style.setProperty('width', exactWidth + 'px', 'important');
-    }    
-    container.scrollTo({ left: targetChild.offsetLeft, behavior: 'smooth' });  
-  }
-}
-
+// 3. FUNGSI LIGHTBOX (SINKRON JUMLAH MEDIA DARI ADMIN)
 function openLightbox(item) {  
   const modal = document.getElementById('modal');  
   const container = document.getElementById('modal-media-container');  
   const dotsContainer = document.getElementById('modal-dots');
+
+  if (!modal || !container) return;
 
   container.innerHTML = '';  
   if (dotsContainer) dotsContainer.innerHTML = '';
@@ -864,17 +806,19 @@ function openLightbox(item) {
   modal.style.display = 'flex';  
   setTimeout(() => modal.style.opacity = '1', 10);
 
-  document.getElementById('modal-tag').textContent = item.title ? item.title.toUpperCase() : '';  
-  document.getElementById('modal-desc').innerHTML = item.desc || item.category || '';
+  const modalTag = document.getElementById('modal-tag');
+  const modalDesc = document.getElementById('modal-desc');
+  if (modalTag) modalTag.textContent = item.title ? item.title.toUpperCase() : '';  
+  if (modalDesc) modalDesc.innerHTML = item.desc || item.category || '';
 
-  // 1. SINKRONISASI LINK TERBARU (Pecah string koma & bersihkan spasi)
+  // Pecah string koma media terbaru
   const rawSrc = item.image || item.src || "";
-  const allLinks = rawSrc.split(',').map(l => l.trim()).filter(l => l !== "");
+  const allLinks = rawSrc.split(',').map(l => l.trim()).filter(Boolean);
 
   allLinks.forEach((link, index) => {    
     const isVideo = link.includes('#video');
-    let rawSrc = link.replace('#video', '');    
-    let fullSrc = rawSrc.startsWith('http') ? rawSrc : (typeof IMAGES_BASE !== 'undefined' ? IMAGES_BASE : '') + rawSrc;    
+    let rawMedia = link.replace('#video', '');    
+    let fullSrc = rawMedia.startsWith('http') ? rawMedia : (typeof IMAGES_BASE !== 'undefined' ? IMAGES_BASE : 'images/') + rawMedia;    
     let displaySrc = fullSrc.includes('drive.google.com') ? getDriveUrl(fullSrc, 1200) : fullSrc;
 
     const wrapper = document.createElement('a');    
@@ -895,11 +839,10 @@ function openLightbox(item) {
     wrapper.innerHTML = innerHtml;
     container.appendChild(wrapper);
 
-    // 2. DOTS INDICATOR (Otomatis menyesuaikan jumlah link terbaru)
+    // Titik Indikator Dots
     if (allLinks.length > 1 && dotsContainer) {      
       const dot = document.createElement('div');      
       dot.className = `modal-dot ${index === 0 ? 'active' : ''}`;
-      // Klik dot untuk scroll langsung ke gambar terkait
       dot.onclick = () => {
         wrapper.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
       };
@@ -907,7 +850,7 @@ function openLightbox(item) {
     }  
   });
 
-  // 3. SEMBUNYIKAN/TAMPILKAN TOMBOL PREV & NEXT & DOTS CONTAINER
+  // Sembunyikan navigasi jika media cuma 1
   const prevBtn = document.getElementById('modal-prev');  
   const nextBtn = document.getElementById('modal-next');  
   if (prevBtn && nextBtn) {    
@@ -918,7 +861,7 @@ function openLightbox(item) {
     dotsContainer.style.display = allLinks.length > 1 ? 'flex' : 'none';
   }
 
-  // 4. AUTO-UPDATE ACTIVE DOT SAAT SLIDE/SCROLL
+  // Update active dot saat scroll lightbox
   container.onscroll = () => {
     if (allLinks.length <= 1 || !dotsContainer) return;
     const scrollPosition = container.scrollLeft;
@@ -931,16 +874,17 @@ function openLightbox(item) {
     });
   };
 
-  // Pre-trigger penyesuaian instan
-  setTimeout(fitModalAbsolute, 50);
-  setTimeout(fitModalAbsolute, 150);
+  // Penyesuaian ukuran instan
+  if (typeof fitModalAbsolute === 'function') {
+    setTimeout(fitModalAbsolute, 50);
+    setTimeout(fitModalAbsolute, 150);
+    document.querySelectorAll('#modal-media-container img').forEach(img => {    
+      img.addEventListener('load', fitModalAbsolute);    
+      if (img.complete) fitModalAbsolute();  
+    });
+  }
 
-  document.querySelectorAll('#modal-media-container img').forEach(img => {    
-    img.addEventListener('load', fitModalAbsolute);    
-    if (img.complete) fitModalAbsolute();  
-  });
-
-  document.body.style.overflow = 'hidden'; /* Lock Background Scroll */
+  document.body.style.overflow = 'hidden';
 }
 
 function closeModal() {   
