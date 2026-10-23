@@ -734,11 +734,17 @@ function filterGallery(category, event) {
 function fitModalAbsolute() {  
   const modalContent = document.getElementById('modal-content');  
   const container = document.getElementById('modal-media-container');  
-  if (!modalContent || !container) return;
+  
+  if (!modalContent || !container) {
+    console.error("❌ [LIGHTBOX ERROR] Elemen #modal-content atau #modal-media-container TIDAK DITEMUKAN!");
+    return;
+  }
 
-  // Ambil gambar yang sedang aktif/terlihat
   const imgs = container.querySelectorAll('img');  
-  if (imgs.length === 0) return;
+  if (imgs.length === 0) {
+    console.warn("⚠️ [LIGHTBOX WARN] Tidak ada elemen <img> di dalam container.");
+    return;
+  }
 
   const containerWidth = container.clientWidth || 1;
   const currentIndex = Math.min(
@@ -747,22 +753,49 @@ function fitModalAbsolute() {
   );
   const activeImg = imgs[currentIndex] || imgs[0];
 
-  // KUNCI UTAMA: Jika naturalWidth masih 0 (belum selesai load), JANGAN paksa ubah width ke 380px
-  if (!activeImg || !activeImg.naturalWidth || activeImg.naturalHeight === 0) {
+  // CHECKPOINT 1: Validasi Gambar
+  if (!activeImg) {
+    console.error("❌ [LIGHTBOX ERROR] activeImg tidak terdefinisi!");
     return;
   }
 
-  // Hitung rasio asli gambar
-  const aspect = activeImg.naturalWidth / activeImg.naturalHeight;
-  const maxVhHeight = window.innerHeight * 0.72; // Patokan tinggi 72vh
+  if (!activeImg.naturalWidth || activeImg.naturalWidth === 0) {
+    console.error("❌ [LIGHTBOX ERROR] Gambar BELUM SESELESAI LOAD / naturalWidth = 0! Batal menghitung.");
+    return;
+  }
+
+  // CHECKPOINT 2: Kalkulasi
+  const naturalW = activeImg.naturalWidth;
+  const naturalH = activeImg.naturalHeight;
+  const aspect = naturalW / naturalH;
+  const maxVhHeight = window.innerHeight * 0.72;
   
-  // Lebar ideal berdasarkan rasio fisik
   let calculatedWidth = maxVhHeight * aspect;
-  const maxAllowedWidth = window.innerWidth * 0.92; // Maksimal 92vw
-  
-  // Terapkan lebar presisi (bebas meregang dari 380px sampai 92vw)
-  const finalWidth = Math.min(Math.max(calculatedWidth, 380), maxAllowedWidth);
-  modalContent.style.setProperty('width', Math.round(finalWidth) + 'px', 'important');
+  const maxAllowedWidth = window.innerWidth * 0.92;
+  const finalWidth = Math.round(Math.min(Math.max(calculatedWidth, 380), maxAllowedWidth));
+
+  // TERAPKAN UKURAN
+  modalContent.style.setProperty('width', finalWidth + 'px', 'important');
+
+  // CHECKPOINT 3: Verifikasi Real-Time DOM
+  const realDOMWidth = parseFloat(window.getComputedStyle(modalContent).width);
+
+  console.group("🔍 [DEBUG FIT MODAL]");
+  console.table({
+    "1. File Image": activeImg.src.split('/').pop(),
+    "2. Natural Dim": `${naturalW}x${naturalH}`,
+    "3. Aspect Ratio": aspect.toFixed(2),
+    "4. Calculated Width": `${Math.round(calculatedWidth)}px`,
+    "5. Target Final Width": `${finalWidth}px`,
+    "6. Actual DOM Width": `${Math.round(realDOMWidth)}px`
+  });
+
+  if (Math.abs(realDOMWidth - finalWidth) > 5) {
+    console.error(`❌ [LIGHTBOX FAILURE] Beda Ukuran! JS minta ${finalWidth}px tapi CSS memaksa DOM jadi ${Math.round(realDOMWidth)}px!`);
+  } else {
+    console.log(`✅ [LIGHTBOX SUCCESS] Modal berhasil di-set ke ${finalWidth}px!`);
+  }
+  console.groupEnd();
 }
 
 function moveGallery(direction) {  
