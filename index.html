@@ -737,6 +737,7 @@ function filterGallery(category, event) {
   });
 }
 
+// ── LOGIKA PRESISI DYNAMIC SHRINK-WRAP LIGHTBOX (MELUK LANDSCAPE & PORTRAIT) ──
 function fitModalAbsolute() {  
   const modalContent = document.getElementById('modal-content');  
   const container = document.getElementById('modal-media-container');  
@@ -745,11 +746,13 @@ function fitModalAbsolute() {
   const imgs = container.querySelectorAll('img');  
   if (imgs.length === 0) return;
 
+  // Ensure 100% width slide wrapper
   container.querySelectorAll('a').forEach(a => {
     a.style.setProperty('width', '100%', 'important');
     a.style.setProperty('flex', '0 0 100%', 'important');
   });
 
+  // Hitung gambar aktif saat ini
   const containerWidth = container.clientWidth || 1;
   const currentIndex = Math.min(
     Math.max(Math.round(container.scrollLeft / containerWidth), 0),
@@ -759,15 +762,19 @@ function fitModalAbsolute() {
 
   if (!activeImg || !activeImg.naturalWidth) return;
 
+  // Rasio Asli Gambar
   const aspect = activeImg.naturalWidth / activeImg.naturalHeight;
-  const maxVhHeight = window.innerHeight * 0.72;
+  const maxVhHeight = window.innerHeight * 0.72; // Tinggi max gambar di modal (72vh)
   
-  let exactWidth = maxVhHeight * aspect;
+  // Hitung lebar ideal berdasarkan rasio asli
+  let calculatedWidth = maxVhHeight * aspect;
 
-  if (exactWidth > window.innerWidth * 0.92) exactWidth = window.innerWidth * 0.92;
-  const finalWidth = Math.max(exactWidth, 360);
+  // Batas aman layar browser (maksimal 92% lebar viewport)
+  const maxAllowedWidth = window.innerWidth * 0.92;
+  const finalWidth = Math.min(calculatedWidth, maxAllowedWidth);
 
-  modalContent.style.setProperty('width', finalWidth + 'px', 'important');
+  // Set lebar modal mengikuti bentuk fisik gambar (Landscape / Portrait)
+  modalContent.style.setProperty('width', Math.round(finalWidth) + 'px', 'important');
   modalContent.style.setProperty('max-width', '92vw', 'important');
 }
 
@@ -789,8 +796,8 @@ function moveGallery(direction) {
     const nextImg = targetChild.querySelector('img') || targetChild;    
     if (nextImg && nextImg.naturalWidth) {      
       const aspect = nextImg.naturalWidth / nextImg.naturalHeight;
-      const exactWidth = Math.min(Math.max((window.innerHeight * 0.72) * aspect, 360), window.innerWidth * 0.92);
-      document.getElementById('modal-content').style.setProperty('width', exactWidth + 'px', 'important');
+      const exactWidth = Math.min((window.innerHeight * 0.72) * aspect, window.innerWidth * 0.92);
+      document.getElementById('modal-content').style.setProperty('width', Math.round(exactWidth) + 'px', 'important');
     }    
     container.scrollTo({ left: targetChild.offsetLeft, behavior: 'smooth' });  
   }
