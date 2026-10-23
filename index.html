@@ -736,33 +736,22 @@ function fitModalAbsolute() {
   const container = document.getElementById('modal-media-container');  
   if (!modalContent || !container) return;
 
-  const imgs = container.querySelectorAll('img');  
-  if (imgs.length === 0) return;
+  const activeImg = container.querySelector('img');  
+  if (!activeImg || !activeImg.naturalWidth || activeImg.naturalHeight === 0) return;
 
-  container.querySelectorAll('a').forEach(a => {
-    a.style.setProperty('width', '100%', 'important');
-    a.style.setProperty('flex', '0 0 100%', 'important');
-  });
-
-  const containerWidth = container.clientWidth || 1;
-  const currentIndex = Math.min(
-    Math.max(Math.round(container.scrollLeft / containerWidth), 0),
-    imgs.length - 1
-  );
-  const activeImg = imgs[currentIndex] || imgs[0];
-
-  // Pastikan membaca aspek rasio fisik asli gambar saat loaded
-  if (activeImg && activeImg.naturalWidth && activeImg.naturalHeight) {
-    const aspect = activeImg.naturalWidth / activeImg.naturalHeight;
-    const maxVhHeight = window.innerHeight * 0.72; // Max tinggi gambar di layar (72vh)
-    
-    let calculatedWidth = maxVhHeight * aspect;
-    const maxAllowedWidth = window.innerWidth * 0.92; // Batas aman lebar layar (92vw)
-    
-    // Meluk gambar landscape/banner dengan presisi
-    const finalWidth = Math.min(calculatedWidth, maxAllowedWidth);
-    modalContent.style.setProperty('width', Math.round(finalWidth) + 'px', 'important');
-  }
+  // 1. Hitung aspect ratio fisik gambar asli (landscape vs portrait)
+  const aspect = activeImg.naturalWidth / activeImg.naturalHeight;
+  
+  // 2. Patokan tinggi gambar maksimal di layar (72vh)
+  const maxVhHeight = window.innerHeight * 0.72;
+  
+  // 3. Hitung lebar presisi meluk (shrink-wrap)
+  const calculatedWidth = maxVhHeight * aspect;
+  const maxAllowedWidth = window.innerWidth * 0.92; // Batas aman 92vw
+  
+  // 4. Paksa nilai width ke inline style dengan priority important agar Flexbox tidak meregang
+  const finalWidth = Math.min(Math.max(calculatedWidth, 380), maxAllowedWidth);
+  modalContent.style.setProperty('width', Math.round(finalWidth) + 'px', 'important');
 }
 
 function moveGallery(direction) {  
