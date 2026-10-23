@@ -714,35 +714,78 @@ function getDriveUrl(url, size) {
   return url;
 }
 
-// 1. PEMUAT DATA JSON (DENGAN TIMESTAMP ANTI-CACHE)
+// 0. MODUL PENANDA ERROR (DEBUG OVERLAY)
+function showErrorBadge(message) {
+  let errBox = document.getElementById('debug-error-box');
+  if (!errBox) {
+    errBox = document.createElement('div');
+    errBox.id = 'debug-error-box';
+    errBox.style.cssText = `
+      position: fixed; top: 15px; right: 15px; z-index: 99999;
+      background: #ff0055; color: #fff; font-family: monospace;
+      padding: 12px 18px; border: 3px solid #000; box-shadow: 4px 4px 0px #000;
+      font-weight: bold; max-width: 350px; border-radius: 6px; font-size: 13px;
+    `;
+    document.body.appendChild(errBox);
+  }
+  errBox.innerHTML = `⚠️ <b>V27 DEBUG ERROR:</b><br>${message}<br><small style="opacity:0.8;display:block;margin-top:5px;">(Tekan F12 untuk detail console)</small>`;
+}
+
+function clearErrorBadge() {
+  const errBox = document.getElementById('debug-error-box');
+  if (errBox) errBox.remove();
+}
+
+// 1. PEMUAT DATA JSON (WITH ERROR CATCHER)
 async function loadPortfolioData() {
   try {
     const res = await fetch(`data.json?t=${Date.now()}`);
-    if (!res.ok) throw new Error("Gagal memuat data.json");
+    if (!res.ok) throw new Error(`HTTP Error Status: ${res.status}`);
     
     portfolioData = await res.json();
     
-    // Tampilkan awal kategori Overview
+    if (!Array.isArray(portfolioData)) {
+      throw new Error("Format data.json bukan Array!");
+    }
+
+    clearErrorBadge(); // Hapus badge jika berhasil
     filterGallery('Overview');
   } catch (err) {
     console.error("Error loading portfolio data:", err);
+    showErrorBadge(`Gagal muat data.json: ${err.message}`);
   }
 }
 
-// 2. FUNGSI FILTER GALLERY (SINKRON PRESISI DENGAN CSS V27)
+// 2. FUNGSI FILTER GALLERY (WITH LAYOUT & DATA CHECK)
 function filterGallery(category, event) {
+  // Pengecekan Tombol Active
   if (event && event.target) {
-    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
+    const buttons = document.querySelectorAll('.cat-btn, .filter-btn, .nav-btn');
+    if (buttons.length === 0) {
+      showErrorBadge("Tombol kategori (.cat-btn/.filter-btn) tidak ditemukan di HTML!");
+    } else {
+      buttons.forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+    }
   }
 
-  const grid = document.getElementById('galleryGrid');
-  if (!grid) return;
+  // Pengecekan Container Grid
+  const grid = document.getElementById('galleryGrid') || document.querySelector('.gallery-grid') || document.querySelector('.grid');
+  if (!grid) {
+    showErrorBadge("Elemen Grid (#galleryGrid atau .gallery-grid) TIDAK DITEMUKAN!");
+    return;
+  }
   grid.innerHTML = '';
+
+  // Pengecekan Data Portfolio
+  if (typeof portfolioData === 'undefined' || !Array.isArray(portfolioData)) {
+    showErrorBadge("Variabel 'portfolioData' kosong atau belum dimuat!");
+    return;
+  }
 
   let filteredData = [];
 
-  // LOGIKA OVERVIEW: Ambil yang featured === true tanpa di-acak (Math.random)
+  // Logika Filter Overview
   if (category === 'Overview' || category === 'overview') {
     filteredData = portfolioData.filter(item => item.featured === true || item.featured === "true");
   } else if (category === 'All' || category === 'all') {
@@ -752,18 +795,21 @@ function filterGallery(category, event) {
   }
 
   if (filteredData.length === 0) {
-    grid.innerHTML = `<div class="empty-msg" style="grid-column: 1/-1; text-align: center; padding: 40px; font-weight: 700;">Belum ada karya di kategori ini.</div>`;
+    grid.innerHTML = `<div class="empty-msg" style="grid-column: 1/-1; text-align: center; padding: 40px; font-weight: 700;">Belum ada karya di kategori ${category}.</div>`;
     return;
   }
 
-  // RENDER MENGGUNAKAN ELEMEN & CLASS CSS ASLI NEO-BRUTALISM V27
-  filteredData.forEach(item => {
-    // Ambil media pertama dari string koma
+  // Render Card + Pengecekan Media
+  filteredData.forEach((item, index) => {
     const rawSrc = item.src || item.image || '';
     const mediaArray = rawSrc.split(',').map(s => s.trim()).filter(Boolean);
+    
+    if (mediaArray.length === 0) {
+      console.warn(`[Warning] Item index ${index} (${item.title}) tidak punya link gambar/media.`);
+    }
+
     const firstMedia = mediaArray[0] || '';
 
-    // Penanganan Link Thumbnail (Google Drive / Direct)
     let thumbUrl = '';
     if (firstMedia.includes('/file/d/')) {
       const fileId = firstMedia.split('/file/d/')[1]?.split('/')[0] || '';
@@ -773,18 +819,23 @@ function filterGallery(category, event) {
       thumbUrl = firstMedia.startsWith('http') ? firstMedia : base + firstMedia.replace('#video', '');
     }
 
-    // STRUKTUR CARD ASLI V27
     const card = document.createElement('div');
-    card.className = 'gallery-item'; // Menggunakan class asli 'gallery-item'
-    card.onclick = () => openLightbox(item);
+    card.className = 'gallery-item';
+    card.onclick = () => {
+      if (typeof openLightbox === 'function') {
+        openLightbox(item);
+      } else {
+        showErrorBadge("Fungsi openLightbox() belum dideklarasikan!");
+      }
+    };
 
     card.innerHTML = `
       <div class="gallery-thumb-wrap">
         <img src="${thumbUrl}" alt="${item.title || 'Artwork'}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=Preview+Error'">
       </div>
       <div class="gallery-info">
-        <div class="gallery-title">${item.title || ''}</div>
-        <div class="gallery-cat-tag">${item.category || ''}</div>
+        <div class="gallery-title">${item.title || 'Untitled'}</div>
+        <div class="gallery-cat-tag">${item.category || 'Uncategorized'}</div>
       </div>
     `;
 
