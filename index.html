@@ -230,10 +230,16 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 }
 
 #modal-content {  
-  background: #fff; border: var(--brutal-border);   
+  background: #fff; 
+  border: var(--brutal-border);   
   box-shadow: 12px 12px 0 #111111;
-  width: 380px; max-height: 92vh;   
-  display: flex; flex-direction: column; position: relative; overflow: hidden;  
+  width: auto !important; /* Biar lebarnya fleksibel meluk gambar */
+  max-width: 92vw !important; /* Batas aman layar */
+  max-height: 92vh;   
+  display: flex; 
+  flex-direction: column; 
+  position: relative; 
+  overflow: hidden;  
   transition: width 0.15s ease-out;
 }
 
@@ -294,8 +300,8 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
   display: block;   
   max-width: 100%;   
   max-height: 75vh;  
-  width: auto;  
-  height: auto;  
+  width: auto !important;
+  height: auto !important;
   object-fit: contain;   
   margin: 0 auto; 
 }
@@ -746,13 +752,7 @@ function fitModalAbsolute() {
   const imgs = container.querySelectorAll('img');  
   if (imgs.length === 0) return;
 
-  // Ensure 100% width slide wrapper
-  container.querySelectorAll('a').forEach(a => {
-    a.style.setProperty('width', '100%', 'important');
-    a.style.setProperty('flex', '0 0 100%', 'important');
-  });
-
-  // Hitung gambar aktif saat ini
+  // Hitung gambar aktif
   const containerWidth = container.clientWidth || 1;
   const currentIndex = Math.min(
     Math.max(Math.round(container.scrollLeft / containerWidth), 0),
@@ -760,22 +760,21 @@ function fitModalAbsolute() {
   );
   const activeImg = imgs[currentIndex] || imgs[0];
 
-  if (!activeImg || !activeImg.naturalWidth) return;
+  // Pastikan gambar sudah ter-load sempurna
+  if (!activeImg || !activeImg.naturalWidth || activeImg.naturalWidth === 0) {
+    return setTimeout(fitModalAbsolute, 50); // Coba ulang jika gambar belum siap
+  }
 
-  // Rasio Asli Gambar
+  // Hitung rasio & lebar ideal
   const aspect = activeImg.naturalWidth / activeImg.naturalHeight;
-  const maxVhHeight = window.innerHeight * 0.72; // Tinggi max gambar di modal (72vh)
+  const maxVhHeight = window.innerHeight * 0.72; // Patokan tinggi 72vh
   
-  // Hitung lebar ideal berdasarkan rasio asli
   let calculatedWidth = maxVhHeight * aspect;
-
-  // Batas aman layar browser (maksimal 92% lebar viewport)
-  const maxAllowedWidth = window.innerWidth * 0.92;
+  const maxAllowedWidth = window.innerWidth * 0.92; // Maksimal 92vw
   const finalWidth = Math.min(calculatedWidth, maxAllowedWidth);
 
-  // Set lebar modal mengikuti bentuk fisik gambar (Landscape / Portrait)
+  // Kunci lebar modal sesuai kontur fisik gambar (Landscape / Portrait)
   modalContent.style.setProperty('width', Math.round(finalWidth) + 'px', 'important');
-  modalContent.style.setProperty('max-width', '92vw', 'important');
 }
 
 function moveGallery(direction) {  
