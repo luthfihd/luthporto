@@ -10,6 +10,9 @@
 <link rel="preconnect" href="https://drive.google.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,700;0,800;0,900;1,600&family=Space+Mono:wght@400;700;900&display=swap" rel="stylesheet">
 
+<!-- Glightbox CSS CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+
 <style>
 /* ── 1. VARIABEL & GLOBAL BORDER RADIUS RULES ── */
 :root { 
@@ -46,9 +49,6 @@ button,
 .btn,
 .cat-btn,
 .folder-tab,
-.modal-nav-btn,
-.modal-close-btn,
-.tool-tag,
 .multiple-sticker,
 .status-badge,
 .liquid-pill {
@@ -177,10 +177,6 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 .folder-item:hover .folder-content { box-shadow: 10px 10px 0 var(--magenta); }
 
 .folder-img-wrap { width: 100%; border: 2px solid var(--text-dark); overflow: hidden; background: #E0E0E0; position: relative; display: flex; }
-.item-scroll-container { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; width: 100%; }
-.item-scroll-container::-webkit-scrollbar { display: none; }
-.scroll-img { flex: 0 0 100%; scroll-snap-align: center; width: 100%; height: auto; object-fit: contain; display: block; border-right: 2px solid var(--text-dark); }
-.scroll-img:last-child { border-right: none; }
 .single-img { width: 100%; height: auto; object-fit: cover; display: block; }
 
 .multiple-sticker { position: absolute; top: 8px; right: 8px; background: var(--purple); color: #fff; border: 2px solid var(--text-dark); padding: 4px 8px; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 10px; transform: rotate(4deg); box-shadow: 2px 2px 0 var(--text-dark); z-index: 5; pointer-events: none;}
@@ -213,196 +209,7 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 @media(max-width: 900px){ .bento-grid { grid-template-columns: repeat(2, 1fr); } .bento-span-3 { grid-column: span 2; } }
 @media(max-width: 600px){ .bento-grid { grid-template-columns: 1fr; } .bento-span-2, .bento-span-3 { grid-column: span 1; } }
 
-/* ── 6. NATIVE HTML5 DIALOG LIGHTBOX (AUTO SHRINK-WRAP UNIVERSAL) ── */
-#modal {
-  border: none;
-  background: transparent;
-  padding: 0;
-  margin: auto;
-  max-width: 100vw;
-  max-height: 100vh;
-  outline: none;
-  overflow: visible;
-}
-
-#modal::backdrop {
-  background: rgba(253, 253, 253, 0.95);
-  backdrop-filter: blur(2px);
-}
-
-.modal-wrapper {  
-  position: relative;  
-  width: fit-content;
-  max-width: 100vw;
-  display: flex; 
-  align-items: center; 
-  justify-content: center;  
-  margin: 0 auto;
-}
-
-#modal-content {  
-  background: #fff; 
-  border: var(--brutal-border);   
-  box-shadow: 12px 12px 0 #111111;
-  width: fit-content !important;
-  min-width: 320px;
-  max-width: 92vw !important;
-  max-height: 92vh;   
-  display: flex; 
-  flex-direction: column; 
-  position: relative; 
-  overflow: hidden; 
-  box-sizing: content-box !important;
-  transition: width 0.15s ease-out;
-}
-
-/* Sharp (0px) Media Elements */
-.modal-content,
-.modal-body,
-.modal-os-body,
-#modal-media-container,
-#modal-media-container img,
-#modal-media-container iframe,
-#modal-media-container video {
-  border-radius: 0px !important;
-  -webkit-border-radius: 0px !important;
-}
-
-/* Header Lightbox */
-.modal-os-header {  
-  background: #eee; border-bottom: var(--brutal-border); display: flex;  
-  justify-content: space-between; align-items: center; padding: 10px 16px;  
-  flex-shrink: 0; width: 100%;
-}
-.modal-os-title {   
-  font-family: 'Space Mono', monospace; font-weight: 900; font-size: 16px;   
-  color: var(--text-dark); text-transform: uppercase;  
-  white-space: normal;
-  display: -webkit-box;  
-  -webkit-line-clamp: 2;  
-  -webkit-box-orient: vertical;  
-  overflow: hidden;   
-  line-height: 1.3;  
-  padding-right: 15px;
-}
-
-/* Close Button */
-.modal-close-btn {   
-  background: #FF4A4A; border: 2px solid var(--text-dark); width: 32px; height: 32px;   
-  font-family: 'Space Mono', monospace; font-weight: 900; font-size: 16px; cursor: pointer; box-shadow: 3px 3px 0 var(--text-dark);   
-  display: flex; align-items: center; justify-content: center; transition: all 0.1s;  
-  flex-shrink: 0;
-  color: #111111 !important;
-  -webkit-text-fill-color: #111111 !important;
-  opacity: 1 !important;
-}
-.modal-close-btn:active { box-shadow: 0 0 0; transform: translate(2px,2px); }
-
-/* Body Lightbox */
-.modal-body {   
-  display: flex; flex-direction: column; overflow-y: auto; background: var(--bg-light);   
-  flex: 1; min-height: 0; width: 100%; padding: 0 !important;
-}
-
-#modal-media-container {  
-  display: flex; 
-  overflow-x: auto; 
-  scroll-snap-type: x mandatory; 
-  scrollbar-width: none;   
-  background: #FFFFFF;  
-  width: fit-content !important; 
-  max-width: 92vw !important;
-  position: relative; 
-  flex-shrink: 0;
-}
-#modal-media-container::-webkit-scrollbar { display: none; }
-#modal-media-container a { 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  flex: 0 0 100% !important; 
-  width: 100% !important;
-  scroll-snap-align: start !important; 
-  scroll-snap-stop: always !important;
-  position: relative; 
-  text-decoration: none;
-}
-
-#modal-media-container img {   
-  display: block;   
-  max-width: 92vw;   
-  max-height: 72vh;  
-  width: auto;  
-  height: auto;  
-  object-fit: contain;   
-  margin: 0 auto; 
-}
-
-/* Video Play Overlay */
-.video-play-overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 60px;
-  height: 60px;
-  background: var(--purple);
-  border: 2px solid var(--text-dark);
-  border-radius: 50% !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 3px 3px 0 var(--text-dark);
-  pointer-events: none;
-  z-index: 10;
-}
-.video-play-overlay svg {
-  fill: #FFF;
-  width: 22px;
-  height: 22px;
-  margin-left: 3px;
-}
-
-/* Detail Info & Dots */
-.modal-info-box { padding: 20px 24px; background: #fff; border-top: var(--brutal-border); width: 100%; }
-#modal-desc { font-size: 15px; line-height: 1.6; font-weight: 400; color: #333; width: 100%; word-wrap: break-word; }
-
-.modal-dots-container { display: flex; justify-content: center; gap: 8px; padding: 10px; background: #eee; border-top: var(--brutal-border); border-bottom: var(--brutal-border); flex-shrink: 0; border-radius: 0px !important; }
-.modal-dots-container:has(.modal-dot:only-child),
-.modal-dots-container:has(.dot:only-child),
-.modal-dots-container:empty {
-  display: none !important;
-}
-.modal-dot { width: 10px; height: 10px; background: #fff; border: 2px solid var(--text-dark); border-radius: 50% !important; transition: background 0.2s; }
-.modal-dot.active { background: var(--purple); box-shadow: 2px 2px 0 var(--text-dark); }
-
-/* Navigation Buttons Inside Wrapper */
-.modal-nav-btn {  
-  position: absolute; top: 50%; transform: translateY(-50%);  
-  background: var(--purple); border: var(--brutal-border);  
-  width: 50px; height: 50px; font-weight: 900; font-size: 24px;  
-  cursor: pointer; box-shadow: 4px 4px 0 var(--text-dark);  
-  z-index: 100000; color: #FFF; display: flex; align-items: center; justify-content: center;  
-  transition: all 0.1s;
-}
-.modal-nav-btn:active { box-shadow: 0 0 0; transform: translateY(-50%) translate(4px,4px); }
-.btn-prev { left: -65px !important; right: auto !important; }
-.btn-next { right: -65px !important; left: auto !important; }
-
-@media(max-width: 1050px) {  
-  .btn-prev { left: 10px !important; width: 44px; height: 44px; font-size: 20px; }  
-  .btn-next { right: 10px !important; width: 44px; height: 44px; font-size: 20px; }
-}
-@media(max-width: 768px) {  
-  .modal-wrapper { padding: 10px; }  
-  .btn-prev { display:none !important; }  
-  .btn-next { display:none !important; }  
-  .modal-info-box { padding: 16px; }  
-  #modal-media-container img { max-height: 65vh; }
-  .modal-os-title { font-size: 12px !important; line-height: 1.3 !important; }
-}
-
-/* ── 7. FOOTER ── */
+/* ── 6. FOOTER ── */
 footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); text-align: center; }
 .footer-copy { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; text-transform: none; color: var(--text-dark); }
 
@@ -431,21 +238,9 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
 .soc-mini:hover svg { transform: scale(1.15); opacity: 0.85; }
 .soc-mini:active svg { transform: scale(0.95); }
 
-.modal-os-title {
-  border-radius: 0px !important;
-  flex: 1 !important;
-  min-width: 0 !important;
-  font-size: 13px !important;
-  line-height: 1.35 !important;
-  color: #111111 !important;
-  font-weight: 900 !important;
-  white-space: normal !important;
-  display: -webkit-box !important;
-  -webkit-line-clamp: 2 !important;
-  -webkit-box-orient: vertical !important;
-  overflow: hidden !important;
-  word-break: break-word !important;
-}
+/* GLightbox Custom Neo-Brutalist Tuning Overrides */
+.glightbox-container .gmodal { border-radius: 0px !important; }
+.gslide-media { border-radius: 0px !important; }
 </style>
 </head>
 <body>
@@ -546,26 +341,8 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
   <div class="footer-copy"> © 2026 Luthfi HD "Create to discover, design to inspire". All Right Reserved.</div>
 </footer>
 
-<!-- LIGHTBOX DIALOG ELEMENT (FIXED PREV/NEXT & DYNAMIC FIT) -->
-<dialog id="modal">  
-  <div class="modal-wrapper">    
-    <button id="modal-prev" onclick="moveGallery(-1)" class="modal-nav-btn btn-prev" type="button">&#8249;</button>        
-    <div id="modal-content">      
-      <div class="modal-os-header">        
-        <div class="modal-os-title" id="modal-tag">TITLE</div>        
-        <button onclick="closeModal()" class="modal-close-btn" type="button">X</button>      
-      </div>            
-      <div class="modal-body">        
-        <div id="modal-media-container"></div>        
-        <div id="modal-dots" class="modal-dots-container"></div>                
-        <div class="modal-info-box">          
-          <p id="modal-desc" class="desc-text">Description</p>        
-        </div>      
-      </div>    
-    </div>        
-    <button id="modal-next" onclick="moveGallery(1)" class="modal-nav-btn btn-next" type="button">&#8250;</button>  
-  </div>
-</dialog>
+<!-- GLightbox JS CDN -->
+<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
 
 <script>
 // WHO IS ME FIELD Function
@@ -669,6 +446,7 @@ const IMAGES_BASE = 'https://raw.githubusercontent.com/luthfihd/luthporto/main/i
 
 let portfolioData = [];
 let categories = ['Overview'];
+let lightboxInstance = null;
 
 function getDriveUrl(url, size) {  
   let fileId = null;  
@@ -715,7 +493,7 @@ function filterGallery(category, event) {
     ? portfolioData.filter(p => p.featured === true || p.featured === "true")     
     : portfolioData.filter(p => p.category === category);
 
-  filteredData.forEach(item => {    
+  filteredData.forEach((item, itemIdx) => {    
     const rawLinks = (item.image || item.src || "").split(',').map(l => l.trim()).filter(l => l !== "");    
     const isMultiple = rawLinks.length > 1;        
     let tabColor = '#fff';    
@@ -729,20 +507,20 @@ function filterGallery(category, event) {
     const card = document.createElement('div');    
     card.className = 'folder-item';
 
-    let mediaHtml = isMultiple ? `<div class="item-scroll-container">` : '';    
-    rawLinks.forEach(link => {      
-      let src = link.replace('#video', '');      
-      src = src.startsWith('http') ? src : IMAGES_BASE + src;      
-      if (src.includes('drive.google.com')) src = getDriveUrl(src, 400);       
-      mediaHtml += `<img src="${src}" class="${isMultiple ? 'scroll-img' : 'single-img'}" onclick="openLightbox(${JSON.stringify(item).replace(/"/g, '&quot;')})">`;    
-    });    
-    if (isMultiple) mediaHtml += `</div>`;        
+    // Preview menampilkan gambar pertama pada card grid
+    let firstLink = rawLinks[0] || "";
+    let previewSrc = firstLink.replace('#video', '');
+    previewSrc = previewSrc.startsWith('http') ? previewSrc : IMAGES_BASE + previewSrc;
+    if (previewSrc.includes('drive.google.com')) previewSrc = getDriveUrl(previewSrc, 400);
+
+    // GLightbox gallery group gallery-{itemIdx}
+    const galleryGroupName = `gallery-${itemIdx}`;
 
     card.innerHTML = `      
       <div class="folder-tab" style="background: ${tabColor}; color: ${cat==='educational'||cat==='promotional'||cat==='labs'?'#fff':'#111'}">${item.category}</div>      
-      <div class="folder-content">        
+      <div class="folder-content" onclick="openProjectLightbox('${galleryGroupName}', ${JSON.stringify(item).replace(/"/g, '&quot;')})">        
         <div class="folder-img-wrap">          
-          ${mediaHtml}          
+          <img src="${previewSrc}" class="single-img" alt="${item.title}">          
           ${isMultiple ? `<div class="multiple-sticker">${rawLinks.length} MEDIA</div>` : ''}        
         </div>        
         <div class="folder-badge">${item.title}</div>      
@@ -752,162 +530,36 @@ function filterGallery(category, event) {
   });
 }
 
-// ── LOGIKA FIT MODAL AUTO-SHRINK WRAP ──
-function fitActiveMediaSlide() {  
-  const modalContent = document.getElementById('modal-content');  
-  const container = document.getElementById('modal-media-container');  
-  if (!modalContent || !container) return;
+// FUNGSI MEMBUKA GLIGHTBOX SECARA DINAMIS DENGAN DUKUNGAN MULTI-MEDIA & DESKRIPSI
+function openProjectLightbox(groupName, item) {
+  const rawLinks = (item.image || item.src || "").split(',').map(l => l.trim()).filter(l => l !== "");
+  const descText = item.desc || item.category;
 
-  const imgs = container.querySelectorAll('img');  
-  if (imgs.length === 0) return;
-
-  const containerWidth = container.clientWidth || 1;
-  const idx = Math.min(
-    Math.max(Math.round(container.scrollLeft / containerWidth), 0),
-    imgs.length - 1
-  );
-
-  const dots = document.querySelectorAll('.modal-dot');
-  dots.forEach((dot, i) => dot.classList.toggle('active', i === idx));
-
-  const activeImg = imgs[idx] || imgs[0];
-  if (!activeImg || !activeImg.naturalWidth || activeImg.naturalHeight === 0) {
-    if (activeImg && !activeImg.__hasLoadListener) {
-      activeImg.__hasLoadListener = true;
-      activeImg.addEventListener('load', fitActiveMediaSlide, { once: true });
-    }
-    return;
-  }
-
-  const aspect = activeImg.naturalWidth / activeImg.naturalHeight;
-  const targetHeight = Math.min(window.innerHeight * 0.72, activeImg.naturalHeight);
-  const calculatedWidth = targetHeight * aspect;
-  const finalWidth = Math.round(Math.min(Math.max(calculatedWidth, 320), window.innerWidth * 0.92));
-
-  modalContent.style.setProperty('width', finalWidth + 'px', 'important');
-}
-
-function moveGallery(direction) {  
-  const container = document.getElementById('modal-media-container');  
-  const imgs = container ? container.querySelectorAll('img') : [];  
-  if (imgs.length <= 1) return;
-
-  const containerWidth = container.clientWidth || 1;
-  const currentIndex = Math.min(
-    Math.max(Math.round(container.scrollLeft / containerWidth), 0),
-    imgs.length - 1
-  );
-
-  const nextIndex = (currentIndex + direction + imgs.length) % imgs.length;  
-  const targetChild = container.children[nextIndex];
-
-  if (targetChild) {    
-    container.scrollTo({ left: targetChild.offsetLeft, behavior: 'smooth' });  
-    setTimeout(fitActiveMediaSlide, 150);
-    setTimeout(fitActiveMediaSlide, 350);
-  }
-}
-
-function openLightbox(item) {  
-  const modal = document.getElementById('modal');  
-  const container = document.getElementById('modal-media-container');  
-  const dotsContainer = document.getElementById('modal-dots');
-
-  container.innerHTML = '';  
-  if(dotsContainer) dotsContainer.innerHTML = '';
-
-  document.getElementById('modal-tag').textContent = item.title.toUpperCase();  
-  document.getElementById('modal-desc').innerHTML = item.desc || item.category;
-
-  const allLinks = (item.image || item.src || "").split(',').map(l => l.trim()).filter(l => l !== "");
-
-  allLinks.forEach((link, index) => {    
-    const isVideo = link.includes('#video');
-    let rawSrc = link.replace('#video', '');    
-    let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;    
+  const elements = rawLinks.map((link, idx) => {
+    let rawSrc = link.replace('#video', '');
+    let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
     let displaySrc = fullSrc.includes('drive.google.com') ? getDriveUrl(fullSrc, 1200) : fullSrc;
 
-    const wrapper = document.createElement('a');    
-    if (isVideo) {
-      wrapper.href = fullSrc;
-      wrapper.target = "_blank";
-      wrapper.rel = "noopener";
-    } else {
-      wrapper.href = "javascript:void(0)";
-      wrapper.style.cursor = "default";
-    }
-
-    let innerHtml = `<img src="${displaySrc}" alt="Artwork">`;
-    if (isVideo) {
-      innerHtml += `<div class="video-play-overlay"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></div>`;
-    }
-
-    wrapper.innerHTML = innerHtml;
-    container.appendChild(wrapper);
-
-    if (allLinks.length > 1 && dotsContainer) {      
-      const dot = document.createElement('div');      
-      dot.className = `modal-dot ${index === 0 ? 'active' : ''}`;      
-      dotsContainer.appendChild(dot);    
-    }  
+    return {
+      href: displaySrc,
+      type: 'image',
+      title: `<span style="font-family: 'Space Mono', monospace; font-weight: 900; text-transform: uppercase; font-size: 15px; display: block; margin-bottom: 4px;">${item.title}</span><span style="font-size: 14px; font-weight: 400; color: #444; line-height: 1.5; display: block;">${descText}</span>`
+    };
   });
 
-  const prevBtn = document.getElementById('modal-prev');  
-  const nextBtn = document.getElementById('modal-next');  
-  if (prevBtn && nextBtn) {    
-    prevBtn.style.display = allLinks.length > 1 ? 'flex' : 'none';    
-    nextBtn.style.display = allLinks.length > 1 ? 'flex' : 'none';  
+  if (lightboxInstance) {
+    lightboxInstance.destroy();
   }
 
-  // Tampilkan modal dialog native
-  modal.showModal();
-  document.body.style.overflow = 'hidden';
+  lightboxInstance = GLightbox({
+    elements: elements,
+    loop: true,
+    touchNavigation: true,
+    zoomable: true
+  });
 
-  // Rekalkulasi presisi setelah terbuka
-  setTimeout(fitActiveMediaSlide, 50);
-  setTimeout(fitActiveMediaSlide, 250);
+  lightboxInstance.open();
 }
-
-function closeModal() {   
-  const modal = document.getElementById('modal');  
-  if (modal.open) {
-    modal.close();     
-    document.body.style.overflow = '';     
-    document.getElementById('modal-media-container').innerHTML = '';   
-  }
-}
-
-// BINDING EVENT SCROLL CAROUSEL
-const mediaContainer = document.getElementById('modal-media-container');
-if (mediaContainer) {
-  let scrollDebounce;
-  mediaContainer.addEventListener('scroll', () => {
-    clearTimeout(scrollDebounce);
-    scrollDebounce = setTimeout(fitActiveMediaSlide, 60);
-  }, { passive: true });
-
-  if ('onscrollend' in window) {
-    mediaContainer.addEventListener('scrollend', fitActiveMediaSlide, { passive: true });
-  }
-}
-
-// BINDING EVENT BACKDROP CLICK (CEK HANYA BACKDROP DILUAR WRAPPER/BUTTON)
-const modalElement = document.getElementById('modal');
-modalElement.addEventListener('click', function(e) {  
-  // Jika klik berasal murni dari backdrop #modal (bukan wrapper / tombol prev/next)
-  if (e.target === modalElement) {
-    closeModal();
-  }
-});
-
-window.addEventListener('resize', fitActiveMediaSlide, { passive: true });
-
-document.addEventListener('keydown', e => {   
-  if (modalElement.open) {
-    if(e.key==='ArrowRight') moveGallery(1);   
-    if(e.key==='ArrowLeft') moveGallery(-1); 
-  }
-});
 
 loadPortfolio();
 </script>
