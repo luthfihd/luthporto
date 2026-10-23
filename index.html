@@ -729,7 +729,7 @@ async function loadPortfolioData() {
   }
 }
 
-// 2. FUNGSI FILTER GALLERY (SINKRON DENGAN ADMIN & KUNCI URUTAN)
+// 2. FUNGSI FILTER GALLERY (SINKRON PRESISI DENGAN CSS V27)
 function filterGallery(category, event) {
   if (event && event.target) {
     document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
@@ -742,7 +742,7 @@ function filterGallery(category, event) {
 
   let filteredData = [];
 
-  // LOGIKA OVERVIEW: Hanya ambil featured === true (TANPA Math.random)
+  // LOGIKA OVERVIEW: Ambil yang featured === true tanpa di-acak (Math.random)
   if (category === 'Overview' || category === 'overview') {
     filteredData = portfolioData.filter(item => item.featured === true || item.featured === "true");
   } else if (category === 'All' || category === 'all') {
@@ -756,7 +756,7 @@ function filterGallery(category, event) {
     return;
   }
 
-  // RENDER MENGGUNAKAN ELEMEN & CLASS CSS ASLI V27
+  // RENDER MENGGUNAKAN ELEMEN & CLASS CSS ASLI NEO-BRUTALISM V27
   filteredData.forEach(item => {
     // Ambil media pertama dari string koma
     const rawSrc = item.src || item.image || '';
@@ -773,18 +773,18 @@ function filterGallery(category, event) {
       thumbUrl = firstMedia.startsWith('http') ? firstMedia : base + firstMedia.replace('#video', '');
     }
 
-    // Tetap menggunakan struktur Card asli kamu
+    // STRUKTUR CARD ASLI V27
     const card = document.createElement('div');
-    card.className = 'gallery-card'; 
+    card.className = 'gallery-item'; // Menggunakan class asli 'gallery-item'
     card.onclick = () => openLightbox(item);
 
     card.innerHTML = `
-      <div class="card-media">
-        <img src="${thumbUrl}" alt="${item.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=Preview+Error'">
+      <div class="gallery-thumb-wrap">
+        <img src="${thumbUrl}" alt="${item.title || 'Artwork'}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=Preview+Error'">
       </div>
-      <div class="card-info">
-        <h3>${item.title}</h3>
-        <span class="card-cat">${item.category}</span>
+      <div class="gallery-info">
+        <div class="gallery-title">${item.title || ''}</div>
+        <div class="gallery-cat-tag">${item.category || ''}</div>
       </div>
     `;
 
