@@ -154,7 +154,7 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 .section-title { 
   font-size: 3rem; 
   font-weight: 900; 
-  text-transform: none; /* No Forced Uppercase */
+  text-transform: none; 
   margin-bottom: 30px; 
   text-align: center; 
   text-shadow: 1px 1px 0 #fff; 
@@ -213,7 +213,7 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 @media(max-width: 900px){ .bento-grid { grid-template-columns: repeat(2, 1fr); } .bento-span-3 { grid-column: span 2; } }
 @media(max-width: 600px){ .bento-grid { grid-template-columns: 1fr; } .bento-span-2, .bento-span-3 { grid-column: span 1; } }
 
-/* ── 6. LIGHTBOX ZCONCEPT V3 REVISED (SHRINK-WRAP DYNAMIC FIXED) ── */
+/* ── 6. LIGHTBOX ZCONCEPT V3 REVISED ── */
 #modal {  
   display: none; position: fixed; inset: 0; z-index: 99999;  
   background: rgba(253, 253, 253, 0.95);  
@@ -237,7 +237,6 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
   transition: width 0.15s ease-out;
 }
 
-/* PAKSA SHARP (0px) ATAS & BAWAH MEDIA LIGHTBOX */
 .modal-content,
 .modal-body,
 .modal-os-body,
@@ -249,7 +248,6 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
   -webkit-border-radius: 0px !important;
 }
 
-/* Header Lightbox */
 .modal-os-header {  
   background: #eee; border-bottom: var(--brutal-border); display: flex;  
   justify-content: space-between; align-items: center; padding: 10px 16px;  
@@ -267,7 +265,6 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
   padding-right: 15px;
 }
 
-/* Tombol Close X High Contrast */
 .modal-close-btn {   
   background: #FF4A4A; border: 2px solid var(--text-dark); width: 32px; height: 32px;   
   font-family: 'Space Mono', monospace; font-weight: 900; font-size: 16px; cursor: pointer; box-shadow: 3px 3px 0 var(--text-dark);   
@@ -276,7 +273,6 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 }
 .modal-close-btn:active { box-shadow: 0 0 0; transform: translate(2px,2px); }
 
-/* Body Lightbox */
 .modal-body {   
   display: flex; flex-direction: column; overflow-y: auto; background: var(--bg-light);   
   flex: 1; min-height: 0;
@@ -294,7 +290,6 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
   position: relative; text-decoration: none;
 }
 
-/* GAMBAR LIGHTBOX FULLSCREEN & EXPANDED */
 #modal-media-container img {   
   display: block;   
   max-width: 100%;   
@@ -305,7 +300,6 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
   margin: 0 auto; 
 }
 
-/* Ikon Video Play Overlay */
 .video-play-overlay {
   position: absolute;
   top: 50%;
@@ -330,12 +324,10 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
   margin-left: 3px;
 }
 
-/* Detail Info & Dots */
 .modal-info-box { padding: 20px 24px; background: #fff; border-top: var(--brutal-border); width: 100%; }
 #modal-desc { font-size: 15px; line-height: 1.6; font-weight: 400; color: #333; width: 100%; word-wrap: break-word; }
 
 .modal-dots-container { display: flex; justify-content: center; gap: 8px; padding: 10px; background: #eee; border-top: var(--brutal-border); border-bottom: var(--brutal-border); flex-shrink: 0; border-radius: 0px !important; }
-/* KODE TAMBAHAN UNTUK HILANGIN DOTS KALAU KONTEN CUMA 1 / KOSONG */
 .modal-dots-container:has(.modal-dot:only-child),
 .modal-dots-container:has(.dot:only-child),
 .modal-dots-container:empty {
@@ -344,7 +336,6 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 .modal-dot { width: 10px; height: 10px; background: #fff; border: 2px solid var(--text-dark); border-radius: 50% !important; transition: background 0.2s; }
 .modal-dot.active { background: var(--purple); box-shadow: 2px 2px 0 var(--text-dark); }
 
-/* Tombol Navigasi Next/Prev Desktop */
 .modal-nav-btn {  
   position: absolute; top: 50%; transform: translateY(-50%);  
   background: var(--purple); border: var(--brutal-border);  
@@ -354,16 +345,9 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
   transition: all 0.1s;
 }
 .modal-nav-btn:active { box-shadow: 0 0 0; transform: translateY(-50%) translate(4px,4px); }
-.btn-prev { 
-  left: 100px !important; 
-  right: auto !important;
-}
-.btn-next { 
-  right: 100px !important; 
-  left: auto !important;
-}
+.btn-prev { left: 100px !important; right: auto !important; }
+.btn-next { right: 100px !important; left: auto !important; }
 
-/* Desktop & Mobile Responsive */
 @media(max-width: 1050px) {  
   .btn-prev { left: -20px; width: 44px; height: 44px; font-size: 20px;}  
   .btn-next { right: -20px; width: 44px; height: 44px; font-size: 20px;}
@@ -376,23 +360,17 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
   #modal-media-container img { max-height: 65vh; }
 }
 
-/* ── 7. FOOTER ── */
 footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); text-align: center; }
 .footer-copy { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; text-transform: none; color: var(--text-dark); }
 
-/* 1. MENGUBAH WARNA TEKS TOMBOL CLOSE (X) JADI HITAM TEGAS (MOBILE & DESKTOP) */
 .modal-close-btn {
   color: #111111 !important;
   -webkit-text-fill-color: #111111 !important;
   opacity: 1 !important;
 }
 
-/* 2. MENGHILANGKAN BORDER RADIUS PADA LOGO DI FAB HOME */
-.fab-home img {
-  border-radius: 0px !important;
-}
+.fab-home img { border-radius: 0px !important; }
 
-/* 3. IKON KONTAK MURNI SVG WARNA PUTIH (TANPA WADAH / BORDER / SHADOW / RADIUS) */
 .soc-mini {
   background: transparent !important;
   border: none !important;
@@ -406,23 +384,16 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
 
 .soc-mini svg,
 .soc-mini svg * {
-  border-radius: 0px !important; /* Timpa radius 20px dari root */
+  border-radius: 0px !important;
   width: 22px !important;
   height: 22px !important;
-  fill: #FFFFFF !important; /* Paksa warna ikon jadi Putih */
+  fill: #FFFFFF !important;
   transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
-.soc-mini:hover svg {
-  transform: scale(1.15);
-  opacity: 0.85;
-}
+.soc-mini:hover svg { transform: scale(1.15); opacity: 0.85; }
+.soc-mini:active svg { transform: scale(0.95); }
 
-.soc-mini:active svg {
-  transform: scale(0.95);
-}
-
-/* 4. PERBAIKAN TOTAL MODAL OS HEADER & TEKS JUDUL (BEBAS KETUTUP DI MOBILE) */
 .modal-os-title {
   border-radius: 0px !important;
   flex: 1 !important;
@@ -433,7 +404,7 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
   font-weight: 900 !important;
   white-space: normal !important;
   display: -webkit-box !important;
-  -webkit-line-clamp: 2 !important; /* Maksimal 2 baris rapi */
+  -webkit-line-clamp: 2 !important;
   -webkit-box-orient: vertical !important;
   overflow: hidden !important;
   word-break: break-word !important;
@@ -445,7 +416,6 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
     line-height: 1.3 !important;
   }
 }
-
 </style>
 </head>
 <body>
@@ -510,35 +480,28 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
       <div style="font-size: 4rem; font-weight: 900; line-height: 1; margin: 10px 0; text-shadow: 2px 2px 0 #111;">500+</div>      
       <p style="font-family:'Space Mono'; font-size:11px;">And counting...</p>    
     </div>
-   <!-- JOB HISTORY -->
-<div class="bento-box">
-  <div class="bento-header">/// JOB HISTORY</div>
-  <div class="history-wrap">
-    <ul class="retro-list" id="jobsList">
-      <!-- Diisi otomatis via JS -->
-    </ul>
-  </div>
-</div>
 
-<!-- EDUCATION & CERTIFICATIONS -->
-<div class="bento-box">
-  <div class="bento-header">/// EDUCATION & CERTIFICATIONS</div>
-  <div class="history-wrap">
-    <ul class="retro-list" id="eduList">
-      <!-- Diisi otomatis via JS -->
-    </ul>
-  </div>
-</div>
+    <div class="bento-box">
+      <div class="bento-header">/// JOB HISTORY</div>
+      <div class="history-wrap">
+        <ul class="retro-list" id="jobsList"></ul>
+      </div>
+    </div>
 
-<!-- ACHIEVEMENTS -->
-<div class="bento-box">
-  <div class="bento-header">/// ACHIEVEMENTS</div>
-  <div class="history-wrap">
-    <ul class="retro-list" id="achievementsList">
-      <!-- Diisi otomatis via JS -->
-    </ul>
-  </div>
-</div>
+    <div class="bento-box">
+      <div class="bento-header">/// EDUCATION & CERTIFICATIONS</div>
+      <div class="history-wrap">
+        <ul class="retro-list" id="eduList"></ul>
+      </div>
+    </div>
+
+    <div class="bento-box">
+      <div class="bento-header">/// ACHIEVEMENTS</div>
+      <div class="history-wrap">
+        <ul class="retro-list" id="achievementsList"></ul>
+      </div>
+    </div>
+
     <div class="bento-box bento-span-3">      
       <div class="bento-header">/// TOOLS AND SKILLS</div>      
       <div class="tools-wrap">        
@@ -581,7 +544,6 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
 </div>
 
 <script>
-
 // WHO IS ME FIELD Function
 async function loadBioProfile() {
   try {
@@ -589,70 +551,49 @@ async function loadBioProfile() {
     if (!res.ok) return;
     const data = await res.json();
 
-    // 1. Update Bio Text
     if (data.bio) {
       const bioEl = document.querySelector('.bento-text');
       if (bioEl) bioEl.textContent = data.bio;
     }
 
-    // 2. Update Projects Count
     if (data.projectsCount) {
       const countEl = document.querySelector('.bento-highlight div:nth-child(2)');
       if (countEl) countEl.textContent = data.projectsCount;
     }
 
-    // 3. Update Job History (Render ke <li>)
     if (data.jobs && data.jobs.length > 0) {
       const jobsWrap = document.querySelector('#jobsList');
       if (jobsWrap) {
         jobsWrap.innerHTML = data.jobs
           .filter(j => j.year || j.desc)
-          .map(j => `
-            <li>
-              <strong>${j.year}</strong> ${j.desc}
-            </li>
-          `).join('');
+          .map(j => `<li><span class="year">${j.year}</span><span class="desc">${j.desc}</span></li>`).join('');
       }
     }
 
-    // 4. Update Education & Certifications (Render ke <li>)
     if (data.edu && data.edu.length > 0) {
       const eduWrap = document.querySelector('#eduList');
       if (eduWrap) {
         eduWrap.innerHTML = data.edu
           .filter(e => e.year || e.desc)
-          .map(e => `
-            <li>
-              <strong>${e.year}</strong> ${e.desc}
-            </li>
-          `).join('');
+          .map(e => `<li><span class="year">${e.year}</span><span class="desc">${e.desc}</span></li>`).join('');
       }
     }
 
-    // 5. Update Achievements (Render ke <li>)
     if (data.achievements && data.achievements.length > 0) {
       const achWrap = document.querySelector('#achievementsList');
       if (achWrap) {
         achWrap.innerHTML = data.achievements
           .filter(a => a.year || a.desc)
-          .map(a => `
-            <li>
-              <strong>${a.year}</strong> ${a.desc}
-            </li>
-          `).join('');
+          .map(a => `<li><span class="year">${a.year}</span><span class="desc">${a.desc}</span></li>`).join('');
       }
     }
 
-    // 6. Update Skills & Tools
     if (data.skills && data.skills.length > 0) {
       const toolsWrap = document.querySelector('.tools-wrap');
       if (toolsWrap) {
-        toolsWrap.innerHTML = data.skills.map(skill => `
-          <div class="tool-tag">${skill}</div>
-        `).join('');
+        toolsWrap.innerHTML = data.skills.map(skill => `<div class="tool-tag">${skill}</div>`).join('');
       }
     }
-
   } catch (err) {
     console.error('Error load profile.json:', err);
   }
@@ -662,7 +603,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadBioProfile();
 });
 
-// AUTO FAVICON GENERATOR (WHITE CIRCLE LOGO)
+// AUTO FAVICON
 window.addEventListener('DOMContentLoaded', () => {    
   const canvas = document.createElement('canvas');    
   canvas.width = 64; canvas.height = 64;    
@@ -713,10 +654,10 @@ function getDriveUrl(url, size) {
   return url;
 }
 
-// PEMUAT DATA BERSIH V28 (SINKRON ADMIN + ANTI CACHE)
+// PEMUAT DATA BERSIH V28 (DENGAN FETCH RELATIF + ANTI CACHE)
 async function loadPortfolio() {  
   try {    
-    const res = await fetch(`${DATA_URL}?t=${Date.now()}`);    
+    const res = await fetch(`data.json?t=${Date.now()}`);    
     portfolioData = await res.json();        
     let foundCats = [];    
     portfolioData.forEach(item => {         
@@ -730,7 +671,7 @@ async function loadPortfolio() {
     if (labsCat) categories.push(labsCat);        
     
     const catMenu = document.getElementById('categoryMenu');    
-    catMenu.innerHTML = ''; // Reset tombol
+    catMenu.innerHTML = '';
     categories.forEach(cat => {      
       const btn = document.createElement('button');      
       btn.className = cat === 'Overview' ? 'cat-btn active' : 'cat-btn';      
@@ -744,13 +685,12 @@ async function loadPortfolio() {
   }
 }
 
-// FUNGSI GALLERY V28 (MASONRY V27 UTUH + SINKRON FEATURED)
+// FUNGSI GALLERY V28 (SOLUSI FLEXIBEL MULTI-MEDIA TERBARU)
 function filterGallery(category, event) {  
   if (event) { document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); }  
   const grid = document.getElementById('galleryGrid');  
   grid.innerHTML = '';    
   
-  // PERBAIKAN V28: Overview hanya mengambil item yang featured === true dari admin (Sesuai urutan JSON)
   let filteredData = [];
   if (category === 'Overview') {
     filteredData = portfolioData.filter(p => p.featured === true || p.featured === "true");
@@ -759,7 +699,8 @@ function filterGallery(category, event) {
   }
 
   filteredData.forEach(item => {    
-    const rawLinks = (item.image || item.src || "").split(',').filter(l => l.trim() !== "");    
+    // Pecah string koma media dan hilangkan spasi kosong
+    const rawLinks = (item.image || item.src || "").split(',').map(l => l.trim()).filter(l => l !== "");    
     const isMultiple = rawLinks.length > 1;        
     let tabColor = '#fff';    
     const cat = (item.category || "").toLowerCase();        
@@ -774,7 +715,8 @@ function filterGallery(category, event) {
 
     let mediaHtml = isMultiple ? `<div class="item-scroll-container">` : '';    
     rawLinks.forEach(link => {      
-      let src = link.trim().replace('#video', '');      
+      let src = link.replace('#video', '');      
+      // Deteksi fleksibel: Jika bukan http/https, tambahkan IMAGES_BASE
       src = src.startsWith('http') ? src : IMAGES_BASE + src;      
       if (src.includes('drive.google.com')) src = getDriveUrl(src, 400);       
       mediaHtml += `<img src="${src}" class="${isMultiple ? 'scroll-img' : 'single-img'}" onclick="openLightbox(${JSON.stringify(item).replace(/"/g, '&quot;')})">`;    
@@ -795,7 +737,6 @@ function filterGallery(category, event) {
   });
 }
 
-// ── LOGIKA PRESISI DYNAMIC SHRINK-WRAP LIGHTBOX ──
 function fitModalAbsolute() {  
   const modalContent = document.getElementById('modal-content');  
   const container = document.getElementById('modal-media-container');  
@@ -869,11 +810,11 @@ function openLightbox(item) {
   document.getElementById('modal-tag').textContent = item.title.toUpperCase();  
   document.getElementById('modal-desc').innerHTML = item.desc || item.category;
 
-  const allLinks = (item.image || item.src || "").split(',').filter(l => l.trim() !== "");
+  const allLinks = (item.image || item.src || "").split(',').map(l => l.trim()).filter(l => l !== "");
 
   allLinks.forEach((link, index) => {    
     const isVideo = link.includes('#video');
-    let rawSrc = link.trim().replace('#video', '');    
+    let rawSrc = link.replace('#video', '');    
     let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;    
     let displaySrc = fullSrc.includes('drive.google.com') ? getDriveUrl(fullSrc, 1200) : fullSrc;
 
