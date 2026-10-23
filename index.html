@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luth's Art V28</title>
+<title>Luth's Art</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://images.weserv.nl" crossorigin>
@@ -218,13 +218,14 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
   display: none; position: fixed; inset: 0; z-index: 99999;  
   background: rgba(253, 253, 253, 0.95);  
   align-items: center; justify-content: center;  
-  padding: 20px; opacity: 0; transition: opacity 0.2s ease;  
+  padding: 10px; opacity: 0; transition: opacity 0.2s ease;  
   overflow-y: auto; touch-action: none;
 }
 
 .modal-wrapper {  
   position: relative;  
   width: 100%;  
+  max-width: 100vw !important;
   display: flex; align-items: center; justify-content: center;  
   margin: auto;
 }
@@ -233,6 +234,8 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
   background: #fff; border: var(--brutal-border);   
   box-shadow: 12px 12px 0 #111111;
   width: 380px; max-height: 92vh;   
+  max-width: 96vw !important;
+  flex-shrink: 0 !important; /* MENCEGAH MODAL DIKEMPESKAN / DIRELEMBUNGKAN PARENT FLEX */
   display: flex; flex-direction: column; position: relative; overflow: hidden;  
   transition: width 0.15s ease-out;
 }
@@ -734,17 +737,10 @@ function filterGallery(category, event) {
 function fitModalAbsolute() {  
   const modalContent = document.getElementById('modal-content');  
   const container = document.getElementById('modal-media-container');  
-  
-  if (!modalContent || !container) {
-    console.error("❌ [LIGHTBOX ERROR] Elemen #modal-content atau #modal-media-container TIDAK DITEMUKAN!");
-    return;
-  }
+  if (!modalContent || !container) return;
 
   const imgs = container.querySelectorAll('img');  
-  if (imgs.length === 0) {
-    console.warn("⚠️ [LIGHTBOX WARN] Tidak ada elemen <img> di dalam container.");
-    return;
-  }
+  if (imgs.length === 0) return;
 
   const containerWidth = container.clientWidth || 1;
   const currentIndex = Math.min(
@@ -753,49 +749,25 @@ function fitModalAbsolute() {
   );
   const activeImg = imgs[currentIndex] || imgs[0];
 
-  // CHECKPOINT 1: Validasi Gambar
-  if (!activeImg) {
-    console.error("❌ [LIGHTBOX ERROR] activeImg tidak terdefinisi!");
+  // Pasang listener 'load' jika gambar belum selesai memuat sempurna dari Weserv/Drive
+  if (!activeImg || !activeImg.naturalWidth || activeImg.naturalHeight === 0) {
+    if (activeImg && !activeImg.__hasLoadListener) {
+      activeImg.__hasLoadListener = true;
+      activeImg.addEventListener('load', fitModalAbsolute, { once: true });
+    }
     return;
   }
 
-  if (!activeImg.naturalWidth || activeImg.naturalWidth === 0) {
-    console.error("❌ [LIGHTBOX ERROR] Gambar BELUM SESELESAI LOAD / naturalWidth = 0! Batal menghitung.");
-    return;
-  }
-
-  // CHECKPOINT 2: Kalkulasi
-  const naturalW = activeImg.naturalWidth;
-  const naturalH = activeImg.naturalHeight;
-  const aspect = naturalW / naturalH;
+  // Hitung rasio fisik asli gambar
+  const aspect = activeImg.naturalWidth / activeImg.naturalHeight;
   const maxVhHeight = window.innerHeight * 0.72;
   
-  let calculatedWidth = maxVhHeight * aspect;
-  const maxAllowedWidth = window.innerWidth * 0.92;
-  const finalWidth = Math.round(Math.min(Math.max(calculatedWidth, 380), maxAllowedWidth));
+  let targetWidth = maxVhHeight * aspect;
+  const maxAllowedWidth = window.innerWidth * 0.96;
+  const finalWidth = Math.round(Math.min(Math.max(targetWidth, 380), maxAllowedWidth));
 
-  // TERAPKAN UKURAN
+  // Terapkan ukuran dengan prioritas 'important'
   modalContent.style.setProperty('width', finalWidth + 'px', 'important');
-
-  // CHECKPOINT 3: Verifikasi Real-Time DOM
-  const realDOMWidth = parseFloat(window.getComputedStyle(modalContent).width);
-
-  console.group("🔍 [DEBUG FIT MODAL]");
-  console.table({
-    "1. File Image": activeImg.src.split('/').pop(),
-    "2. Natural Dim": `${naturalW}x${naturalH}`,
-    "3. Aspect Ratio": aspect.toFixed(2),
-    "4. Calculated Width": `${Math.round(calculatedWidth)}px`,
-    "5. Target Final Width": `${finalWidth}px`,
-    "6. Actual DOM Width": `${Math.round(realDOMWidth)}px`
-  });
-
-  if (Math.abs(realDOMWidth - finalWidth) > 5) {
-    console.error(`❌ [LIGHTBOX FAILURE] Beda Ukuran! JS minta ${finalWidth}px tapi CSS memaksa DOM jadi ${Math.round(realDOMWidth)}px!`);
-  } else {
-    console.log(`✅ [LIGHTBOX SUCCESS] Modal berhasil di-set ke ${finalWidth}px!`);
-  }
-  console.groupEnd();
 }
 
 function moveGallery(direction) {  
@@ -872,12 +844,15 @@ function openLightbox(item) {
     nextBtn.style.display = allLinks.length > 1 ? 'flex' : 'none';  
   }
 
-  // EVENT LOAD GAMBAR: LANGSUNG UKUR UKURAN SHRINK-WRAP
+  // EVENT LOAD GAMBAR: UKUR SECARA ASIKRINOK DENGAN RETRY TIMEOUT AMAN
   const modalImgs = container.querySelectorAll('img');
   modalImgs.forEach(img => {
     img.addEventListener('load', fitModalAbsolute);
     if (img.complete) fitModalAbsolute();
   });
+  
+  setTimeout(fitModalAbsolute, 50);
+  setTimeout(fitModalAbsolute, 200);
 
   document.body.style.overflow = 'hidden';
 }
@@ -914,6 +889,9 @@ if (mediaContainer) {
     mediaContainer.addEventListener('scrollend', fitModalAbsolute, { passive: true });
   }
 }
+
+// BINDING EVENT RESIZE WINDOW AGAR MODAL KEBAL SAAT DEVTOOLS DITUTUP
+window.addEventListener('resize', fitModalAbsolute, { passive: true });
 
 document.getElementById('modal').addEventListener('click', function(e) {  
   if (e.target === this || e.target.classList.contains('modal-wrapper')) closeModal();
