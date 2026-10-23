@@ -15,7 +15,7 @@
 :root { 
   --magenta: #8a2889; 
   --purple: #8c52ff; 
-  --green-labs: #1E8449; 
+  --green-labs: #1E8449; /* Warna Tag Labs Hijau Lebih Gelap */
   --bg-light: #FDFDFD; 
   --text-dark: #111111; 
   --brutal-border: 2px solid var(--text-dark); 
@@ -23,6 +23,7 @@
   --spring: cubic-bezier(0.34, 1.56, 0.64, 1); 
 }
 
+/* Base global border-radius 20px */
 *, *::before, *::after { 
   box-sizing: border-box; 
   margin: 0; 
@@ -30,6 +31,7 @@
   border-radius: 20px !important; 
 }
 
+/* Pengecualian Sharp 0px untuk Pembungkus Teks & Pembungkus Icon Kontak */
 .text-box,
 .modal-info-box,
 .modal-os-header,
@@ -39,6 +41,7 @@
   border-radius: 0px !important;
 }
 
+/* Pengecualian All Buttons Kapsul 100px */
 button,
 .btn,
 .cat-btn,
@@ -61,6 +64,7 @@ body {
   position: relative;
 }
 
+/* PATTERN BACKGROUND */
 .pattern-bg { 
   position: fixed; inset: 0; z-index: -1; 
   background-image: url('images/luth.png'); 
@@ -150,7 +154,7 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 .section-title { 
   font-size: 3rem; 
   font-weight: 900; 
-  text-transform: none; 
+  text-transform: none; /* No Forced Uppercase */
   margin-bottom: 30px; 
   text-align: center; 
   text-shadow: 1px 1px 0 #fff; 
@@ -209,7 +213,7 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 @media(max-width: 900px){ .bento-grid { grid-template-columns: repeat(2, 1fr); } .bento-span-3 { grid-column: span 2; } }
 @media(max-width: 600px){ .bento-grid { grid-template-columns: 1fr; } .bento-span-2, .bento-span-3 { grid-column: span 1; } }
 
-/* ── 6. LIGHTBOX ZCONCEPT V3 REVISED (DYNAMIC LANDSCAPE FIX) ── */
+/* ── 6. LIGHTBOX ZCONCEPT V3 REVISED (SHRINK-WRAP DYNAMIC FIXED) ── */
 #modal {  
   display: none; position: fixed; inset: 0; z-index: 99999;  
   background: rgba(253, 253, 253, 0.95);  
@@ -228,14 +232,12 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 #modal-content {  
   background: #fff; border: var(--brutal-border);   
   box-shadow: 12px 12px 0 #111111;
-  width: auto !important; 
-  min-width: 320px;
-  max-width: 92vw !important; 
-  max-height: 92vh;   
+  width: 380px; max-height: 92vh;   
   display: flex; flex-direction: column; position: relative; overflow: hidden;  
   transition: width 0.15s ease-out;
 }
 
+/* PAKSA SHARP (0px) ATAS & BAWAH MEDIA LIGHTBOX */
 .modal-content,
 .modal-body,
 .modal-os-body,
@@ -247,6 +249,7 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
   -webkit-border-radius: 0px !important;
 }
 
+/* Header Lightbox */
 .modal-os-header {  
   background: #eee; border-bottom: var(--brutal-border); display: flex;  
   justify-content: space-between; align-items: center; padding: 10px 16px;  
@@ -264,6 +267,7 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
   padding-right: 15px;
 }
 
+/* Tombol Close X High Contrast */
 .modal-close-btn {   
   background: #FF4A4A; border: 2px solid var(--text-dark); width: 32px; height: 32px;   
   font-family: 'Space Mono', monospace; font-weight: 900; font-size: 16px; cursor: pointer; box-shadow: 3px 3px 0 var(--text-dark);   
@@ -275,6 +279,7 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 }
 .modal-close-btn:active { box-shadow: 0 0 0; transform: translate(2px,2px); }
 
+/* Body Lightbox */
 .modal-body {   
   display: flex; flex-direction: column; overflow-y: auto; background: var(--bg-light);   
   flex: 1; min-height: 0;
@@ -292,16 +297,18 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
   position: relative; text-decoration: none;
 }
 
+/* GAMBAR LIGHTBOX FULLSCREEN & EXPANDED */
 #modal-media-container img {   
   display: block;   
   max-width: 100%;   
-  max-height: 72vh;  
-  width: auto !important;  
-  height: auto !important;  
+  max-height: 75vh;  
+  width: auto;  
+  height: auto;  
   object-fit: contain;   
   margin: 0 auto; 
 }
 
+/* Ikon Video Play Overlay */
 .video-play-overlay {
   position: absolute;
   top: 50%;
@@ -326,6 +333,7 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
   margin-left: 3px;
 }
 
+/* Detail Info & Dots */
 .modal-info-box { padding: 20px 24px; background: #fff; border-top: var(--brutal-border); width: 100%; }
 #modal-desc { font-size: 15px; line-height: 1.6; font-weight: 400; color: #333; width: 100%; word-wrap: break-word; }
 
@@ -338,6 +346,7 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 .modal-dot { width: 10px; height: 10px; background: #fff; border: 2px solid var(--text-dark); border-radius: 50% !important; transition: background 0.2s; }
 .modal-dot.active { background: var(--purple); box-shadow: 2px 2px 0 var(--text-dark); }
 
+/* Tombol Navigasi Next/Prev Desktop */
 .modal-nav-btn {  
   position: absolute; top: 50%; transform: translateY(-50%);  
   background: var(--purple); border: var(--brutal-border);  
@@ -347,9 +356,16 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
   transition: all 0.1s;
 }
 .modal-nav-btn:active { box-shadow: 0 0 0; transform: translateY(-50%) translate(4px,4px); }
-.btn-prev { left: 100px !important; right: auto !important; }
-.btn-next { right: 100px !important; left: auto !important; }
+.btn-prev { 
+  left: 100px !important; 
+  right: auto !important;
+}
+.btn-next { 
+  right: 100px !important; 
+  left: auto !important;
+}
 
+/* Desktop & Mobile Responsive */
 @media(max-width: 1050px) {  
   .btn-prev { left: -20px; width: 44px; height: 44px; font-size: 20px;}  
   .btn-next { right: -20px; width: 44px; height: 44px; font-size: 20px;}
@@ -363,6 +379,7 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
   .modal-os-title { font-size: 12px !important; line-height: 1.3 !important; }
 }
 
+/* ── 7. FOOTER ── */
 footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); text-align: center; }
 .footer-copy { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; text-transform: none; color: var(--text-dark); }
 
@@ -623,8 +640,10 @@ function toggleContact() {
   lpText.textContent = liquidPill.classList.contains('active') ? 'CLOSE' : 'HIT ME UP!';
 }
 
-// DATA FETCH & GRID LOGIC
+// DATA FETCH & GRID LOGIC (PERFECTED ANTI-CACHE + PURE V27)
+const DATA_URL = 'data.json';
 const IMAGES_BASE = 'https://raw.githubusercontent.com/luthfihd/luthporto/main/images/';
+
 let portfolioData = [];
 let categories = ['Overview'];
 
@@ -636,10 +655,9 @@ function getDriveUrl(url, size) {
   return url;
 }
 
-// PEMUAT DATA CEPAT V28.2 (FAST FETCH)
 async function loadPortfolio() {  
   try {    
-    const res = await fetch(`data.json?t=${Date.now()}`);    
+    const res = await fetch(`${DATA_URL}?t=${Date.now()}`);    
     portfolioData = await res.json();        
     let foundCats = [];    
     portfolioData.forEach(item => {         
@@ -662,23 +680,18 @@ async function loadPortfolio() {
       catMenu.appendChild(btn);    
     });    
     filterGallery('Overview');  
-  } catch(e){
-    console.error("Error loading portfolio data:", e);
-  }
+  } catch(e){}
 }
 
-// RENDER GALLERY V28.2 (MASONRY V27 UNTOUCHED)
 function filterGallery(category, event) {  
   if (event) { document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); }  
   const grid = document.getElementById('galleryGrid');  
   grid.innerHTML = '';    
   
-  let filteredData = [];
-  if (category === 'Overview') {
-    filteredData = portfolioData.filter(p => p.featured === true || p.featured === "true");
-  } else {
-    filteredData = portfolioData.filter(p => p.category === category);
-  }
+  // Overview: Kunci ke featured===true (Sesuai order Admin)
+  let filteredData = category === 'Overview'     
+    ? portfolioData.filter(p => p.featured === true || p.featured === "true")     
+    : portfolioData.filter(p => p.category === category);
 
   filteredData.forEach(item => {    
     const rawLinks = (item.image || item.src || "").split(',').map(l => l.trim()).filter(l => l !== "");    
@@ -717,7 +730,7 @@ function filterGallery(category, event) {
   });
 }
 
-// ── LOGIKA AKURAT SHRINK-WRAP LANDSCAPE LIGHTBOX V28.2 ──
+// ── LOGIKA DYNAMIC SHRINK-WRAP LANDSCAPE LIGHTBOX (FIXED ACCURATE) ──
 function fitModalAbsolute() {  
   const modalContent = document.getElementById('modal-content');  
   const container = document.getElementById('modal-media-container');  
@@ -726,6 +739,11 @@ function fitModalAbsolute() {
   const imgs = container.querySelectorAll('img');  
   if (imgs.length === 0) return;
 
+  container.querySelectorAll('a').forEach(a => {
+    a.style.setProperty('width', '100%', 'important');
+    a.style.setProperty('flex', '0 0 100%', 'important');
+  });
+
   const containerWidth = container.clientWidth || 1;
   const currentIndex = Math.min(
     Math.max(Math.round(container.scrollLeft / containerWidth), 0),
@@ -733,15 +751,16 @@ function fitModalAbsolute() {
   );
   const activeImg = imgs[currentIndex] || imgs[0];
 
-  // Hitung rasio asli jika gambar sudah loaded
+  // Pastikan membaca aspek rasio fisik asli gambar saat loaded
   if (activeImg && activeImg.naturalWidth && activeImg.naturalHeight) {
     const aspect = activeImg.naturalWidth / activeImg.naturalHeight;
-    const maxVhHeight = window.innerHeight * 0.72; // Patokan 72vh tinggi layar
+    const maxVhHeight = window.innerHeight * 0.72; // Max tinggi gambar di layar (72vh)
     
     let calculatedWidth = maxVhHeight * aspect;
-    const maxAllowedWidth = window.innerWidth * 0.92; // Batas aman 92% lebar layar
+    const maxAllowedWidth = window.innerWidth * 0.92; // Batas aman lebar layar (92vw)
+    
+    // Meluk gambar landscape/banner dengan presisi
     const finalWidth = Math.min(calculatedWidth, maxAllowedWidth);
-
     modalContent.style.setProperty('width', Math.round(finalWidth) + 'px', 'important');
   }
 }
@@ -762,7 +781,7 @@ function moveGallery(direction) {
 
   if (targetChild) {    
     container.scrollTo({ left: targetChild.offsetLeft, behavior: 'smooth' });  
-    setTimeout(fitModalAbsolute, 100);
+    setTimeout(fitModalAbsolute, 60);
   }
 }
 
@@ -820,7 +839,7 @@ function openLightbox(item) {
     nextBtn.style.display = allLinks.length > 1 ? 'flex' : 'none';  
   }
 
-  // PASSING EVENT LOAD: JAMINAN LIGHTBOX MELUK DENGAN PAS
+  // EVENT LOAD GAMBAR: LANGSUNG UKUR UKURAN SHRINK-WRAP
   const modalImgs = container.querySelectorAll('img');
   modalImgs.forEach(img => {
     img.addEventListener('load', fitModalAbsolute);
@@ -840,6 +859,7 @@ function closeModal() {
   }, 200);
 }
 
+// BINDING EVENT SCROLL UNTUK ACCURATE FIT & DOTS
 const mediaContainer = document.getElementById('modal-media-container');
 if (mediaContainer) {
   let swipeTimer;
