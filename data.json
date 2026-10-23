@@ -244,7 +244,7 @@
     "id": "item_1780996511941_vgyy5n",
     "type": "gdrive",
     "src": "https://drive.google.com/file/d/1tO6weRdJ55uIYePh7smqSelG_kN-8-3o/view?usp=drive_link",
-    "title": "Don't save source code, usernames, and passwords in a public repository Poster",
+    "title": "Source Code Security",
     "category": "educational",
     "desc": "I created this poster to emphasize the critical warning against storing sensitive information like source code, usernames, and passwords in public repositories for EMASKU Developers. I visually illustrated six fatal consequences, from data leaks and misuse to compliance violations and the inherent persistence of Git history. My aim was to clearly communicate that cyber threats often stem from our own negligence, not just external actors, encouraging vigilance and secure practices.",
     "icon": "🎬",
