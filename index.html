@@ -714,76 +714,78 @@ function getDriveUrl(url, size) {
   return url;
 }
 
-async function loadPortfolio() {  
-  try {    
-    const res = await fetch(DATA_URL);    
-    portfolioData = await res.json();        
-    let foundCats = [];    
-    portfolioData.forEach(item => {         
-      if (item.category && !foundCats.includes(item.category)) foundCats.push(item.category);     
-    });        
-    categories = ['Overview'];    
-    foundCats.forEach(c => {        
-      if (c !== 'Overview' && c.toLowerCase() !== 'labs') categories.push(c);    
-    });    
-    let labsCat = foundCats.find(c => c.toLowerCase() === 'labs');    
-    if (labsCat) categories.push(labsCat);        
+async function loadPortfolioData() {
+  try {
+    // Tambah timestamp Date.now() biar file data.json gak tertahan cache browser/GitHub
+    const res = await fetch(`data.json?t=${Date.now()}`);
+    if (!res.ok) throw new Error("Gagal mengambil data.json");
     
-    const catMenu = document.getElementById('categoryMenu');    
-    categories.forEach(cat => {      
-      const btn = document.createElement('button');      
-      btn.className = cat === 'Overview' ? 'cat-btn active' : 'cat-btn';      
-      btn.textContent = cat;      
-      btn.onclick = (e) => filterGallery(cat, e);      
-      catMenu.appendChild(btn);    
-    });    
-    filterGallery('Overview');  
-  } catch(e){}
+    portfolioData = await res.json();
+    
+    // Langsung render kategori awal (Overview)
+    filterGallery('Overview');
+  } catch (err) {
+    console.error("Error loading data:", err);
+  }
 }
 
-function filterGallery(category, event) {  
-  if (event) { document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); }  
-  const grid = document.getElementById('galleryGrid');  
-  grid.innerHTML = '';    
-  
-  let filteredData = category === 'Overview'     
-    ? [...portfolioData].sort(() => 0.5 - Math.random()).slice(0, OVERVIEW_LIMIT)     
-    : portfolioData.filter(p => p.category === category);
+function filterGallery(category, event) {
+  if (event && event.target) {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+  }
 
-  filteredData.forEach(item => {    
-    const rawLinks = (item.image || item.src || "").split(',').filter(l => l.trim() !== "");    
-    const isMultiple = rawLinks.length > 1;        
-    let tabColor = '#fff';    
-    const cat = (item.category || "").toLowerCase();        
-    
-    if(cat === 'educational') tabColor = 'var(--purple)';    
-    else if(cat === 'promotional') tabColor = 'var(--magenta)';    
-    else if(cat === 'branding') tabColor = '#FFD93D';    
-    else if(cat === 'labs') tabColor = 'var(--green-labs)'; /* Tag Labs Hijau Gelap */
+  const grid = document.getElementById('galleryGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
 
-    const card = document.createElement('div');    
-    card.className = 'folder-item';
+  let filteredData = [];
 
-    let mediaHtml = isMultiple ? `<div class="item-scroll-container">` : '';    
-    rawLinks.forEach(link => {      
-      let src = link.trim().replace('#video', '');      
-      src = src.startsWith('http') ? src : IMAGES_BASE + src;      
-      if (src.includes('drive.google.com')) src = getDriveUrl(src, 400);       
-      mediaHtml += `<img src="${src}" class="${isMultiple ? 'scroll-img' : 'single-img'}" onclick="openLightbox(${JSON.stringify(item).replace(/"/g, '&quot;')})">`;    
-    });    
-    if (isMultiple) mediaHtml += `</div>`;        
+  if (category === 'Overview' || category === 'overview') {
+    // AMBIL HANYA KONTEN FEATURED & TETAPKAN URUTAN SESUAI DARI JSON/ADMIN
+    filteredData = portfolioData.filter(item => item.featured === true || item.featured === "true");
+  } else if (category === 'All' || category === 'all') {
+    filteredData = portfolioData;
+  } else {
+    filteredData = portfolioData.filter(item => item.category === category);
+  }
 
-    card.innerHTML = `      
-      <div class="folder-tab" style="background: ${tabColor}; color: ${cat==='educational'||cat==='promotional'||cat==='labs'?'#fff':'#111'}">${item.category}</div>      
-      <div class="folder-content">        
-        <div class="folder-img-wrap">          
-          ${mediaHtml}          
-          ${isMultiple ? `<div class="multiple-sticker">${rawLinks.length} MEDIA</div>` : ''}        
-        </div>        
-        <div class="folder-badge">${item.title}</div>      
-      </div>    
-    `;    
-    grid.appendChild(card);  
+  if (filteredData.length === 0) {
+    grid.innerHTML = `<div class="empty-msg" style="grid-column: 1/-1; text-align: center; padding: 40px; font-weight: 700;">Belum ada karya di kategori ini.</div>`;
+    return;
+  }
+
+  // RENDER SESUAI URUTAN ASLI ARRAY
+  filteredData.forEach(item => {
+    // Handling jika ada beberapa link gambar/video yang dipisah koma
+    const rawSrc = item.src || item.image || '';
+    const mediaArray = rawSrc.split(',').map(s => s.trim()).filter(Boolean);
+    const firstMedia = mediaArray[0] || '';
+
+    // Generate Thumbnail
+    let thumbUrl = '';
+    if (firstMedia.includes('/file/d/')) {
+      const fileId = firstMedia.split('/file/d/')[1]?.split('/')[0] || '';
+      thumbUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w600`;
+    } else {
+      thumbUrl = firstMedia.startsWith('http') ? firstMedia : `images/${firstMedia}`;
+    }
+
+    const card = document.createElement('div');
+    card.className = 'gallery-card'; // Sesuaikan class card V27 kamu
+    card.onclick = () => openLightbox(item);
+
+    card.innerHTML = `
+      <div class="card-media">
+        <img src="${thumbUrl}" alt="${item.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=Preview+Error'">
+      </div>
+      <div class="card-info">
+        <h3>${item.title}</h3>
+        <span class="card-cat">${item.category}</span>
+      </div>
+    `;
+
+    grid.appendChild(card);
   });
 }
 
@@ -857,24 +859,25 @@ function openLightbox(item) {
   const dotsContainer = document.getElementById('modal-dots');
 
   container.innerHTML = '';  
-  if(dotsContainer) dotsContainer.innerHTML = '';
+  if (dotsContainer) dotsContainer.innerHTML = '';
 
   modal.style.display = 'flex';  
   setTimeout(() => modal.style.opacity = '1', 10);
 
-  document.getElementById('modal-tag').textContent = item.title.toUpperCase();  
-  document.getElementById('modal-desc').innerHTML = item.desc || item.category;
+  document.getElementById('modal-tag').textContent = item.title ? item.title.toUpperCase() : '';  
+  document.getElementById('modal-desc').innerHTML = item.desc || item.category || '';
 
-  const allLinks = (item.image || item.src || "").split(',').filter(l => l.trim() !== "");
+  // 1. SINKRONISASI LINK TERBARU (Pecah string koma & bersihkan spasi)
+  const rawSrc = item.image || item.src || "";
+  const allLinks = rawSrc.split(',').map(l => l.trim()).filter(l => l !== "");
 
   allLinks.forEach((link, index) => {    
     const isVideo = link.includes('#video');
-    let rawSrc = link.trim().replace('#video', '');    
-    let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;    
+    let rawSrc = link.replace('#video', '');    
+    let fullSrc = rawSrc.startsWith('http') ? rawSrc : (typeof IMAGES_BASE !== 'undefined' ? IMAGES_BASE : '') + rawSrc;    
     let displaySrc = fullSrc.includes('drive.google.com') ? getDriveUrl(fullSrc, 1200) : fullSrc;
 
     const wrapper = document.createElement('a');    
-    // Pure Gallery: Disable link external untuk gambar biasa, hanya aktif untuk video
     if (isVideo) {
       wrapper.href = fullSrc;
       wrapper.target = "_blank";
@@ -884,8 +887,7 @@ function openLightbox(item) {
       wrapper.style.cursor = "default";
     }
 
-    let innerHtml = `<img src="${displaySrc}" alt="Artwork">`;
-    // Add overlay video play icon jika video
+    let innerHtml = `<img src="${displaySrc}" alt="${item.title || 'Artwork'}">`;
     if (isVideo) {
       innerHtml += `<div class="video-play-overlay"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></div>`;
     }
@@ -893,19 +895,41 @@ function openLightbox(item) {
     wrapper.innerHTML = innerHtml;
     container.appendChild(wrapper);
 
+    // 2. DOTS INDICATOR (Otomatis menyesuaikan jumlah link terbaru)
     if (allLinks.length > 1 && dotsContainer) {      
       const dot = document.createElement('div');      
-      dot.className = `modal-dot ${index === 0 ? 'active' : ''}`;      
-      dotsContainer.appendChild(dot);    
+      dot.className = `modal-dot ${index === 0 ? 'active' : ''}`;
+      // Klik dot untuk scroll langsung ke gambar terkait
+      dot.onclick = () => {
+        wrapper.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+      };
+      dotsContainer.appendChild(dot);      
     }  
   });
 
+  // 3. SEMBUNYIKAN/TAMPILKAN TOMBOL PREV & NEXT & DOTS CONTAINER
   const prevBtn = document.getElementById('modal-prev');  
   const nextBtn = document.getElementById('modal-next');  
   if (prevBtn && nextBtn) {    
     prevBtn.style.display = allLinks.length > 1 ? 'flex' : 'none';    
     nextBtn.style.display = allLinks.length > 1 ? 'flex' : 'none';  
   }
+  if (dotsContainer) {
+    dotsContainer.style.display = allLinks.length > 1 ? 'flex' : 'none';
+  }
+
+  // 4. AUTO-UPDATE ACTIVE DOT SAAT SLIDE/SCROLL
+  container.onscroll = () => {
+    if (allLinks.length <= 1 || !dotsContainer) return;
+    const scrollPosition = container.scrollLeft;
+    const width = container.clientWidth;
+    const activeIndex = Math.round(scrollPosition / width);
+    
+    const dots = dotsContainer.querySelectorAll('.modal-dot');
+    dots.forEach((dot, idx) => {
+      dot.classList.toggle('active', idx === activeIndex);
+    });
+  };
 
   // Pre-trigger penyesuaian instan
   setTimeout(fitModalAbsolute, 50);
