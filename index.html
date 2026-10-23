@@ -736,20 +736,31 @@ function fitModalAbsolute() {
   const container = document.getElementById('modal-media-container');  
   if (!modalContent || !container) return;
 
-  const activeImg = container.querySelector('img');  
-  if (!activeImg || !activeImg.naturalWidth || activeImg.naturalHeight === 0) return;
+  // Ambil gambar yang sedang aktif/terlihat
+  const imgs = container.querySelectorAll('img');  
+  if (imgs.length === 0) return;
 
-  // 1. Hitung aspect ratio fisik gambar asli (landscape vs portrait)
+  const containerWidth = container.clientWidth || 1;
+  const currentIndex = Math.min(
+    Math.max(Math.round(container.scrollLeft / containerWidth), 0),
+    imgs.length - 1
+  );
+  const activeImg = imgs[currentIndex] || imgs[0];
+
+  // KUNCI UTAMA: Jika naturalWidth masih 0 (belum selesai load), JANGAN paksa ubah width ke 380px
+  if (!activeImg || !activeImg.naturalWidth || activeImg.naturalHeight === 0) {
+    return;
+  }
+
+  // Hitung rasio asli gambar
   const aspect = activeImg.naturalWidth / activeImg.naturalHeight;
+  const maxVhHeight = window.innerHeight * 0.72; // Patokan tinggi 72vh
   
-  // 2. Patokan tinggi gambar maksimal di layar (72vh)
-  const maxVhHeight = window.innerHeight * 0.72;
+  // Lebar ideal berdasarkan rasio fisik
+  let calculatedWidth = maxVhHeight * aspect;
+  const maxAllowedWidth = window.innerWidth * 0.92; // Maksimal 92vw
   
-  // 3. Hitung lebar presisi meluk (shrink-wrap)
-  const calculatedWidth = maxVhHeight * aspect;
-  const maxAllowedWidth = window.innerWidth * 0.92; // Batas aman 92vw
-  
-  // 4. Paksa nilai width ke inline style dengan priority important agar Flexbox tidak meregang
+  // Terapkan lebar presisi (bebas meregang dari 380px sampai 92vw)
   const finalWidth = Math.min(Math.max(calculatedWidth, 380), maxAllowedWidth);
   modalContent.style.setProperty('width', Math.round(finalWidth) + 'px', 'important');
 }
