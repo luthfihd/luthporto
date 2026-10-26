@@ -15,53 +15,40 @@
 
 <style>
 /* ── 1. VARIABEL & GLOBAL BORDER RADIUS RULES ── */
-:root { 
-  --magenta: #8a2889; 
-  --purple: #8c52ff; 
+:root {
+  --magenta: #8a2889;
+  --purple: #8c52ff;
   --green-labs: #1E8449;
-  --bg-light: #FDFDFD; 
-  --text-dark: #111111; 
-  --brutal-border: 2px solid var(--text-dark); 
-  --brutal-shadow: 5px 5px 0px var(--text-dark); 
-  --spring: cubic-bezier(0.34, 1.56, 0.64, 1); 
+  --bg-light: #FDFDFD;
+  --text-dark: #111111;
+  --brutal-border: 2px solid var(--text-dark);
+  --brutal-shadow: 5px 5px 0px var(--text-dark);
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Base global border-radius 20px */
-*, *::before, *::after { 
-  box-sizing: border-box; 
-  margin: 0; 
-  padding: 0; 
-  border-radius: 20px !important; 
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border-radius: 20px !important;
 }
 
-/* Pengecualian Sharp 0px untuk Pembungkus Teks & Pembungkus Icon Kontak */
-.text-box,
-.modal-info-box,
-.modal-os-header,
-.bento-header,
-.soc-mini,
-.contact-icon-wrapper {
+/* Pengecualian Sharp 0px */
+.text-box, .modal-info-box, .modal-os-header, .bento-header, .soc-mini, .contact-icon-wrapper {
   border-radius: 0px !important;
 }
 
 /* Pengecualian All Buttons Kapsul 100px */
-button,
-.btn,
-.btn-secondary,
-.cat-btn,
-.folder-tab,
-.multiple-sticker,
-.status-badge,
-.liquid-pill {
+button, .btn, .btn-secondary, .cat-btn, .folder-tab, .multiple-sticker, .status-badge, .liquid-pill, .gdrive-mobile-playbtn {
   border-radius: 100px !important;
 }
 
 html { scroll-behavior: smooth; }
-body { 
-  font-family: 'Barlow', sans-serif; 
-  background-color: var(--bg-light); 
-  color: var(--text-dark); 
-  overflow-x: hidden; 
+body {
+  font-family: 'Barlow', sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  overflow-x: hidden;
   position: relative;
 }
 
@@ -72,37 +59,36 @@ body.modal-open-lock {
 }
 
 /* PATTERN BACKGROUND */
-.pattern-bg { 
-  position: fixed; inset: 0; z-index: -1; 
-  background-image: url('images/luth.png'); 
-  background-repeat: repeat; background-size: 90px; 
-  opacity: 0.02; 
+.pattern-bg {
+  position: fixed; inset: 0; z-index: -1;
+  background-image: url('images/luth.png');
+  background-repeat: repeat; background-size: 90px;
+  opacity: 0.02;
 }
 
-/* ── 2. FLOATING ACTION BUTTONS ── */
-#fab-container { 
-  position: fixed; top: 30px; right: 30px; z-index: 9999; 
-  display: flex; flex-direction: column; align-items: flex-end; gap: 12px; 
-  opacity: 0; pointer-events: none; transform: translateY(-20px); 
-  transition: opacity 0.4s ease, transform 0.4s ease;
+/* ── 2. FLOATING ACTION BUTTONS (DYNAMIC OPACITY ON SCROLL) ── */
+#fab-container {
+  position: fixed; top: 30px; right: 30px; z-index: 9999;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
+  opacity: 0; pointer-events: none; transform: translateY(-20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 #fab-container.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
-#fab-container.idle-mobile { opacity: 0.3; }
-#fab-container.idle-mobile:hover, #fab-container.idle-mobile:active { opacity: 1; }
+#fab-container.scrolling { opacity: 0.2 !important; pointer-events: none !important; }
 
-.fab-home { 
-  width: 50px; height: 50px; background: rgba(255,255,255,0.95); border: var(--brutal-border); 
-  display: flex; align-items: center; justify-content: center; 
+.fab-home {
+  width: 50px; height: 50px; background: rgba(255,255,255,0.95); border: var(--brutal-border);
+  display: flex; align-items: center; justify-content: center;
   cursor: pointer; transition: all 0.1s ease-out; box-shadow: var(--brutal-shadow);
 }
 .fab-home:hover { background: #eee; }
 .fab-home:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0 var(--text-dark); }
-.fab-home img { width: 70%; height: 70%; object-fit: contain; }
+.fab-home img { width: 70%; height: 70%; object-fit: contain; border-radius: 0px !important; }
 
-.liquid-pill { 
-  background: var(--purple); border: var(--brutal-border); 
-  display: flex; flex-direction: column; align-items: center; justify-content: center; 
-  overflow: hidden; transition: height 0.6s var(--spring), width 0.6s var(--spring), transform 0.1s, box-shadow 0.1s; 
+.liquid-pill {
+  background: var(--purple); border: var(--brutal-border);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  overflow: hidden; transition: height 0.6s var(--spring), width 0.6s var(--spring), transform 0.1s, box-shadow 0.1s;
   height: 50px; width: 140px; cursor: pointer; box-shadow: var(--brutal-shadow);
 }
 .liquid-pill.active { height: 300px; width: 50px; }
@@ -111,22 +97,24 @@ body.modal-open-lock {
 .lp-socials { display: flex; flex-direction: column; gap: 12px; align-items: center; opacity: 0; transition: all 0.4s ease; height: 0; pointer-events: none; }
 .liquid-pill.active .lp-socials { opacity: 1; height: auto; padding: 20px 0 10px; pointer-events: auto; }
 
-.soc-mini { 
-  width: 36px; height: 36px; background: #fff; display: flex; align-items: center; justify-content: center; 
-  color: var(--text-dark); transition: all 0.1s ease-out; text-decoration: none; border: 2px solid var(--text-dark); 
-  box-shadow: 2px 2px 0 var(--text-dark);
+.soc-mini {
+  background: transparent !important; border: none !important; box-shadow: none !important;
+  width: auto !important; height: auto !important; padding: 4px !important; color: #FFFFFF !important;
 }
-.soc-mini svg { width: 18px; height: 18px; fill: currentColor; }
-.soc-mini:hover { background: var(--text-dark); color: #fff; }
-.soc-mini:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--text-dark); }
+.soc-mini svg, .soc-mini svg * {
+  border-radius: 0px !important; width: 22px !important; height: 22px !important;
+  fill: #FFFFFF !important; transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.soc-mini:hover svg { transform: scale(1.15); opacity: 0.85; }
+.soc-mini:active svg { transform: scale(0.95); }
 
 .lp-text { font-weight: 900; font-size: 13px; letter-spacing: 0.5px; color: #fff; text-transform: uppercase; transition: all 0.3s; white-space: nowrap; text-shadow: 1px 1px 0 var(--text-dark); }
 .liquid-pill.active .lp-text { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 14px; letter-spacing: 2px; padding: 15px 0; }
 
-@media(max-width: 768px) { 
-  #fab-container { top: auto; bottom: 30px; right: 20px; flex-direction: column-reverse; } 
-  .liquid-pill { flex-direction: column-reverse; } 
-  .liquid-pill.active .lp-socials { padding: 10px 0 20px; } 
+@media(max-width: 768px) {
+  #fab-container { top: auto; bottom: 30px; right: 20px; flex-direction: column-reverse; }
+  .liquid-pill { flex-direction: column-reverse; }
+  .liquid-pill.active .lp-socials { padding: 10px 0 20px; }
   .liquid-pill.active .lp-text { transform: rotate(0deg); }
 }
 
@@ -143,59 +131,33 @@ header { min-height: 100vh; display: flex; align-items: center; justify-content:
 .c-purp { color: var(--purple); font-weight: 900; }
 
 .hero-actions { display: flex; gap: 16px; margin-top: 40px; flex-wrap: wrap; }
-.btn { 
-  padding: 14px 32px; 
-  font-size: 16px; 
-  font-weight: 900; 
-  text-transform: uppercase; 
-  text-decoration: none; 
-  cursor: pointer; 
-  transition: all 0.1s ease-out; 
-  background: var(--purple); 
-  color: #fff; 
-  border: var(--brutal-border); 
-  box-shadow: var(--brutal-shadow); 
+.btn {
+  padding: 14px 32px; font-size: 16px; font-weight: 900; text-transform: uppercase; text-decoration: none; cursor: pointer;
+  transition: all 0.1s ease-out; background: var(--magenta); color: #fff; border: var(--brutal-border); box-shadow: var(--brutal-shadow);
 }
-.btn:hover { background: var(--magenta); }
+.btn:hover { background: var(--purple); }
 .btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--text-dark); }
 
 .btn-secondary {
-  padding: 14px 32px;
-  font-size: 16px;
-  font-weight: 900;
-  text-transform: uppercase;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all 0.1s ease-out;
-  background: var(--magenta);
-  color: #fff; 
-  border: var(--brutal-border); 
-  box-shadow: var(--brutal-shadow);
-  display: inline-block;
+  padding: 14px 32px; font-size: 16px; font-weight: 900; text-transform: uppercase; text-decoration: none; cursor: pointer;
+  transition: all 0.1s ease-out; background: var(--purple); color: #fff; border: var(--brutal-border); box-shadow: var(--brutal-shadow); display: inline-block;
 }
-.btn-secondary:hover { background: #8c52ff; }
+.btn-secondary:hover { background: var(--magenta); }
 .btn-secondary:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--text-dark); }
 
-@media(max-width: 1024px) { 
-  .hero-wrapper { flex-direction: column; text-align: center; } 
-  .hero-text { padding-left: 0; margin-top: 40px; } 
-  .hero-actions { justify-content: center; } 
+@media(max-width: 1024px) {
+  .hero-wrapper { flex-direction: column; text-align: center; }
+  .hero-text { padding-left: 0; margin-top: 40px; }
+  .hero-actions { justify-content: center; }
   .hero-visual { width: 400px; height: 400px; }
 }
-@media(max-width: 768px) { 
+@media(max-width: 768px) {
   .hero-actions { display: flex !important; }
 }
 
-/* ── 4. PORTFOLIO ── */
+/* ── 4. PORTFOLIO & MASONRY GRID ── */
 section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
-.section-title { 
-  font-size: 3rem; 
-  font-weight: 900; 
-  text-transform: none; 
-  margin-bottom: 30px; 
-  text-align: center; 
-  text-shadow: 1px 1px 0 #fff; 
-}
+.section-title { font-size: 3rem; font-weight: 900; text-transform: none; margin-bottom: 30px; text-align: center; text-shadow: 1px 1px 0 #fff; }
 
 .category-menu { display: flex; justify-content: center; gap: 12px; margin-bottom: 50px; flex-wrap: wrap; }
 .cat-btn { padding: 8px 24px; font-weight: 800; text-transform: uppercase; font-size: 13px; background: #fff; border: var(--brutal-border); color: var(--text-dark); cursor: pointer; transition: all 0.1s ease-out; box-shadow: var(--brutal-shadow); }
@@ -213,11 +175,17 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 .folder-content { background: #fff; border: var(--brutal-border); box-shadow: var(--brutal-shadow); padding: 10px; position: relative; transition: all 0.2s; }
 .folder-item:hover .folder-content { box-shadow: 10px 10px 0 var(--magenta); }
 
-.folder-img-wrap { width: 100%; border: 2px solid var(--text-dark); overflow: hidden; background: #E0E0E0; position: relative; display: flex; }
+.folder-img-wrap { width: 100%; border: 2px solid var(--text-dark); overflow: hidden; background: #E0E0E0; position: relative; }
 .single-img { width: 100%; height: auto; object-fit: cover; display: block; }
 
-.multiple-sticker { position: absolute; top: 8px; right: 8px; background: var(--purple); color: #fff; border: 2px solid var(--text-dark); padding: 4px 8px; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 10px; transform: rotate(4deg); box-shadow: 2px 2px 0 var(--text-dark); z-index: 5; pointer-events: none;}
-.folder-badge { background: #fff; border-top: 2px solid var(--text-dark); padding: 12px 5px 5px; font-weight: 900; font-size: 14px; margin-top: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase;}
+/* SWIPER IN GRID CARD */
+.grid-card-swiper { width: 100%; touch-action: pan-y pinch-zoom !important; }
+.grid-card-swiper .swiper-slide img { width: 100%; height: auto; display: block; object-fit: cover; pointer-events: none !important; -webkit-user-drag: none !important; }
+.grid-card-swiper .swiper-pagination-bullet { background: #fff !important; opacity: 0.8; border: 1px solid #111; }
+.grid-card-swiper .swiper-pagination-bullet-active { background: var(--purple) !important; opacity: 1; }
+
+.multiple-sticker { position: absolute; top: 8px; right: 8px; background: var(--purple); color: #fff; border: 2px solid var(--text-dark); padding: 4px 8px; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 10px; transform: rotate(4deg); box-shadow: 2px 2px 0 var(--text-dark); z-index: 5; pointer-events: none; }
+.folder-badge { background: #fff; border-top: 2px solid var(--text-dark); padding: 12px 5px 5px; font-weight: 900; font-size: 14px; margin-top: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase; }
 
 /* ── 5. WHO IS ME (BENTO BOX) ── */
 .cv-sec { padding-top: 60px; padding-bottom: 100px; }
@@ -237,7 +205,7 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 
 .retro-list { list-style: none; }
 .retro-list li { padding: 8px 0; border-bottom: 1px solid #eee; display: flex; flex-direction: column; }
-.retro-list li span.year { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--purple); font-weight: 700;}
+.retro-list li span.year { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--purple); font-weight: 700; }
 .retro-list li span.desc { font-weight: 600; font-size: 15px; }
 
 .tools-wrap { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -250,31 +218,6 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); text-align: center; }
 .footer-copy { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; text-transform: none; color: var(--text-dark); }
 
-.fab-home img { border-radius: 0px !important; }
-
-.soc-mini {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  border-radius: 0px !important;
-  width: auto !important;
-  height: auto !important;
-  padding: 4px !important;
-  color: #FFFFFF !important;
-}
-
-.soc-mini svg,
-.soc-mini svg * {
-  border-radius: 0px !important;
-  width: 22px !important;
-  height: 22px !important;
-  fill: #FFFFFF !important;
-  transition: transform 0.15s ease, opacity 0.15s ease;
-}
-
-.soc-mini:hover svg { transform: scale(1.15); opacity: 0.85; }
-.soc-mini:active svg { transform: scale(0.95); }
-
 /* ── 7. NEO-BRUTALIST SHRINK-WRAP MODAL ── */
 .shrink-modal-overlay {
   position: fixed; inset: 0; z-index: 99999;
@@ -286,7 +229,6 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
 }
 .shrink-modal-overlay.active { opacity: 1; pointer-events: auto; }
 
-/* MODAL BOX FIT CONTENT UNTUK MULTI-RATIO */
 .shrink-modal-box {
   background: #fff;
   border: 2px solid #111;
@@ -296,150 +238,66 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
   display: flex; flex-direction: column;
   position: relative;
   border-radius: 20px !important;
-  transition: width 0.2s ease-out; /* Animasi mekar/menguncup yang responsif */
+  transition: width 0.2s ease-out, transform 0.15s ease-out;
   margin: 0 auto;
   overflow: hidden !important;
-}
-
-/* KHUSUS DISPLAY MOBILE (<= 768px): CEGAH SLIDE TERDORONG KE ATAS */
-@media (max-width: 768px) {
-  .shrink-modal-box {
-    max-width: 95vw !important;
-  }
-  .swiper-slide {
-    height: auto !important;
-  }
-  .swiper-slide img {
-    max-height: 58vh !important; /* Kunci tinggi gambar di HP biar gak geser ke atas */
-    object-fit: contain !important;
-  }
-  .shrink-swiper-container .swiper-button-next,
-  .shrink-swiper-container .swiper-button-prev {
-    display: none !important; /* Sembunyikan panah di mobile */
-  }
 }
 
 .shrink-modal-header {
   display: flex; justify-content: space-between; align-items: center;
   padding: 10px 16px; border-bottom: 2px solid #111; background: #fff;
-  border-top-left-radius: 20px !important;
-  border-top-right-radius: 20px !important;
+  border-top-left-radius: 20px !important; border-top-right-radius: 20px !important;
 }
-.shrink-modal-title {
-  font-family: 'Space Mono', monospace;
-  font-weight: 900; font-size: 13px; text-transform: uppercase; color: #8a2889;
-}
+.shrink-modal-title { font-family: 'Space Mono', monospace; font-weight: 900; font-size: 13px; text-transform: uppercase; color: #8a2889; }
 
 .shrink-modal-close {
-  background: #a00a12 !important;
-  color: #fff !important;
-  border: 2px solid #111 !important;
+  background: #a00a12 !important; color: #fff !important; border: 2px solid #111 !important;
   width: 30px; height: 30px; font-weight: 900; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  border-radius: 20px !important;
-  box-shadow: 2px 2px 0px #111;
-  transition: transform 0.1s ease;
+  border-radius: 20px !important; box-shadow: 2px 2px 0px #111; transition: transform 0.1s ease;
 }
 .shrink-modal-close:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0 #111; }
 
-.shrink-swiper-container {
-  width: 100% !important;
-  background: #fff !important;
-  position: relative;
-  overflow: hidden !important;
-}
-.swiper-slide {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 100% !important;
-  background: #fff !important;
-  overflow: hidden !important;
-}
-.swiper-slide img {
-  max-height: 68vh;
-  max-width: 100%;
-  width: auto; height: auto;
-  display: block; margin: 0 auto;
-  object-fit: contain;
-}
+.shrink-swiper-container { width: 100% !important; background: #fff !important; position: relative; overflow: hidden !important; touch-action: pan-y pinch-zoom !important; }
+.swiper-slide { display: flex !important; align-items: center !important; justify-content: center !important; width: 100% !important; background: #fff !important; overflow: hidden !important; }
+.swiper-slide img { max-height: 68vh; max-width: 100%; width: auto; height: auto; display: block; margin: 0 auto; object-fit: contain; }
 
-/* VIDEO EMBED WRAPPER FIX FOR GDRIVE & YOUTUBE */
+/* VIDEO EMBED WRAPPER & REV AGAIN MOBILE PLAY BUTTON */
 .video-embed-wrapper {
-  width: 100% !important;
-  height: 60vh !important;
-  max-height: 68vh !important;
-  position: relative !important;
-  z-index: 10;
-  background: #000 !important;
+  width: 100% !important; height: 60vh !important; max-height: 68vh !important;
+  position: relative !important; z-index: 10; background: #000 !important;
+  display: flex !important; align-items: center !important; justify-content: center !important;
+  overflow: hidden !important;
 }
-.video-embed-wrapper iframe, 
-.video-embed-wrapper video {
-  width: 100% !important;
-  height: 100% !important;
-  border: none !important;
-  display: block !important;
-  pointer-events: auto !important;
+.video-embed-wrapper iframe { width: 100% !important; height: 100% !important; border: none !important; display: block !important; pointer-events: auto !important; }
+
+.gdrive-mobile-playbtn { display: none; }
+
+@media (max-width: 768px) {
+  .shrink-modal-box { max-width: 95vw !important; }
+  .swiper-slide { height: auto !important; }
+  .swiper-slide img { max-height: 58vh !important; object-fit: contain !important; }
+  .shrink-swiper-container .swiper-button-next, .shrink-swiper-container .swiper-button-prev { display: none !important; }
+
+  /* Sembunyikan Iframe di Mobile Mode untuk mencegah Gesture Stuck */
+  .video-embed-wrapper iframe { display: none !important; }
+  .video-embed-wrapper {
+    height: 180px !important; background: #111 !important; border: 2px solid #111 !important;
+    border-radius: 16px !important; box-shadow: 4px 4px 0px #111 !important; margin: 10px 0 !important; width: 100% !important;
+  }
+
+  .gdrive-mobile-playbtn {
+    display: flex !important; align-items: center; justify-content: center; gap: 8px; width: 85%;
+    padding: 12px 20px; background: #FFD93D !important; color: #111 !important; border: 2px solid #111 !important;
+    box-shadow: 3px 3px 0px #111 !important; font-family: 'Space Mono', monospace; font-weight: 900; font-size: 13px;
+    text-transform: uppercase; text-decoration: none; cursor: pointer; z-index: 30; transition: all 0.1s ease;
+  }
+  .gdrive-mobile-playbtn:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0 #111 !important; }
 }
 
 .shrink-modal-infobox {
-  padding: 12px 16px; background: #fff;
-  border-top: 2px solid #111; font-size: 13px; color: #111; line-height: 1.4;
-  width: 100%; z-index: 10;
-  border-bottom-left-radius: 20px !important;
-  border-bottom-right-radius: 20px !important;
-}
-
-@media (max-width: 768px) {
-  .shrink-swiper-container .swiper-button-next,
-  .shrink-swiper-container .swiper-button-prev {
-    display: none !important;
-  }
-}
-  /* CONTAINER IFRAME VIDEO & TOUCH MASK FOR MOBILE */
-.video-embed-wrapper {
-  width: 100% !important;
-  height: 60vh !important;
-  max-height: 68vh !important;
-  position: relative !important;
-  z-index: 10;
-  background: #000 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  overflow: hidden !important;
-}
-
-.video-embed-wrapper iframe {
-  width: 100% !important;
-  height: 100% !important;
-  border: none !important;
-  display: block !important;
-  pointer-events: auto !important;
-}
-
-/* TOUCH MASK: MENCEGAH SWIPER TERKUNCI DI HP */
-.gdrive-touch-mask {
-  position: absolute;
-  inset: 0;
-  z-index: 25;
-  background: transparent;
-  cursor: pointer;
-  touch-action: manipulation;
-}
-
-/* Saat di-tap, hilangkan mask & bebaskan akses klik langsung ke iframe */
-.gdrive-touch-mask.activated {
-  display: none !important;
-  pointer-events: none !important;
-}
-
-@media (max-width: 768px) {
-  .video-embed-wrapper {
-    height: auto !important;
-    aspect-ratio: 16 / 9 !important;
-    max-height: 50vh !important;
-  }
+  padding: 12px 16px; background: #fff; border-top: 2px solid #111; font-size: 13px; color: #111; line-height: 1.4; width: 100%; z-index: 10;
+  border-bottom-left-radius: 20px !important; border-bottom-right-radius: 20px !important;
 }
 </style>
 </head>
@@ -448,99 +306,95 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
 <div class="pattern-bg"></div>
 
 <!-- FAB CONTACT -->
-<div id="fab-container">  
-  <a href="#home" class="fab-home" title="Back to Home"><img src="images/luth.png" alt="LUTH" onerror="this.style.display='none'"></a>  
-  <div class="liquid-pill" id="liquidPill" onclick="toggleContact()">    
-    <div class="lp-socials" id="lpSocials">      
-      <a href="https://instagram.com" class="soc-mini" title="Instagram" target="_blank">        
-        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>      
-      </a>      
-      <a href="mailto:mail@gmail.com" class="soc-mini" title="Email">        
-        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>      
-      </a>      
-      <a href="https://wa.me" class="soc-mini" title="WhatsApp" target="_blank">        
-        <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>      
-      </a>      
-      <a href="https://x.com" class="soc-mini" title="X" target="_blank">        
-        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>      
-      </a>    
-    </div>    
-    <div class="lp-text" id="lpText">HIT ME UP!</div>  
+<div id="fab-container">
+  <a href="#home" class="fab-home" title="Back to Home"><img src="images/luth.png" alt="LUTH" onerror="this.style.display='none'"></a>
+  <div class="liquid-pill" id="liquidPill" onclick="toggleContact()">
+    <div class="lp-socials" id="lpSocials">
+      <a href="https://instagram.com" class="soc-mini" title="Instagram" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </a>
+      <a href="mailto:mail@gmail.com" class="soc-mini" title="Email">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      </a>
+      <a href="https://wa.me" class="soc-mini" title="WhatsApp" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+      </a>
+      <a href="https://x.com" class="soc-mini" title="X" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+    </div>
+    <div class="lp-text" id="lpText">HIT ME UP!</div>
   </div>
 </div>
 
 <!-- HERO -->
-<header id="home">  
-  <div class="hero-wrapper">    
-    <div class="hero-visual">      
-      <div class="logo-back"></div>      
-      <img src="images/profile.png" alt="Luthfi" class="hero-model" onerror="this.src='https://via.placeholder.com/650x650/8a2889/FFF?text=Profile'">      
-      <div class="logo-front"></div>    
-    </div>    
-    <div class="hero-text">      
-      <h1>Hi! I'm Luthfi,<br>Lets create design<br>to make people <span class="c-mag">stop</span>,<br><span class="c-purp">think</span>, and <span class="c-mag">act</span>.</h1>      
+<header id="home">
+  <div class="hero-wrapper">
+    <div class="hero-visual">
+      <div class="logo-back"></div>
+      <img src="images/profile.png" alt="Luthfi" class="hero-model" onerror="this.src='https://via.placeholder.com/650x650/8a2889/FFF?text=Profile'">
+      <div class="logo-front"></div>
+    </div>
+    <div class="hero-text">
+      <h1>Hi! I'm Luthfi,<br>Lets create design<br>to make people <span class="c-mag">stop</span>,<br><span class="c-purp">think</span>, and <span class="c-mag">act</span>.</h1>
       <div class="hero-actions">
         <a href="#portfolio" class="btn">EXPLORE</a>
         <a href="#about" class="btn-secondary">GET TO KNOW ME</a>
-      </div>    
-    </div>  
+      </div>
+    </div>
   </div>
 </header>
 
 <!-- PORTFOLIO -->
-<section id="portfolio">  
-  <h2 class="section-title">Significant Projects</h2>  
-  <div class="category-menu" id="categoryMenu"></div>  
+<section id="portfolio">
+  <h2 class="section-title">Significant Projects</h2>
+  <div class="category-menu" id="categoryMenu"></div>
   <div id="galleryGrid" class="masonry-grid"></div>
 </section>
 
 <!-- WHO IS ME (BENTO BOX) -->
-<section class="cv-sec" id="about">  
-  <h2 class="section-title">Man behind the gun</h2>  
-  <div class="bento-grid">        
-    <div class="bento-box bento-span-2">      
-      <div class="bento-header">/// SYSTEM.BIO</div>      
-      <h3 class="bento-title">Luthfi Hidayat</h3>      
-      <p class="bento-text">A digital creative professional obsessed with blending stark structural grids and fluid, high-performance interactions. I don't just build layouts; I engineer visual experiences that leave a lasting imprint.</p>    
+<section class="cv-sec" id="about">
+  <h2 class="section-title">Man behind the gun</h2>
+  <div class="bento-grid">
+    <div class="bento-box bento-span-2">
+      <div class="bento-header">/// SYSTEM.BIO</div>
+      <h3 class="bento-title">Luthfi Hidayat</h3>
+      <p class="bento-text">A digital creative professional obsessed with blending stark structural grids and fluid, high-performance interactions. I don't just build layouts; I engineer visual experiences that leave a lasting imprint.</p>
     </div>
-    <div class="bento-box bento-highlight" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">      
-      <div class="bento-header" style="margin:0; border:none;">PROJECTS DELIVERED</div>      
-      <div style="font-size: 4rem; font-weight: 900; line-height: 1; margin: 10px 0; text-shadow: 2px 2px 0 #111;">500+</div>      
-      <p style="font-family:'Space Mono'; font-size:11px;">And counting...</p>    
+    <div class="bento-box bento-highlight" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+      <div class="bento-header" style="margin:0; border:none;">PROJECTS DELIVERED</div>
+      <div style="font-size: 4rem; font-weight: 900; line-height: 1; margin: 10px 0; text-shadow: 2px 2px 0 #111;">500+</div>
+      <p style="font-family:'Space Mono'; font-size:11px;">And counting...</p>
     </div>
-
     <div class="bento-box">
       <div class="bento-header">/// JOB HISTORY</div>
       <div class="history-wrap"><ul class="retro-list" id="jobsList"></ul></div>
     </div>
-
     <div class="bento-box">
       <div class="bento-header">/// EDUCATION & CERTIFICATIONS</div>
       <div class="history-wrap"><ul class="retro-list" id="eduList"></ul></div>
     </div>
-
     <div class="bento-box">
       <div class="bento-header">/// ACHIEVEMENTS</div>
       <div class="history-wrap"><ul class="retro-list" id="achievementsList"></ul></div>
     </div>
-
-    <div class="bento-box bento-span-3">      
-      <div class="bento-header">/// TOOLS AND SKILLS</div>      
-      <div class="tools-wrap">        
-        <div class="tool-tag">Figma</div>        
-        <div class="tool-tag">Adobe Illustrator</div>        
-        <div class="tool-tag">Photoshop</div>        
-        <div class="tool-tag">After Effects</div>        
-        <div class="tool-tag">HTML/CSS/JS</div>        
-        <div class="tool-tag">Webflow</div>        
-        <div class="tool-tag">UI/UX Design</div>        
-        <div class="tool-tag">Brand Strategy</div>      
-      </div>    
+    <div class="bento-box bento-span-3">
+      <div class="bento-header">/// TOOLS AND SKILLS</div>
+      <div class="tools-wrap">
+        <div class="tool-tag">Figma</div>
+        <div class="tool-tag">Adobe Illustrator</div>
+        <div class="tool-tag">Photoshop</div>
+        <div class="tool-tag">After Effects</div>
+        <div class="tool-tag">HTML/CSS/JS</div>
+        <div class="tool-tag">Webflow</div>
+        <div class="tool-tag">UI/UX Design</div>
+        <div class="tool-tag">Brand Strategy</div>
+      </div>
     </div>
   </div>
 </section>
 
-<footer>  
+<footer>
   <div class="footer-copy"> © 2026 Luthfi HD "Create to discover, design to inspire". All Right Reserved.</div>
 </footer>
 
@@ -576,12 +430,10 @@ async function loadBioProfile() {
       const bioEl = document.querySelector('.bento-text');
       if (bioEl) bioEl.textContent = data.bio;
     }
-
     if (data.projectsCount) {
       const countEl = document.querySelector('.bento-highlight div:nth-child(2)');
       if (countEl) countEl.textContent = data.projectsCount;
     }
-
     if (data.jobs && data.jobs.length > 0) {
       const jobsWrap = document.querySelector('#jobsList');
       if (jobsWrap) {
@@ -590,7 +442,6 @@ async function loadBioProfile() {
           .map(j => `<li><span class="year">${j.year}</span><span class="desc">${j.desc}</span></li>`).join('');
       }
     }
-
     if (data.edu && data.edu.length > 0) {
       const eduWrap = document.querySelector('#eduList');
       if (eduWrap) {
@@ -599,7 +450,6 @@ async function loadBioProfile() {
           .map(e => `<li><span class="year">${e.year}</span><span class="desc">${e.desc}</span></li>`).join('');
       }
     }
-
     if (data.achievements && data.achievements.length > 0) {
       const achWrap = document.querySelector('#achievementsList');
       if (achWrap) {
@@ -608,7 +458,6 @@ async function loadBioProfile() {
           .map(a => `<li><span class="year">${a.year}</span><span class="desc">${a.desc}</span></li>`).join('');
       }
     }
-
     if (data.skills && data.skills.length > 0) {
       const toolsWrap = document.querySelector('.tools-wrap');
       if (toolsWrap) {
@@ -625,38 +474,52 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // AUTO FAVICON
-window.addEventListener('DOMContentLoaded', () => {    
-  const canvas = document.createElement('canvas');    
-  canvas.width = 64; canvas.height = 64;    
-  const ctx = canvas.getContext('2d');    
-  ctx.beginPath();    
-  ctx.arc(32, 32, 32, 0, Math.PI * 2);    
-  ctx.fillStyle = '#FFFFFF';    
-  ctx.fill();    
-  const img = new Image();    
+window.addEventListener('DOMContentLoaded', () => {
+  const canvas = document.createElement('canvas');
+  canvas.width = 64; canvas.height = 64;
+  const ctx = canvas.getContext('2d');
+  ctx.beginPath();
+  ctx.arc(32, 32, 32, 0, Math.PI * 2);
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fill();
+  const img = new Image();
   ctx.imageSmoothingEnabled = true;
-  img.crossOrigin = "Anonymous";    
-  img.onload = () => {        
-    ctx.drawImage(img, 12, 12, 40, 40);        
-    const link = document.createElement('link');        
-    link.rel = 'icon';        
-    link.type = 'image/png';        
-    link.href = canvas.toDataURL('image/png');        
-    document.head.appendChild(link);    
-  };    
+  img.crossOrigin = "Anonymous";
+  img.onload = () => {
+    ctx.drawImage(img, 12, 12, 40, 40);
+    const link = document.createElement('link');
+    link.rel = 'icon';
+    link.type = 'image/png';
+    link.href = canvas.toDataURL('image/png');
+    document.head.appendChild(link);
+  };
   img.src = 'images/luth.png';
 });
 
-// FAB LOGIC
+// FAB LOGIC WITH DYNAMIC OPACITY ON SCROLL
 const fabContainer = document.getElementById('fab-container');
 const liquidPill = document.getElementById('liquidPill');
 const lpText = document.getElementById('lpText');
-window.addEventListener('scroll', () => {  
-  if (window.scrollY > window.innerHeight * 0.5) fabContainer.classList.add('visible');  
-  else { fabContainer.classList.remove('visible'); liquidPill.classList.remove('active'); lpText.textContent = 'HIT ME UP!'; }
-});
-function toggleContact() {  
-  liquidPill.classList.toggle('active');  
+let fabScrollTimeout = null;
+
+window.addEventListener('scroll', () => {
+  if (window.scrollY > window.innerHeight * 0.5) {
+    fabContainer.classList.add('visible');
+    fabContainer.classList.add('scrolling');
+    clearTimeout(fabScrollTimeout);
+    fabScrollTimeout = setTimeout(() => {
+      fabContainer.classList.remove('scrolling');
+    }, 400); // 400ms IDLE -> OPACITY RETURNING 1
+  } else {
+    fabContainer.classList.remove('visible');
+    fabContainer.classList.remove('scrolling');
+    liquidPill.classList.remove('active');
+    lpText.textContent = 'HIT ME UP!';
+  }
+}, { passive: true });
+
+function toggleContact() {
+  liquidPill.classList.toggle('active');
   lpText.textContent = liquidPill.classList.contains('active') ? 'CLOSE' : 'HIT ME UP!';
 }
 
@@ -667,97 +530,149 @@ const IMAGES_BASE = 'https://raw.githubusercontent.com/luthfihd/luthporto/main/i
 let portfolioData = [];
 let categories = ['Overview'];
 
-function getDriveUrl(url, size) {  
-  let fileId = null;  
-  if (url.includes('/file/d/')) fileId = url.split('/file/d/')[1]?.split('/')[0];  
-  else if (url.includes('id=')) fileId = url.split('id=')[1]?.split('&')[0];  
-  if (fileId) return `https://images.weserv.nl/?url=${encodeURIComponent(`https://drive.google.com/thumbnail?authuser=0&sz=w${size}&id=${fileId}`)}&output=webp`;  
+function getDriveUrl(url, size) {
+  let fileId = null;
+  if (url.includes('/file/d/')) fileId = url.split('/file/d/')[1]?.split('/')[0];
+  else if (url.includes('id=')) fileId = url.split('id=')[1]?.split('&')[0];
+  if (fileId) return `https://images.weserv.nl/?url=${encodeURIComponent(`https://drive.google.com/thumbnail?authuser=0&sz=w${size}&id=${fileId}`)}&output=webp`;
   return url;
 }
 
 function parseGDriveVideoUrl(url) {
   let fileId = null;
-  if (url.includes('/file/d/')) {
-    fileId = url.split('/file/d/')[1]?.split('/')[0];
-  } else if (url.includes('id=')) {
-    fileId = url.split('id=')[1]?.split('&')[0];
-  }
-
-  if (fileId) {
-    return `https://drive.google.com/file/d/${fileId}/preview`;
-  }
-  return url;
+  if (url.includes('/file/d/')) fileId = url.split('/file/d/')[1]?.split('/')[0];
+  else if (url.includes('id=')) fileId = url.split('id=')[1]?.split('&')[0];
+  return fileId ? `https://drive.google.com/file/d/${fileId}/preview` : url;
 }
 
-async function loadPortfolio() {  
-  try {    
-    const res = await fetch(`${DATA_URL}?t=${Date.now()}`);    
-    portfolioData = await res.json();        
-    let foundCats = [];    
-    portfolioData.forEach(item => {         
-      if (item.category && !foundCats.includes(item.category)) foundCats.push(item.category);     
-    });        
-    categories = ['Overview'];    
-    foundCats.forEach(c => {        
-      if (c !== 'Overview' && c.toLowerCase() !== 'labs') categories.push(c);    
-    });    
-    let labsCat = foundCats.find(c => c.toLowerCase() === 'labs');    
-    if (labsCat) categories.push(labsCat);        
-    
-    const catMenu = document.getElementById('categoryMenu');    
+async function loadPortfolio() {
+  try {
+    const res = await fetch(`${DATA_URL}?t=${Date.now()}`);
+    portfolioData = await res.json();
+    let foundCats = [];
+    portfolioData.forEach(item => {
+      if (item.category && !foundCats.includes(item.category)) foundCats.push(item.category);
+    });
+    categories = ['Overview'];
+    foundCats.forEach(c => {
+      if (c !== 'Overview' && c.toLowerCase() !== 'labs') categories.push(c);
+    });
+    let labsCat = foundCats.find(c => c.toLowerCase() === 'labs');
+    if (labsCat) categories.push(labsCat);
+
+    const catMenu = document.getElementById('categoryMenu');
     catMenu.innerHTML = '';
-    categories.forEach(cat => {      
-      const btn = document.createElement('button');      
-      btn.className = cat === 'Overview' ? 'cat-btn active' : 'cat-btn';      
-      btn.textContent = cat;      
-      btn.onclick = (e) => filterGallery(cat, e);      
-      catMenu.appendChild(btn);    
-    });    
-    filterGallery('Overview');  
+    categories.forEach(cat => {
+      const btn = document.createElement('button');
+      btn.className = cat === 'Overview' ? 'cat-btn active' : 'cat-btn';
+      btn.textContent = cat;
+      btn.onclick = (e) => filterGallery(cat, e);
+      catMenu.appendChild(btn);
+    });
+    filterGallery('Overview');
   } catch(e){}
 }
 
-function filterGallery(category, event) {  
-  if (event) { document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); }  
-  const grid = document.getElementById('galleryGrid');  
-  grid.innerHTML = '';    
-  
-  let filteredData = category === 'Overview'     
-    ? portfolioData.filter(p => p.featured === true || p.featured === "true")     
+function filterGallery(category, event) {
+  if (event) { document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); }
+  const grid = document.getElementById('galleryGrid');
+  grid.innerHTML = '';
+
+  let filteredData = category === 'Overview'
+    ? portfolioData.filter(p => p.featured === true || p.featured === "true")
     : portfolioData.filter(p => p.category === category);
 
-  filteredData.forEach((item, itemIdx) => {    
-    const rawLinks = (item.image || item.src || "").split(',').map(l => l.trim()).filter(l => l !== "");    
-    const isMultiple = rawLinks.length > 1;        
-    let tabColor = '#fff';    
-    const cat = (item.category || "").toLowerCase();        
-    
-    if(cat === 'educational') tabColor = 'var(--purple)';    
-    else if(cat === 'promotional') tabColor = 'var(--magenta)';    
-    else if(cat === 'branding') tabColor = '#FFD93D';    
-    else if(cat === 'labs') tabColor = 'var(--green-labs)'; 
+  filteredData.forEach((item, itemIdx) => {
+    const rawLinks = (item.image || item.src || "").split(',').map(l => l.trim()).filter(l => l !== "");
+    const isMultiple = rawLinks.length > 1;
 
-    const card = document.createElement('div');    
+    let tabColor = '#fff';
+    const cat = (item.category || "").toLowerCase();
+
+    if(cat === 'educational') tabColor = 'var(--purple)';
+    else if(cat === 'promotional') tabColor = 'var(--magenta)';
+    else if(cat === 'branding') tabColor = '#FFD93D';
+    else if(cat === 'labs') tabColor = 'var(--green-labs)';
+
+    const card = document.createElement('div');
     card.className = 'folder-item';
-
-    let firstLink = rawLinks[0] || "";
-    let previewSrc = firstLink.replace('#video', '');
-    previewSrc = previewSrc.startsWith('http') ? previewSrc : IMAGES_BASE + previewSrc;
-    if (previewSrc.includes('drive.google.com')) previewSrc = getDriveUrl(previewSrc, 400);
 
     const galleryGroupName = `gallery-${itemIdx}`;
 
-    card.innerHTML = `      
-      <div class="folder-tab" style="background: ${tabColor}; color: ${cat==='educational'||cat==='promotional'||cat==='labs'?'#fff':'#111'}">${item.category}</div>      
-      <div class="folder-content" onclick="openProjectLightbox('${galleryGroupName}', ${JSON.stringify(item).replace(/"/g, '&quot;')})">        
-        <div class="folder-img-wrap">          
-          <img src="${previewSrc}" class="single-img" alt="${item.title}">          
-          ${isMultiple ? `<div class="multiple-sticker">${rawLinks.length} MEDIA</div>` : ''}        
-        </div>        
-        <div class="folder-badge">${item.title}</div>      
-      </div>    
-    `;    
-    grid.appendChild(card);  
+    // RENDER MEDIA AREA (SINGLE VS SWIPER CAROUSEL IN GRID)
+    let mediaHtml = '';
+    if (isMultiple) {
+      let slidesHtml = rawLinks.map((link) => {
+        let isVid = link.includes('#video');
+        let src = link.replace('#video', '');
+        src = src.startsWith('http') ? src : IMAGES_BASE + src;
+        if (src.includes('drive.google.com')) src = getDriveUrl(src, 400);
+
+        return `<div class="swiper-slide"><img src="${src}" alt="${item.title}"></div>`;
+      }).join('');
+
+      mediaHtml = `
+        <div class="swiper grid-card-swiper" id="swiper-card-${itemIdx}">
+          <div class="swiper-wrapper">${slidesHtml}</div>
+          <div class="swiper-pagination"></div>
+        </div>
+        <div class="multiple-sticker">${rawLinks.length} MEDIA</div>
+      `;
+    } else {
+      let firstLink = rawLinks[0] || "";
+      let previewSrc = firstLink.replace('#video', '');
+      previewSrc = previewSrc.startsWith('http') ? previewSrc : IMAGES_BASE + previewSrc;
+      if (previewSrc.includes('drive.google.com')) previewSrc = getDriveUrl(previewSrc, 400);
+
+      mediaHtml = `<img src="${previewSrc}" class="single-img" alt="${item.title}">`;
+    }
+
+    card.innerHTML = `
+      <div class="folder-tab" style="background: ${tabColor}; color: ${cat==='educational'||cat==='promotional'||cat==='labs'?'#fff':'#111'}">${item.category}</div>
+      <div class="folder-content">
+        <div class="folder-img-wrap">${mediaHtml}</div>
+        <div class="folder-badge">${item.title}</div>
+      </div>
+    `;
+
+    grid.appendChild(card);
+
+    // BIND EVENT KLIK MODAL & SWIPER IN GRID
+    const contentEl = card.querySelector('.folder-content');
+    let isSwipingCard = false;
+    let startX = 0;
+
+    if (isMultiple) {
+      const swiperElem = card.querySelector(`#swiper-card-${itemIdx}`);
+      new Swiper(swiperElem, {
+        loop: false,
+        speed: 250,
+        nested: true,
+        simulateTouch: true,
+        allowTouchMove: true,
+        touchEventsTarget: 'wrapper',
+        pagination: { el: swiperElem.querySelector('.swiper-pagination'), clickable: true }
+      });
+
+      swiperElem.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; isSwipingCard = false; }, { passive: true });
+      swiperElem.addEventListener('touchmove', (e) => {
+        if (Math.abs(e.touches[0].clientX - startX) > 8) isSwipingCard = true;
+      }, { passive: true });
+      swiperElem.addEventListener('mousedown', (e) => { startX = e.clientX; isSwipingCard = false; });
+      swiperElem.addEventListener('mousemove', (e) => {
+        if (Math.abs(e.clientX - startX) > 8) isSwipingCard = true;
+      });
+    }
+
+    contentEl.addEventListener('click', (e) => {
+      if (isSwipingCard) {
+        e.preventDefault();
+        e.stopPropagation();
+        isSwipingCard = false;
+        return;
+      }
+      openProjectLightbox(galleryGroupName, item);
+    });
   });
 }
 
@@ -765,12 +680,11 @@ function filterGallery(category, event) {
 function closeShrinkModal() {
   document.getElementById('shrink-modal-overlay').classList.remove('active');
   document.body.classList.remove('modal-open-lock');
-  
+
   const wrapper = document.getElementById('shrinkWrapper');
   if (wrapper) wrapper.innerHTML = '';
 }
 
-// CLOSE MODAL VIA ESC KEY & BACKDROP CLICK
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27) {
     closeShrinkModal();
@@ -784,16 +698,7 @@ if (modalOverlay) {
   });
 }
 
-// OPEN LIGHTBOX LOGIC WITH SWIPER ENGINE & VIDEO FIX
-// HELPER CONVERT LINK GOOGLE DRIVE KE EMBED PREVIEW
-function parseGDriveVideoUrl(url) {
-  let fileId = null;
-  if (url.includes('/file/d/')) fileId = url.split('/file/d/')[1]?.split('/')[0];
-  else if (url.includes('id=')) fileId = url.split('id=')[1]?.split('&')[0];
-  return fileId ? `https://drive.google.com/file/d/${fileId}/preview` : url;
-}
-
-// OPEN LIGHTBOX LOGIC WITH SWIPER ENGINE, TOUCH MASK & MOBILE MULTI-RATIO FIX
+// OPEN LIGHTBOX LOGIC WITH SWIPER ENGINE, REV AGAIN MOBILE BUTTON & SWIPE DOWN TO CLOSE
 function openProjectLightbox(groupName, item) {
   const rawLinks = (item.image || item.src || "").split(',').map(l => l.trim()).filter(l => l !== "");
   const descText = item.desc || item.category;
@@ -815,11 +720,17 @@ function openProjectLightbox(groupName, item) {
 
     if (isVideo) {
       const vidWrap = document.createElement('div');
-      vidWrap.className = 'video-embed-wrapper swiper-no-swiping';
+      vidWrap.className = 'video-embed-wrapper';
 
       let embedVideoUrl = fullSrc;
+      let rawDriveViewUrl = fullSrc;
+
       if (fullSrc.includes('drive.google.com')) {
         embedVideoUrl = parseGDriveVideoUrl(fullSrc);
+        let fileId = null;
+        if (fullSrc.includes('/file/d/')) fileId = fullSrc.split('/file/d/')[1]?.split('/')[0];
+        else if (fullSrc.includes('id=')) fileId = fullSrc.split('id=')[1]?.split('&')[0];
+        if (fileId) rawDriveViewUrl = `https://drive.google.com/file/d/${fileId}/view`;
       } else if (fullSrc.includes('youtube.com/watch?v=')) {
         const vId = fullSrc.split('v=')[1]?.split('&')[0];
         embedVideoUrl = `https://www.youtube.com/embed/${vId}?enablejsapi=1`;
@@ -828,13 +739,12 @@ function openProjectLightbox(groupName, item) {
         embedVideoUrl = `https://www.youtube.com/embed/${vId}?enablejsapi=1`;
       }
 
-      // TOUCH MASK OVERLAY FIX MOBILE
+      // Desktop output Iframe, Mobile output Tombol Play REV AGAIN
       vidWrap.innerHTML = `
-        <div class="gdrive-touch-mask" 
-             ontouchstart="this.classList.add('activated')" 
-             onclick="this.classList.add('activated')">
-        </div>
         <iframe src="${embedVideoUrl}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+        <a href="${rawDriveViewUrl}" target="_blank" rel="noopener noreferrer" class="gdrive-mobile-playbtn">
+          ▶ PLAY ON GOOGLE DRIVE
+        </a>
       `;
 
       slide.appendChild(vidWrap);
@@ -842,10 +752,9 @@ function openProjectLightbox(groupName, item) {
     } else {
       let displaySrc = fullSrc.includes('drive.google.com') ? getDriveUrl(fullSrc, 1200) : fullSrc;
       const img = document.createElement('img');
-      img.loading = idx === 0 ? "eager" : "lazy";
       img.src = displaySrc;
       img.alt = item.title;
-      
+
       loadedMedia.push({ type: 'image', el: img });
       slide.appendChild(img);
     }
@@ -896,23 +805,42 @@ function openProjectLightbox(groupName, item) {
     loop: false,
     spaceBetween: 0,
     speed: 250,
+    simulateTouch: true,
+    allowTouchMove: true,
     touchEventsTarget: 'wrapper',
-    noSwiping: true,
-    noSwipingClass: 'swiper-no-swiping',
-    touchMoveStopPropagation: false,
     mousewheel: { forceToAxis: true },
     keyboard: { enabled: true, onlyInViewport: true },
     navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
     pagination: { el: '.swiper-pagination', clickable: true },
     on: {
-      init: function () {
-        fitModalToSlide(this.activeIndex || 0);
-      },
-      slideChangeTransitionStart: function () {
-        fitModalToSlide(this.activeIndex || 0);
-      }
+      init: function () { fitModalToSlide(this.activeIndex || 0); },
+      slideChangeTransitionStart: function () { fitModalToSlide(this.activeIndex || 0); }
     }
   });
+
+  // SWIPE DOWN TO CLOSE GESTURE ON MOBILE
+  let startY = 0;
+  let currentY = 0;
+  const modalBox = document.getElementById('shrinkBox');
+
+  modalBox.ontouchstart = function(e) { startY = e.touches[0].clientY; };
+  modalBox.ontouchmove = function(e) {
+    currentY = e.touches[0].clientY;
+    let diffY = currentY - startY;
+    if (diffY > 30) {
+      modalBox.style.transform = `translateY(${diffY}px)`;
+      modalBox.style.opacity = `${1 - (diffY / 300)}`;
+    }
+  };
+  modalBox.ontouchend = function() {
+    let diffY = currentY - startY;
+    if (diffY > 120) {
+      closeShrinkModal();
+    }
+    modalBox.style.transform = '';
+    modalBox.style.opacity = '';
+    startY = 0; currentY = 0;
+  };
 }
 
 loadPortfolio();
