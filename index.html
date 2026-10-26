@@ -156,7 +156,7 @@ header { min-height: 100vh; display: flex; align-items: center; justify-content:
   cursor: pointer;
   transition: all 0.1s ease-out;
   background: #8a2889;
-  color: var(--text-dark);
+  color: #fff
   border: var(--brutal-border);
   box-shadow: var(--brutal-shadow);
   display: inline-block;
@@ -171,7 +171,7 @@ header { min-height: 100vh; display: flex; align-items: center; justify-content:
   .hero-visual { width: 400px; height: 400px; }
 }
 @media(max-width: 768px) { 
-  .hero-actions { display: none !important; }
+  .hero-actions { display: flex !important; }
 }
 
 /* ── 4. PORTFOLIO ── */
@@ -270,6 +270,7 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
   display: flex; align-items: center; justify-content: center;
   padding: 16px; opacity: 0; pointer-events: none;
   transition: opacity 0.2s ease;
+  border-radius: 0px !important;
 }
 .shrink-modal-overlay.active { opacity: 1; pointer-events: auto; }
 
@@ -381,6 +382,47 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
   .shrink-swiper-container .swiper-button-next,
   .shrink-swiper-container .swiper-button-prev {
     display: none !important;
+  }
+}
+  /* CONTAINER IFRAME VIDEO & TOUCH MASK FOR MOBILE */
+.video-embed-wrapper {
+  width: 100% !important;
+  height: 60vh !important;
+  max-height: 68vh !important;
+  position: relative !important;
+  z-index: 10;
+  background: #000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+
+.video-embed-wrapper iframe {
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+  display: block !important;
+  pointer-events: auto !important;
+}
+
+/* TOUCH MASK: MENCEGAH SWIPER TERKUNCI DI HP */
+.gdrive-touch-mask {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background: transparent;
+  cursor: pointer;
+}
+.gdrive-touch-mask.activated {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .video-embed-wrapper {
+    height: auto !important;
+    aspect-ratio: 16 / 9 !important;
+    max-height: 50vh !important;
   }
 }
 </style>
@@ -727,6 +769,15 @@ if (modalOverlay) {
 }
 
 // OPEN LIGHTBOX LOGIC WITH SWIPER ENGINE & VIDEO FIX
+// HELPER CONVERT LINK GOOGLE DRIVE KE EMBED PREVIEW
+function parseGDriveVideoUrl(url) {
+  let fileId = null;
+  if (url.includes('/file/d/')) fileId = url.split('/file/d/')[1]?.split('/')[0];
+  else if (url.includes('id=')) fileId = url.split('id=')[1]?.split('&')[0];
+  return fileId ? `https://drive.google.com/file/d/${fileId}/preview` : url;
+}
+
+// OPEN LIGHTBOX LOGIC WITH SWIPER ENGINE, TOUCH MASK & MOBILE MULTI-RATIO FIX
 function openProjectLightbox(groupName, item) {
   const rawLinks = (item.image || item.src || "").split(',').map(l => l.trim()).filter(l => l !== "");
   const descText = item.desc || item.category;
@@ -761,7 +812,12 @@ function openProjectLightbox(groupName, item) {
         embedVideoUrl = `https://www.youtube.com/embed/${vId}?enablejsapi=1`;
       }
 
-      vidWrap.innerHTML = `<iframe src="${embedVideoUrl}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+      // TOUCH MASK OVERLAY: Membebaskan sentuhan usap/swipe Swiper di HP sampai user men-tap video
+      vidWrap.innerHTML = `
+        <div class="gdrive-touch-mask" onclick="this.classList.add('activated')"></div>
+        <iframe src="${embedVideoUrl}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+      `;
+
       slide.appendChild(vidWrap);
       loadedMedia.push({ type: 'video' });
     } else {
