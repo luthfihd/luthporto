@@ -133,7 +133,7 @@ header { min-height: 100vh; display: flex; align-items: center; justify-content:
 .hero-actions { display: flex; gap: 16px; margin-top: 40px; flex-wrap: wrap; }
 .btn {
   padding: 14px 32px; font-size: 16px; font-weight: 900; text-transform: uppercase; text-decoration: none; cursor: pointer;
-  transition: all 0.1s ease-out; background: var(--magenta); color: #fff; border: var(--brutal-border); box-shadow: var(--brutal-shadow);
+  transition: all 0.1s ease-out; background: var(--purple); color: #fff; border: var(--brutal-border); box-shadow: var(--brutal-shadow);
 }
 .btn:hover { background: var(--purple); }
 .btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--text-dark); }
@@ -142,7 +142,7 @@ header { min-height: 100vh; display: flex; align-items: center; justify-content:
   padding: 14px 32px; font-size: 16px; font-weight: 900; text-transform: uppercase; text-decoration: none; cursor: pointer;
   transition: all 0.1s ease-out; background: var(--purple); color: #fff; border: var(--brutal-border); box-shadow: var(--brutal-shadow); display: inline-block;
 }
-.btn-secondary:hover { background: var(--magenta); }
+.btn-secondary:hover { background: var(--purple); }
 .btn-secondary:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--text-dark); }
 
 @media(max-width: 1024px) {
@@ -182,7 +182,7 @@ section { padding: 80px 24px 40px; max-width: 1400px; margin: 0 auto; }
 .grid-card-swiper { width: 100%; touch-action: pan-y pinch-zoom !important; }
 .grid-card-swiper .swiper-slide img { width: 100%; height: auto; display: block; object-fit: cover; pointer-events: none !important; -webkit-user-drag: none !important; }
 .grid-card-swiper .swiper-pagination-bullet { background: #fff !important; opacity: 0.8; border: 1px solid #111; }
-.grid-card-swiper .swiper-pagination-bullet-active { background: var(--purple) !important; opacity: 1; }
+.grid-card-swiper .swiper-pagination-bullet-active { background: #000000 !important; opacity: 1; }
 
 .multiple-sticker { position: absolute; top: 8px; right: 8px; background: var(--purple); color: #fff; border: 2px solid var(--text-dark); padding: 4px 8px; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 10px; transform: rotate(4deg); box-shadow: 2px 2px 0 var(--text-dark); z-index: 5; pointer-events: none; }
 .folder-badge { background: #fff; border-top: 2px solid var(--text-dark); padding: 12px 5px 5px; font-weight: 900; font-size: 14px; margin-top: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase; }
@@ -251,7 +251,7 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
 .shrink-modal-title { font-family: 'Space Mono', monospace; font-weight: 900; font-size: 13px; text-transform: uppercase; color: #8a2889; }
 
 .shrink-modal-close {
-  background: #a00a12 !important; color: #fff !important; border: 2px solid #111 !important;
+  background: #f63641 !important; color: #fff !important; border: 2px solid #111 !important;
   width: 30px; height: 30px; font-weight: 900; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   border-radius: 20px !important; box-shadow: 2px 2px 0px #111; transition: transform 0.1s ease;
@@ -582,7 +582,10 @@ async function loadPortfolio() {
 }
 
 function filterGallery(category, event) {
-  if (event) { document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); }
+  if (event) { 
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active')); 
+    event.target.classList.add('active'); 
+  }
   const grid = document.getElementById('galleryGrid');
   grid.innerHTML = '';
 
@@ -619,10 +622,10 @@ function filterGallery(category, event) {
         return `<div class="swiper-slide"><img src="${src}" alt="${item.title}"></div>`;
       }).join('');
 
+      // Note: Opsi Swiper tanpa bullet/pagination di grid
       mediaHtml = `
         <div class="swiper grid-card-swiper" id="swiper-card-${itemIdx}">
           <div class="swiper-wrapper">${slidesHtml}</div>
-          <div class="swiper-pagination"></div>
         </div>
         <div class="multiple-sticker">${rawLinks.length} MEDIA</div>
       `;
@@ -645,45 +648,52 @@ function filterGallery(category, event) {
 
     grid.appendChild(card);
 
-    // BIND EVENT KLIK MODAL & SWIPER IN GRID
+    // INISIALISASI SWIPER & PEMISAHAN GESTURE CLICK VS SWIPE
     const contentEl = card.querySelector('.folder-content');
-    let isSwipingCard = false;
-    let startX = 0;
 
     if (isMultiple) {
       const swiperElem = card.querySelector(`#swiper-card-${itemIdx}`);
-      new Swiper(swiperElem, {
-  loop: false,
-  speed: 250,
-  nested: true,
-  simulateTouch: true,
-  allowTouchMove: true,
-  touchEventsTarget: 'wrapper',
-  mousewheel: {
-    forceToAxis: true,    // Mengaktifkan gesture usap 2 jari di touchpad
-    releaseOnEdges: true
-  }
-});
+      
+      const swiperInstance = new Swiper(swiperElem, {
+        loop: false,
+        speed: 250,
+        nested: true,
+        simulateTouch: true,
+        allowTouchMove: true,
+        threshold: 8, // Mengizinkan toleransi usap sebelum Swiper mengunci gesture
+        touchEventsTarget: 'wrapper',
+        mousewheel: {
+          forceToAxis: true,
+          releaseOnEdges: true
+        }
+      });
 
-      swiperElem.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; isSwipingCard = false; }, { passive: true });
-      swiperElem.addEventListener('touchmove', (e) => {
-        if (Math.abs(e.touches[0].clientX - startX) > 8) isSwipingCard = true;
-      }, { passive: true });
-      swiperElem.addEventListener('mousedown', (e) => { startX = e.clientX; isSwipingCard = false; });
-      swiperElem.addEventListener('mousemove', (e) => {
-        if (Math.abs(e.clientX - startX) > 8) isSwipingCard = true;
+      // Deteksi geseran nyata via Swiper internal event
+      let isRealSwipe = false;
+
+      swiperInstance.on('touchStart', () => {
+        isRealSwipe = false;
+      });
+
+      swiperInstance.on('touchMove', () => {
+        isRealSwipe = true;
+      });
+
+      contentEl.addEventListener('click', (e) => {
+        if (isRealSwipe) {
+          e.preventDefault();
+          e.stopPropagation();
+          isRealSwipe = false;
+          return;
+        }
+        openProjectLightbox(galleryGroupName, item);
+      });
+    } else {
+      // Untuk single media, 1x klik langsung buka modal
+      contentEl.addEventListener('click', () => {
+        openProjectLightbox(galleryGroupName, item);
       });
     }
-
-    contentEl.addEventListener('click', (e) => {
-      if (isSwipingCard) {
-        e.preventDefault();
-        e.stopPropagation();
-        isSwipingCard = false;
-        return;
-      }
-      openProjectLightbox(galleryGroupName, item);
-    });
   });
 }
 
