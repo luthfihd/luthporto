@@ -143,7 +143,19 @@ header { min-height: 100vh; display: flex; align-items: center; justify-content:
 .c-purp { color: var(--purple); font-weight: 900; }
 
 .hero-actions { display: flex; gap: 16px; margin-top: 40px; flex-wrap: wrap; }
-.btn { padding: 14px 32px; font-size: 16px; font-weight: 900; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: all 0.1s ease-out; background: var(--purple); color: #fff; border: var(--brutal-border); box-shadow: var(--brutal-shadow); }
+.btn { 
+  padding: 14px 32px; 
+  font-size: 16px; 
+  font-weight: 900; 
+  text-transform: uppercase; 
+  text-decoration: none; 
+  cursor: pointer; 
+  transition: all 0.1s ease-out; 
+  background: var(--purple); 
+  color: #fff; 
+  border: var(--brutal-border); 
+  box-shadow: var(--brutal-shadow); 
+}
 .btn:hover { background: var(--magenta); }
 .btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--text-dark); }
 
@@ -155,9 +167,9 @@ header { min-height: 100vh; display: flex; align-items: center; justify-content:
   text-decoration: none;
   cursor: pointer;
   transition: all 0.1s ease-out;
-  background: #8a2889;
-  color: #fff
-  border: var(--brutal-border);
+  background: var(--magenta);
+  color: #fff; 
+  border: var(--brutal-border); 
   box-shadow: var(--brutal-shadow);
   display: inline-block;
 }
@@ -410,12 +422,16 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
 .gdrive-touch-mask {
   position: absolute;
   inset: 0;
-  z-index: 20;
+  z-index: 25;
   background: transparent;
   cursor: pointer;
+  touch-action: manipulation;
 }
+
+/* Saat di-tap, hilangkan mask & bebaskan akses klik langsung ke iframe */
 .gdrive-touch-mask.activated {
   display: none !important;
+  pointer-events: none !important;
 }
 
 @media (max-width: 768px) {
@@ -812,9 +828,12 @@ function openProjectLightbox(groupName, item) {
         embedVideoUrl = `https://www.youtube.com/embed/${vId}?enablejsapi=1`;
       }
 
-      // TOUCH MASK OVERLAY: Membebaskan sentuhan usap/swipe Swiper di HP sampai user men-tap video
+      // TOUCH MASK OVERLAY FIX MOBILE
       vidWrap.innerHTML = `
-        <div class="gdrive-touch-mask" onclick="this.classList.add('activated')"></div>
+        <div class="gdrive-touch-mask" 
+             ontouchstart="this.classList.add('activated')" 
+             onclick="this.classList.add('activated')">
+        </div>
         <iframe src="${embedVideoUrl}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
       `;
 
@@ -837,15 +856,12 @@ function openProjectLightbox(groupName, item) {
   document.body.classList.add('modal-open-lock');
   document.getElementById('shrink-modal-overlay').classList.add('active');
 
-  // FITUR KUNCI: Menyesuaikan ukuran box & memaksa Swiper menghitung ulang koordinat posisi slide
   const fitModalToSlide = (activeIndex) => {
     const activeMedia = loadedMedia[activeIndex] || loadedMedia[0];
     const shrinkBox = document.getElementById('shrinkBox');
 
     const applyAndRecalculate = (finalW) => {
       shrinkBox.style.setProperty('width', finalW + 'px', 'important');
-      
-      // PAKSA SWIPER HITUNG ULANG TEPAT SETELAH UKURAN MODAL BERUBAH
       requestAnimationFrame(() => {
         if (window.shrinkSwiperInstance) {
           window.shrinkSwiperInstance.updateSize();
@@ -876,14 +892,11 @@ function openProjectLightbox(groupName, item) {
 
   if (window.shrinkSwiperInstance) window.shrinkSwiperInstance.destroy();
 
-  // KONFIGURASI SWIPER ANTI-STUCK DI MOBILE
   window.shrinkSwiperInstance = new Swiper('#shrinkSwiper', {
     loop: false,
     spaceBetween: 0,
     speed: 250,
-    touchEventsTarget: 'wrapper', // Menghindari gestur tersangkut pada gambar/elemen anak
-    observer: true,               // Deteksi otomatis jika ada perubahan DOM
-    observeParents: true,         // Deteksi otomatis jika ukuran modal berubah
+    touchEventsTarget: 'wrapper',
     noSwiping: true,
     noSwipingClass: 'swiper-no-swiping',
     touchMoveStopPropagation: false,
