@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
@@ -10,8 +10,8 @@
 <link rel="preconnect" href="https://drive.google.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,700;0,800;0,900;1,600&family=Space+Mono:wght@400;700;900&display=swap" rel="stylesheet">
 
-<!-- Glightbox CSS CDN -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+<!-- Swiper.js CSS CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
 <style>
 /* ── 1. VARIABEL & GLOBAL BORDER RADIUS RULES ── */
@@ -47,6 +47,7 @@
 /* Pengecualian All Buttons Kapsul 100px */
 button,
 .btn,
+.btn-secondary,
 .cat-btn,
 .folder-tab,
 .multiple-sticker,
@@ -62,6 +63,12 @@ body {
   color: var(--text-dark); 
   overflow-x: hidden; 
   position: relative;
+}
+
+/* LOCK SCROLL BODY SAAT MODAL AKTIF */
+body.modal-open-lock {
+  overflow: hidden !important;
+  touch-action: none !important;
 }
 
 /* PATTERN BACKGROUND */
@@ -134,10 +141,28 @@ header { min-height: 100vh; display: flex; align-items: center; justify-content:
 .hero-text h1 { font-size: clamp(3rem, 5.5vw, 4.5rem); font-weight: 500; line-height: 1.1; color: var(--text-dark); letter-spacing: -1px; text-shadow: 1px 1px 0 #fff; }
 .c-mag { color: var(--magenta); font-weight: 900; }
 .c-purp { color: var(--purple); font-weight: 900; }
-.hero-actions { display: flex; gap: 16px; margin-top: 40px; }
+
+.hero-actions { display: flex; gap: 16px; margin-top: 40px; flex-wrap: wrap; }
 .btn { padding: 14px 32px; font-size: 16px; font-weight: 900; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: all 0.1s ease-out; background: var(--purple); color: #fff; border: var(--brutal-border); box-shadow: var(--brutal-shadow); }
 .btn:hover { background: var(--magenta); }
 .btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--text-dark); }
+
+.btn-secondary {
+  padding: 14px 32px;
+  font-size: 16px;
+  font-weight: 900;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.1s ease-out;
+  background: #fff;
+  color: var(--text-dark);
+  border: var(--brutal-border);
+  box-shadow: var(--brutal-shadow);
+  display: inline-block;
+}
+.btn-secondary:hover { background: #FFD93D; }
+.btn-secondary:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--text-dark); }
 
 @media(max-width: 1024px) { 
   .hero-wrapper { flex-direction: column; text-align: center; } 
@@ -238,9 +263,107 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
 .soc-mini:hover svg { transform: scale(1.15); opacity: 0.85; }
 .soc-mini:active svg { transform: scale(0.95); }
 
-/* GLightbox Custom Neo-Brutalist Tuning Overrides */
-.glightbox-container .gmodal { border-radius: 0px !important; }
-.gslide-media { border-radius: 0px !important; }
+/* ── 7. NEO-BRUTALIST SHRINK-WRAP MODAL ── */
+.shrink-modal-overlay {
+  position: fixed; inset: 0; z-index: 99999;
+  background: rgba(0,0,0,0.8);
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px; opacity: 0; pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.shrink-modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+.shrink-modal-box {
+  background: #fff;
+  border: 2px solid #111;
+  box-shadow: 6px 6px 0px #111;
+  width: fit-content;
+  max-width: 92vw;
+  display: flex; flex-direction: column;
+  position: relative;
+  border-radius: 20px !important;
+  transition: width 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+  margin: 0 auto;
+  overflow: hidden !important;
+}
+
+.shrink-modal-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 16px; border-bottom: 2px solid #111; background: #fff;
+  border-top-left-radius: 20px !important;
+  border-top-right-radius: 20px !important;
+}
+.shrink-modal-title {
+  font-family: 'Space Mono', monospace;
+  font-weight: 900; font-size: 13px; text-transform: uppercase; color: #8a2889;
+}
+
+.shrink-modal-close {
+  background: #a00a12 !important;
+  color: #fff !important;
+  border: 2px solid #111 !important;
+  width: 30px; height: 30px; font-weight: 900; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 20px !important;
+  box-shadow: 2px 2px 0px #111;
+  transition: transform 0.1s ease;
+}
+.shrink-modal-close:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0 #111; }
+
+.shrink-swiper-container {
+  width: 100% !important;
+  background: #fff !important;
+  position: relative;
+  overflow: hidden !important;
+}
+.swiper-slide {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  background: #fff !important;
+  overflow: hidden !important;
+}
+.swiper-slide img {
+  max-height: 68vh;
+  max-width: 100%;
+  width: auto; height: auto;
+  display: block; margin: 0 auto;
+  object-fit: contain;
+}
+
+/* VIDEO EMBED WRAPPER FIX FOR GDRIVE & YOUTUBE */
+.video-embed-wrapper {
+  width: 100% !important;
+  height: 60vh !important;
+  max-height: 68vh !important;
+  position: relative !important;
+  z-index: 10;
+  background: #000 !important;
+}
+.video-embed-wrapper iframe, 
+.video-embed-wrapper video {
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+  display: block !important;
+  pointer-events: auto !important;
+}
+
+.shrink-modal-infobox {
+  padding: 12px 16px; background: #fff;
+  border-top: 2px solid #111; font-size: 13px; color: #111; line-height: 1.4;
+  width: 100%; z-index: 10;
+  border-bottom-left-radius: 20px !important;
+  border-bottom-right-radius: 20px !important;
+}
+
+@media (max-width: 768px) {
+  .shrink-swiper-container .swiper-button-next,
+  .shrink-swiper-container .swiper-button-prev {
+    display: none !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -279,7 +402,10 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
     </div>    
     <div class="hero-text">      
       <h1>Hi! I'm Luthfi,<br>Lets create design<br>to make people <span class="c-mag">stop</span>,<br><span class="c-purp">think</span>, and <span class="c-mag">act</span>.</h1>      
-      <div class="hero-actions"><a href="#portfolio" class="btn">E X P L O R E</a></div>    
+      <div class="hero-actions">
+        <a href="#portfolio" class="btn">E X P L O R E</a>
+        <a href="#about" class="btn-secondary">GET TO KNOW ME</a>
+      </div>    
     </div>  
   </div>
 </header>
@@ -341,8 +467,25 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
   <div class="footer-copy"> © 2026 Luthfi HD "Create to discover, design to inspire". All Right Reserved.</div>
 </footer>
 
-<!-- GLightbox JS CDN -->
-<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+<!-- MODAL OVERLAY CONTAINER -->
+<div class="shrink-modal-overlay" id="shrink-modal-overlay">
+  <div class="shrink-modal-box" id="shrinkBox">
+    <div class="shrink-modal-header">
+      <span class="shrink-modal-title" id="shrinkTitle">TITLE</span>
+      <button class="shrink-modal-close" onclick="closeShrinkModal()">✕</button>
+    </div>
+    <div class="swiper shrink-swiper-container" id="shrinkSwiper">
+      <div class="swiper-wrapper" id="shrinkWrapper"></div>
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-next" style="color:#111;"></div>
+      <div class="swiper-button-prev" style="color:#111;"></div>
+    </div>
+    <div class="shrink-modal-infobox" id="shrinkDesc">Description...</div>
+  </div>
+</div>
+
+<!-- Swiper.js JS CDN -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 <script>
 // WHO IS ME FIELD Function
@@ -446,13 +589,26 @@ const IMAGES_BASE = 'https://raw.githubusercontent.com/luthfihd/luthporto/main/i
 
 let portfolioData = [];
 let categories = ['Overview'];
-let lightboxInstance = null;
 
 function getDriveUrl(url, size) {  
   let fileId = null;  
   if (url.includes('/file/d/')) fileId = url.split('/file/d/')[1]?.split('/')[0];  
   else if (url.includes('id=')) fileId = url.split('id=')[1]?.split('&')[0];  
   if (fileId) return `https://images.weserv.nl/?url=${encodeURIComponent(`https://drive.google.com/thumbnail?authuser=0&sz=w${size}&id=${fileId}`)}&output=webp`;  
+  return url;
+}
+
+function parseGDriveVideoUrl(url) {
+  let fileId = null;
+  if (url.includes('/file/d/')) {
+    fileId = url.split('/file/d/')[1]?.split('/')[0];
+  } else if (url.includes('id=')) {
+    fileId = url.split('id=')[1]?.split('&')[0];
+  }
+
+  if (fileId) {
+    return `https://drive.google.com/file/d/${fileId}/preview`;
+  }
   return url;
 }
 
@@ -507,13 +663,11 @@ function filterGallery(category, event) {
     const card = document.createElement('div');    
     card.className = 'folder-item';
 
-    // Preview menampilkan gambar pertama pada card grid
     let firstLink = rawLinks[0] || "";
     let previewSrc = firstLink.replace('#video', '');
     previewSrc = previewSrc.startsWith('http') ? previewSrc : IMAGES_BASE + previewSrc;
     if (previewSrc.includes('drive.google.com')) previewSrc = getDriveUrl(previewSrc, 400);
 
-    // GLightbox gallery group gallery-{itemIdx}
     const galleryGroupName = `gallery-${itemIdx}`;
 
     card.innerHTML = `      
@@ -530,35 +684,132 @@ function filterGallery(category, event) {
   });
 }
 
-// FUNGSI MEMBUKA GLIGHTBOX SECARA DINAMIS DENGAN DUKUNGAN MULTI-MEDIA & DESKRIPSI
+// CLOSE MODAL LOGIC
+function closeShrinkModal() {
+  document.getElementById('shrink-modal-overlay').classList.remove('active');
+  document.body.classList.remove('modal-open-lock');
+  
+  const wrapper = document.getElementById('shrinkWrapper');
+  if (wrapper) wrapper.innerHTML = '';
+}
+
+// CLOSE MODAL VIA ESC KEY & BACKDROP CLICK
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27) {
+    closeShrinkModal();
+  }
+});
+
+const modalOverlay = document.getElementById('shrink-modal-overlay');
+if (modalOverlay) {
+  modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) closeShrinkModal();
+  });
+}
+
+// OPEN LIGHTBOX LOGIC WITH SWIPER ENGINE & VIDEO FIX
 function openProjectLightbox(groupName, item) {
   const rawLinks = (item.image || item.src || "").split(',').map(l => l.trim()).filter(l => l !== "");
   const descText = item.desc || item.category;
 
-  const elements = rawLinks.map((link, idx) => {
+  document.getElementById('shrinkTitle').textContent = item.title;
+  document.getElementById('shrinkDesc').textContent = descText;
+
+  const wrapper = document.getElementById('shrinkWrapper');
+  wrapper.innerHTML = '';
+  const loadedMedia = [];
+
+  rawLinks.forEach((link, idx) => {
+    const isVideo = link.includes('#video');
     let rawSrc = link.replace('#video', '');
     let fullSrc = rawSrc.startsWith('http') ? rawSrc : IMAGES_BASE + rawSrc;
-    let displaySrc = fullSrc.includes('drive.google.com') ? getDriveUrl(fullSrc, 1200) : fullSrc;
 
-    return {
-      href: displaySrc,
-      type: 'image',
-      title: `<span style="font-family: 'Space Mono', monospace; font-weight: 900; text-transform: uppercase; font-size: 15px; display: block; margin-bottom: 4px;">${item.title}</span><span style="font-size: 14px; font-weight: 400; color: #444; line-height: 1.5; display: block;">${descText}</span>`
-    };
+    const slide = document.createElement('div');
+    slide.className = 'swiper-slide';
+
+    if (isVideo) {
+      const vidWrap = document.createElement('div');
+      vidWrap.className = 'video-embed-wrapper swiper-no-swiping';
+
+      let embedVideoUrl = fullSrc;
+      if (fullSrc.includes('drive.google.com')) {
+        embedVideoUrl = parseGDriveVideoUrl(fullSrc);
+      } else if (fullSrc.includes('youtube.com/watch?v=')) {
+        const vId = fullSrc.split('v=')[1]?.split('&')[0];
+        embedVideoUrl = `https://www.youtube.com/embed/${vId}?enablejsapi=1`;
+      } else if (fullSrc.includes('youtu.be/')) {
+        const vId = fullSrc.split('youtu.be/')[1]?.split('?')[0];
+        embedVideoUrl = `https://www.youtube.com/embed/${vId}?enablejsapi=1`;
+      }
+
+      if (embedVideoUrl.includes('drive.google.com') || embedVideoUrl.includes('youtube.com') || embedVideoUrl.includes('vimeo.com')) {
+        vidWrap.innerHTML = `<iframe src="${embedVideoUrl}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+      } else {
+        vidWrap.innerHTML = `<video src="${fullSrc}" controls playsinline preload="metadata"></video>`;
+      }
+
+      slide.appendChild(vidWrap);
+      loadedMedia.push({ type: 'video' });
+    } else {
+      let displaySrc = fullSrc.includes('drive.google.com') ? getDriveUrl(fullSrc, 1200) : fullSrc;
+      const img = document.createElement('img');
+      img.loading = idx === 0 ? "eager" : "lazy";
+      img.src = displaySrc;
+      img.alt = item.title;
+      
+      loadedMedia.push({ type: 'image', el: img });
+      slide.appendChild(img);
+    }
+
+    wrapper.appendChild(slide);
   });
 
-  if (lightboxInstance) {
-    lightboxInstance.destroy();
-  }
+  document.body.classList.add('modal-open-lock');
+  document.getElementById('shrink-modal-overlay').classList.add('active');
 
-  lightboxInstance = GLightbox({
-    elements: elements,
-    loop: true,
-    touchNavigation: true,
-    zoomable: true
+  const fitModalToSlide = (activeIndex) => {
+    const activeMedia = loadedMedia[activeIndex] || loadedMedia[0];
+    const shrinkBox = document.getElementById('shrinkBox');
+
+    if (activeMedia && activeMedia.type === 'image' && activeMedia.el) {
+      const applySize = () => {
+        if (activeMedia.el.naturalWidth && activeMedia.el.naturalHeight) {
+          const aspect = activeMedia.el.naturalWidth / activeMedia.el.naturalHeight;
+          const targetH = Math.min(window.innerHeight * 0.68, activeMedia.el.naturalHeight);
+          const finalW = Math.round(Math.min(Math.max(targetH * aspect, 320), window.innerWidth * 0.92));
+          shrinkBox.style.setProperty('width', finalW + 'px', 'important');
+        }
+      };
+
+      if (activeMedia.el.complete) applySize();
+      else activeMedia.el.onload = applySize;
+    } else {
+      shrinkBox.style.setProperty('width', '760px', 'important');
+    }
+  };
+
+  if (window.shrinkSwiperInstance) window.shrinkSwiperInstance.destroy();
+
+  window.shrinkSwiperInstance = new Swiper('#shrinkSwiper', {
+    loop: false,
+    spaceBetween: 0,
+    speed: 250,
+    noSwiping: true,
+    noSwipingClass: 'swiper-no-swiping',
+    touchMoveStopPropagation: false,
+    mousewheel: { forceToAxis: true },
+    keyboard: { enabled: true, onlyInViewport: true },
+    navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+    pagination: { el: '.swiper-pagination', clickable: true },
+    on: {
+      init: function () {
+        fitModalToSlide(this.activeIndex || 0);
+      },
+      slideChangeTransitionStart: function () {
+        fitModalToSlide(this.activeIndex || 0);
+      }
+    }
   });
-
-  lightboxInstance.open();
 }
 
 loadPortfolio();
