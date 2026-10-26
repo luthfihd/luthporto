@@ -394,6 +394,33 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
     box-shadow: 0px 0px 0px #111111 !important;
   }
 }
+  /* ── DESKTOP LIGHTBOX MODAL RESIZE (INSTANT & STABLE) ── */
+.shrink-modal-box {
+  max-width: 88vw !important;
+  width: fit-content;
+}
+
+.shrink-swiper-container .swiper-slide img {
+  max-height: 78vh !important;
+}
+
+.video-embed-wrapper {
+  height: 72vh !important;
+  max-height: 78vh !important;
+}
+
+/* Tetap Stabil di HP / Mobile */
+@media (max-width: 768px) {
+  .shrink-modal-box {
+    max-width: 95vw !important;
+  }
+  .shrink-swiper-container .swiper-slide img {
+    max-height: 58vh !important;
+  }
+  .video-embed-wrapper {
+    height: auto !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -698,11 +725,9 @@ function filterGallery(category, event) {
 
     const galleryGroupName = `gallery-${itemIdx}`;
 
-    // RENDER MEDIA AREA (SINGLE VS SWIPER CAROUSEL IN GRID)
     let mediaHtml = '';
     if (isMultiple) {
       let slidesHtml = rawLinks.map((link) => {
-        let isVid = link.includes('#video');
         let src = link.replace('#video', '');
         src = src.startsWith('http') ? src : IMAGES_BASE + src;
         if (src.includes('drive.google.com')) src = getDriveUrl(src, 400);
@@ -710,7 +735,6 @@ function filterGallery(category, event) {
         return `<div class="swiper-slide"><img src="${src}" alt="${item.title}"></div>`;
       }).join('');
 
-      // Note: Opsi Swiper tanpa bullet/pagination di grid
       mediaHtml = `
         <div class="swiper grid-card-swiper" id="swiper-card-${itemIdx}">
           <div class="swiper-wrapper">${slidesHtml}</div>
@@ -736,7 +760,7 @@ function filterGallery(category, event) {
 
     grid.appendChild(card);
 
-    // INISIALISASI SWIPER & PEMISAHAN GESTURE CLICK VS SWIPE
+    // BIND EVENT KLIK MODAL & SWIPER IN GRID
     const contentEl = card.querySelector('.folder-content');
 
     if (isMultiple) {
@@ -748,7 +772,7 @@ function filterGallery(category, event) {
         nested: true,
         simulateTouch: true,
         allowTouchMove: true,
-        threshold: 8, // Mengizinkan toleransi usap sebelum Swiper mengunci gesture
+        threshold: 12, // Toleransi mikromovement 12px
         touchEventsTarget: 'wrapper',
         mousewheel: {
           forceToAxis: true,
@@ -756,28 +780,20 @@ function filterGallery(category, event) {
         }
       });
 
-      // Deteksi geseran nyata via Swiper internal event
-      let isRealSwipe = false;
-
-      swiperInstance.on('touchStart', () => {
-        isRealSwipe = false;
-      });
-
-      swiperInstance.on('touchMove', () => {
-        isRealSwipe = true;
-      });
-
-      contentEl.addEventListener('click', (e) => {
-        if (isRealSwipe) {
-          e.preventDefault();
-          e.stopPropagation();
-          isRealSwipe = false;
-          return;
-        }
+      // Menggunakan event native 'tap' bawaan Swiper untuk membedakan murni klik vs geser
+      swiperInstance.on('tap', (s, e) => {
         openProjectLightbox(galleryGroupName, item);
       });
+
+      // Tetap pasang event listener pada area badge judul bawahnya
+      const badgeEl = card.querySelector('.folder-badge');
+      if (badgeEl) {
+        badgeEl.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openProjectLightbox(galleryGroupName, item);
+        });
+      }
     } else {
-      // Untuk single media, 1x klik langsung buka modal
       contentEl.addEventListener('click', () => {
         openProjectLightbox(galleryGroupName, item);
       });
@@ -904,16 +920,23 @@ function openProjectLightbox(groupName, item) {
       const applySize = () => {
         if (activeMedia.el.naturalWidth && activeMedia.el.naturalHeight) {
           const aspect = activeMedia.el.naturalWidth / activeMedia.el.naturalHeight;
-          const targetH = Math.min(window.innerHeight * 0.62, activeMedia.el.naturalHeight);
-          const finalW = Math.round(Math.min(Math.max(targetH * aspect, 280), window.innerWidth * 0.94));
+          const targetH = Math.min(window.innerHeight * 0.78, activeMedia.el.naturalHeight);
+          const finalW = Math.round(Math.min(Math.max(targetH * aspect, 320), window.innerWidth * 0.88));
           applyAndRecalculate(finalW);
+        } else {
+          // Fallback instan sebelum naturalWidth/Height selesai dimuat browser
+          const defaultW = Math.min(1020, window.innerWidth * 0.88);
+          applyAndRecalculate(defaultW);
         }
       };
 
-      if (activeMedia.el.complete) applySize();
-      else activeMedia.el.onload = applySize;
+      // Jalankan langsung instan
+      applySize();
+      // Bila gambar belum selesai muat saat diklik pertama kali, trigger ulang begitu onload
+      activeMedia.el.onload = applySize;
     } else {
-      const defaultW = Math.min(760, window.innerWidth * 0.94);
+      // Ukuran default untuk video embed / fallback
+      const defaultW = Math.min(1020, window.innerWidth * 0.88);
       applyAndRecalculate(defaultW);
     }
   };
