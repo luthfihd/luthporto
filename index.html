@@ -312,6 +312,87 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
   background: #000000 !important; /* Bisa diganti var(--magenta) atau warna hex misal #8c52ff */
   opacity: 1 !important;
 }
+  /* ── BULLET PAGINATION BRAND COLOR ── */
+.shrink-swiper-container .swiper-pagination-bullet {
+  background: #ffffff;
+  opacity: 0.7;
+  border: 1.5px solid #111111 !important;
+}
+
+.shrink-swiper-container .swiper-pagination-bullet-active {
+  background: var(--purple, #8c52ff) !important;
+  opacity: 1 !important;
+}
+
+/* ── MOBILE VIDEO THUMBNAIL & PURPLE PLAY BUTTON (NO TEXT) ── */
+.mobile-video-play-wrap {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* Hide Iframe di Mobile */
+  .video-embed-wrapper iframe {
+    display: none !important;
+  }
+
+  .video-embed-wrapper {
+    height: auto !important;
+    background: #000 !important;
+    position: relative !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+  }
+
+  .mobile-video-play-wrap {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .mobile-video-thumb {
+    width: 100%;
+    max-height: 58vh;
+    object-fit: contain;
+    display: block;
+    opacity: 0.85;
+  }
+
+  /* Tombol Play Ungu Icon Only */
+  .btn-play-purple {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 64px;
+    height: 64px;
+    background: var(--purple, #8c52ff) !important;
+    color: #FFFFFF !important;
+    border: 2px solid #111111 !important;
+    box-shadow: 4px 4px 0px #111111 !important;
+    border-radius: 50% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    z-index: 30;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+
+  .btn-play-purple svg {
+    width: 28px;
+    height: 28px;
+    fill: #FFFFFF;
+    margin-left: 4px;
+  }
+
+  .btn-play-purple:active {
+    transform: translate(-46%, -46%);
+    box-shadow: 0px 0px 0px #111111 !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -750,27 +831,37 @@ function openProjectLightbox(groupName, item) {
 
       let embedVideoUrl = fullSrc;
       let rawDriveViewUrl = fullSrc;
+      let thumbSrc = fullSrc;
 
       if (fullSrc.includes('drive.google.com')) {
         embedVideoUrl = parseGDriveVideoUrl(fullSrc);
         let fileId = null;
         if (fullSrc.includes('/file/d/')) fileId = fullSrc.split('/file/d/')[1]?.split('/')[0];
         else if (fullSrc.includes('id=')) fileId = fullSrc.split('id=')[1]?.split('&')[0];
-        if (fileId) rawDriveViewUrl = `https://drive.google.com/file/d/${fileId}/view`;
+        
+        if (fileId) {
+          rawDriveViewUrl = `https://drive.google.com/file/d/${fileId}/view`;
+          thumbSrc = getDriveUrl(fullSrc, 800);
+        }
       } else if (fullSrc.includes('youtube.com/watch?v=')) {
         const vId = fullSrc.split('v=')[1]?.split('&')[0];
         embedVideoUrl = `https://www.youtube.com/embed/${vId}?enablejsapi=1`;
+        thumbSrc = `https://img.youtube.com/vi/${vId}/hqdefault.jpg`;
       } else if (fullSrc.includes('youtu.be/')) {
         const vId = fullSrc.split('youtu.be/')[1]?.split('?')[0];
         embedVideoUrl = `https://www.youtube.com/embed/${vId}?enablejsapi=1`;
+        thumbSrc = `https://img.youtube.com/vi/${vId}/hqdefault.jpg`;
       }
 
-      // Desktop output Iframe, Mobile output Tombol Play REV AGAIN
+      // Desktop output Iframe, Mobile output Thumbnail + Tombol Play Ungu Icon Only
       vidWrap.innerHTML = `
         <iframe src="${embedVideoUrl}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
-        <a href="${rawDriveViewUrl}" target="_blank" rel="noopener noreferrer" class="gdrive-mobile-playbtn">
-          ▶ PLAY ON GOOGLE DRIVE
-        </a>
+        <div class="mobile-video-play-wrap">
+          <img src="${thumbSrc}" class="mobile-video-thumb" alt="${item.title}">
+          <a href="${rawDriveViewUrl}" target="_blank" rel="noopener noreferrer" class="btn-play-purple" title="Play Video">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </a>
+        </div>
       `;
 
       slide.appendChild(vidWrap);
@@ -844,7 +935,7 @@ function openProjectLightbox(groupName, item) {
     }
   });
 
-  // SWIPE DOWN TO CLOSE GESTURE ON MOBILE
+  // GESTURE SWIPE DOWN TO CLOSE MODAL
   let startY = 0;
   let currentY = 0;
   const modalBox = document.getElementById('shrinkBox');
