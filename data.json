@@ -277,7 +277,8 @@
     "category": "educational",
     "desc": "The designs aim for clear communication and actionable advice to protect users from cyber threats.",
     "icon": "🎬",
-    "date": "2026-06-09"
+    "date": "2026-06-09",
+    "featured": true
   },
   {
     "id": "item_1780993824752_82fh8s",
