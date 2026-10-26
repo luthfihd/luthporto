@@ -155,13 +155,13 @@ header { min-height: 100vh; display: flex; align-items: center; justify-content:
   text-decoration: none;
   cursor: pointer;
   transition: all 0.1s ease-out;
-  background: #fff;
+  background: #8a2889;
   color: var(--text-dark);
   border: var(--brutal-border);
   box-shadow: var(--brutal-shadow);
   display: inline-block;
 }
-.btn-secondary:hover { background: #FFD93D; }
+.btn-secondary:hover { background: #8c52ff; }
 .btn-secondary:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--text-dark); }
 
 @media(max-width: 1024px) { 
@@ -273,18 +273,37 @@ footer { padding: 40px 0; background: #fff; border-top: var(--brutal-border); te
 }
 .shrink-modal-overlay.active { opacity: 1; pointer-events: auto; }
 
+/* MODAL BOX FIT CONTENT UNTUK MULTI-RATIO */
 .shrink-modal-box {
   background: #fff;
   border: 2px solid #111;
   box-shadow: 6px 6px 0px #111;
   width: fit-content;
-  max-width: 92vw;
+  max-width: 94vw;
   display: flex; flex-direction: column;
   position: relative;
   border-radius: 20px !important;
-  transition: width 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: width 0.2s ease-out; /* Animasi mekar/menguncup yang responsif */
   margin: 0 auto;
   overflow: hidden !important;
+}
+
+/* KHUSUS DISPLAY MOBILE (<= 768px): CEGAH SLIDE TERDORONG KE ATAS */
+@media (max-width: 768px) {
+  .shrink-modal-box {
+    max-width: 95vw !important;
+  }
+  .swiper-slide {
+    height: auto !important;
+  }
+  .swiper-slide img {
+    max-height: 58vh !important; /* Kunci tinggi gambar di HP biar gak geser ke atas */
+    object-fit: contain !important;
+  }
+  .shrink-swiper-container .swiper-button-next,
+  .shrink-swiper-container .swiper-button-prev {
+    display: none !important; /* Sembunyikan panah di mobile */
+  }
 }
 
 .shrink-modal-header {
@@ -742,12 +761,7 @@ function openProjectLightbox(groupName, item) {
         embedVideoUrl = `https://www.youtube.com/embed/${vId}?enablejsapi=1`;
       }
 
-      if (embedVideoUrl.includes('drive.google.com') || embedVideoUrl.includes('youtube.com') || embedVideoUrl.includes('vimeo.com')) {
-        vidWrap.innerHTML = `<iframe src="${embedVideoUrl}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
-      } else {
-        vidWrap.innerHTML = `<video src="${fullSrc}" controls playsinline preload="metadata"></video>`;
-      }
-
+      vidWrap.innerHTML = `<iframe src="${embedVideoUrl}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
       slide.appendChild(vidWrap);
       loadedMedia.push({ type: 'video' });
     } else {
@@ -767,33 +781,53 @@ function openProjectLightbox(groupName, item) {
   document.body.classList.add('modal-open-lock');
   document.getElementById('shrink-modal-overlay').classList.add('active');
 
+  // FITUR KUNCI: Menyesuaikan ukuran box & memaksa Swiper menghitung ulang koordinat posisi slide
   const fitModalToSlide = (activeIndex) => {
     const activeMedia = loadedMedia[activeIndex] || loadedMedia[0];
     const shrinkBox = document.getElementById('shrinkBox');
+
+    const applyAndRecalculate = (finalW) => {
+      shrinkBox.style.setProperty('width', finalW + 'px', 'important');
+      
+      // PAKSA SWIPER HITUNG ULANG TEPAT SETELAH UKURAN MODAL BERUBAH
+      requestAnimationFrame(() => {
+        if (window.shrinkSwiperInstance) {
+          window.shrinkSwiperInstance.updateSize();
+          window.shrinkSwiperInstance.updateSlides();
+          window.shrinkSwiperInstance.updateProgress();
+          window.shrinkSwiperInstance.updateSlidesClasses();
+        }
+      });
+    };
 
     if (activeMedia && activeMedia.type === 'image' && activeMedia.el) {
       const applySize = () => {
         if (activeMedia.el.naturalWidth && activeMedia.el.naturalHeight) {
           const aspect = activeMedia.el.naturalWidth / activeMedia.el.naturalHeight;
-          const targetH = Math.min(window.innerHeight * 0.68, activeMedia.el.naturalHeight);
-          const finalW = Math.round(Math.min(Math.max(targetH * aspect, 320), window.innerWidth * 0.92));
-          shrinkBox.style.setProperty('width', finalW + 'px', 'important');
+          const targetH = Math.min(window.innerHeight * 0.62, activeMedia.el.naturalHeight);
+          const finalW = Math.round(Math.min(Math.max(targetH * aspect, 280), window.innerWidth * 0.94));
+          applyAndRecalculate(finalW);
         }
       };
 
       if (activeMedia.el.complete) applySize();
       else activeMedia.el.onload = applySize;
     } else {
-      shrinkBox.style.setProperty('width', '760px', 'important');
+      const defaultW = Math.min(760, window.innerWidth * 0.94);
+      applyAndRecalculate(defaultW);
     }
   };
 
   if (window.shrinkSwiperInstance) window.shrinkSwiperInstance.destroy();
 
+  // KONFIGURASI SWIPER ANTI-STUCK DI MOBILE
   window.shrinkSwiperInstance = new Swiper('#shrinkSwiper', {
     loop: false,
     spaceBetween: 0,
     speed: 250,
+    touchEventsTarget: 'wrapper', // Menghindari gestur tersangkut pada gambar/elemen anak
+    observer: true,               // Deteksi otomatis jika ada perubahan DOM
+    observeParents: true,         // Deteksi otomatis jika ukuran modal berubah
     noSwiping: true,
     noSwipingClass: 'swiper-no-swiping',
     touchMoveStopPropagation: false,
