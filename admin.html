@@ -690,7 +690,7 @@ async function saveBioData() {
   const content = btoa(unescape(encodeURIComponent(jsonStr)));
   const sha = await getFileSha('profile.json');
   await putFile('profile.json', content, 'Update profile bio data', sha);
-  toast('Profile Who is Me berhasil diperbarui!', 'ok');
+  toast('Biografi berhasil diperbarui!', 'ok');
 }
 
 function toast(msg, type='ok') {
