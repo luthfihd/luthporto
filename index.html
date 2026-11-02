@@ -618,11 +618,20 @@ window.addEventListener('DOMContentLoaded', () => {
   img.src = 'images/luth.png';
 });
 
-// FAB LOGIC WITH DYNAMIC OPACITY ON SCROLL
+// FAB LOGIC & HOME BUTTON SMOOTH SCROLL FIX
 const fabContainer = document.getElementById('fab-container');
+const fabHomeBtn = document.querySelector('.fab-home');
 const liquidPill = document.getElementById('liquidPill');
 const lpText = document.getElementById('lpText');
 let fabScrollTimeout = null;
+
+// Smooth Scroll langsung ke atas saat Tombol Home diklik
+if (fabHomeBtn) {
+  fabHomeBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
 
 window.addEventListener('scroll', () => {
   if (window.scrollY > window.innerHeight * 0.5) {
@@ -631,7 +640,7 @@ window.addEventListener('scroll', () => {
     clearTimeout(fabScrollTimeout);
     fabScrollTimeout = setTimeout(() => {
       fabContainer.classList.remove('scrolling');
-    }, 400); // 400ms IDLE -> OPACITY RETURNING 1
+    }, 400);
   } else {
     fabContainer.classList.remove('visible');
     fabContainer.classList.remove('scrolling');
